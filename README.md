@@ -25,11 +25,17 @@ This is a non-exhaustive list of linters:
 * The `$.` prefix must be used only to avoid ambiguity
 * The `^.` prefix must be used only to avoid ambiguity
 * The `+rt` meta may be present only if the program has at least one atom
+* The `+rt` meta must be present if the program has at least one atom
+* The tail of the `+rt` must be strict: runtime + location
+* The tail of the `+package` must have a name of a EO package
+* The tail of the `+home` must have a valid URL
+* The tail of the `+architect` must be a valid email
 * Some metas must be unique, like `version`, `package`, and `home`
 * An object referenced must either be local or in the `org.eolang` package
 * The `body` object in `try`, `go.to` and `while` must be attached (with the `>>`)
 * Names inside a program must be unique (no matter the scope of visibility)
 * A void attribute must be used, unless the object is an atom
+* The forma of an atom must be either from `org.eolang` or current package
 *
 
 [xmir]: https://news.eolang.org/2022-11-25-xmir-guide.html
