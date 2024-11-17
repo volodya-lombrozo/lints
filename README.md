@@ -20,6 +20,7 @@ This is a non-exhaustive list of linters:
 * The width of any line with a comment must be less than 80
 * The compexity of an object must be within acceptable limits
 * The number of void attributes in an object must be smaller than five
+* The number of attached attributes in an object must be smaller than twelve
 * A program must have mandatory metas: `package`, `architect`, `version`, etc.
 * A test object must have the `@` attribute
 * The `$.` prefix must be used only to avoid ambiguity
@@ -36,7 +37,10 @@ This is a non-exhaustive list of linters:
 * Names inside a program must be unique (no matter the scope of visibility)
 * A void attribute must be used, unless the object is an atom
 * The forma of an atom must be either from `org.eolang` or current package
-*
+* If an `+alias` is defined, it must be used in the program
+
+It is possible to disable any particular linter in a program,
+with the help of the `+unlint` meta.
 
 [xmir]: https://news.eolang.org/2022-11-25-xmir-guide.html
 [eo]: https://www.eolang.org
