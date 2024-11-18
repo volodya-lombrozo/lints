@@ -23,12 +23,14 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.ClasspathSources;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XSL;
 import com.jcabi.xml.XSLDocument;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
+import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
@@ -50,15 +52,24 @@ final class LintByXsl implements Lint {
      * @param xsl Relative path of XSL
      * @throws IOException If fails
      */
-    LintByXsl(final String xsl) throws IOException {
+    LintByXsl(final Input xsl) throws IOException {
         this.sheet = new XSLDocument(
             new IoCheckedText(
-                new TextOf(
-                    new ResourceOf(
-                        String.format("org/eolang/lints/%s.xsl", xsl)
-                    )
-                )
+                new TextOf(xsl)
             ).asString()
+        ).with(new ClasspathSources());
+    }
+
+    /**
+     * Ctor.
+     * @param xsl Relative path of XSL
+     * @throws IOException If fails
+     */
+    LintByXsl(final String xsl) throws IOException {
+        this(
+            new ResourceOf(
+                String.format("org/eolang/lints/%s.xsl", xsl)
+            )
         );
     }
 

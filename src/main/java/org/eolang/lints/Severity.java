@@ -53,7 +53,7 @@ public enum Severity {
         final Severity severity;
         if ("critical".equals(text)) {
             severity = Severity.CRITICAL;
-        } else if ("defect".equals(text)) {
+        } else if ("error".equals(text)) {
             severity = Severity.ERROR;
         } else if ("warning".equals(text)) {
             severity = Severity.WARNING;

@@ -23,11 +23,13 @@
  */
 package org.eolang.lints;
 
+import io.github.secretx33.resourceresolver.PathMatchingResourcePatternResolver;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
+import org.cactoos.io.InputOf;
 import org.cactoos.iterable.Mapped;
 
 /**
@@ -40,13 +42,7 @@ public final class Scope {
     /**
      * Lints to use.
      */
-    private static final Iterable<Lint> LINTS = new Mapped<>(
-        LintByXsl::new,
-        Arrays.asList(
-            "critical/duplicate-names",
-            "critical/not-empty-atoms"
-        )
-    );
+    private static final Iterable<Lint> LINTS = Scope.all();
 
     /**
      * Directory with XMIR files.
@@ -74,6 +70,27 @@ public final class Scope {
             }
         }
         return messages;
+    }
+
+    /**
+     * All lints.
+     * @return List of all lints
+     */
+    private static Iterable<Lint> all() {
+        try {
+            return new Mapped<>(
+                res -> new LintByXsl(
+                    new InputOf(res.getInputStream())
+                ),
+                Arrays.asList(
+                    new PathMatchingResourcePatternResolver().getResources(
+                        "classpath*:org/eolang/lints/**/*.xsl"
+                    )
+                )
+            );
+        } catch (final IOException ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
 }
