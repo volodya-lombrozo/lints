@@ -30,6 +30,7 @@ xsls:
   - /org/eolang/lints/critical/duplicate-names.xsl
 tests:
   - /defects[count(defect)=1]
+  - /defects/defect[@line='3']
 eo: |
   # This is the default 64+ symbols comment in front of abstract object.
   [] > main

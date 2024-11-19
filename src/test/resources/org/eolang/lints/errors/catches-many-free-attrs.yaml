@@ -24,6 +24,7 @@ xsls:
   - /org/eolang/lints/errors/many-free-attributes.xsl
 tests:
   - /defects[count(defect[@severity='error'])=1]
+  - /defects/defect[@line='2']
 eo: |
   # This is the default 64+ symbols comment in front of abstract object.
   [a b c d e f] > with-many

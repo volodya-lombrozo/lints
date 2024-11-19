@@ -33,7 +33,7 @@ SOFTWARE.
               <xsl:text>rt-and-atoms</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="line">
-              <xsl:value-of select="@line"/>
+              <xsl:text>0</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
@@ -49,7 +49,7 @@ SOFTWARE.
               <xsl:text>rt-and-atoms</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="line">
-              <xsl:value-of select="@line"/>
+              <xsl:text>0</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>

@@ -24,5 +24,6 @@ xsls:
   - /org/eolang/lints/errors/signed-binding-indexes.xsl
 tests:
   - /defects[count(defect[@severity='error'])=3]
+  - /defects/defect[@line='1']
 eo: |
   object c:-1 d:-2 a:0 b:1 e:+12

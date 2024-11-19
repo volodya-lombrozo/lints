@@ -25,6 +25,7 @@ xsls:
 tests:
   - /defects[count(defect[@severity='warning'])=1]
   - /defects[count(defect[@severity='error'])=0]
+  - /defects/defect[@line='0']
 eo: |
   +home https://github.com/objectionary/eo
   +package test

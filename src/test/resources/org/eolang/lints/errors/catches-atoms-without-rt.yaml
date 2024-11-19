@@ -24,6 +24,7 @@ xsls:
   - /org/eolang/lints/errors/rt-and-atoms.xsl
 tests:
   - /defects[count(defect[@severity='error'])=1]
+  - /defects/defect[@line='0']
 eo: |
   +architect yegor256@gmail.com
   +home https://github.com/objectionary/eo
