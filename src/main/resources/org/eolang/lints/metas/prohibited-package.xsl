@@ -56,9 +56,6 @@ SOFTWARE.
         <xsl:variable name="meta-tail" select="tail"/>
         <xsl:if test="$meta-head='package' and $meta-tail='org.eolang' and not($white-list/a=$name)">
           <xsl:element name="defect">
-            <xsl:attribute name="check">
-              <xsl:text>prohibited-package</xsl:text>
-            </xsl:attribute>
             <xsl:attribute name="line">
               <xsl:value-of select="@line"/>
             </xsl:attribute>

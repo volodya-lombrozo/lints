@@ -28,9 +28,6 @@ SOFTWARE.
     <defects>
       <xsl:if test="count(/program/metas/meta[head ='home'])=0">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>missing-home</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:text>0</xsl:text>
           </xsl:attribute>
@@ -42,9 +39,6 @@ SOFTWARE.
       </xsl:if>
       <xsl:if test="count(/program/metas/meta[head ='home'])&gt;1">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>more-one-home</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:text>0</xsl:text>
           </xsl:attribute>

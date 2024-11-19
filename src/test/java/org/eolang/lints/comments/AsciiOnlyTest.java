@@ -21,10 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.eolang.lints.comments;
+
+import java.io.IOException;
+import org.cactoos.io.InputOf;
+import org.eolang.parser.EoSyntax;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 /**
- * Lints (style checkers).
+ * Test for {@link AsciiOnly}.
  *
  * @since 0.0.1
  */
-package org.eolang.lints;
+final class AsciiOnlyTest {
+
+    @Test
+    @Disabled
+    void catchesNonAsciiInComment() throws IOException {
+        MatcherAssert.assertThat(
+            "non-ascii comment is not welcome",
+            new AsciiOnly().defects(
+                new EoSyntax(
+                    new InputOf("# привет\n[] > foo\n")
+                ).parsed()
+            ),
+            Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
+
+}

@@ -28,9 +28,6 @@ SOFTWARE.
     <defects>
       <xsl:for-each select="//o[@as and matches(@as, '^(-|\+)\d+$')]">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>signed-binding-indexes</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:value-of select="@line"/>
           </xsl:attribute>

@@ -29,9 +29,6 @@ SOFTWARE.
     <defects>
       <xsl:for-each select="//o[eo:abstract(.) and @name and @name='@']">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>abstract-decoratee</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:value-of select="@line"/>
           </xsl:attribute>

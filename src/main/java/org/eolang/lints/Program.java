@@ -28,9 +28,12 @@ import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
+import org.cactoos.iterable.Joined;
 import org.cactoos.iterable.Sticky;
+import org.eolang.lints.comments.AsciiOnly;
 
 /**
  * A single XMIR program to analyze.
@@ -43,7 +46,14 @@ public final class Program {
     /**
      * Lints to use.
      */
-    private static final Iterable<Lint> LINTS = new Sticky<>(new XslLints());
+    private static final Iterable<Lint> LINTS = new Sticky<>(
+        new Joined<Lint>(
+            new XslLints(),
+            Arrays.asList(
+                new AsciiOnly()
+            )
+        )
+    );
 
     /**
      * The XMIR program to analyze.

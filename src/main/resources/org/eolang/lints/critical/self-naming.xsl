@@ -48,9 +48,6 @@ SOFTWARE.
     <defects>
       <xsl:for-each select="//o[@name and @base and (eo:base-eq-name(.) or eo:with-this(.) or eo:with-method(.) or eo:with-method-and-this(.))]">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>self-naming</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:value-of select="@line"/>
           </xsl:attribute>

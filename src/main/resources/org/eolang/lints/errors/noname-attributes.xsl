@@ -35,9 +35,6 @@ SOFTWARE.
   <xsl:template match="o" mode="abstract">
     <xsl:for-each select="o[not(@name)]">
       <xsl:element name="defect">
-        <xsl:attribute name="check">
-          <xsl:text>noname-attributes</xsl:text>
-        </xsl:attribute>
         <xsl:attribute name="line">
           <xsl:value-of select="@line"/>
         </xsl:attribute>

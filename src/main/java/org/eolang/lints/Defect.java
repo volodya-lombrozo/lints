@@ -88,7 +88,7 @@ public interface Defect {
          * @param text Description of the defect
          * @checkstyle ParameterNumberCheck (5 lines)
          */
-        Default(final String rule, final Severity severity,
+        public Default(final String rule, final Severity severity,
             final int line, final String text) {
             this.rle = rule;
             this.sev = severity;

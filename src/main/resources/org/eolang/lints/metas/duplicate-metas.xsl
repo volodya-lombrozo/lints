@@ -31,9 +31,6 @@ SOFTWARE.
         <xsl:variable name="tail" select="tail"/>
         <xsl:if test="preceding-sibling::meta[head=$head and tail=$tail]">
           <xsl:element name="defect">
-            <xsl:attribute name="check">
-              <xsl:text>duplicate-metas</xsl:text>
-            </xsl:attribute>
             <xsl:attribute name="line">
               <xsl:value-of select="@line"/>
             </xsl:attribute>

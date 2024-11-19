@@ -30,9 +30,6 @@ SOFTWARE.
       <xsl:if test="not($package='org.eolang')">
         <xsl:for-each select="//o[@atom and @atom='?']">
           <xsl:element name="defect">
-            <xsl:attribute name="check">
-              <xsl:text>external-weak-typed-atoms</xsl:text>
-            </xsl:attribute>
             <xsl:attribute name="line">
               <xsl:value-of select="@line"/>
             </xsl:attribute>

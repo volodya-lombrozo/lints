@@ -32,9 +32,6 @@ SOFTWARE.
         <xsl:variable name="sibling-text" select="concat($previous/head/text(), ' ', $previous/tail/text())"/>
         <xsl:if test="$meta-text &lt; $sibling-text">
           <xsl:element name="defect">
-            <xsl:attribute name="check">
-              <xsl:text>unsorted-metas</xsl:text>
-            </xsl:attribute>
             <xsl:attribute name="line">
               <xsl:value-of select="@line"/>
             </xsl:attribute>

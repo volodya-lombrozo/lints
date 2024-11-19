@@ -28,9 +28,6 @@ SOFTWARE.
     <defects>
       <xsl:for-each select="//o[@ref and @ref!='' and not(matches(@ref, '^[0-9]+(\.[0-9]+)*$'))]">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>broken-refs</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:value-of select="@line"/>
           </xsl:attribute>
@@ -46,9 +43,6 @@ SOFTWARE.
       </xsl:for-each>
       <xsl:for-each select="//o[@ref and @ref='']">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>broken-refs</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:value-of select="@line"/>
           </xsl:attribute>
@@ -64,9 +58,6 @@ SOFTWARE.
         <xsl:variable name="o" select="."/>
         <xsl:if test="not(//o[@name=$o/@base and @line=$o/@ref])">
           <xsl:element name="defect">
-            <xsl:attribute name="check">
-              <xsl:text>broken-refs</xsl:text>
-            </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
             </xsl:attribute>

@@ -35,9 +35,6 @@ SOFTWARE.
     <xsl:variable name="x" select="."/>
     <xsl:for-each select="(following::o | descendant::o)[@name=$x/@name and @line=$x/@line]">
       <xsl:element name="defect">
-        <xsl:attribute name="check">
-          <xsl:text>same-line-names</xsl:text>
-        </xsl:attribute>
         <xsl:attribute name="line">
           <xsl:value-of select="@line"/>
         </xsl:attribute>

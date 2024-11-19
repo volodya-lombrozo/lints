@@ -31,9 +31,6 @@ SOFTWARE.
         <xsl:variable name="meta-tail" select="tail"/>
         <xsl:if test="$meta-head='version' and not(matches($meta-tail, '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$'))">
           <xsl:element name="defect">
-            <xsl:attribute name="check">
-              <xsl:text>incorrect-version</xsl:text>
-            </xsl:attribute>
             <xsl:attribute name="line">
               <xsl:value-of select="@line"/>
             </xsl:attribute>

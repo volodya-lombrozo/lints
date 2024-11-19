@@ -28,9 +28,6 @@ SOFTWARE.
     <defects>
       <xsl:for-each select="//o[@abstract and count(o)=1 and count(o[@name='@' and not(@base='^') and (@abstract or count(o)=0)])=1]">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>sparse-decoration</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:value-of select="@line"/>
           </xsl:attribute>

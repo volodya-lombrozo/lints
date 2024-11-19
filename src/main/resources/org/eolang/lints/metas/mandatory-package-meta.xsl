@@ -28,9 +28,6 @@ SOFTWARE.
     <defects>
       <xsl:if test="count(/program/metas/meta[head ='package'])=0">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>missing-package</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:text>0</xsl:text>
           </xsl:attribute>
@@ -42,9 +39,6 @@ SOFTWARE.
       </xsl:if>
       <xsl:if test="count(/program/metas/meta[head ='package'])&gt;1">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>more-one-package</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:text>0</xsl:text>
           </xsl:attribute>

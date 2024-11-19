@@ -30,9 +30,6 @@ SOFTWARE.
         <xsl:variable name="src" select="/program/@source"/>
         <xsl:if test="matches($src, 'src/(?:main|test)') and not(./tail/text() = '0.0.0')">
           <xsl:element name="defect">
-            <xsl:attribute name="check">
-              <xsl:text>zero-version</xsl:text>
-            </xsl:attribute>
             <xsl:attribute name="line">
               <xsl:value-of select="@line"/>
             </xsl:attribute>

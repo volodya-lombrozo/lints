@@ -28,9 +28,6 @@ SOFTWARE.
     <defects>
       <xsl:for-each select="//o[count(o[@name and not(@base) and not(@atom) and count(o)=0]) &gt; 5]">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>too-many-attributes</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:value-of select="@line"/>
           </xsl:attribute>

@@ -23,8 +23,8 @@
  */
 
 /**
- * Lints (style checkers).
+ * Linters.
  *
  * @since 0.0.1
  */
-package org.eolang.lints;
+package org.eolang.lints.comments;

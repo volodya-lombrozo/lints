@@ -30,9 +30,6 @@ SOFTWARE.
         <xsl:variable name="name" select="tokenize(tail, ' ')[1]"/>
         <xsl:if test="preceding-sibling::meta[head='alias' and tokenize(tail, ' ')[1]=$name]">
           <xsl:element name="defect">
-            <xsl:attribute name="check">
-              <xsl:text>duplicate-aliases</xsl:text>
-            </xsl:attribute>
             <xsl:attribute name="line">
               <xsl:value-of select="@line"/>
             </xsl:attribute>

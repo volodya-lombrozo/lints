@@ -28,9 +28,6 @@ SOFTWARE.
     <defects>
       <xsl:if test="count(/program/metas/meta[head ='package'and count(part)!=1])&gt;0">
         <xsl:element name="defect">
-          <xsl:attribute name="check">
-            <xsl:text>wrong-package-name</xsl:text>
-          </xsl:attribute>
           <xsl:attribute name="line">
             <xsl:text>0</xsl:text>
           </xsl:attribute>

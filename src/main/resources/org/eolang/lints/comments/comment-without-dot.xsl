@@ -22,50 +22,20 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="not-empty-atoms" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="comment-too-short" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
+    <xsl:variable name="min" select="32"/>
     <defects>
-      <xsl:for-each select="//o[@atom and o[@base]]">
+      <xsl:for-each select="/program/comments/comment[ends-with(., '.')]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="@line"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
-            <xsl:text>error</xsl:text>
+            <xsl:text>warning</xsl:text>
           </xsl:attribute>
-          <xsl:text>The atom '</xsl:text>
-          <xsl:value-of select="@name"/>
-          <xsl:text>' may not have any attributes: </xsl:text>
-          <xsl:for-each select="o[@base]">
-            <xsl:if test="position() &gt; 1">
-              <xsl:text>, </xsl:text>
-            </xsl:if>
-            <xsl:text>'</xsl:text>
-            <xsl:value-of select="@name"/>
-            <xsl:text>'</xsl:text>
-          </xsl:for-each>
-        </xsl:element>
-      </xsl:for-each>
-      <xsl:for-each select="//o[@atom and o[@atom]]">
-        <xsl:element name="defect">
-          <xsl:attribute name="line">
-            <xsl:value-of select="@line"/>
-          </xsl:attribute>
-          <xsl:attribute name="severity">
-            <xsl:text>error</xsl:text>
-          </xsl:attribute>
-          <xsl:text>Atom '</xsl:text>
-          <xsl:value-of select="@name"/>
-          <xsl:text>' may not have any attributes, even though they are atoms: </xsl:text>
-          <xsl:for-each select="o[@atom]">
-            <xsl:if test="position() &gt; 1">
-              <xsl:text>, </xsl:text>
-            </xsl:if>
-            <xsl:text>'</xsl:text>
-            <xsl:value-of select="@name"/>
-            <xsl:text>'</xsl:text>
-          </xsl:for-each>
+          <xsl:text>The comment for the object doesn't end with a dot</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>

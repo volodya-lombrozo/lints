@@ -29,9 +29,6 @@ SOFTWARE.
       <xsl:if test="//o[@atom]">
         <xsl:if test="not(/program/metas/meta[head='rt'])">
           <xsl:element name="defect">
-            <xsl:attribute name="check">
-              <xsl:text>rt-and-atoms</xsl:text>
-            </xsl:attribute>
             <xsl:attribute name="line">
               <xsl:text>0</xsl:text>
             </xsl:attribute>
@@ -45,9 +42,6 @@ SOFTWARE.
       <xsl:if test="not(//o[@atom])">
         <xsl:if test="/program/metas/meta[head='rt']">
           <xsl:element name="defect">
-            <xsl:attribute name="check">
-              <xsl:text>rt-and-atoms</xsl:text>
-            </xsl:attribute>
             <xsl:attribute name="line">
               <xsl:text>0</xsl:text>
             </xsl:attribute>

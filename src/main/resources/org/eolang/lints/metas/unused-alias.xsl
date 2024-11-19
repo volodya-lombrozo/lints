@@ -30,9 +30,6 @@ SOFTWARE.
         <xsl:variable name="name" select="tokenize(tail, ' ')[2]"/>
         <xsl:if test="count(//o[@base=$name]) = 0">
           <xsl:element name="defect">
-            <xsl:attribute name="check">
-              <xsl:text>unused-aliases</xsl:text>
-            </xsl:attribute>
             <xsl:attribute name="line">
               <xsl:value-of select="@line"/>
             </xsl:attribute>
