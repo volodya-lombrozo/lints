@@ -88,24 +88,6 @@ final class LintByXsl implements Lint {
         final XML report = this.sheet.transform(xmir);
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML defect : report.nodes("/defects/defect")) {
-            final List<String> lines = defect.xpath("@line");
-            if (lines.isEmpty()) {
-                throw new IllegalStateException(
-                    String.format("No line number reported by %s", this.rule)
-                );
-            }
-            final int lineno;
-            try {
-                lineno = Integer.parseInt(lines.get(0));
-            } catch (final NumberFormatException ex) {
-                throw new IllegalStateException(
-                    String.format(
-                        "Wrong line number reported by %s: '%s'",
-                        this.rule, lines.get(0)
-                    ),
-                    ex
-                );
-            }
             final List<String> severity = defect.xpath("@severity");
             if (severity.isEmpty()) {
                 throw new IllegalStateException(
@@ -116,12 +98,45 @@ final class LintByXsl implements Lint {
                 new Defect.Default(
                     this.rule,
                     Severity.parsed(severity.get(0)),
-                    lineno,
+                    this.lineno(defect),
                     defect.xpath("text()").get(0)
                 )
             );
         }
         return defects;
+    }
+
+    /**
+     * Get line number of the defect.
+     * @param defect XML defect
+     * @return Line number
+     */
+    private int lineno(final XML defect) {
+        final List<String> lines = defect.xpath("@line");
+        if (lines.isEmpty()) {
+            throw new IllegalStateException(
+                String.format("No line number reported by %s", this.rule)
+            );
+        }
+        final String line = lines.get(0);
+        if (line.isEmpty()) {
+            throw new IllegalStateException(
+                String.format("Empty line number reported by %s", this.rule)
+            );
+        }
+        final int lineno;
+        try {
+            lineno = Integer.parseInt(line);
+        } catch (final NumberFormatException ex) {
+            throw new IllegalStateException(
+                String.format(
+                    "Wrong line number reported by %s: '%s'",
+                    this.rule, lines.get(0)
+                ),
+                ex
+            );
+        }
+        return lineno;
     }
 
 }

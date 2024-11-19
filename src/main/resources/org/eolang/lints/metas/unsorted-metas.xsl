@@ -38,7 +38,7 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>Meta is out of order: "</xsl:text>
+            <xsl:text>The meta is out of order: "</xsl:text>
             <xsl:value-of select="$meta-text"/>
             <xsl:text>"</xsl:text>
           </xsl:element>
