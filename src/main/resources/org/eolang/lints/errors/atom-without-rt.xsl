@@ -26,18 +26,20 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="//o[@atom]">
-        <xsl:if test="not(/program/metas/meta[head='rt'])">
+      <xsl:if test="not(/program/metas/meta[head='rt'])">
+        <xsl:for-each select="//o[@atom]">
           <xsl:element name="defect">
             <xsl:attribute name="line">
-              <xsl:value-of select="//o[@atom]/@line"/>
+              <xsl:value-of select="@line"/>
             </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
             </xsl:attribute>
-            <xsl:text>Defining an atom without an +rt meta doesn't make sense</xsl:text>
+            <xsl:text>Defining "</xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text>" atom without an +rt meta doesn't make sense</xsl:text>
           </xsl:element>
-        </xsl:if>
+        </xsl:for-each>
       </xsl:if>
     </defects>
   </xsl:template>

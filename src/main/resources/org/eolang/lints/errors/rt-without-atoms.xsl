@@ -30,7 +30,7 @@ SOFTWARE.
         <xsl:if test="/program/metas/meta[head='rt']">
           <xsl:element name="defect">
             <xsl:attribute name="line">
-              <xsl:value-of select="/program/metas/meta[head='rt']/@line"/>
+              <xsl:value-of select="/program/metas/meta[head='rt'][1]/@line"/>
             </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
