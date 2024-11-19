@@ -31,6 +31,7 @@ import com.jcabi.xml.XSLDocument;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.IoCheckedText;
@@ -87,11 +88,23 @@ final class LintByXsl implements Lint {
         final XML report = this.sheet.transform(xmir);
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML defect : report.nodes("/defects/defect")) {
+            final List<String> line = defect.xpath("@line");
+            if (line.isEmpty()) {
+                throw new IllegalStateException(
+                    String.format("No line number reported by %s", this.rule)
+                );
+            }
+            final List<String> severity = defect.xpath("@severity");
+            if (severity.isEmpty()) {
+                throw new IllegalStateException(
+                    String.format("No severity reported by %s", this.rule)
+                );
+            }
             defects.add(
                 new Defect.Default(
                     this.rule,
-                    Severity.parsed(defect.xpath("@severity").get(0)),
-                    Integer.parseInt(defect.xpath("@line").get(0)),
+                    Severity.parsed(severity.get(0)),
+                    Integer.parseInt(line.get(0)),
                     defect.xpath("text()").get(0)
                 )
             );
