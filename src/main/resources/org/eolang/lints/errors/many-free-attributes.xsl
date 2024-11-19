@@ -32,7 +32,7 @@ SOFTWARE.
             <xsl:value-of select="if (@line) then @line else '0'"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
-            <xsl:text>error</xsl:text>
+            <xsl:text>warning</xsl:text>
           </xsl:attribute>
           <xsl:text>The object </xsl:text>
           <xsl:text>"</xsl:text>
