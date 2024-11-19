@@ -25,6 +25,7 @@ package org.eolang.lints;
 
 import com.jcabi.xml.ClasspathSources;
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import com.jcabi.xml.XSL;
 import com.jcabi.xml.XSLDocument;
 import java.io.IOException;
@@ -43,6 +44,11 @@ import org.cactoos.text.TextOf;
 final class LintByXsl implements Lint {
 
     /**
+     * The name of the rule.
+     */
+    private final String rule;
+
+    /**
      * The stylesheet.
      */
     private final XSL sheet;
@@ -52,12 +58,15 @@ final class LintByXsl implements Lint {
      * @param xsl Relative path of XSL
      * @throws IOException If fails
      */
+    @SuppressWarnings("PMD.ConstructorOnlyInitializesOrCallOtherConstructors")
     LintByXsl(final Input xsl) throws IOException {
-        this.sheet = new XSLDocument(
+        final XML xml = new XMLDocument(
             new IoCheckedText(
                 new TextOf(xsl)
             ).asString()
-        ).with(new ClasspathSources());
+        );
+        this.rule = xml.xpath("/xsl:stylesheet/@id").get(0);
+        this.sheet = new XSLDocument(xml).with(new ClasspathSources());
     }
 
     /**
@@ -80,6 +89,7 @@ final class LintByXsl implements Lint {
         for (final XML defect : report.nodes("/defects/defect")) {
             defects.add(
                 new Defect.Default(
+                    this.rule,
                     Severity.parsed(defect.xpath("@severity").get(0)),
                     Integer.parseInt(defect.xpath("@line").get(0)),
                     defect.xpath("text()").get(0)

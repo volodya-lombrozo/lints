@@ -31,6 +31,12 @@ package org.eolang.lints;
 public interface Defect {
 
     /**
+     * Rule.
+     * @return Unique name of the rule
+     */
+    String rule();
+
+    /**
      * Severity.
      * @return Severity
      */
@@ -55,6 +61,11 @@ public interface Defect {
      */
     final class Default implements Defect {
         /**
+         * Rule.
+         */
+        private final String rle;
+
+        /**
          * Severity.
          */
         private final Severity sev;
@@ -71,14 +82,23 @@ public interface Defect {
 
         /**
          * Ctor.
+         * @param rule Rule
          * @param severity Severity
          * @param line Line number
          * @param text Description of the defect
+         * @checkstyle ParameterNumberCheck (5 lines)
          */
-        Default(final Severity severity, final int line, final String text) {
+        Default(final String rule, final Severity severity,
+            final int line, final String text) {
+            this.rle = rule;
             this.sev = severity;
             this.lineno = line;
             this.txt = text;
+        }
+
+        @Override
+        public String rule() {
+            return this.rle;
         }
 
         @Override
