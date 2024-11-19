@@ -29,7 +29,7 @@ SOFTWARE.
       <xsl:for-each select="//o[@atom and o[@base]]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:value-of select="@line"/>
+            <xsl:value-of select="if (@line) then @line else '0'"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
@@ -50,7 +50,7 @@ SOFTWARE.
       <xsl:for-each select="//o[@atom and o[@atom]]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:value-of select="@line"/>
+            <xsl:value-of select="if (@line) then @line else '0'"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>

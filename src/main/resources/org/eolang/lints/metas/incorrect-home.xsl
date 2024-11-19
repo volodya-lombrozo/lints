@@ -32,7 +32,7 @@ SOFTWARE.
         <xsl:if test="$meta-head='home' and not(matches($meta-tail, '^(?:http(s)?://)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#\[\]@!\$&amp;''\(\)\*\+,;=.]+$'))">
           <xsl:element name="defect">
             <xsl:attribute name="line">
-              <xsl:value-of select="@line"/>
+              <xsl:value-of select="if (@line) then @line else '0'"/>
             </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>

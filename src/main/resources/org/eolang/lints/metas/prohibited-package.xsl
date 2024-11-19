@@ -57,7 +57,7 @@ SOFTWARE.
         <xsl:if test="$meta-head='package' and $meta-tail='org.eolang' and not($white-list/a=$name)">
           <xsl:element name="defect">
             <xsl:attribute name="line">
-              <xsl:value-of select="@line"/>
+              <xsl:value-of select="if (@line) then @line else '0'"/>
             </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>

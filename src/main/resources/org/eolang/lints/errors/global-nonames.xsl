@@ -29,7 +29,7 @@ SOFTWARE.
       <xsl:for-each select="/program/objects/o[not(@name) and not(@method) and not(following-sibling::o[1][@method])]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:value-of select="@line"/>
+            <xsl:value-of select="if (@line) then @line else '0'"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>

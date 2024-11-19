@@ -31,7 +31,7 @@ SOFTWARE.
         <xsl:if test="preceding-sibling::meta[head='alias' and tokenize(tail, ' ')[1]=$name]">
           <xsl:element name="defect">
             <xsl:attribute name="line">
-              <xsl:value-of select="@line"/>
+              <xsl:value-of select="if (@line) then @line else '0'"/>
             </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
@@ -50,7 +50,7 @@ SOFTWARE.
       <xsl:if test="preceding-sibling::o/@name = $x/@name">
         <error>
           <xsl:attribute name="line">
-            <xsl:value-of select="@line"/>
+            <xsl:value-of select="if (@line) then @line else '0'"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>

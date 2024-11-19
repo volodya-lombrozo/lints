@@ -33,7 +33,7 @@ SOFTWARE.
         <xsl:if test="$meta-text &lt; $sibling-text">
           <xsl:element name="defect">
             <xsl:attribute name="line">
-              <xsl:value-of select="@line"/>
+              <xsl:value-of select="if (@line) then @line else '0'"/>
             </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>

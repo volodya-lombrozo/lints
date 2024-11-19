@@ -32,7 +32,7 @@ SOFTWARE.
         <xsl:if test="$meta-head='architect' and not(matches(upper-case($meta-tail),'^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$'))">
           <xsl:element name="defect">
             <xsl:attribute name="line">
-              <xsl:value-of select="@line"/>
+              <xsl:value-of select="if (@line) then @line else '0'"/>
             </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>

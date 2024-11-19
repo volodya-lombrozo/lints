@@ -36,7 +36,7 @@ SOFTWARE.
     <xsl:for-each select="(following::o | descendant::o)[@name=$x/@name and @line=$x/@line]">
       <xsl:element name="defect">
         <xsl:attribute name="line">
-          <xsl:value-of select="@line"/>
+          <xsl:value-of select="if (@line) then @line else '0'"/>
         </xsl:attribute>
         <xsl:attribute name="severity">
           <xsl:text>error</xsl:text>

@@ -49,7 +49,7 @@ SOFTWARE.
       <xsl:for-each select="//o[@name and @base and (eo:base-eq-name(.) or eo:with-this(.) or eo:with-method(.) or eo:with-method-and-this(.))]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:value-of select="@line"/>
+            <xsl:value-of select="if (@line) then @line else '0'"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>

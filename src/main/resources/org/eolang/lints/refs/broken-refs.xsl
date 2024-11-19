@@ -29,7 +29,7 @@ SOFTWARE.
       <xsl:for-each select="//o[@ref and @ref!='' and not(matches(@ref, '^[0-9]+(\.[0-9]+)*$'))]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:value-of select="@line"/>
+            <xsl:value-of select="if (@line) then @line else '0'"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
@@ -44,7 +44,7 @@ SOFTWARE.
       <xsl:for-each select="//o[@ref and @ref='']">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:value-of select="@line"/>
+            <xsl:value-of select="if (@line) then @line else '0'"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
@@ -62,7 +62,7 @@ SOFTWARE.
               <xsl:text>error</xsl:text>
             </xsl:attribute>
             <xsl:attribute name="line">
-              <xsl:value-of select="@line"/>
+              <xsl:value-of select="if (@line) then @line else '0'"/>
             </xsl:attribute>
             <xsl:text>The object "</xsl:text>
             <xsl:value-of select="@base"/>

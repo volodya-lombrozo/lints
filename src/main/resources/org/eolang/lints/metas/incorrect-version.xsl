@@ -32,7 +32,7 @@ SOFTWARE.
         <xsl:if test="$meta-head='version' and not(matches($meta-tail, '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$'))">
           <xsl:element name="defect">
             <xsl:attribute name="line">
-              <xsl:value-of select="@line"/>
+              <xsl:value-of select="if (@line) then @line else '0'"/>
             </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
