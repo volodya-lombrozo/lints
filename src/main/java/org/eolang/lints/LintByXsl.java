@@ -88,10 +88,22 @@ final class LintByXsl implements Lint {
         final XML report = this.sheet.transform(xmir);
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML defect : report.nodes("/defects/defect")) {
-            final List<String> line = defect.xpath("@line");
-            if (line.isEmpty()) {
+            final List<String> lines = defect.xpath("@line");
+            if (lines.isEmpty()) {
                 throw new IllegalStateException(
                     String.format("No line number reported by %s", this.rule)
+                );
+            }
+            final int lineno;
+            try {
+                lineno = Integer.parseInt(lines.get(0));
+            } catch (final NumberFormatException ex) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Wrong line number reported by %s: '%s'",
+                        this.rule, lines.get(0)
+                    ),
+                    ex
                 );
             }
             final List<String> severity = defect.xpath("@severity");
@@ -104,7 +116,7 @@ final class LintByXsl implements Lint {
                 new Defect.Default(
                     this.rule,
                     Severity.parsed(severity.get(0)),
-                    Integer.parseInt(line.get(0)),
+                    lineno,
                     defect.xpath("text()").get(0)
                 )
             );
