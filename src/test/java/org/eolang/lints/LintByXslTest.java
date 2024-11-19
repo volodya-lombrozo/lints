@@ -23,12 +23,7 @@
  */
 package org.eolang.lints;
 
-import com.yegor256.Mktmp;
-import com.yegor256.MktmpResolver;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import org.cactoos.io.InputOf;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.CheckPack;
@@ -37,7 +32,6 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
 /**
@@ -45,21 +39,16 @@ import org.junit.jupiter.params.ParameterizedTest;
  *
  * @since 0.0.1
  */
-@ExtendWith(MktmpResolver.class)
 final class LintByXslTest {
 
     @Test
-    void lintsOneFile(@Mktmp final Path dir) throws IOException {
-        Files.write(
-            dir.resolve("foo.xmir"),
-            new EoSyntax(
-                new InputOf("# first\n[] > foo\n# first\n[] > foo\n")
-            ).parsed().toString().getBytes(StandardCharsets.UTF_8)
-        );
+    void lintsOneFile() throws IOException {
         MatcherAssert.assertThat(
             "the objects is found",
-            new LintByXsl("critical/duplicate-names").violations(
-                new ObjectsInDir(dir), "foo"
+            new LintByXsl("critical/duplicate-names").defects(
+                new EoSyntax(
+                    new InputOf("# first\n[] > foo\n# first\n[] > foo\n")
+                ).parsed()
             ),
             Matchers.hasSize(Matchers.greaterThan(0))
         );

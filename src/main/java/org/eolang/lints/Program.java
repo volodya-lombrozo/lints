@@ -23,6 +23,8 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import io.github.secretx33.resourceresolver.PathMatchingResourcePatternResolver;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -33,41 +35,40 @@ import org.cactoos.io.InputOf;
 import org.cactoos.iterable.Mapped;
 
 /**
- * Scope of analysis.
+ * A single XMIR program to analyze.
  *
+ * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR</a>
  * @since 0.0.1
  */
-public final class Scope {
+public final class Program {
 
     /**
      * Lints to use.
      */
-    private static final Iterable<Lint> LINTS = Scope.all();
+    private static final Iterable<Lint> LINTS = Program.all();
 
     /**
-     * Directory with XMIR files.
+     * Absolute path of the XMIR file to analyze.
      */
-    private final Path dir;
+    private final Path path;
 
     /**
      * Ctor.
-     * @param path The directory with XMIR files
+     * @param file The absolute path of the XMIR file
      */
-    public Scope(final Path path) {
-        this.dir = path;
+    public Program(final Path file) {
+        this.path = file;
     }
 
     /**
-     * Find defects possible defects in XMIR files.
+     * Find defects possible defects in the XMIR file.
      * @return All defects found
      */
     public Collection<Defect> defects() throws IOException {
-        final Objects objects = new ObjectsInDir(this.dir);
         final Collection<Defect> messages = new LinkedList<>();
-        for (final Lint lint : Scope.LINTS) {
-            for (final String rel : objects.rels()) {
-                messages.addAll(lint.violations(objects, rel));
-            }
+        final XML xmir = new XMLDocument(this.path);
+        for (final Lint lint : Program.LINTS) {
+            messages.addAll(lint.defects(xmir));
         }
         return messages;
     }

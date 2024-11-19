@@ -33,10 +33,12 @@ public enum Severity {
      * Compilation can't continue, must stop.
      */
     CRITICAL,
+
     /**
      * It's a bug, must be fixed.
      */
     ERROR,
+
     /**
      * Can live with it, but better be fixed.
      */

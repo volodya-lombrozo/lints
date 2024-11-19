@@ -23,22 +23,22 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
 
 /**
- * A single checker for an {@code .xmir} file inside a package.
+ * A single checker for an {@code .xmir} file.
  *
  * @since 0.0.1
  */
 public interface Lint {
 
     /**
-     * Check and return warnings.
-     * @param objects Pack of XMIR objects
-     * @param rel Relative name of the object inside the pack
-     * @return Violations
+     * Find and return defects.
+     * @param xmir The XMIR document to analyze
+     * @return Defects
      */
-    Collection<Defect> violations(Objects objects, String rel) throws IOException;
+    Collection<Defect> defects(XML xmir) throws IOException;
 
 }

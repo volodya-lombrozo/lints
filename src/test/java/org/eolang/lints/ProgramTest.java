@@ -23,50 +23,41 @@
  */
 package org.eolang.lints;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
+import com.yegor256.Mktmp;
+import com.yegor256.MktmpResolver;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import org.cactoos.io.InputOf;
+import org.eolang.parser.EoSyntax;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
- * All {@code .xmir} files in a directory (with sub-directories).
+ * Test for {@link Program}.
  *
  * @since 0.0.1
  */
-public final class ObjectsInDir implements Objects {
+@ExtendWith(MktmpResolver.class)
+final class ProgramTest {
 
-    /**
-     * The location of them.
-     */
-    private final Path dir;
-
-    /**
-     * Ctor.
-     * @param path The directory with XMIR files
-     */
-    public ObjectsInDir(final Path path) {
-        this.dir = path;
-    }
-
-    @Override
-    public Collection<String> rels() throws IOException {
-        try (Stream<Path> files = Files.walk(this.dir)) {
-            return files
-                .filter(file -> !file.toFile().isDirectory())
-                .map(file -> this.dir.relativize(file).toString())
-                .map(rel -> rel.replaceAll("\\.xmir$", ""))
-                .collect(Collectors.toList());
-        }
-    }
-
-    @Override
-    public XML take(final String rel) throws IOException {
-        return new XMLDocument(
-            this.dir.resolve(String.format("%s.xmir", rel))
+    @Test
+    void simpleTest(@Mktmp final Path dir) throws IOException {
+        final Path path = dir.resolve("foo.xmir");
+        Files.write(
+            path,
+            new EoSyntax(
+                new InputOf("# first.\n[] > foo\n# second.\n[] > foo\n")
+            ).parsed().toString().getBytes(StandardCharsets.UTF_8)
+        );
+        MatcherAssert.assertThat(
+            "the defect is found",
+            new Program(path).defects().size(),
+            Matchers.greaterThan(0)
         );
     }
+
 }

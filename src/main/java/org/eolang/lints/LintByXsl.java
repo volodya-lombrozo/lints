@@ -74,11 +74,8 @@ final class LintByXsl implements Lint {
     }
 
     @Override
-    public Collection<Defect> violations(final Objects objects,
-        final String rel) throws IOException {
-        final XML report = this.sheet.transform(
-            objects.take(rel)
-        );
+    public Collection<Defect> defects(final XML xmir) {
+        final XML report = this.sheet.transform(xmir);
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML defect : report.nodes("/defects/defect")) {
             defects.add(
