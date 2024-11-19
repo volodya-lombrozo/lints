@@ -26,29 +26,16 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="//o[@atom]">
-        <xsl:if test="not(/program/metas/meta[head='rt'])">
-          <xsl:element name="defect">
-            <xsl:attribute name="line">
-              <xsl:text>0</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="severity">
-              <xsl:text>error</xsl:text>
-            </xsl:attribute>
-            <xsl:text>Using atoms without +rt meta is prohibited</xsl:text>
-          </xsl:element>
-        </xsl:if>
-      </xsl:if>
       <xsl:if test="not(//o[@atom])">
         <xsl:if test="/program/metas/meta[head='rt']">
           <xsl:element name="defect">
             <xsl:attribute name="line">
-              <xsl:text>0</xsl:text>
+              <xsl:value-of select="/program/metas/meta[head='rt']/@line"/>
             </xsl:attribute>
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
             </xsl:attribute>
-            <xsl:text>Using +rt meta without atoms is prohibited</xsl:text>
+            <xsl:text>Using +rt meta without any atoms in the program doesn't make sense</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:if>
