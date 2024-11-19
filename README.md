@@ -16,6 +16,17 @@ This Java package is a collection of "lints" (aka "checkers") for
 formatting. This is about best practices and readiness of code
 for successful compilation and execution.
 
+We use this package as a dependency in the 
+[EO-to-Java compiler][eo]:
+
+```xml
+<dependency>
+  <groupId>org.eolang</groupId>
+  <artifactId>lints</artifactId>
+  <version>0.0.0</version>
+</dependency>
+```
+
 This is a non-exhaustive list of lints in the collection:
 
 * A comment for an object must be 64+ characters
