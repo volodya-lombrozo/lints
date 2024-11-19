@@ -28,7 +28,6 @@ import org.cactoos.io.InputOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -39,7 +38,6 @@ import org.junit.jupiter.api.Test;
 final class AsciiOnlyTest {
 
     @Test
-    @Disabled
     void catchesNonAsciiInComment() throws IOException {
         MatcherAssert.assertThat(
             "non-ascii comment is not welcome",
