@@ -113,7 +113,7 @@ final class LintByXsl implements Lint {
      */
     private static XML sanitized(final XML xmir) {
         final String[] paths = {
-            "/program/metas/meta[not(@line)]",
+            "/program/metas/meta[not(@line) or @line='']",
         };
         for (final String xpath : paths) {
             if (!xmir.nodes(xpath).isEmpty()) {
