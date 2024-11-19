@@ -26,7 +26,7 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@abstract and count(o)=0]">
+      <xsl:for-each select="//o[@abstract and not(o)]">
         <xsl:element name="defect">
           <xsl:attribute name="check">
             <xsl:text>empty-object</xsl:text>
@@ -41,7 +41,7 @@ SOFTWARE.
           <xsl:text>"</xsl:text>
           <xsl:value-of select="@name"/>
           <xsl:text>" </xsl:text>
-          <xsl:text>is empty</xsl:text>
+          <xsl:text>is empty, it doesn't have any attributes, neither void nor attached</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>
