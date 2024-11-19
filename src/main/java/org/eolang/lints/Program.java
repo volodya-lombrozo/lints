@@ -38,7 +38,7 @@ import org.cactoos.iterable.Mapped;
  * A single XMIR program to analyze.
  *
  * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR</a>
- * @since 0.0.1
+ * @since 0.1.0
  */
 public final class Program {
 
