@@ -45,7 +45,7 @@ final class AsciiOnlyTest {
             "non-ascii comment is not welcome",
             new AsciiOnly().defects(
                 new EoSyntax(
-                    new InputOf("# привет\n[] > foo\n")
+                    new InputOf("# привет\n# как дела?\n[] > foo\n")
                 ).parsed()
             ),
             Matchers.hasSize(Matchers.greaterThan(0))
