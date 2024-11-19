@@ -22,14 +22,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="duplicate-aliases" version="2.0">
-  <xsl:import href="/org/eolang/parser/_funcs.xsl"/>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="duplicate-aliases" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="/program/metas/meta[head='alias']">
-        <xsl:variable name="name" select="eo:alias-name(.)"/>
-        <xsl:if test="preceding-sibling::meta[head='alias' and eo:alias-name(.)=$name]">
+        <xsl:variable name="name" select="tokenize(tail, ' ')[1]"/>
+        <xsl:if test="preceding-sibling::meta[head='alias' and tokenize(tail, ' ')[1]=$name]">
           <xsl:element name="defect">
             <xsl:attribute name="check">
               <xsl:text>duplicate-aliases</xsl:text>

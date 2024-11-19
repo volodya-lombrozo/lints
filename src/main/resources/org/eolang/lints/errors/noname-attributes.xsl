@@ -51,10 +51,6 @@ SOFTWARE.
           <xsl:text>" </xsl:text>
         </xsl:if>
         <xsl:text>has attribute without a name</xsl:text>
-        <xsl:text>, line=</xsl:text>
-        <xsl:value-of select="@line"/>
-        <xsl:text>, pos=</xsl:text>
-        <xsl:value-of select="@pos"/>
       </xsl:element>
     </xsl:for-each>
   </xsl:template>

@@ -23,60 +23,46 @@
  */
 package org.eolang.lints;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
-import java.io.FileNotFoundException;
+import io.github.secretx33.resourceresolver.PathMatchingResourcePatternResolver;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Collection;
-import java.util.LinkedList;
-import org.cactoos.iterable.Sticky;
+import java.util.Arrays;
+import org.cactoos.io.InputOf;
+import org.cactoos.iterable.IterableEnvelope;
+import org.cactoos.iterable.Mapped;
 
 /**
- * A single XMIR program to analyze.
+ * All lints defined by XSLs.
  *
- * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR</a>
  * @since 0.1.0
  */
-public final class Program {
-
-    /**
-     * Lints to use.
-     */
-    private static final Iterable<Lint> LINTS = new Sticky<>(new XslLints());
-
-    /**
-     * The XMIR program to analyze.
-     */
-    private final XML xmir;
+public final class XslLints extends IterableEnvelope<Lint> {
 
     /**
      * Ctor.
-     * @param xml The XMIR
      */
-    public Program(final XML xml) {
-        this.xmir = xml;
+    public XslLints() {
+        super(XslLints.all());
     }
 
     /**
-     * Ctor.
-     * @param file The absolute path of the XMIR file
-     * @throws FileNotFoundException If file not found
+     * All lints.
+     * @return List of all lints
      */
-    public Program(final Path file) throws FileNotFoundException {
-        this(new XMLDocument(file));
-    }
-
-    /**
-     * Find defects possible defects in the XMIR file.
-     * @return All defects found
-     */
-    public Collection<Defect> defects() throws IOException {
-        final Collection<Defect> messages = new LinkedList<>();
-        for (final Lint lint : Program.LINTS) {
-            messages.addAll(lint.defects(this.xmir));
+    private static Iterable<Lint> all() {
+        try {
+            return new Mapped<>(
+                res -> new LintByXsl(
+                    new InputOf(res.getInputStream())
+                ),
+                Arrays.asList(
+                    new PathMatchingResourcePatternResolver().getResources(
+                        "classpath*:org/eolang/lints/**/*.xsl"
+                    )
+                )
+            );
+        } catch (final IOException ex) {
+            throw new IllegalArgumentException(ex);
         }
-        return messages;
     }
 
 }

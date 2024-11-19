@@ -22,13 +22,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="unused-aliases" version="2.0">
-  <xsl:import href="/org/eolang/parser/_funcs.xsl"/>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="unused-alias" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="/program/metas/meta[head='alias']">
-        <xsl:variable name="name" select="eo:alias-qualified(.)"/>
+      <xsl:for-each select="/program/metas/meta[head='alias' and count(part)=2]">
+        <xsl:variable name="name" select="tokenize(tail, ' ')[2]"/>
         <xsl:if test="count(//o[@base=$name]) = 0">
           <xsl:element name="defect">
             <xsl:attribute name="check">
@@ -42,7 +41,9 @@ SOFTWARE.
             </xsl:attribute>
             <xsl:text>The alias "</xsl:text>
             <xsl:value-of select="$name"/>
-            <xsl:text>" is not used</xsl:text>
+            <xsl:text>" is not used, but defined as "+alias </xsl:text>
+            <xsl:value-of select="tail"/>
+            <xsl:text>"</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

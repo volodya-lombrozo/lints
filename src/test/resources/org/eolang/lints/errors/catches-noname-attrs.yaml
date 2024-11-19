@@ -25,10 +25,10 @@ xsls:
   - /org/eolang/lints/errors/noname-attributes.xsl
 tests:
   - /defects[count(defect[@severity='error'])=4]
-  - /defects/defect[@line='3' and contains(text(),'pos=2')]
-  - /defects/defect[@line='4' and contains(text(),'pos=2')]
-  - /defects/defect[@line='11' and contains(text(),'pos=19')]
-  - /defects/defect[@line='17' and contains(text(),'pos=2')]
+  - /defects/defect[@line='3']
+  - /defects/defect[@line='4']
+  - /defects/defect[@line='11']
+  - /defects/defect[@line='17']
 eo: |
   # This is the default 64+ symbols comment in front of abstract object.
   [] > abs

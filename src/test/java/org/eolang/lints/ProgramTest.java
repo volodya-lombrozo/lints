@@ -60,4 +60,48 @@ final class ProgramTest {
         );
     }
 
+    @Test
+    void largerBrokenProgramTest() throws IOException {
+        MatcherAssert.assertThat(
+            "checking passes",
+            new Program(
+                new EoSyntax(
+                    new InputOf(
+                        String.join(
+                            "\n",
+                            "# This is the license",
+                            "",
+                            "+version 8.8.8-beta",
+                            "+alias org.eolang.txt.sprintf",
+                            "+alias org . eolang . txt . broken",
+                            "+version 1.1-another maybe be wrong",
+                            "+package Z.Y.Z",
+                            "+home some-wrong-URL",
+                            "+architect broken-email-here",
+                            "",
+                            "# комментарий здесь",
+                            "[] > foo-bar",
+                            "  (bar 42) > zzz",
+                            "  44 > zzz",
+                            "",
+                            "[] > foo-bar",
+                            "",
+                            "[] > another",
+                            "",
+                            "42 > forty-two"
+                        )
+                    )
+                ).parsed()
+            ).defects(),
+            Matchers.allOf(
+                Matchers.iterableWithSize(Matchers.greaterThan(0)),
+                Matchers.hasItem(
+                    Matchers.hasToString(
+                        "[broken-aliases ERROR]:5 The alias is invalid: \"org . eolang . txt . broken\""
+                    )
+                )
+            )
+        );
+    }
+
 }

@@ -97,6 +97,13 @@ public interface Defect {
         }
 
         @Override
+        public String toString() {
+            return String.format(
+                "[%s %s]:%d %s", this.rle, this.sev, this.lineno, this.txt
+            );
+        }
+
+        @Override
         public String rule() {
             return this.rle;
         }

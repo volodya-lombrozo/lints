@@ -25,58 +25,28 @@ package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Collection;
-import java.util.LinkedList;
-import org.cactoos.iterable.Sticky;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
 /**
- * A single XMIR program to analyze.
+ * Test for {@link XslLints}.
  *
- * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR</a>
- * @since 0.1.0
+ * @since 0.0.1
  */
-public final class Program {
+final class XslLintsTest {
 
-    /**
-     * Lints to use.
-     */
-    private static final Iterable<Lint> LINTS = new Sticky<>(new XslLints());
-
-    /**
-     * The XMIR program to analyze.
-     */
-    private final XML xmir;
-
-    /**
-     * Ctor.
-     * @param xml The XMIR
-     */
-    public Program(final XML xml) {
-        this.xmir = xml;
-    }
-
-    /**
-     * Ctor.
-     * @param file The absolute path of the XMIR file
-     * @throws FileNotFoundException If file not found
-     */
-    public Program(final Path file) throws FileNotFoundException {
-        this(new XMLDocument(file));
-    }
-
-    /**
-     * Find defects possible defects in the XMIR file.
-     * @return All defects found
-     */
-    public Collection<Defect> defects() throws IOException {
-        final Collection<Defect> messages = new LinkedList<>();
-        for (final Lint lint : Program.LINTS) {
-            messages.addAll(lint.defects(this.xmir));
+    @Test
+    void passesOnSimpleXmir() throws IOException {
+        final XML xmir = new XMLDocument("<program/>");
+        for (final Lint lint : new XslLints()) {
+            MatcherAssert.assertThat(
+                "passes with no exceptions",
+                lint.defects(xmir),
+                Matchers.notNullValue()
+            );
         }
-        return messages;
     }
 
 }
