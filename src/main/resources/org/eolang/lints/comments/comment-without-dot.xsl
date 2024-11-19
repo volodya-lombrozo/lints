@@ -27,7 +27,7 @@ SOFTWARE.
   <xsl:template match="/">
     <xsl:variable name="min" select="32"/>
     <defects>
-      <xsl:for-each select="/program/comments/comment[ends-with(., '.')]">
+      <xsl:for-each select="/program/comments/comment[not(ends-with(., '.'))]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="if (@line) then @line else '0'"/>
