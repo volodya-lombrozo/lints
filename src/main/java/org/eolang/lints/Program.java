@@ -26,6 +26,7 @@ package org.eolang.lints;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import io.github.secretx33.resourceresolver.PathMatchingResourcePatternResolver;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -48,16 +49,25 @@ public final class Program {
     private static final Iterable<Lint> LINTS = Program.all();
 
     /**
-     * Absolute path of the XMIR file to analyze.
+     * The XMIR program to analyze.
      */
-    private final Path path;
+    private final XML xmir;
+
+    /**
+     * Ctor.
+     * @param xml The XMIR
+     */
+    public Program(final XML xml) {
+        this.xmir = xml;
+    }
 
     /**
      * Ctor.
      * @param file The absolute path of the XMIR file
+     * @throws FileNotFoundException If file not found
      */
-    public Program(final Path file) {
-        this.path = file;
+    public Program(final Path file) throws FileNotFoundException {
+        this(new XMLDocument(file));
     }
 
     /**
@@ -66,9 +76,8 @@ public final class Program {
      */
     public Collection<Defect> defects() throws IOException {
         final Collection<Defect> messages = new LinkedList<>();
-        final XML xmir = new XMLDocument(this.path);
         for (final Lint lint : Program.LINTS) {
-            messages.addAll(lint.defects(xmir));
+            messages.addAll(lint.defects(this.xmir));
         }
         return messages;
     }
