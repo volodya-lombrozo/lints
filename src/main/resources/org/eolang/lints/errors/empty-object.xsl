@@ -32,13 +32,21 @@ SOFTWARE.
             <xsl:value-of select="if (@line) then @line else '0'"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
-            <xsl:text>error</xsl:text>
+            <xsl:text>warning</xsl:text>
           </xsl:attribute>
-          <xsl:text>The object </xsl:text>
-          <xsl:text>"</xsl:text>
-          <xsl:value-of select="@name"/>
-          <xsl:text>" </xsl:text>
-          <xsl:text>is empty, it doesn't have any attributes, neither void nor attached</xsl:text>
+          <xsl:text>The </xsl:text>
+          <xsl:choose>
+            <xsl:when test="@name">
+              <xsl:text>object </xsl:text>
+              <xsl:text>"</xsl:text>
+              <xsl:value-of select="@name"/>
+              <xsl:text>"</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>anonymous object</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text> is empty, it doesn't have any attributes, neither void nor attached</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>
