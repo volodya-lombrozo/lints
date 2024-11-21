@@ -31,7 +31,6 @@ import org.eolang.lints.Defect;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 
 /**
