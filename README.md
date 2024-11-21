@@ -16,7 +16,7 @@ This Java package is a collection of "lints" (aka "checkers") for
 formatting. This is about best practices and readiness of code
 for successful compilation and execution.
 
-We use this package as a dependency in the 
+We use this package as a dependency in the
 [EO-to-Java compiler][eo]:
 
 ```xml
