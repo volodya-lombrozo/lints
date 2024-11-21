@@ -48,7 +48,10 @@ public final class AsciiOnly implements Lint {
                         "ascii-only",
                         Severity.ERROR,
                         Integer.parseInt(comment.xpath("@line").get(0)),
-                        "Comment must contain only ASCII printable characters: 0x20-0x7f"
+                        String.format(
+                        "Comment must contain only ASCII printable characters: %s",
+                            comment.xpath("text()").get(0)
+                        )
                     )
                 );
             }
