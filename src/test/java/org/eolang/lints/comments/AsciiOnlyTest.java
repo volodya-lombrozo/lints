@@ -54,8 +54,10 @@ final class AsciiOnlyTest {
         );
         MatcherAssert.assertThat(
             "non-ascii comment error should contain abusive character",
-            new ListOf<>(defects).get(0).text().contains("приветкак дела?"),
-            Matchers.is(true)
+            new ListOf<>(defects).get(0).text(),
+            Matchers.is(
+                "Only ASCII characters are allowed in comments, while 'п' is used at the 3th line at the 1th position"
+            )
         );
     }
 
