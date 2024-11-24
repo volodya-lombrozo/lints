@@ -40,6 +40,7 @@ import org.eolang.lints.Severity;
  *  For now we just reusing object line number (via @line), which is not correct
  *  for specifying on which line of the program comment is located. This issue
  *  can be solved after <a href="https://github.com/objectionary/eo/issues/3536">this one</a>.
+ * @checkstyle StringLiteralsConcatenationCheck (30 lines)
  */
 public final class AsciiOnly implements Lint {
 
