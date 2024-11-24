@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Optional;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
 import org.eolang.lints.Severity;
@@ -42,15 +43,23 @@ public final class AsciiOnly implements Lint {
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML comment : xmir.nodes("/program/comments/comment")) {
-            if (comment.xpath("text()").get(0).chars().anyMatch(chr -> chr < 32 || chr > 127)) {
+            final Optional<Character> abusive = comment.xpath("text()").get(0).chars()
+                .filter(chr -> chr < 32 || chr > 127)
+                .mapToObj(chr -> (char) chr)
+                .findFirst();
+            if (abusive.isPresent()) {
+                final String line = comment.xpath("@line").get(0);
+                final Character chr = abusive.get();
                 defects.add(
                     new Defect.Default(
                         "ascii-only",
                         Severity.ERROR,
-                        Integer.parseInt(comment.xpath("@line").get(0)),
+                        Integer.parseInt(line),
                         String.format(
-                        "Comment must contain only ASCII printable characters: %s",
-                            comment.xpath("text()").get(0)
+                            "Only ASCII characters are allowed in comments, while '%s' is used at the %sth line at the %sth position",
+                            chr,
+                            line,
+                            comment.xpath("text()").get(0).indexOf(chr)
                         )
                     )
                 );
