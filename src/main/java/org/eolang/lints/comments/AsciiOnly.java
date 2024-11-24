@@ -52,23 +52,24 @@ public final class AsciiOnly implements Lint {
                 .filter(chr -> chr < 32 || chr > 127)
                 .mapToObj(chr -> (char) chr)
                 .findFirst();
-            if (abusive.isPresent()) {
-                final String line = comment.xpath("@line").get(0);
-                final Character chr = abusive.get();
-                defects.add(
-                    new Defect.Default(
-                        "ascii-only",
-                        Severity.ERROR,
-                        Integer.parseInt(line),
-                        String.format(
-                            "Only ASCII characters are allowed in comments, while '%s' is used at the %sth line at the %sth position",
-                            chr,
-                            line,
-                            comment.xpath("text()").get(0).indexOf(chr) + 1
-                        )
-                    )
-                );
+            if (!abusive.isPresent()) {
+                continue;
             }
+            final String line = comment.xpath("@line").get(0);
+            final Character chr = abusive.get();
+            defects.add(
+                new Defect.Default(
+                    "ascii-only",
+                    Severity.ERROR,
+                    Integer.parseInt(line),
+                    String.format(
+                        "Only ASCII characters are allowed in comments, while '%s' is used at the %sth line at the %sth position",
+                        chr,
+                        line,
+                        comment.xpath("text()").get(0).indexOf(chr) + 1
+                    )
+                )
+            );
         }
         return defects;
     }
