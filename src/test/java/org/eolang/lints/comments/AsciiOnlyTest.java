@@ -24,7 +24,10 @@
 package org.eolang.lints.comments;
 
 import java.io.IOException;
+import java.util.Collection;
 import org.cactoos.io.InputOf;
+import org.cactoos.list.ListOf;
+import org.eolang.lints.Defect;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -39,14 +42,22 @@ final class AsciiOnlyTest {
 
     @Test
     void catchesNonAsciiInComment() throws IOException {
+        final Collection<Defect> defects = new AsciiOnly().defects(
+            new EoSyntax(
+                new InputOf("# привет\n# как дела?\n[] > foo\n")
+            ).parsed()
+        );
         MatcherAssert.assertThat(
             "non-ascii comment is not welcome",
-            new AsciiOnly().defects(
-                new EoSyntax(
-                    new InputOf("# привет\n# как дела?\n[] > foo\n")
-                ).parsed()
-            ),
+            defects,
             Matchers.hasSize(Matchers.greaterThan(0))
+        );
+        MatcherAssert.assertThat(
+            "non-ascii comment error should contain abusive character",
+            new ListOf<>(defects).get(0).text(),
+            Matchers.is(
+                "Only ASCII characters are allowed in comments, while 'п' is used at the 3th line at the 1th position"
+            )
         );
     }
 

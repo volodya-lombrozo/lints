@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Optional;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
 import org.eolang.lints.Severity;
@@ -35,6 +36,11 @@ import org.eolang.lints.Severity;
  * A comment must include only ASCII characters.
  *
  * @since 0.1.0
+ * @todo #14:35min Calculate comment line number with abusive character.
+ *  For now we just reusing object line number (via @line), which is not correct
+ *  for specifying on which line of the program comment is located. This issue
+ *  can be solved after <a href="https://github.com/objectionary/eo/issues/3536">this one</a>.
+ * @checkstyle StringLiteralsConcatenationCheck (30 lines)
  */
 public final class AsciiOnly implements Lint {
 
@@ -42,16 +48,28 @@ public final class AsciiOnly implements Lint {
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML comment : xmir.nodes("/program/comments/comment")) {
-            if (comment.xpath("text()").get(0).chars().anyMatch(chr -> chr < 32 || chr > 127)) {
-                defects.add(
-                    new Defect.Default(
-                        "ascii-only",
-                        Severity.ERROR,
-                        Integer.parseInt(comment.xpath("@line").get(0)),
-                        "Comment must contain only ASCII printable characters: 0x20-0x7f"
-                    )
-                );
+            final Optional<Character> abusive = comment.xpath("text()").get(0).chars()
+                .filter(chr -> chr < 32 || chr > 127)
+                .mapToObj(chr -> (char) chr)
+                .findFirst();
+            if (!abusive.isPresent()) {
+                continue;
             }
+            final String line = comment.xpath("@line").get(0);
+            final Character chr = abusive.get();
+            defects.add(
+                new Defect.Default(
+                    "ascii-only",
+                    Severity.ERROR,
+                    Integer.parseInt(line),
+                    String.format(
+                        "Only ASCII characters are allowed in comments, while '%s' is used at the %sth line at the %sth position",
+                        chr,
+                        line,
+                        comment.xpath("text()").get(0).indexOf(chr) + 1
+                    )
+                )
+            );
         }
         return defects;
     }
