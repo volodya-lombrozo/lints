@@ -59,7 +59,7 @@ public final class AsciiOnly implements Lint {
                             "Only ASCII characters are allowed in comments, while '%s' is used at the %sth line at the %sth position",
                             chr,
                             line,
-                            comment.xpath("text()").get(0).indexOf(chr)
+                            comment.xpath("text()").get(0).indexOf(chr) + 1
                         )
                     )
                 );
