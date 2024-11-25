@@ -9,3 +9,4 @@ target/
 .mvn/
 temp/
 *.tgz
+*.DS_Store

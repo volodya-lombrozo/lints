@@ -29,8 +29,8 @@ SOFTWARE.
       <xsl:for-each select="/program/metas/meta">
         <xsl:variable name="meta-head" select="head"/>
         <xsl:variable name="meta-tail" select="tail"/>
-        <xsl:if test="$meta-head='version' and not(matches($meta-tail, '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$'))">
-          <xsl:element name="defect">
+        <xsl:if test="$meta-head='version' and not(matches($meta-tail, '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)?(\+[a-zA-Z0-9]+)?$'))">
+        <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="if (@line) then @line else '0'"/>
             </xsl:attribute>
