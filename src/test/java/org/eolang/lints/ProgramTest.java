@@ -97,7 +97,9 @@ final class ProgramTest {
                 Matchers.iterableWithSize(Matchers.greaterThan(0)),
                 Matchers.hasItem(
                     Matchers.hasToString(
-                        "[broken-aliases ERROR]:5 The alias is invalid: \"org . eolang . txt . broken\""
+                        Matchers.containsString(
+                            "[alias-too-long ERROR]:5 The alias has too many parts"
+                        )
                     )
                 )
             )

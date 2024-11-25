@@ -22,12 +22,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="broken-aliases" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="broken-alias" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="/program/metas/meta[head='alias']">
-        <xsl:if test="not(matches(tail, '^([a-z]+[^&gt;&lt;.\[\]()!:&quot;@^$#&amp;/\s]* ?)?[\w\d]+(\.[\w][\w\d_-]*)*$'))">
+        <xsl:if test="part[1] and not(matches(part[1], '^[a-z]+[^&gt;&lt;.\[\]()!:&quot;@^$#&amp;/\s]*$'))">
           <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="if (@line) then @line else '0'"/>
@@ -35,8 +35,21 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
             </xsl:attribute>
-            <xsl:text>The alias is invalid: "</xsl:text>
-            <xsl:value-of select="tail"/>
+            <xsl:text>The first part of the alias is invalid: "</xsl:text>
+            <xsl:value-of select="part[1]"/>
+            <xsl:text>"</xsl:text>
+          </xsl:element>
+        </xsl:if>
+        <xsl:if test="part[2] and not(matches(part[2], '^[a-z]+[^&gt;&lt;.\[\]()!:&quot;@^$#&amp;/\s]*(\.[a-z]+[^&gt;&lt;.\[\]()!:&quot;@^$#&amp;/\s]*)*$'))">
+          <xsl:element name="defect">
+            <xsl:attribute name="line">
+              <xsl:value-of select="if (@line) then @line else '0'"/>
+            </xsl:attribute>
+            <xsl:attribute name="severity">
+              <xsl:text>error</xsl:text>
+            </xsl:attribute>
+            <xsl:text>The second part of the alias is invalid: "</xsl:text>
+            <xsl:value-of select="part[2]"/>
             <xsl:text>"</xsl:text>
           </xsl:element>
         </xsl:if>

@@ -22,21 +22,22 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="comment-not-capitalized" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="alias-without-tail" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
-    <xsl:variable name="min" select="32"/>
     <defects>
-      <xsl:for-each select="/program/comments/comment[not(matches(., '^[A-Z]'))]">
-        <xsl:element name="defect">
-          <xsl:attribute name="line">
-            <xsl:value-of select="if (@line) then @line else '0'"/>
-          </xsl:attribute>
-          <xsl:attribute name="severity">
-            <xsl:text>warning</xsl:text>
-          </xsl:attribute>
-          <xsl:text>The comment doesn't start with a capital English letter</xsl:text>
-        </xsl:element>
+      <xsl:for-each select="/program/metas/meta[head='alias']">
+        <xsl:if test="not(count(part))">
+          <xsl:element name="defect">
+            <xsl:attribute name="line">
+              <xsl:value-of select="if (@line) then @line else '0'"/>
+            </xsl:attribute>
+            <xsl:attribute name="severity">
+              <xsl:text>error</xsl:text>
+            </xsl:attribute>
+            <xsl:text>The alias doesn't have a tail</xsl:text>
+          </xsl:element>
+        </xsl:if>
       </xsl:for-each>
     </defects>
   </xsl:template>

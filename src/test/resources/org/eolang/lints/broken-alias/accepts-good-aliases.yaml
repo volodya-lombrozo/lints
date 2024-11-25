@@ -21,15 +21,20 @@
 # SOFTWARE.
 ---
 xsls:
-  - /org/eolang/lints/aliases/duplicate-aliases.xsl
+  - /org/eolang/parser/expand-aliases.xsl
+  - /org/eolang/lints/aliases/broken-alias.xsl
 tests:
-  - /defects[count(defect[@severity='error'])=1]
-  - /defects/defect[@line='3']
+  - /defects[count(defect)=0]
 eo: |
-  +alias stdin org.eolang.io.stdin
-  +alias stdout org.eolang.io.stdout
-  +alias stdout org.eolang.io.stdout
+  +alias one
+  +alias one-two
+  +alias one-two-three-four
+  +alias i文件
+  +alias i文件 this.is.legal2
+  +alias org.eolang.io.stdout
+  +alias org.eolang.with-dash
+  +alias with-dash
+  +alias with-dash org.eolang.with-dash
 
-  # This is the default 64+ symbols comment in front of abstract object.
-  [] > main
-    (stdout "Hello, world!").print
+  # foo.
+  [] > foo
