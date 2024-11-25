@@ -23,12 +23,18 @@
 xsls:
   - /org/eolang/lints/metas/incorrect-version.xsl
 tests:
-  - /defects[count(defect[@severity='warning'])=5]
+  - /defects[count(defect[@severity='warning'])=11]
   - /defects/defect[@line='3']
   - /defects/defect[@line='5']
   - /defects/defect[@line='6']
   - /defects/defect[@line='7']
   - /defects/defect[@line='8']
+  - /defects/defect[@line='10']
+  - /defects/defect[@line='11']
+  - /defects/defect[@line='12']
+  - /defects/defect[@line='13']
+  - /defects/defect[@line='14']
+  - /defects/defect[@line='15']
 eo: |
   +version 0.0.0
   +version 0.2.1
@@ -38,6 +44,15 @@ eo: |
   +version привет, друг!
   +version привет, как дела?
   +version 你好，伙计
+  +version 42.0.555555
+  +version 0.0
+  +version 123
+  +version 1. 1 .1
+  +version 1.1.alpha
+  +version 1-alpha
+  +version alpha.1.1
+  +version 0.0.1-alpha
+  +version 0.0.1-beta-1
 
   # This is the default 64+ symbols comment in front of abstract object.
   [x] > foo
