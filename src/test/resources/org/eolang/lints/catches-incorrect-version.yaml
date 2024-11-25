@@ -35,7 +35,6 @@ tests:
   - /defects/defect[@line='13']
   - /defects/defect[@line='14']
   - /defects/defect[@line='15']
-# +version 0.0.1-beta-1
 eo: |
   +version 0.0.0
   +version 0.2.1
@@ -53,6 +52,7 @@ eo: |
   +version 1-alpha
   +version alpha.1.1
   +version 0.0.1-alpha
+  +version 0.0.1-beta-1
 
   # This is the default 64+ symbols comment in front of abstract object.
   [x] > foo
