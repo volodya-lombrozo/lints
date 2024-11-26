@@ -26,9 +26,13 @@ package org.eolang.lints;
 import io.github.secretx33.resourceresolver.PathMatchingResourcePatternResolver;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Pattern;
 import org.cactoos.io.InputOf;
+import org.cactoos.io.ResourceOf;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Mapped;
+import org.cactoos.list.ListOf;
 
 /**
  * All lints defined by XSLs.
@@ -36,6 +40,13 @@ import org.cactoos.iterable.Mapped;
  * @since 0.1.0
  */
 public final class XslLints extends IterableEnvelope<Lint> {
+
+    /**
+     * XSL extension pattern.
+     */
+    private static final Pattern XSL_PATTERN = Pattern.compile(
+        ".xsl", Pattern.LITERAL
+    );
 
     /**
      * Ctor.
@@ -46,14 +57,32 @@ public final class XslLints extends IterableEnvelope<Lint> {
 
     /**
      * All lints.
+     *
      * @return List of all lints
      */
     private static Iterable<Lint> all() {
         try {
             return new Mapped<>(
-                res -> new LintByXsl(
-                    new InputOf(res.getInputStream())
-                ),
+                res -> {
+                    final List<String> dirs = new ListOf<>(
+                        res.getFile().toString().split("/")
+                    );
+                    final int last = dirs.size() - 1;
+                    return new LintByXsl(
+                        new InputOf(res.getInputStream()),
+                        new InputOf(
+                            new ResourceOf(
+                                String.format(
+                                    "org/eolang/motives/%s/%s",
+                                    dirs.get(last - 1),
+                                    XSL_PATTERN.matcher(
+                                        dirs.get(last)
+                                    ).replaceAll(".md")
+                                )
+                            ).stream()
+                        )
+                    );
+                },
                 Arrays.asList(
                     new PathMatchingResourcePatternResolver().getResources(
                         "classpath*:org/eolang/lints/**/*.xsl"
