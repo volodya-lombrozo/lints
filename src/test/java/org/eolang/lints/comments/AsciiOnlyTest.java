@@ -31,6 +31,7 @@ import org.eolang.lints.Defect;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -58,6 +59,15 @@ final class AsciiOnlyTest {
             Matchers.is(
                 "Only ASCII characters are allowed in comments, while 'п' is used at the 3th line at the 1th position"
             )
+        );
+    }
+
+    @Test
+    void explainsMotive() throws Exception {
+        MatcherAssert.assertThat(
+            "The motive doesn't contain expected string",
+            new AsciiOnly().motive().contains("# ASCII-Only Characters in Comment"),
+            new IsEqual<>(true)
         );
     }
 
