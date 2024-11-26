@@ -1,11 +1,11 @@
-# Alias Too Long
+# Alias Without Tail
 
-Object alias must have **2 parts at max**. 
+All aliases must have tail after it.
 
 Incorrect:
 
 ```eo
-+alias a b c
++alias
 
 # Foo.
 [] > foo
@@ -16,7 +16,8 @@ Correct:
 ```eo
 +alias a
 +alias a b
-+alias a b.c.d.e
++alias a b c
++alias a b c d
 
 # Foo.
 [] > foo
