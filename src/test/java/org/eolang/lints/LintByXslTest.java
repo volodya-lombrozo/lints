@@ -30,6 +30,7 @@ import org.eolang.parser.CheckPack;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -65,6 +66,15 @@ final class LintByXslTest {
             String.format("The check pack has failed: %n%s", pack),
             check.failures(),
             Matchers.empty()
+        );
+    }
+
+    @Test
+    void returnsMotive() throws Exception {
+        MatcherAssert.assertThat(
+            "The motive was not found or empty",
+            new LintByXsl("critical/duplicate-names").motive().isEmpty(),
+            new IsEqual<>(false)
         );
     }
 
