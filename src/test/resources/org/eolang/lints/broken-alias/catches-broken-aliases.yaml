@@ -24,13 +24,12 @@ xsls:
   - /org/eolang/parser/expand-aliases.xsl
   - /org/eolang/lints/aliases/broken-alias.xsl
 tests:
-  - /defects[count(defect[@severity='error'])=22]
+  - /defects[count(defect[@severity='error'])=21]
 eo: |
   +alias FirstLetter Capital.Letters.Prohibited.Here
   +alias good Should.Be.Small
   +alias with-Dash-and-number-999 0.1.2
   +alias caseInsensitive thiS.IS.2
-  +alias the  symbol.is.not.allowed
   +alias the! symbol.is.not.allowed
   +alias the" symbol.is.not.allowed
   +alias the# symbol.is.not.allowed

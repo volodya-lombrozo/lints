@@ -22,11 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="not-empty-atoms" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="broken-ref" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@atom and o[@base]]">
+      <xsl:for-each select="//o[@ref and @ref!='' and not(matches(@ref, '^[0-9]+(\.[0-9]+)*$'))]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="if (@line) then @line else '0'"/>
@@ -34,20 +34,14 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>The atom '</xsl:text>
-          <xsl:value-of select="@name"/>
-          <xsl:text>' may not have any attributes: </xsl:text>
-          <xsl:for-each select="o[@base]">
-            <xsl:if test="position() &gt; 1">
-              <xsl:text>, </xsl:text>
-            </xsl:if>
-            <xsl:text>'</xsl:text>
-            <xsl:value-of select="@name"/>
-            <xsl:text>'</xsl:text>
-          </xsl:for-each>
+          <xsl:text>The ref at "</xsl:text>
+          <xsl:value-of select="@base"/>
+          <xsl:text>" is wrongly formatted: "</xsl:text>
+          <xsl:value-of select="@ref"/>
+          <xsl:text>"</xsl:text>
         </xsl:element>
       </xsl:for-each>
-      <xsl:for-each select="//o[@atom and o[@atom]]">
+      <xsl:for-each select="//o[@ref and @ref='']">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="if (@line) then @line else '0'"/>
@@ -55,18 +49,28 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>Atom '</xsl:text>
-          <xsl:value-of select="@name"/>
-          <xsl:text>' may not have any attributes, even though they are atoms: </xsl:text>
-          <xsl:for-each select="o[@atom]">
-            <xsl:if test="position() &gt; 1">
-              <xsl:text>, </xsl:text>
-            </xsl:if>
-            <xsl:text>'</xsl:text>
-            <xsl:value-of select="@name"/>
-            <xsl:text>'</xsl:text>
-          </xsl:for-each>
+          <xsl:text>The ref at "</xsl:text>
+          <xsl:value-of select="@base"/>
+          <xsl:text>" is empty</xsl:text>
         </xsl:element>
+      </xsl:for-each>
+      <xsl:for-each select="//o[@ref and @base]">
+        <xsl:variable name="o" select="."/>
+        <xsl:if test="not(//o[@name=$o/@base and @line=$o/@ref])">
+          <xsl:element name="defect">
+            <xsl:attribute name="severity">
+              <xsl:text>error</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="line">
+              <xsl:value-of select="if (@line) then @line else '0'"/>
+            </xsl:attribute>
+            <xsl:text>The object "</xsl:text>
+            <xsl:value-of select="@base"/>
+            <xsl:text>" is absent, but is referenced as "</xsl:text>
+            <xsl:value-of select="@ref"/>
+            <xsl:text>"</xsl:text>
+          </xsl:element>
+        </xsl:if>
       </xsl:for-each>
     </defects>
   </xsl:template>

@@ -22,11 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="unknown-names" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="not-empty-atom" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@base and @base!='@' and @base!='&amp;' and @base!='Q' and @base!='^' and @base!='$' and @base!='&lt;' and not(@ref) and not(contains(@base, '.')) and not(@base = //meta[head='alias']/part[1])]">
+      <xsl:for-each select="//o[@atom and o[@base]]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="if (@line) then @line else '0'"/>
@@ -34,9 +34,17 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>The object "</xsl:text>
-          <xsl:value-of select="@base"/>
-          <xsl:text>" is not defined anywhere</xsl:text>
+          <xsl:text>The atom '</xsl:text>
+          <xsl:value-of select="@name"/>
+          <xsl:text>' may not have any attributes: </xsl:text>
+          <xsl:for-each select="o[@base]">
+            <xsl:if test="position() &gt; 1">
+              <xsl:text>, </xsl:text>
+            </xsl:if>
+            <xsl:text>'</xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text>'</xsl:text>
+          </xsl:for-each>
         </xsl:element>
       </xsl:for-each>
     </defects>

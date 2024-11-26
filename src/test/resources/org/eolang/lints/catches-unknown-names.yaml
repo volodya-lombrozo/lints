@@ -21,7 +21,7 @@
 # SOFTWARE.
 ---
 xsls:
-  - /org/eolang/lints/errors/unknown-names.xsl
+  - /org/eolang/lints/errors/unknown-name.xsl
 tests:
   - /defects[count(defect[@severity='error'])=1]
   - /defects/defect[@line='5']

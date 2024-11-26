@@ -22,7 +22,7 @@
 ---
 xsls:
   - /org/eolang/parser/wrap-method-calls.xsl
-  - /org/eolang/lints/errors/noname-attributes.xsl
+  - /org/eolang/lints/errors/noname-attribute.xsl
 tests:
   - /defects[count(defect[@severity='error'])=4]
   - /defects/defect[@line='3']

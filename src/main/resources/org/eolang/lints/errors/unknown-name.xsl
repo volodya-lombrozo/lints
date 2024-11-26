@@ -22,11 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="broken-refs" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="unknown-name" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@ref and @ref!='' and not(matches(@ref, '^[0-9]+(\.[0-9]+)*$'))]">
+      <xsl:for-each select="//o[@base and @base!='@' and @base!='&amp;' and @base!='Q' and @base!='^' and @base!='$' and @base!='&lt;' and not(@ref) and not(contains(@base, '.')) and not(@base = //meta[head='alias']/part[1])]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="if (@line) then @line else '0'"/>
@@ -34,43 +34,10 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>The ref at "</xsl:text>
+          <xsl:text>The object "</xsl:text>
           <xsl:value-of select="@base"/>
-          <xsl:text>" is wrongly formatted: "</xsl:text>
-          <xsl:value-of select="@ref"/>
-          <xsl:text>"</xsl:text>
+          <xsl:text>" is not defined anywhere</xsl:text>
         </xsl:element>
-      </xsl:for-each>
-      <xsl:for-each select="//o[@ref and @ref='']">
-        <xsl:element name="defect">
-          <xsl:attribute name="line">
-            <xsl:value-of select="if (@line) then @line else '0'"/>
-          </xsl:attribute>
-          <xsl:attribute name="severity">
-            <xsl:text>error</xsl:text>
-          </xsl:attribute>
-          <xsl:text>The ref at "</xsl:text>
-          <xsl:value-of select="@base"/>
-          <xsl:text>" is empty</xsl:text>
-        </xsl:element>
-      </xsl:for-each>
-      <xsl:for-each select="//o[@ref and @base]">
-        <xsl:variable name="o" select="."/>
-        <xsl:if test="not(//o[@name=$o/@base and @line=$o/@ref])">
-          <xsl:element name="defect">
-            <xsl:attribute name="severity">
-              <xsl:text>error</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="line">
-              <xsl:value-of select="if (@line) then @line else '0'"/>
-            </xsl:attribute>
-            <xsl:text>The object "</xsl:text>
-            <xsl:value-of select="@base"/>
-            <xsl:text>" is absent, but is referenced as "</xsl:text>
-            <xsl:value-of select="@ref"/>
-            <xsl:text>"</xsl:text>
-          </xsl:element>
-        </xsl:if>
       </xsl:for-each>
     </defects>
   </xsl:template>
