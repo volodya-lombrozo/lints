@@ -1,6 +1,6 @@
 # Alias Without Tail
 
-Object alias must have a tail.
+Object's alias must have a tail.
 
 Incorrect:
 
