@@ -8,10 +8,12 @@ Incorrect:
 # привет.
 # 你好，伙计
 # Γεια σας
+[] > foo
 ```
 
 Correct:
 
 ```eo
 # This is comment with all ASCII characters.
+[] > foo
 ```
