@@ -44,7 +44,7 @@ import org.eolang.lints.Severity;
  *  can be solved after <a href="https://github.com/objectionary/eo/issues/3536">this one</a>.
  * @todo #19:45min Create Lint envelope called `JavaLint` that will fetch motive from
  *  Markdown file based on the lint's name (Java class name) and lint's dimension
- *  (Java package, e.g. `comments`).
+ *  (Java package name, e.g. `comments`).
  * @checkstyle StringLiteralsConcatenationCheck (30 lines)
  */
 public final class AsciiOnly implements Lint {
