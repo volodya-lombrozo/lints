@@ -55,12 +55,17 @@ final class LintByXsl implements Lint {
     private final XSL sheet;
 
     /**
+     * Motive.
+     */
+    private final Input motive;
+
+    /**
      * Ctor.
      * @param xsl Relative path of XSL
      * @throws IOException If fails
      */
     @SuppressWarnings("PMD.ConstructorOnlyInitializesOrCallOtherConstructors")
-    LintByXsl(final Input xsl) throws IOException {
+    LintByXsl(final Input xsl, final Input motive) throws IOException {
         final XML xml = new XMLDocument(
             new IoCheckedText(
                 new TextOf(xsl)
@@ -68,6 +73,7 @@ final class LintByXsl implements Lint {
         );
         this.rule = xml.xpath("/xsl:stylesheet/@id").get(0);
         this.sheet = new XSLDocument(xml).with(new ClasspathSources());
+        this.motive = motive;
     }
 
     /**
@@ -79,6 +85,9 @@ final class LintByXsl implements Lint {
         this(
             new ResourceOf(
                 String.format("org/eolang/lints/%s.xsl", xsl)
+            ),
+            new ResourceOf(
+                String.format("org/eolang/motives/%s.md", xsl)
             )
         );
     }
@@ -104,6 +113,11 @@ final class LintByXsl implements Lint {
             );
         }
         return defects;
+    }
+
+    @Override
+    public String motive() throws Exception {
+        return new TextOf(this.motive).asString();
     }
 
     /**

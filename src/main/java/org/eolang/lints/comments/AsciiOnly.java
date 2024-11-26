@@ -73,4 +73,9 @@ public final class AsciiOnly implements Lint {
         }
         return defects;
     }
+
+    @Override
+    public String motive() throws Exception {
+        throw new UnsupportedOperationException("#motive()");
+    }
 }
