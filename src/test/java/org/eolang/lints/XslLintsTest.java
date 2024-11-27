@@ -79,7 +79,7 @@ final class XslLintsTest {
     }
 
     @Test
-    void checksTextOfEachLintMotive() throws Exception {
+    void checksAllMotives() throws Exception {
         for (final Lint lint : new XslLints()) {
             MatcherAssert.assertThat(
                 lint.motive().isEmpty(),
