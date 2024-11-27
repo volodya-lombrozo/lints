@@ -7,7 +7,7 @@ Incorrect:
 ```eo
 # This comment is short.
 [] > foo
-    42 > @
+  42 > @
 ```
 
 Correct:
@@ -15,5 +15,5 @@ Correct:
 ```eo
 # This is the default 32+ characters comment in front of abstract object.
 [] > foo
-    42 > @
+  42 > @
 ```

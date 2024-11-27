@@ -11,7 +11,7 @@ Incorrect:
 
 # Print text to stdout.
 [] > main
-    (stdout "Hello, world!").print
+  (stdout "Hello, world!").print
 ```
 
 Correct:
@@ -22,5 +22,5 @@ Correct:
 
 # Print text to stdout.
 [] > main
-    (stdout "Hello, world!").print
+  (stdout "Hello, world!").print
 ```

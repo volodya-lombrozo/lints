@@ -6,12 +6,12 @@ Incorrect:
 
 ```eo
 [] > foo
-    a > a
+  a > a
 ```
 
 Correct:
 
 ```eo
 [] > foo
-    a > b
+  a > b
 ```

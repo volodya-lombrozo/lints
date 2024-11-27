@@ -7,7 +7,7 @@ Incorrect:
 ```eo
 # this comment doesn't start with capital English letter.
 [] > foo
-    42 > @
+  42 > @
 ```
 
 Correct:
@@ -15,5 +15,5 @@ Correct:
 ```eo
 # This comment does start with capital English letter.
 [] > foo
-    42 > @
+  42 > @
 ```

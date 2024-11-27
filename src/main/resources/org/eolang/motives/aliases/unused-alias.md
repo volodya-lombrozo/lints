@@ -11,7 +11,7 @@ Incorrect:
 
 # Foo.
 [x] > foo
-    x.div in.nextInt > @
+  x.div in.nextInt > @
 ```
 
 Correct:
@@ -21,5 +21,5 @@ Correct:
 
 # Foo.
 [x] > foo
-    x.div in.nextInt > @
+  x.div in.nextInt > @
 ```

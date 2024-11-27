@@ -7,7 +7,7 @@ Incorrect:
 ```eo
 # This comment doesn't end with a dot
 [] > foo
-    42 > @
+  42 > @
 ```
 
 Correct:
@@ -15,5 +15,5 @@ Correct:
 ```eo
 # This does end with a dot.
 [] > foo
-    42 > @
+  42 > @
 ```
