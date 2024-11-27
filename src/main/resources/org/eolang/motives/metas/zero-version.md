@@ -1,6 +1,6 @@
 # Zero Version
 
-Objects inside `src/(main|test)` must use `0.0.0` version during the 
+Objects inside `src/(main|test)` must use `0.0.0` version during the
 development.
 
 Incorrect:
