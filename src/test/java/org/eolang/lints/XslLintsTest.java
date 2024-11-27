@@ -34,6 +34,7 @@ import org.cactoos.proc.ForEach;
 import org.cactoos.text.TextOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -75,6 +76,16 @@ final class XslLintsTest {
                 )
             )
         );
+    }
+
+    @Test
+    void checksTextOfEachLintMotive() throws Exception {
+        for (final Lint lint : new XslLints()) {
+            MatcherAssert.assertThat(
+                lint.motive().isEmpty(),
+                Matchers.equalTo(false)
+            );
+        }
     }
 
 }
