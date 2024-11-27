@@ -1,4 +1,33 @@
-@todo #19:35min Document motives for `critical` lints.
- We should document motives for each critical lint, including:
- `duplicate-names.md`, `not-empty-atoms.md`, `same-line-names.md`, and
- `self-naming.md`.
+# Duplicate Names
+
+Object's name must not be duplicated.
+
+Incorrect:
+
+```eo
+foo
+    1 > name
+    2 > name
+```
+
+```eo
+[x] > first
+    second > x
+
+18 > first
+```
+
+Correct:
+
+```eo
+foo
+    1 > one
+    2 > two
+```
+
+```eo
+[x] > first
+    second > x
+
+18 > age
+```
