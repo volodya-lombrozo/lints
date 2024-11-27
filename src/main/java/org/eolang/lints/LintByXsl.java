@@ -55,13 +55,14 @@ final class LintByXsl implements Lint {
     private final XSL sheet;
 
     /**
-     * Motive.
+     * Motive document.
      */
-    private final Input motive;
+    private final Input motivedoc;
 
     /**
      * Ctor.
      * @param xsl Relative path of XSL
+     * @param motive Relative path of motive document
      * @throws IOException If fails
      */
     @SuppressWarnings("PMD.ConstructorOnlyInitializesOrCallOtherConstructors")
@@ -73,7 +74,7 @@ final class LintByXsl implements Lint {
         );
         this.rule = xml.xpath("/xsl:stylesheet/@id").get(0);
         this.sheet = new XSLDocument(xml).with(new ClasspathSources());
-        this.motive = motive;
+        this.motivedoc = motive;
     }
 
     /**
@@ -117,7 +118,7 @@ final class LintByXsl implements Lint {
 
     @Override
     public String motive() throws Exception {
-        return new TextOf(this.motive).asString();
+        return new TextOf(this.motivedoc).asString();
     }
 
     /**
