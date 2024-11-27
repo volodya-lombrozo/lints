@@ -14,6 +14,6 @@ Incorrect:
 Correct:
 
 ```eo
-# This is comment with all ASCII characters.
+# This is the comment with all ASCII characters.
 [] > foo
 ```

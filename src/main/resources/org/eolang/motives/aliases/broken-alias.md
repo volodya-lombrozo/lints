@@ -1,9 +1,9 @@
 # Broken Alias
 
-Object's alias parts must follow the following regexes:
+Object's alias parts must follow regexes:
 
-* First part: `^[a-z]+[^><.\[\]()!:"\""@^$#&/\s]*$'))`
-* Second part: `^[a-z]+[^><.\[\]()!:"\""@^$#&/\s]*(\.[a-z]+[^&gt;&lt;.\[\]()!:"\""@^$#&/\s]*)*$'))`
+* First part: `^[a-z]+[^><.\[\]()!:"@^$#&/\s]*$'))`
+* Second part: `^[a-z]+[^><.\[\]()!:"@^$#&/\s]*(\.[a-z]+[^><.\[\]()!:"@^$#&/\s]*)*$'))`
 
 Incorrect:
 
