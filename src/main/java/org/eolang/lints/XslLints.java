@@ -62,6 +62,17 @@ public final class XslLints extends IterableEnvelope<Lint> {
      */
     private static Iterable<Lint> all() {
         try {
+            Arrays.stream(
+                new PathMatchingResourcePatternResolver().getResources(
+                    "classpath*:org/eolang/motives/**/*.md"
+                )
+            ).forEach(res -> {
+                try {
+                    System.out.println(res.getURL());
+                } catch (IOException e) {
+                    throw new IllegalStateException(e);
+                }
+            });
             return new Mapped<>(
                 res -> {
                     final List<String> dirs = new ListOf<>(
