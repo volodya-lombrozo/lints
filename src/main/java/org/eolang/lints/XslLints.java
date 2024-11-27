@@ -26,13 +26,10 @@ package org.eolang.lints;
 import io.github.secretx33.resourceresolver.PathMatchingResourcePatternResolver;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Pattern;
 import org.cactoos.io.InputOf;
-import org.cactoos.io.ResourceOf;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Mapped;
-import org.cactoos.list.ListOf;
 
 /**
  * All lints defined by XSLs.
@@ -49,6 +46,13 @@ public final class XslLints extends IterableEnvelope<Lint> {
     );
 
     /**
+     * Lints path pattern.
+     */
+    private static final Pattern LINTS_PATH = Pattern.compile(
+        "eolang/lints", Pattern.LITERAL
+    );
+
+    /**
      * Ctor.
      */
     public XslLints() {
@@ -62,35 +66,16 @@ public final class XslLints extends IterableEnvelope<Lint> {
      */
     private static Iterable<Lint> all() {
         try {
-            Arrays.stream(
-                new PathMatchingResourcePatternResolver().getResources(
-                    "classpath*:org/eolang/motives/**/*.md"
-                )
-            ).forEach(res -> {
-                try {
-                    System.out.println(res.getURL());
-                } catch (IOException e) {
-                    throw new IllegalStateException(e);
-                }
-            });
             return new Mapped<>(
                 res -> {
-                    final List<String> dirs = new ListOf<>(
-                        res.getFile().toString().split("/")
-                    );
-                    final int last = dirs.size() - 1;
                     return new LintByXsl(
                         new InputOf(res.getInputStream()),
                         new InputOf(
-                            new ResourceOf(
-                                String.format(
-                                    "org/eolang/motives/%s/%s",
-                                    dirs.get(last - 1),
-                                    XSL_PATTERN.matcher(
-                                        dirs.get(last)
-                                    ).replaceAll(".md")
-                                )
-                            ).stream()
+                            XSL_PATTERN.matcher(
+                                LINTS_PATH.matcher(
+                                    res.getFile().toString()
+                                ).replaceAll("eolang/motives")
+                            ).replaceAll(".md")
                         )
                     );
                 },
