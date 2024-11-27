@@ -67,18 +67,16 @@ public final class XslLints extends IterableEnvelope<Lint> {
     private static Iterable<Lint> all() {
         try {
             return new Mapped<>(
-                res -> {
-                    return new LintByXsl(
-                        new InputOf(res.getInputStream()),
-                        new InputOf(
-                            XSL_PATTERN.matcher(
-                                LINTS_PATH.matcher(
-                                    res.getFile().toString()
-                                ).replaceAll("eolang/motives")
-                            ).replaceAll(".md")
-                        )
-                    );
-                },
+                res -> new LintByXsl(
+                    new InputOf(res.getInputStream()),
+                    new InputOf(
+                        XSL_PATTERN.matcher(
+                            LINTS_PATH.matcher(
+                                res.getFile().toString()
+                            ).replaceAll("eolang/motives")
+                        ).replaceAll(".md")
+                    )
+                ),
                 Arrays.asList(
                     new PathMatchingResourcePatternResolver().getResources(
                         "classpath*:org/eolang/lints/**/*.xsl"
