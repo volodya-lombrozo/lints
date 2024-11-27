@@ -77,4 +77,15 @@ final class XslLintsTest {
         );
     }
 
+    @Test
+    void checksAllMotives() throws Exception {
+        for (final Lint lint : new XslLints()) {
+            MatcherAssert.assertThat(
+                "Lint's motive is empty, but should not be",
+                lint.motive().isEmpty(),
+                Matchers.equalTo(false)
+            );
+        }
+    }
+
 }

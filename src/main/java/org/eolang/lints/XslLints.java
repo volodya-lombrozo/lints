@@ -26,6 +26,7 @@ package org.eolang.lints;
 import io.github.secretx33.resourceresolver.PathMatchingResourcePatternResolver;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.regex.Pattern;
 import org.cactoos.io.InputOf;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Mapped;
@@ -38,6 +39,20 @@ import org.cactoos.iterable.Mapped;
 public final class XslLints extends IterableEnvelope<Lint> {
 
     /**
+     * XSL extension pattern.
+     */
+    private static final Pattern XSL_PATTERN = Pattern.compile(
+        ".xsl", Pattern.LITERAL
+    );
+
+    /**
+     * Lints path pattern.
+     */
+    private static final Pattern LINTS_PATH = Pattern.compile(
+        "eolang/lints", Pattern.LITERAL
+    );
+
+    /**
      * Ctor.
      */
     public XslLints() {
@@ -46,13 +61,21 @@ public final class XslLints extends IterableEnvelope<Lint> {
 
     /**
      * All lints.
+     *
      * @return List of all lints
      */
     private static Iterable<Lint> all() {
         try {
             return new Mapped<>(
                 res -> new LintByXsl(
-                    new InputOf(res.getInputStream())
+                    new InputOf(res.getInputStream()),
+                    new InputOf(
+                        XSL_PATTERN.matcher(
+                            LINTS_PATH.matcher(
+                                res.getFile().toString()
+                            ).replaceAll("eolang/motives")
+                        ).replaceAll(".md")
+                    )
                 ),
                 Arrays.asList(
                     new PathMatchingResourcePatternResolver().getResources(
