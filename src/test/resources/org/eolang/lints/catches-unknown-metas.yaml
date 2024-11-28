@@ -38,5 +38,6 @@ eo: |
   +rt node
   +home https://earth.com
   +unlint test
+  +probe
 
   [] > foo

@@ -10,6 +10,7 @@ The following metas are supported:
 * `+architect`
 * `+home`
 * `+unlint`
+* `+probe`
 
 Incorrect:
 
