@@ -56,7 +56,7 @@ final class LintByXslTest {
     }
 
     @ParameterizedTest
-    @ClasspathSource(value = "org/eolang/lints/packs/", glob = "**.yaml")
+    @ClasspathSource(value = "org/eolang/lints/eo-packs/", glob = "**.yaml")
     void testsAllLints(final String pack) throws IOException {
         final CheckPack check = new CheckPack(pack);
         if (check.skip()) {
