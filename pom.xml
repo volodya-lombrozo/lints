@@ -125,7 +125,11 @@ SOFTWARE.
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
       <version>0.43.2</version>
-      <scope>test</scope>
+      <!--
+         EO-parser should be used in compile scope in order to be able provide
+         XSLs for imports for lint XSLs.
+      -->
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.yegor256</groupId>
@@ -190,18 +194,6 @@ SOFTWARE.
       <plugin>
         <artifactId>maven-invoker-plugin</artifactId>
         <!-- version from the parent pom -->
-        <configuration>
-          <pomExcludes>
-            <!--
-               @todo #59:30min Enable lints-it integration test.
-                Currently, we getting java.io.FileNotFoundException when trying to access
-                XSL file from the filesystem: URL cannot be resolved to absolute
-                file path because it does not reside in the file system. We should
-                enable lints-it after resolving that very issue.
-             -->
-            <exclude>lints-it/pom.xml</exclude>
-          </pomExcludes>
-        </configuration>
       </plugin>
     </plugins>
   </build>
