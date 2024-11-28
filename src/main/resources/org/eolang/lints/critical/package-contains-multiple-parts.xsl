@@ -29,7 +29,7 @@ SOFTWARE.
       <xsl:for-each select="/program/metas/meta">
         <xsl:variable name="meta-head" select="head"/>
         <xsl:variable name="meta-tail" select="tail"/>
-        <xsl:if test="$meta-head='package' and count(tokenize($meta-tail, ' ')) != 1">
+        <xsl:if test="$meta-head='package' and count(part) != 1">
           <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="if (@line) then @line else '0'"/>
