@@ -70,8 +70,8 @@ public final class XslLints extends IterableEnvelope<Lint> {
                 res -> new LintByXsl(
                     new InputOf(res.getInputStream()),
                     new InputOf(
-                        XSL_PATTERN.matcher(
-                            LINTS_PATH.matcher(
+                        XslLints.XSL_PATTERN.matcher(
+                            XslLints.LINTS_PATH.matcher(
                                 res.getFile().toString()
                             ).replaceAll("eolang/motives")
                         ).replaceAll(".md")
