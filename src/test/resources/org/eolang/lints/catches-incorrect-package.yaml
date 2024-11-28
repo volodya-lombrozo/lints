@@ -38,5 +38,5 @@ eo: |
   +package org.eolang
   +package my.awesome.package
   +package test.xy
-  
+
   [] > foo
