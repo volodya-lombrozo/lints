@@ -23,17 +23,29 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.log.Logger;
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
+import com.yegor256.xsline.Shift;
+import com.yegor256.xsline.StClasspath;
+import com.yegor256.xsline.Train;
+import com.yegor256.xsline.Xsline;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
 import org.cactoos.io.InputOf;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.CheckPack;
 import org.eolang.parser.EoSyntax;
+import org.eolang.parser.TrParsing;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * Test for {@link LintByXsl}.
@@ -57,7 +69,7 @@ final class LintByXslTest {
 
     @ParameterizedTest
     @ClasspathSource(value = "org/eolang/lints/eo-packs/", glob = "**.yaml")
-    void testsAllLints(final String pack) throws IOException {
+    void testsAllLintsByEo(final String pack) throws IOException {
         final CheckPack check = new CheckPack(pack);
         if (check.skip()) {
             Assumptions.abort(String.format("%s is not ready", pack));
@@ -66,6 +78,36 @@ final class LintByXslTest {
             String.format("The check pack has failed: %n%s", pack),
             check.failures(),
             Matchers.empty()
+        );
+    }
+
+    @ParameterizedTest
+    @SuppressWarnings("unchecked")
+    @ClasspathSource(value = "org/eolang/lints/xmir-packs/", glob = "**.yaml")
+    void testsAllLintsByXmir(final String pack) {
+        final Yaml yaml = new Yaml();
+        final Map<String, Object> map = yaml.load(pack);
+        final Iterable<String> xsls = (Iterable<String>) map.get("xsls");
+        Train<Shift> train = new TrParsing();
+        if (xsls != null) {
+            for (final String xsl : xsls) {
+                train = train.with(new StClasspath(xsl));
+            }
+        }
+        final XML out = new Xsline(train).pass(
+            new XMLDocument(map.get("xmir").toString())
+        );
+        Logger.debug(this, "Output XML:\n%s", out);
+        final Collection<String> failures = new LinkedList<>();
+        for (final String xpath : (Iterable<String>) map.get("tests")) {
+            if (out.nodes(xpath).isEmpty()) {
+                failures.add(xpath);
+            }
+        }
+        MatcherAssert.assertThat(
+            String.format("Broken XML:\n%s", out),
+            failures,
+            Matchers.emptyIterable()
         );
     }
 
