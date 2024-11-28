@@ -38,7 +38,7 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>critical</xsl:text>
             </xsl:attribute>
-            <xsl:value-of select="concat('The ', '+package meta may have only one part, which is the name of the package, while currently there are ', $parts, ' parts')"/>
+            <xsl:value-of select="concat('The +package meta may have only one part, which is the name of the package, while currently there are ', $parts, ' parts')"/>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>
