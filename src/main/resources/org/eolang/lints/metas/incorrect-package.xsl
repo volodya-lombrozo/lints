@@ -29,7 +29,8 @@ SOFTWARE.
       <xsl:for-each select="/program/metas/meta">
         <xsl:variable name="meta-head" select="head"/>
         <xsl:variable name="meta-tail" select="tail"/>
-        <xsl:if test="$meta-head='package' and not(matches($meta-tail, '^[a-z][a-z0-9_]*(\.[a-z0-9_]+)+[0-9a-z_]$'))">
+        <xsl:variable name="first" select="normalize-space(substring-before(concat($meta-tail, ' '), ' '))"/>
+        <xsl:if test="$meta-head='package' and not(matches($first, '^[a-z][a-z0-9_]*(\.[a-z0-9_]+)+[0-9a-z_]$'))">
           <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="if (@line) then @line else '0'"/>
@@ -38,7 +39,7 @@ SOFTWARE.
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
             <xsl:text>Wrong format of package name "</xsl:text>
-            <xsl:value-of select="$meta-tail"/>
+            <xsl:value-of select="$first"/>
             <xsl:text>"</xsl:text>
           </xsl:element>
         </xsl:if>
