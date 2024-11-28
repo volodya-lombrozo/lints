@@ -29,7 +29,7 @@ SOFTWARE.
       <xsl:for-each select="/program/metas/meta">
         <xsl:variable name="meta-head" select="head"/>
         <xsl:variable name="meta-tail" select="tail"/>
-        <xsl:variable name="parts" select="count(part)" />
+        <xsl:variable name="parts" select="count(part)"/>
         <xsl:if test="$meta-head='package' and $parts != 1">
           <xsl:element name="defect">
             <xsl:attribute name="line">
@@ -38,7 +38,9 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>critical</xsl:text>
             </xsl:attribute>
-            <xsl:value-of select="concat('The +package meta may have only one part, which is the name of the package, while currently there are ', $parts, ' parts')"/>
+            <xsl:text>The +package meta may have only one part, which is the name of the package, while currently there are </xsl:text>
+            <xsl:value-of select="$parts"/>
+            <xsl:text> parts</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>
