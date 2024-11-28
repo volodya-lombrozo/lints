@@ -23,7 +23,7 @@ We use this package as a dependency in the
 <dependency>
   <groupId>org.eolang</groupId>
   <artifactId>lints</artifactId>
-  <version>0.0.9</version>
+  <version>0.0.10</version>
 </dependency>
 ```
 
