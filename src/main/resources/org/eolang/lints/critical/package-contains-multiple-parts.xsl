@@ -22,25 +22,25 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="incorrect-package" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="package-contains-multiple-parts" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="/program/metas/meta">
         <xsl:variable name="meta-head" select="head"/>
         <xsl:variable name="meta-tail" select="tail"/>
-        <xsl:variable name="first" select="normalize-space(substring-before(concat($meta-tail, ' '), ' '))"/>
-        <xsl:if test="$meta-head='package' and not(matches($first, '^[a-z][a-z0-9_]*(\.[a-z0-9_]+)+[0-9a-z_]$'))">
+        <xsl:variable name="parts" select="count(part)"/>
+        <xsl:if test="$meta-head='package' and $parts != 1">
           <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="if (@line) then @line else '0'"/>
             </xsl:attribute>
             <xsl:attribute name="severity">
-              <xsl:text>warning</xsl:text>
+              <xsl:text>critical</xsl:text>
             </xsl:attribute>
-            <xsl:text>Wrong format of package name "</xsl:text>
-            <xsl:value-of select="$first"/>
-            <xsl:text>"</xsl:text>
+            <xsl:text>The +package meta may have only one part, which is the name of the package, while currently there are </xsl:text>
+            <xsl:value-of select="$parts"/>
+            <xsl:text> parts</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

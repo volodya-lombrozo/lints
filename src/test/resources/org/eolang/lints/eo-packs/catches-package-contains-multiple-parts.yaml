@@ -21,24 +21,22 @@
 # SOFTWARE.
 ---
 xsls:
-  - /org/eolang/lints/metas/incorrect-package.xsl
+  - /org/eolang/lints/critical/package-contains-multiple-parts.xsl
 tests:
-  - /defects[count(defect[@severity='warning'])=6]
-  - /defects/defect[@line='1']
-  - /defects/defect[@line='2']
-  - /defects/defect[@line='3']
-  - /defects/defect[@line='4']
-  - /defects/defect[@line='5']
+  - /defects[count(defect[@severity='critical'])=3]
+  - /defects/defect[@line='8']
   - /defects/defect[@line='9']
+  - /defects/defect[@line='10']
 eo: |
   +package test
   +package test.
   +package test.x
-  +package привет, как дела?
   +package привет.foo
   +package org.eolang
   +package my.awesome.package
   +package test.xy
   +package hello world
+  +package привет, как дела?
+  +package
 
   [] > foo
