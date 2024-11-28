@@ -37,7 +37,7 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>critical</xsl:text>
             </xsl:attribute>
-            <xsl:text>Package meta must have only one part "</xsl:text>
+            <xsl:text>Package meta must have the only one part "</xsl:text>
             <xsl:value-of select="$meta-tail"/>
             <xsl:text>"</xsl:text>
           </xsl:element>
