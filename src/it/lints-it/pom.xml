@@ -44,5 +44,23 @@ SOFTWARE.
       <artifactId>lints</artifactId>
       <version>@project.version@</version>
     </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <!-- version from the parent pom -->
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <!-- version from the parent pom -->
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <!-- version from the parent pom -->
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 </project>
