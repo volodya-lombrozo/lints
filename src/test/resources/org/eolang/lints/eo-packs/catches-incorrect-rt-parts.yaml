@@ -23,7 +23,7 @@
 xsls:
   - /org/eolang/lints/critical/incorrect-rt-parts.xsl
 tests:
-  - /defects[count(defect[@severity='critical'])=3]
+  - /defects[count(defect[@severity='critical'])=4]
   - /defects/defect[@line='1']
   - /defects/defect[@line='2']
   - /defects/defect[@line='3']
