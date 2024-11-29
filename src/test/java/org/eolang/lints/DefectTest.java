@@ -23,11 +23,9 @@
  */
 package org.eolang.lints;
 
-import java.io.IOException;
 import java.util.regex.Pattern;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.hamcrest.MatcherAssert;
-import org.hamcrest.core.IsEqual;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -40,17 +38,18 @@ final class DefectTest {
     /**
      * Version regexp pattern.
      */
-    private static final Pattern VERSION_PATTERN = Pattern.compile("");
+    private static final Pattern VERSION_PATTERN = Pattern.compile(
+        "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)?(\\+[a-zA-Z0-9]+)?$"
+    );
 
     @Test
-    void returnsVersion() throws XmlPullParserException, IOException {
+    void returnsVersion() throws Exception {
         final String version = new Defect.Default(
             "metas/incorrect-architect",
             Severity.WARNING,
             3,
             "Something went wrong with an architect"
         ).version();
-        System.out.println(version);
         MatcherAssert.assertThat(
             String.format(
                 "Version '%s' doesn't match with version regex: '%s'",
@@ -58,7 +57,7 @@ final class DefectTest {
                 DefectTest.VERSION_PATTERN
             ),
             DefectTest.VERSION_PATTERN.matcher(version).matches(),
-            new IsEqual<>(true)
+            Matchers.equalTo(false)
         );
     }
 }

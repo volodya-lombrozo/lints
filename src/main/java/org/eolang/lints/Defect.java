@@ -23,8 +23,6 @@
  */
 package org.eolang.lints;
 
-import com.jcabi.manifests.Manifests;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
