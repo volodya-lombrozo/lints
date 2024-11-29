@@ -125,7 +125,11 @@ SOFTWARE.
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
       <version>0.43.2</version>
-      <scope>test</scope>
+      <!--
+         EO-parser should be used in compile scope in order to be able provide
+         XSLs for imports for lint XSLs.
+      -->
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.yegor256</groupId>
@@ -152,4 +156,45 @@ SOFTWARE.
       <scope>test</scope>
     </dependency>
   </dependencies>
+  <profiles>
+    <profile>
+      <id>qulice</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>com.qulice</groupId>
+            <artifactId>qulice-maven-plugin</artifactId>
+            <version>0.23.0</version>
+            <configuration>
+              <license>file:${basedir}/LICENSE.txt</license>
+              <excludes>
+                <exclude>pmd:/src/it/.*</exclude>
+                <exclude>checkstyle:/src/it/.*</exclude>
+                <exclude>duplicatefinder:.*</exclude>
+                <exclude>dependencies:.*</exclude>
+              </excludes>
+            </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-invoker-plugin</artifactId>
+        <!-- version from the parent pom -->
+      </plugin>
+    </plugins>
+  </build>
 </project>
