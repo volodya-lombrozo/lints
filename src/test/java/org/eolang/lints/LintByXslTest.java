@@ -23,11 +23,11 @@
  */
 package org.eolang.lints;
 
-import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import com.yegor256.xsline.Shift;
 import com.yegor256.xsline.StClasspath;
+import com.yegor256.xsline.TrDefault;
 import com.yegor256.xsline.Train;
 import com.yegor256.xsline.Xsline;
 import java.io.IOException;
@@ -38,7 +38,6 @@ import org.cactoos.io.InputOf;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.CheckPack;
 import org.eolang.parser.EoSyntax;
-import org.eolang.parser.TrParsing;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
@@ -88,16 +87,14 @@ final class LintByXslTest {
         final Yaml yaml = new Yaml();
         final Map<String, Object> map = yaml.load(pack);
         final Iterable<String> xsls = (Iterable<String>) map.get("xsls");
-        Train<Shift> train = new TrParsing();
+        Train<Shift> train = new TrDefault<>();
         if (xsls != null) {
             for (final String xsl : xsls) {
                 train = train.with(new StClasspath(xsl));
             }
         }
-        final XML out = new Xsline(train).pass(
-            new XMLDocument(map.get("xmir").toString())
-        );
-        Logger.debug(this, "Output XML:\n%s", out);
+        final XML xmir = new XMLDocument(map.get("xmir").toString());
+        final XML out = new Xsline(train).pass(xmir);
         final Collection<String> failures = new LinkedList<>();
         for (final String xpath : (Iterable<String>) map.get("tests")) {
             if (out.nodes(xpath).isEmpty()) {
@@ -105,7 +102,7 @@ final class LintByXslTest {
             }
         }
         MatcherAssert.assertThat(
-            String.format("Broken XML:\n%s", out),
+            String.format("Input XML:%n%s%nBroken XML:%n%s", xmir, out),
             failures,
             Matchers.emptyIterable()
         );

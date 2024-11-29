@@ -124,11 +124,7 @@ SOFTWARE.
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.43.2</version>
-      <!--
-         EO-parser should be used in compile scope in order to be able provide
-         XSLs for imports for lint XSLs.
-      -->
+      <version>0.44.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
