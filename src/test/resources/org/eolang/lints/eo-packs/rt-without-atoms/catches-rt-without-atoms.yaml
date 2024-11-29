@@ -21,12 +21,18 @@
 # SOFTWARE.
 ---
 xsls:
-  - /org/eolang/lints/errors/external-weak-typed-atoms.xsl
+  - /org/eolang/lints/atoms/rt-without-atoms.xsl
 tests:
   - /defects[count(defect[@severity='error'])=1]
   - /defects/defect[@line='4']
 eo: |
-  +package my.awesome.package
+  +architect yegor256@gmail.com
+  +home https://github.com/objectionary/eo
+  +package org.eolang
+  +rt jvm org.eolang:eo-runtime:0.0.0
+  +rt ruby something
+  +version 0.0.0
 
-  # This is the default 64+ symbols comment in front of abstract object.
-  [] > my-awesome-object /?
+  # Boolean.
+  [attr] > obj
+    attr > @

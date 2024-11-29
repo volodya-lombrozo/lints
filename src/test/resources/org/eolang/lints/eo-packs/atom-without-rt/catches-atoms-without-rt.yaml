@@ -21,7 +21,7 @@
 # SOFTWARE.
 ---
 xsls:
-  - /org/eolang/lints/errors/atom-without-rt.xsl
+  - /org/eolang/lints/atoms/atom-without-rt.xsl
 tests:
   - /defects[count(defect[@severity='error'])=2]
   - /defects/defect[@line='9']
