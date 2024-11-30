@@ -23,7 +23,6 @@
  */
 package org.eolang.lints;
 
-import java.util.regex.Pattern;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -35,15 +34,8 @@ import org.junit.jupiter.api.Test;
  */
 final class DefectTest {
 
-    /**
-     * Version regexp pattern.
-     */
-    private static final Pattern VERSION_PATTERN = Pattern.compile(
-        "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(-[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)?(\\+[a-zA-Z0-9]+)?$"
-    );
-
     @Test
-    void returnsVersion() throws Exception {
+    void returnsVersion() {
         final String version = new Defect.Default(
             "metas/incorrect-architect",
             Severity.WARNING,
@@ -51,13 +43,9 @@ final class DefectTest {
             "Something went wrong with an architect"
         ).version();
         MatcherAssert.assertThat(
-            String.format(
-                "Version '%s' doesn't match with version regex: '%s'",
-                version,
-                DefectTest.VERSION_PATTERN
-            ),
-            DefectTest.VERSION_PATTERN.matcher(version).matches(),
-            Matchers.equalTo(false)
+            "Version doesn't match with expected",
+            version,
+            Matchers.equalTo("1.2.3")
         );
     }
 }

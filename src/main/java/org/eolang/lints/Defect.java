@@ -23,11 +23,7 @@
  */
 package org.eolang.lints;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import com.jcabi.manifests.Manifests;
 
 /**
  * A single defect found.
@@ -64,7 +60,7 @@ public interface Defect {
      * The linter's current version.
      * @return Linter's current version
      */
-    String version() throws IOException, XmlPullParserException;
+    String version();
 
     /**
      * Default.
@@ -136,10 +132,8 @@ public interface Defect {
         }
 
         @Override
-        public String version() throws IOException, XmlPullParserException {
-            return new MavenXpp3Reader().read(
-                Files.newInputStream(Paths.get("pom.xml"))
-            ).getVersion();
+        public String version() {
+            return Manifests.read("Lints-Version");
         }
     }
 
