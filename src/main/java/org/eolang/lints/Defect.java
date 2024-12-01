@@ -23,6 +23,8 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.manifests.Manifests;
+
 /**
  * A single defect found.
  *
@@ -53,6 +55,12 @@ public interface Defect {
      * @return Text
      */
     String text();
+
+    /**
+     * The linter's current version.
+     * @return Linter's current version
+     */
+    String version();
 
     /**
      * Default.
@@ -121,6 +129,11 @@ public interface Defect {
         @Override
         public String text() {
             return this.txt;
+        }
+
+        @Override
+        public String version() {
+            return Manifests.read("Lints-Version");
         }
     }
 
