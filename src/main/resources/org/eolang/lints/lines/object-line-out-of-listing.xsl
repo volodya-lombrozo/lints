@@ -27,7 +27,7 @@ SOFTWARE.
   <xsl:variable name="max" select="count(tokenize(/program/listing, '&#10;')) - 1"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@line &gt; $max]">
+      <xsl:for-each select="//o[number(@line) and @line &gt; $max]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="@line"/>
