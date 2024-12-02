@@ -73,7 +73,7 @@ final class LintByXsl implements Lint {
             ).asString()
         );
         this.rule = xml.xpath("/xsl:stylesheet/@id").get(0);
-        this.sheet = new XSLDocument(xml).with(new ClasspathSources());
+        this.sheet = new XSLDocument(xml, this.rule).with(new ClasspathSources());
         this.motivedoc = motive;
     }
 
