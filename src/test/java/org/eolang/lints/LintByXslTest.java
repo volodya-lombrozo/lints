@@ -33,9 +33,14 @@ import com.yegor256.xsline.TrDefault;
 import com.yegor256.xsline.Train;
 import com.yegor256.xsline.Xsline;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.cactoos.io.InputOf;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.CheckPack;
@@ -122,6 +127,41 @@ final class LintByXslTest {
             new LintByXsl("critical/duplicate-names").motive().isEmpty(),
             new IsEqual<>(false)
         );
+    }
+
+    @Test
+    void testLocationsOfYamlPacks() throws IOException {
+        final Set<String> groups = Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
+            .filter(Files::isRegularFile)
+            .filter(path -> path.toString().endsWith(".xsl"))
+            .map(path -> path.getParent().getFileName().toString())
+            .collect(Collectors.toSet());
+        Files.walk(Paths.get("src/test/resources/org/eolang/lints/eo-packs"))
+            .filter(Files::isRegularFile)
+            .forEach(
+                path -> {
+                    final String lint = path.getParent().getFileName().toString();
+                    final Path folder = Paths.get("src/main/resources/org/eolang/lints/");
+                    boolean found = false;
+                    for (final String group : groups) {
+                        final Path xsl = folder.resolve(group).resolve(
+                            String.format("%s.xsl", lint)
+                        );
+                        if (Files.exists(xsl)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    MatcherAssert.assertThat(
+                        String.format(
+                            "Can't find XSL for %s/%s, which must be located at %s",
+                            lint, path.getFileName(), folder
+                        ),
+                        found,
+                        new IsEqual<>(true)
+                    );
+                }
+            );
     }
 
 }
