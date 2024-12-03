@@ -6,14 +6,15 @@
     </defects>
   </xsl:template>
   <xsl:template match="o">
-    <xsl:if test="not(matches(normalize-space(.), '^--|[0-9A-F]{2}(-|(-[0-9A-F]{2})+)$'))">
+    <xsl:variable name="bytes" select="normalize-space(.)"/>
+    <xsl:if test="not(matches($bytes, '^--|[0-9A-F]{2}(-|(-[0-9A-F]{2})+)$'))">
       <defect>
         <xsl:attribute name="line">
           <xsl:value-of select="if (@line) then @line else '0'"/>
         </xsl:attribute>
         <xsl:attribute name="severity">critical</xsl:attribute>
         <xsl:text>Incorrect bytes format: "</xsl:text>
-        <xsl:value-of select="normalize-space(.)"/>
+        <xsl:value-of select="$bytes"/>
         <xsl:text>"</xsl:text>
       </defect>
     </xsl:if>
