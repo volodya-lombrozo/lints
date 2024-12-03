@@ -23,8 +23,10 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.XML;
 import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
+import com.yegor256.xsline.Xsline;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -32,6 +34,7 @@ import java.nio.file.Path;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.eolang.parser.EoSyntax;
+import org.eolang.parser.TrParsing;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Disabled;
@@ -111,15 +114,16 @@ final class ProgramTest {
     @Test
     @Disabled
     void acceptsCanonicalCode() throws IOException {
+        final XML xmir = new Xsline(new TrParsing()).pass(
+            new EoSyntax(
+                new ResourceOf(
+                    "org/eolang/lints/canonical.eo"
+                )
+            ).parsed()
+        );
         MatcherAssert.assertThat(
-            "no errors in canonical code",
-            new Program(
-                new EoSyntax(
-                    new ResourceOf(
-                        "org/eolang/lints/canonical.eo"
-                    )
-                ).parsed()
-            ).defects(),
+            String.format("no errors in canonical code in %s", xmir),
+            new Program(xmir).defects(),
             Matchers.emptyIterable()
         );
     }
