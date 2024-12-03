@@ -23,15 +23,37 @@
 xsls:
   - /org/eolang/lints/critical/incorrect-bytes-format.xsl
 tests:
-  - /defects[count(defect[@severity='error'])=10]
+  - /defects[count(defect[@severity='critical'])=0]
 xmir: |
   <program>
     <objects>
       <o name="foo">
-       hello, world!
+       --
       </o>
-      <o name="bar">
-        test
+      <o name="tuple">
+        12-34
       </o>
+      <o name="mixed">
+        AB-12
+      </o>
+      <o name="xyz">
+        AB-CD
+      </o>
+      <o name="hex">
+        AB-CD-EF
+      </o>
+      <o name="nums">
+        01-23-45
+      </o>
+      <o name="f">
+        FF-FF-FF
+      </o>
+      <o name="long">
+        A1-B2-C3-D4-E5
+      </o>
+      <o name="chain">
+        10-20-30-40-50
+      </o>
+      <o name="xyz"/>
     </objects>
   </program>
