@@ -22,6 +22,7 @@
 ---
 xsls:
   - /org/eolang/lints/metas/incorrect-package.xsl
+  - /org/eolang/lints/set-fake-schema.xsl
 tests:
   - /defects[count(defect)=0]
 eo: |

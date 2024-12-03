@@ -23,6 +23,7 @@
 xsls:
   - /org/eolang/parser/optimize/abstracts-float-up.xsl
   - /org/eolang/lints/critical/duplicate-names.xsl
+  - /org/eolang/lints/set-fake-schema.xsl
 tests:
   - /defects[count(defect)=0]
 eo: |

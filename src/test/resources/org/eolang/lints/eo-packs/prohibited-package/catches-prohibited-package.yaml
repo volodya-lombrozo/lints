@@ -22,6 +22,7 @@
 ---
 xsls:
   - /org/eolang/lints/metas/prohibited-package.xsl
+  - /org/eolang/lints/set-fake-schema.xsl
 tests:
   - /defects[count(defect[@severity='warning'])=1]
   - /defects/defect[@line='1']

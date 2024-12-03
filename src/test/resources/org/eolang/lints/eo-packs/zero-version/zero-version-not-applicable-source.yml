@@ -22,6 +22,7 @@
 ---
 sheets:
   - /org/eolang/lints/critical/zero-version.xsl
+  - /org/eolang/lints/set-fake-schema.xsl
 document:
   <?xml version="1.0" encoding="UTF-8"?>
   <program source="user/aaa/main/ttt.eo">

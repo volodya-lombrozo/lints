@@ -28,6 +28,7 @@
 skip: true
 xsls:
   - /org/eolang/lints/critical/duplicate-names.xsl
+  - /org/eolang/lints/set-fake-schema.xsl
 tests:
   - /defects[count(defect)=1]
   - /defects/defect[@line='3']

@@ -22,6 +22,7 @@
 ---
 xsls:
   - /org/eolang/lints/metas/package-contains-multiple-parts.xsl
+  - /org/eolang/lints/set-fake-schema.xsl
 tests:
   - /defects[count(defect[@severity='critical'])=3]
   - /defects/defect[@line='8']

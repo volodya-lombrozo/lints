@@ -22,7 +22,7 @@
 ---
 xsls:
   - /org/eolang/lints/metas/incorrect-home.xsl
-  - /org/eolang/parser/blank-xsd-schema.xsl
+  - /org/eolang/lints/set-fake-schema.xsl
 tests:
   - /defects[count(defect[@severity='warning'])=2]
   - /defects/defect[@line='1']

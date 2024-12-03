@@ -24,6 +24,7 @@ xsls:
   - /org/eolang/parser/expand-aliases.xsl
   - /org/eolang/parser/resolve-aliases.xsl
   - /org/eolang/lints/aliases/unused-alias.xsl
+  - /org/eolang/lints/set-fake-schema.xsl
 tests:
   - /defects[count(defect[@severity='error'])=2]
   - /defects/defect[@line='1']

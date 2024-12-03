@@ -23,6 +23,7 @@
 xsls:
   - /org/eolang/parser/add-refs.xsl
   - /org/eolang/lints/refs/broken-ref.xsl
+  - /org/eolang/lints/set-fake-schema.xsl
 tests:
   - /defects[count(*)=0]
 eo: |
