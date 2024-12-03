@@ -25,6 +25,7 @@ package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import com.yegor256.WeAreOnline;
 import com.yegor256.xsline.Shift;
 import com.yegor256.xsline.StClasspath;
 import com.yegor256.xsline.TrDefault;
@@ -43,6 +44,7 @@ import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.yaml.snakeyaml.Yaml;
 
@@ -67,6 +69,8 @@ final class LintByXslTest {
     }
 
     @ParameterizedTest
+    @ExtendWith(WeAreOnline.class)
+    @ExtendWith(M)
     @ClasspathSource(value = "org/eolang/lints/eo-packs/", glob = "**.yaml")
     void testsAllLintsByEo(final String pack) throws IOException {
         final CheckPack check = new CheckPack(pack);
@@ -82,6 +86,7 @@ final class LintByXslTest {
 
     @ParameterizedTest
     @SuppressWarnings("unchecked")
+    @ExtendWith(WeAreOnline.class)
     @ClasspathSource(value = "org/eolang/lints/xmir-packs/", glob = "**.yaml")
     void testsAllLintsByXmir(final String pack) {
         final Yaml yaml = new Yaml();
