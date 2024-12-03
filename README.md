@@ -43,7 +43,7 @@ final class Foo {
     Assertions.assertTrue(
       new Program(
         new StrictXML("<program/>")
-      ).defects().empty()
+      ).defects().isEmpty()
     );
   }
 }
