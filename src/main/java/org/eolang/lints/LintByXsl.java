@@ -57,7 +57,7 @@ final class LintByXsl implements Lint {
     /**
      * Motive document.
      */
-    private final Input motivedoc;
+    private final Input doc;
 
     /**
      * Ctor.
@@ -74,7 +74,7 @@ final class LintByXsl implements Lint {
         );
         this.rule = xml.xpath("/xsl:stylesheet/@id").get(0);
         this.sheet = new XSLDocument(xml, this.rule).with(new ClasspathSources());
-        this.motivedoc = motive;
+        this.doc = motive;
     }
 
     /**
@@ -118,7 +118,7 @@ final class LintByXsl implements Lint {
 
     @Override
     public String motive() throws Exception {
-        return new TextOf(this.motivedoc).asString();
+        return new TextOf(this.doc).asString();
     }
 
     /**
