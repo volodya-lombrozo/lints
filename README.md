@@ -28,6 +28,27 @@ We use this package as a dependency in the
 </dependency>
 ```
 
+You can also use it in order to validate the validity
+of [XMIR][xmir] documents your software may generate:
+
+```java
+import com.jcabi.xml.StrictXML;
+import org.eolang.lints.Program;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+final class Foo {
+  @Test
+  void testValidProgram() {
+    Assertions.assertTrue(
+      new Program(
+        new StrictXML("<program/>")
+      ).defects().empty()
+    );
+  }
+}
+```
+
 This is a non-exhaustive list of lints in the collection:
 
 * A comment for an object must be 64+ characters
