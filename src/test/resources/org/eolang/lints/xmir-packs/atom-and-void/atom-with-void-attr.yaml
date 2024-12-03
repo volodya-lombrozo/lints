@@ -21,7 +21,7 @@
 # SOFTWARE.
 ---
 xsls:
-  - /org/eolang/lints/atoms/not-empty-atoms.xsl
+  - /org/eolang/lints/atoms/not-empty-atom.xsl
 tests:
   - /defects[count(defect)=0]
 xmir: |
