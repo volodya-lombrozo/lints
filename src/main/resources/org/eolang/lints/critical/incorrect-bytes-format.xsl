@@ -7,7 +7,7 @@
   </xsl:template>
   <xsl:template match="o">
     <xsl:variable name="bytes" select="normalize-space(.)"/>
-    <xsl:if test="not(matches($bytes, '^--|[0-9A-F]{2}(-|(-[0-9A-F]{2})+)$'))">
+    <xsl:if test="$bytes != '' and not(matches($bytes, '^--|[0-9A-F]{2}(-|(-[0-9A-F]{2})+)$'))">
       <defect>
         <xsl:attribute name="line">
           <xsl:value-of select="if (@line) then @line else '0'"/>
