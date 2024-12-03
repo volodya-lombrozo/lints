@@ -25,6 +25,7 @@ package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import com.yegor256.MayBeSlow;
 import com.yegor256.WeAreOnline;
 import com.yegor256.xsline.Shift;
 import com.yegor256.xsline.StClasspath;
@@ -69,8 +70,8 @@ final class LintByXslTest {
     }
 
     @ParameterizedTest
+    @ExtendWith(MayBeSlow.class)
     @ExtendWith(WeAreOnline.class)
-    @ExtendWith(M)
     @ClasspathSource(value = "org/eolang/lints/eo-packs/", glob = "**.yaml")
     void testsAllLintsByEo(final String pack) throws IOException {
         final CheckPack check = new CheckPack(pack);
@@ -86,6 +87,7 @@ final class LintByXslTest {
 
     @ParameterizedTest
     @SuppressWarnings("unchecked")
+    @ExtendWith(MayBeSlow.class)
     @ExtendWith(WeAreOnline.class)
     @ClasspathSource(value = "org/eolang/lints/xmir-packs/", glob = "**.yaml")
     void testsAllLintsByXmir(final String pack) {
