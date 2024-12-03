@@ -22,7 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="mandatory-package-meta" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="mandatory-package" version="2.0">
   <xsl:output encoding="UTF-8"/>
   <xsl:template match="/">
     <defects>
@@ -35,17 +35,6 @@ SOFTWARE.
             <xsl:text>warning</xsl:text>
           </xsl:attribute>
           <xsl:text>Missing package</xsl:text>
-        </xsl:element>
-      </xsl:if>
-      <xsl:if test="count(/program/metas/meta[head ='package'])&gt;1">
-        <xsl:element name="defect">
-          <xsl:attribute name="line">
-            <xsl:text>0</xsl:text>
-          </xsl:attribute>
-          <xsl:attribute name="severity">
-            <xsl:text>warning</xsl:text>
-          </xsl:attribute>
-          <xsl:text>More than one package specified</xsl:text>
         </xsl:element>
       </xsl:if>
     </defects>

@@ -22,11 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="correct-package-meta" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="mandatory-home" version="2.0">
   <xsl:output encoding="UTF-8"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="count(/program/metas/meta[head ='package'and count(part)!=1])&gt;0">
+      <xsl:if test="count(/program/metas/meta[head ='home'])=0">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:text>0</xsl:text>
@@ -34,7 +34,7 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
           </xsl:attribute>
-          <xsl:text>Wrong package name</xsl:text>
+          <xsl:text>Missing +home meta</xsl:text>
         </xsl:element>
       </xsl:if>
     </defects>
