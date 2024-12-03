@@ -29,8 +29,17 @@ SOFTWARE.
       <xsl:for-each select="/program/metas/meta">
         <xsl:variable name="meta-head" select="head"/>
         <xsl:variable name="meta-tail" select="tail"/>
-        <xsl:variable name="first" select="substring-before($meta-tail, ' ')"/>
         <xsl:variable name="allowed" select="('jvm', 'node')"/>
+        <xsl:variable name="first">
+          <xsl:choose>
+            <xsl:when test="contains($meta-tail, ' ')">
+              <xsl:value-of select="substring-before($meta-tail, ' ')"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$meta-tail"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
         <xsl:if test="$meta-head='rt' and count(part) &gt; 0 and not($first = $allowed)">
           <xsl:element name="defect">
             <xsl:attribute name="line">
