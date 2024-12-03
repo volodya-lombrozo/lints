@@ -20,12 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-sheets:
-  - /org/eolang/lints/critical/zero-version.xsl
+xsls:
+  - /org/eolang/lints/metas/zero-version.xsl
   - /org/eolang/lints/set-fake-schema.xsl
-document:
+xmir:
   <?xml version="1.0" encoding="UTF-8"?>
-  <program source="user/src/main/ttt.eo">
+  <program source="user/src/test/ttt.eo">
     <errors/>
     <metas>
       <meta line="3">
@@ -39,5 +39,5 @@ document:
       </o>
     </objects>
   </program>
-asserts:
-  - /defects/defect[@line="3" and @severity="defect"]
+tests:
+  - /defects/defect[@line="3" and @severity="error"]
