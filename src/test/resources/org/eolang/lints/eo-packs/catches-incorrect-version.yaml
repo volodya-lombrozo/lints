@@ -54,6 +54,6 @@ eo: |
   +version 1-alpha
   +version alpha.1.1
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [x] > foo
     x.div in.nextInt > @

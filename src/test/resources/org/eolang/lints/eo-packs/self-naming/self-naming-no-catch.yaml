@@ -25,12 +25,12 @@ xsls:
 tests:
   - /defects[count(defect)=0]
 eo: |
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > first
     5.plus a > a
     ^.size > size
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [size] > more
-    # This is the default 64+ symbols comment in front of abstract object.
+    # No comments.
     [] > inner
       ^.size > size

@@ -26,7 +26,7 @@ xsls:
 tests:
   - /defects[count(*)=0]
 eo: |
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > app
     42 > a
     a.plus 1 > @

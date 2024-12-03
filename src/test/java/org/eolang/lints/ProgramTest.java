@@ -30,9 +30,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.cactoos.io.InputOf;
+import org.cactoos.io.ResourceOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -103,6 +105,22 @@ final class ProgramTest {
                     )
                 )
             )
+        );
+    }
+
+    @Test
+    @Disabled
+    void acceptsCanonicalCode() throws IOException {
+        MatcherAssert.assertThat(
+            "no errors in canonical code",
+            new Program(
+                new EoSyntax(
+                    new ResourceOf(
+                        "org/eolang/lints/canonical.eo"
+                    )
+                ).parsed()
+            ).defects(),
+            Matchers.emptyIterable()
         );
     }
 

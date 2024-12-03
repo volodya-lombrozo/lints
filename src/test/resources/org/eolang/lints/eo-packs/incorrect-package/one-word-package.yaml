@@ -21,24 +21,11 @@
 # SOFTWARE.
 ---
 xsls:
-  - /org/eolang/lints/metas/incorrect-architect.xsl
+  - /org/eolang/lints/metas/incorrect-package.xsl
 tests:
-  - /defects[count(defect[@severity='warning'])=5]
-  - /defects/defect[@line='1']
-  - /defects/defect[@line='2']
-  - /defects/defect[@line='3']
-  - /defects/defect[@line='4']
-  - /defects/defect[@line='6']
+  - /defects[count(defect)=0]
 eo: |
-  +architect hello
-  +architect hello@mail
-  +architect someone@@
-  +architect @gmail.com
-  +architect hello@gmail.com
-  +architect someone24@.com
-  +architect hello@mail.ru
-  +alias org.eolang.io.stdout
+  +package foo
 
   # No comments.
-  [x] > foo
-    x.div in.nextInt > @
+  [] > main

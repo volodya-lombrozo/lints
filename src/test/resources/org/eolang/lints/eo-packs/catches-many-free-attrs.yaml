@@ -26,40 +26,40 @@ tests:
   - /defects[count(defect[@severity='warning'])=1]
   - /defects/defect[@line='2']
 eo: |
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [a b c d e f] > with-many
     something > @
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [x y z] > main
-    # This is the default 64+ symbols comment in front of abstract object.
+    # No comments.
     [v] > zz /int
-    # This is the default 64+ symbols comment in front of abstract object.
+    # No comments.
     [v] > yy /int
-    # This is the default 64+ symbols comment in front of abstract object.
+    # No comments.
     [v] > uu /int
-    # This is the default 64+ symbols comment in front of abstract object.
+    # No comments.
     [v] > ff /int
-    # This is the default 64+ symbols comment in front of abstract object.
+    # No comments.
     [v] > oo /int
-    # This is the default 64+ symbols comment in front of abstract object
+    # No comments
     [v] > pp /int
 
-  # This is the default 64+ symbols comment in front of abstract object
+  # No comments
   [] > not-many-free-attributes
-    # This is the default 64+ symbols comment in front of abstract object
+    # No comments
     [] > empty1
       true > @
-    # This is the default 64+ symbols comment in front of abstract object
+    # No comments
     [] > empty2
       true > @
-    # This is the default 64+ symbols comment in front of abstract object
+    # No comments
     [] > empty3
       true > @
-    # This is the default 64+ symbols comment in front of abstract object
+    # No comments
     [] > empty4
       true > @
-    # This is the default 64+ symbols comment in front of abstract object
+    # No comments
     [] > empty5
       true > @
     true > @

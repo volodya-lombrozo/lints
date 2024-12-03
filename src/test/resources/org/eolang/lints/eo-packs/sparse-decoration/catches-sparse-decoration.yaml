@@ -32,36 +32,36 @@ tests:
 eo: |
   5 > five
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > decorates-num
     5 > @
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > decorates-five
     five > @
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > decorates-application
     if > @
       true
       5
       five
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [free] > decorates-with-free-args
     five > @
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > decorates-abstract
-    # This is the default 64+ symbols comment in front of abstract object.
+    # No comments.
     [] > @
       five > @
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > decorates-parent
     ^ > @
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > try-example
     try
       []
@@ -70,6 +70,6 @@ eo: |
         error "Error" > @
       nop
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [args] > nop
     true > @

@@ -32,9 +32,9 @@ tests:
   - /defects[count(defect)=1]
   - /defects/defect[@line='3']
 eo: |
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > main
     x > f
       [] >>
-    # This is the default 64+ symbols comment in front of abstract object.
+    # No comments.
     [] > auto-named-attr-at-4-6

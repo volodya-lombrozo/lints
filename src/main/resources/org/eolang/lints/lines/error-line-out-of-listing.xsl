@@ -24,7 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="error-line-out-of-listing" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:variable name="max" select="count(tokenize(/program/listing, '&#10;')) - 1"/>
+  <xsl:variable name="max" select="count(tokenize(/program/listing, '&#10;'))"/>
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="/program/errors/error[number(@line) and @line &gt; $max]">
@@ -35,9 +35,9 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>The line </xsl:text>
+          <xsl:text>The line "</xsl:text>
           <xsl:value-of select="@line"/>
-          <xsl:text> is out of listing, which contains only </xsl:text>
+          <xsl:text>" is out of listing, which contains only </xsl:text>
           <xsl:value-of select="$max"/>
           <xsl:text> lines</xsl:text>
         </xsl:element>

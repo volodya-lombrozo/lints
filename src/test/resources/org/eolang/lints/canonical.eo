@@ -19,26 +19,31 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
----
-xsls:
-  - /org/eolang/lints/metas/incorrect-architect.xsl
-tests:
-  - /defects[count(defect[@severity='warning'])=5]
-  - /defects/defect[@line='1']
-  - /defects/defect[@line='2']
-  - /defects/defect[@line='3']
-  - /defects/defect[@line='4']
-  - /defects/defect[@line='6']
-eo: |
-  +architect hello
-  +architect hello@mail
-  +architect someone@@
-  +architect @gmail.com
-  +architect hello@gmail.com
-  +architect someone24@.com
-  +architect hello@mail.ru
-  +alias org.eolang.io.stdout
 
-  # No comments.
-  [x] > foo
-    x.div in.nextInt > @
++architect yegor256@gmail.com
++home https://www.eolang.org
++package canonical
++version 0.0.0
+
+[args] > app
+  malloc.for > @
+    0
+    [x] >>
+      seq > @
+        *
+          x.put 2
+          while
+            x.as-number.lt 6 > [i]
+            [i] >>
+              seq > @
+                *
+                  QQ.io.stdout
+                    QQ.txt.sprintf
+                      "%d x %d = %d\n"
+                      *
+                        ^.x
+                        ^.x
+                        ^.x.as-number.times ^.x
+                  ^.x.put
+                    ^.x.as-number.plus 1
+          true

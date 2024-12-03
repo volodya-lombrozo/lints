@@ -30,7 +30,7 @@ tests:
   - /defects/defect[@line='11']
   - /defects/defect[@line='17']
 eo: |
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > abs
     first
     second
@@ -38,11 +38,11 @@ eo: |
       23
       33
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [args] > main
     (stdout "Hello!").print
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > test
     a > @
     .b

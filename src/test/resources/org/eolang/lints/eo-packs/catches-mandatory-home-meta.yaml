@@ -31,6 +31,6 @@ eo: |
   +alias stdout org.eolang.io.stdout
   +package test
 
-  # This is the default 64+ symbols comment in front of abstract object.
+  # No comments.
   [] > main
     (stdout "Hello, world!").print > @
