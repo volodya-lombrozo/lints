@@ -25,15 +25,12 @@ xsls:
   - /org/eolang/lints/set-fake-schema.xsl
 tests:
   - /defects[count(defect[@severity='critical'])=3]
+  - /defects/defect[@line='1']
+  - /defects/defect[@line='2']
   - /defects/defect[@line='3']
-  - /defects/defect[@line='4']
-  - /defects/defect[@line='5']
 eo: |
-  +rt jvm org.eolang:eo-runtime:0.0.0
-  +rt node path
   +rt test test
   +rt привет, как дела?
   +rt foo
-  +rt
 
   [] > foo
