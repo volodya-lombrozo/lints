@@ -164,4 +164,20 @@ final class LintByXslTest {
             );
     }
 
+    @Test
+    void checksFileNaming() throws IOException {
+        final String[] folders = {"eo-packs", "xmir-packs"};
+        for (final String folder : folders) {
+            Files.walk(Paths.get("src/test/resources/org/eolang/lints").resolve(folder))
+                .filter(Files::isRegularFile)
+                .forEach(
+                    path -> MatcherAssert.assertThat(
+                        String.format("Only YAML files are allowed here, while: %s", path),
+                        path.toFile().toString().endsWith(".yaml"),
+                        new IsEqual<>(true)
+                    )
+                );
+        }
+    }
+
 }
