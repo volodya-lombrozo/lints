@@ -112,7 +112,6 @@ final class ProgramTest {
     }
 
     @Test
-    @Disabled
     void acceptsCanonicalCode() throws IOException {
         final XML xmir = new Xsline(new TrParsing()).pass(
             new EoSyntax(
