@@ -32,17 +32,38 @@ public enum Severity {
     /**
      * Compilation can't continue, must stop.
      */
-    CRITICAL,
+    CRITICAL("critical"),
 
     /**
      * It's a bug, must be fixed.
      */
-    ERROR,
+    ERROR("error"),
 
     /**
      * Can live with it, but better be fixed.
      */
-    WARNING;
+    WARNING("warning");
+
+    /**
+     * Name of it.
+     */
+    private final String name;
+
+    /**
+     * Ctor.
+     * @param txt Name of it.
+     */
+    Severity(final String txt) {
+        this.name = txt;
+    }
+
+    /**
+     * Mnemo of it.
+     * @return Mnemo
+     */
+    public String mnemo() {
+        return this.name;
+    }
 
     /**
      * Parse it from the text.
@@ -53,11 +74,11 @@ public enum Severity {
     @SuppressWarnings("PMD.ProhibitPublicStaticMethods")
     public static Severity parsed(final String text) {
         final Severity severity;
-        if ("critical".equals(text)) {
+        if (Severity.CRITICAL.mnemo().equals(text)) {
             severity = Severity.CRITICAL;
-        } else if ("error".equals(text)) {
+        } else if (Severity.ERROR.mnemo().equals(text)) {
             severity = Severity.ERROR;
-        } else if ("warning".equals(text)) {
+        } else if (Severity.WARNING.mnemo().equals(text)) {
             severity = Severity.WARNING;
         } else {
             throw new IllegalArgumentException(
