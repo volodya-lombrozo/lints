@@ -14,31 +14,31 @@ Incorrect:
 # Test.
 [] > tEst
   42 > foo
-  
+
 # Test.
 [] > test123
   42 > fooB
-  
+
 # Test.
 [] > test--
   42 > foo
-  
+
 # Test.
 [] > test--test
   42 > foo
-  
+
 # Test.
-[] > test--test
+[] > t
   42 > foo
-  
+
 # Test.
-[] > test--test
+[] > test-test-
   42 > foo
-  
+
 # Test.
 [] > test-Test
   42 > foo
-  
+
 # Test.
 [] > test_abc
   42 > foo
