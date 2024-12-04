@@ -28,11 +28,18 @@ tests:
 eo: |
   +tests
 
-  # Runs something.
+  # Test.
+  [] > runs
+    42 > foo
+  
+  # Test.
   [] > runs-something
-    52 > st-petersburg
-    52 > foo
-    52 > bar
-    52 > foo-bar
-    52 > good-one
-    52 > ok
+    42 > fooB
+  
+  # Test.
+  [] > good-one
+    42 > foo
+  
+  # Test.
+  [] > ok
+    42 > foo
