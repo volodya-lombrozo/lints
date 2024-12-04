@@ -11,16 +11,37 @@ Incorrect:
 ```eo
 +tests
 
-# Runs something.
-[] > runs-something
-  42 > tEst
-  42 > test123
-  42 > test--
-  42 > test--test
-  42 > t
-  42 > test-test-
-  42 > test-Test
-  42 > test_abc
+# Test.
+[] > tEst
+  42 > foo
+  
+# Test.
+[] > test123
+  42 > fooB
+  
+# Test.
+[] > test--
+  42 > foo
+  
+# Test.
+[] > test--test
+  42 > foo
+  
+# Test.
+[] > test--test
+  42 > foo
+  
+# Test.
+[] > test--test
+  42 > foo
+  
+# Test.
+[] > test-Test
+  42 > foo
+  
+# Test.
+[] > test_abc
+  42 > foo
 ```
 
 Correct:
@@ -28,9 +49,19 @@ Correct:
 ```eo
 +tests
 
-# Runs something.
+# Test.
+[] > runs
+  42 > foo
+  
+# Test.
 [] > runs-something
-  42 > test
-  42 > foo-bar
-  42 > ok
+  42 > fooB
+  
+# Test.
+[] > good-one
+  42 > foo
+  
+# Test.
+[] > ok
+  42 > foo
 ```
