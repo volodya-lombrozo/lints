@@ -27,7 +27,7 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml" indent="yes"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="/program[metas/meta[head='tests']]/objects//o[@name and not(@abstract)]">
+      <xsl:for-each select="/program[metas/meta[head='tests']]/objects/o[@name]">
         <xsl:variable name="regexp" select="'^[a-z][a-z]+(-[a-z][a-z]+)*$'"/>
         <xsl:if test="not(matches(@name, $regexp))">
           <defect>
@@ -38,7 +38,7 @@ SOFTWARE.
             <xsl:text>Test object name: "</xsl:text>
             <xsl:value-of select="@name"/>
             <xsl:text>"</xsl:text>
-            <xsl:text>doesn't match '</xsl:text>
+            <xsl:text> doesn't match '</xsl:text>
             <xsl:value-of select="$regexp"/>
             <xsl:text>'</xsl:text>
           </defect>
