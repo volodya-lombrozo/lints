@@ -28,7 +28,7 @@ tests:
   - /defects/defect[@line='4']
 eo: |
   +tests
-  
+
   # Test.
   [] > t
     42 > foo
