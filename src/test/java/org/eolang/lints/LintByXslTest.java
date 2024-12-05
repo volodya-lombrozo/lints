@@ -23,36 +23,23 @@
  */
 package org.eolang.lints;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
-import com.yegor256.MayBeSlow;
-import com.yegor256.WeAreOnline;
-import com.yegor256.xsline.Shift;
-import com.yegor256.xsline.StClasspath;
-import com.yegor256.xsline.TrDefault;
-import com.yegor256.xsline.Train;
-import com.yegor256.xsline.Xsline;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.cactoos.io.InputOf;
 import org.eolang.jucs.ClasspathSource;
-import org.eolang.parser.CheckPack;
 import org.eolang.parser.EoSyntax;
+import org.eolang.xax.XtSticky;
+import org.eolang.xax.XtYaml;
+import org.eolang.xax.XtoryMatcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
-import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.yaml.snakeyaml.Yaml;
 
 /**
  * Test for {@link LintByXsl}.
@@ -75,48 +62,17 @@ final class LintByXslTest {
     }
 
     @ParameterizedTest
-    @ExtendWith(MayBeSlow.class)
-    @ExtendWith(WeAreOnline.class)
-    @ClasspathSource(value = "org/eolang/lints/eo-packs/", glob = "**.yaml")
-    void testsAllLintsByEo(final String pack) throws IOException {
-        final CheckPack check = new CheckPack(pack);
-        if (check.skip()) {
-            Assumptions.abort(String.format("%s is not ready", pack));
-        }
+    @ClasspathSource(value = "org/eolang/lints/packs/", glob = "**.yaml")
+    void testsAllLintsByEo(final String yaml) {
         MatcherAssert.assertThat(
-            String.format("The check pack has failed: %n%s", pack),
-            check.failures(),
-            Matchers.empty()
-        );
-    }
-
-    @ParameterizedTest
-    @SuppressWarnings("unchecked")
-    @ExtendWith(MayBeSlow.class)
-    @ExtendWith(WeAreOnline.class)
-    @ClasspathSource(value = "org/eolang/lints/xmir-packs/", glob = "**.yaml")
-    void testsAllLintsByXmir(final String pack) {
-        final Yaml yaml = new Yaml();
-        final Map<String, Object> map = yaml.load(pack);
-        final Iterable<String> xsls = (Iterable<String>) map.get("xsls");
-        Train<Shift> train = new TrDefault<>();
-        if (xsls != null) {
-            for (final String xsl : xsls) {
-                train = train.with(new StClasspath(xsl));
-            }
-        }
-        final XML xmir = new XMLDocument(map.get("xmir").toString());
-        final XML out = new Xsline(train).pass(xmir);
-        final Collection<String> failures = new LinkedList<>();
-        for (final String xpath : (Iterable<String>) map.get("tests")) {
-            if (out.nodes(xpath).isEmpty()) {
-                failures.add(xpath);
-            }
-        }
-        MatcherAssert.assertThat(
-            String.format("Input XML:%n%s%nBroken XML:%n%s", xmir, out),
-            failures,
-            Matchers.emptyIterable()
+            "must pass without errors",
+            new XtSticky(
+                new XtYaml(
+                    yaml,
+                    eo -> new EoSyntax("pack", new InputOf(eo)).parsed()
+                )
+            ),
+            new XtoryMatcher()
         );
     }
 
@@ -136,7 +92,7 @@ final class LintByXslTest {
             .filter(path -> path.toString().endsWith(".xsl"))
             .map(path -> path.getParent().getFileName().toString())
             .collect(Collectors.toSet());
-        Files.walk(Paths.get("src/test/resources/org/eolang/lints/eo-packs"))
+        Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs"))
             .filter(Files::isRegularFile)
             .forEach(
                 path -> {
@@ -166,18 +122,15 @@ final class LintByXslTest {
 
     @Test
     void checksFileNaming() throws IOException {
-        final String[] folders = {"eo-packs", "xmir-packs"};
-        for (final String folder : folders) {
-            Files.walk(Paths.get("src/test/resources/org/eolang/lints").resolve(folder))
-                .filter(Files::isRegularFile)
-                .forEach(
-                    path -> MatcherAssert.assertThat(
-                        String.format("Only YAML files are allowed here, while: %s", path),
-                        path.toFile().toString().endsWith(".yaml"),
-                        new IsEqual<>(true)
-                    )
-                );
-        }
+        Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs"))
+            .filter(Files::isRegularFile)
+            .forEach(
+                path -> MatcherAssert.assertThat(
+                    String.format("Only YAML files are allowed here, while: %s", path),
+                    path.toFile().toString().endsWith(".yaml"),
+                    new IsEqual<>(true)
+                )
+            );
     }
 
 }

@@ -22,11 +22,11 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="many-free-attributes" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="unit-test-without-phi" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[count(o[@name and @base='∅' and not(@atom) and count(o)=0]) &gt; 5]">
+      <xsl:for-each select="/program[metas/meta[head='tests']]/objects/o[count(o[@name='@'])=0]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="if (@line) then @line else '0'"/>
@@ -34,11 +34,9 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
           </xsl:attribute>
-          <xsl:text>The object </xsl:text>
-          <xsl:text>"</xsl:text>
+          <xsl:text>Unit test without '@': "</xsl:text>
           <xsl:value-of select="@name"/>
-          <xsl:text>" </xsl:text>
-          <xsl:text>has more than five free attributes, it's too many</xsl:text>
+          <xsl:text>"</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>
