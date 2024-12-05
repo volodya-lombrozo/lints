@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
+import org.cactoos.list.ListOf;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
 
@@ -56,6 +57,7 @@ public final class TestObjectIsVerbInSingular implements Lint {
 
     /**
      * Ctor.
+     *
      * @throws IOException if something went wrong.
      */
     public TestObjectIsVerbInSingular() throws IOException {
@@ -64,6 +66,7 @@ public final class TestObjectIsVerbInSingular implements Lint {
 
     /**
      * Ctor.
+     *
      * @param url Model URL
      * @throws IOException if something went wrong.
      */
@@ -73,6 +76,7 @@ public final class TestObjectIsVerbInSingular implements Lint {
 
     /**
      * Ctor.
+     *
      * @param model POS model.
      */
     public TestObjectIsVerbInSingular(final POSModel model) {
@@ -81,6 +85,7 @@ public final class TestObjectIsVerbInSingular implements Lint {
 
     /**
      * Ctor.
+     *
      * @param mdl The Open NLP tagger.
      */
     public TestObjectIsVerbInSingular(final POSTaggerME mdl) {
@@ -92,15 +97,19 @@ public final class TestObjectIsVerbInSingular implements Lint {
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML object : xmir.nodes("/program[metas/meta[head='tests']]/objects/o[@name]")) {
             final String name = object.xpath("@name").get(0);
-            final String[] tags = this.model.tag(
-                Stream
-                    .concat(
-                        Stream.of("It"),
-                        Arrays.stream(TestObjectIsVerbInSingular.KEBAB.split(name))
-                    ).map(s -> s.toLowerCase(Locale.ROOT))
-                    .toArray(String[]::new)
-            );
-            System.out.println(Arrays.toString(tags));
+            final String first = new ListOf<>(
+                this.model.tag(
+                    Stream
+                        .concat(
+                            Stream.of("It"),
+                            Arrays.stream(TestObjectIsVerbInSingular.KEBAB.split(name))
+                        ).map(s -> s.toLowerCase(Locale.ROOT))
+                        .toArray(String[]::new)
+                )
+            ).get(0);
+            if ("VB".equals(first) || "VBP".equals(first) || "VBZ".equals(first)) {
+                System.out.println(first);
+            }
         }
         return defects;
     }
