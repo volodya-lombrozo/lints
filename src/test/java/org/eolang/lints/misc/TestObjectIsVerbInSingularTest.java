@@ -23,10 +23,11 @@
  */
 package org.eolang.lints.misc;
 
+import com.yegor256.MayBeSlow;
+import com.yegor256.WeAreOnline;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 import org.cactoos.io.InputOf;
@@ -35,6 +36,7 @@ import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 
 /**
@@ -45,7 +47,7 @@ import org.junit.jupiter.params.ParameterizedTest;
  *  Currently, we load the model from the internet for each test run. Instead of
  *  this, let's cache the model after the first load in both: filesystem, and
  *  RAM. This optimization should improve local testing experience. This was
- *  already implemented <a href="https://github.com/volodya-lombrozo/jtcop/blob/main/src/main/java/com/github/lombrozo/testnames/rules/ml/CachedModelSource.java">here<a/>.
+ *  already implemented <a href="https://github.com/volodya-lombrozo/jtcop/blob/main/src/main/java/com/github/lombrozo/testnames/rules/ml/CachedModelSource.java">here</a>.
  */
 final class TestObjectIsVerbInSingularTest {
 
@@ -56,7 +58,7 @@ final class TestObjectIsVerbInSingularTest {
 
     @BeforeAll
     static void setUp() throws IOException, URISyntaxException {
-        model = new POSTaggerME(
+        TestObjectIsVerbInSingularTest.model = new POSTaggerME(
             new POSModel(
                 new URI(
                     "https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin"
@@ -65,17 +67,19 @@ final class TestObjectIsVerbInSingularTest {
         );
     }
 
+    @ExtendWith(MayBeSlow.class)
+    @ExtendWith(WeAreOnline.class)
     @ParameterizedTest
     @ClasspathSource(
         value = "org/eolang/lints/misc/test-object-is-not-verb-in-singular/bad",
         glob = "**.eo"
     )
-    void catchesBadName(final String eo) throws IOException {
+    void catchesBadName(final String source) throws IOException {
         MatcherAssert.assertThat(
             "Defects shouldn't be empty",
-            new TestObjectIsVerbInSingular(model).defects(
+            new TestObjectIsVerbInSingular(TestObjectIsVerbInSingularTest.model).defects(
                 new EoSyntax(
-                    new InputOf(eo)
+                    new InputOf(source)
                 ).parsed()
             ),
             Matchers.hasSize(Matchers.greaterThan(0))
@@ -87,12 +91,12 @@ final class TestObjectIsVerbInSingularTest {
         value = "org/eolang/lints/misc/test-object-is-not-verb-in-singular/good",
         glob = "**.eo"
     )
-    void allowsGoodNames(final String eo) throws IOException {
+    void allowsGoodNames(final String source) throws IOException {
         MatcherAssert.assertThat(
             "Defects are not empty, but they shouldn't be",
-            new TestObjectIsVerbInSingular(model).defects(
+            new TestObjectIsVerbInSingular(TestObjectIsVerbInSingularTest.model).defects(
                 new EoSyntax(
-                    new InputOf(eo)
+                    new InputOf(source)
                 ).parsed()
             ),
             Matchers.hasSize(0)

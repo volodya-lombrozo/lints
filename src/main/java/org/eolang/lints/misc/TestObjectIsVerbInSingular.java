@@ -47,6 +47,7 @@ import org.eolang.lints.Severity;
  *
  * @since 0.0.20
  */
+@SuppressWarnings("PMD.TestClassWithoutTestCases")
 public final class TestObjectIsVerbInSingular implements Lint {
 
     /**
