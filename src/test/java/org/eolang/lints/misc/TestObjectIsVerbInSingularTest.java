@@ -24,10 +24,15 @@
 package org.eolang.lints.misc;
 
 import java.io.IOException;
+import java.net.URL;
+import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 import org.cactoos.io.InputOf;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.EoSyntax;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 
 /**
@@ -37,13 +42,50 @@ import org.junit.jupiter.params.ParameterizedTest;
  */
 final class TestObjectIsVerbInSingularTest {
 
+    private static POSTaggerME model;
+
+    @BeforeAll
+    static void setUp() throws IOException {
+        model = new POSTaggerME(
+            new POSModel(
+                new URL(
+                    "https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin"
+                )
+            )
+        );
+    }
+
     @ParameterizedTest
-    @ClasspathSource(value = "org/eolang/lints/misc/", glob = "**.eo")
+    @ClasspathSource(
+        value = "org/eolang/lints/misc/test-object-is-not-verb-in-singular/bad",
+        glob = "**.eo"
+    )
     void catchesBadName(final String eo) throws IOException {
-        new TestObjectIsVerbInSingular().defects(
-            new EoSyntax(
-                new InputOf(eo)
-            ).parsed()
+        MatcherAssert.assertThat(
+            "Defects shouldn't be empty",
+            new TestObjectIsVerbInSingular(model).defects(
+                new EoSyntax(
+                    new InputOf(eo)
+                ).parsed()
+            ),
+            Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
+
+    @ParameterizedTest
+    @ClasspathSource(
+        value = "org/eolang/lints/misc/test-object-is-not-verb-in-singular/good",
+        glob = "**.eo"
+    )
+    void allowsGoodNames(final String eo) throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are not empty, but they shouldn't be",
+            new TestObjectIsVerbInSingular(model).defects(
+                new EoSyntax(
+                    new InputOf(eo)
+                ).parsed()
+            ),
+            Matchers.hasSize(0)
         );
     }
 }

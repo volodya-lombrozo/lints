@@ -1,0 +1,5 @@
++tests
+
+# This is test.
+[] > locks-branch
+  42 > foo

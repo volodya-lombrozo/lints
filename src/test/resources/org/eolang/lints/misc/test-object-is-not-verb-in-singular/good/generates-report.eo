@@ -1,0 +1,5 @@
++tests
+
+# This is test.
+[] > generates-report
+  42 > foo

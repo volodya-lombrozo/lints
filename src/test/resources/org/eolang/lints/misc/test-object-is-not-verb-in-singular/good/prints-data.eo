@@ -1,0 +1,5 @@
++tests
+
+# This is test.
+[] > prints-data
+  42 > foo

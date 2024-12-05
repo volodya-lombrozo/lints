@@ -1,0 +1,5 @@
++tests
+
+# This is test.
+[] > itIsTrue
+  42 > foo

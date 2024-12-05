@@ -1,0 +1,5 @@
++tests
+
+# This is test.
+[] > runs
+  42 > foo

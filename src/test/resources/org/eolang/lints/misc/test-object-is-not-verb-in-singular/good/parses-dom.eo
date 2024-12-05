@@ -1,0 +1,5 @@
++tests
+
+# This is test.
+[] > parses-dom
+  42 > foo

@@ -1,0 +1,5 @@
++tests
+
+# This is test.
+[] > works-as-expected
+  42 > foo
