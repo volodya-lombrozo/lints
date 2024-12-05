@@ -34,7 +34,9 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
+import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
+import org.cactoos.text.TextOf;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
 import org.eolang.lints.Severity;
@@ -127,6 +129,10 @@ public final class TestObjectIsVerbInSingular implements Lint {
 
     @Override
     public String motive() throws Exception {
-        throw new UnsupportedOperationException("#motive()");
+        return new TextOf(
+            new ResourceOf(
+                "org/eolang/motives/misc/test-object-is-not-verb-in-singular.md"
+            )
+        ).asString();
     }
 }
