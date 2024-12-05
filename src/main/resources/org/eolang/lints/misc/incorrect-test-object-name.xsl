@@ -22,50 +22,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="prohibited-package" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" id="incorrect-test-object-name">
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:variable name="white-list">
-    <a>as-phi</a>
-    <a>bytes</a>
-    <a>cti</a>
-    <a>dataized</a>
-    <a>error</a>
-    <a>false</a>
-    <a>go</a>
-    <a>i16</a>
-    <a>i32</a>
-    <a>i64</a>
-    <a>malloc</a>
-    <a>nan</a>
-    <a>negative-infinity</a>
-    <a>number</a>
-    <a>positive-infinity</a>
-    <a>rust</a>
-    <a>seq</a>
-    <a>string</a>
-    <a>switch</a>
-    <a>true</a>
-    <a>try</a>
-    <a>tuple</a>
-    <a>while</a>
-  </xsl:variable>
-  <xsl:variable name="name" select="//objects/o[1]/@name"/>
+  <xsl:output encoding="UTF-8" method="xml" indent="yes"/>
   <xsl:template match="/">
     <defects>
-      <xsl:variable name="tested" select="/program/metas/meta[head='tests']"/>
-      <xsl:for-each select="/program/metas/meta">
-        <xsl:variable name="meta-head" select="head"/>
-        <xsl:variable name="meta-tail" select="tail"/>
-        <xsl:if test="not($tested) and $meta-head='package' and $meta-tail='org.eolang' and not($white-list/a=$name)">
-          <xsl:element name="defect">
+      <xsl:for-each select="/program[metas/meta[head='tests']]/objects/o[@name]">
+        <xsl:variable name="regexp" select="'^[a-z][a-z]+(-[a-z][a-z]+)*$'"/>
+        <xsl:if test="not(matches(@name, $regexp))">
+          <defect>
             <xsl:attribute name="line">
               <xsl:value-of select="if (@line) then @line else '0'"/>
             </xsl:attribute>
-            <xsl:attribute name="severity">
-              <xsl:text>warning</xsl:text>
-            </xsl:attribute>
-            <xsl:text>Package org.eolang is reserved for internal object only</xsl:text>
-          </xsl:element>
+            <xsl:attribute name="severity">warning</xsl:attribute>
+            <xsl:text>Test object name: "</xsl:text>
+            <xsl:value-of select="@name"/>
+            <xsl:text>"</xsl:text>
+            <xsl:text> doesn't match '</xsl:text>
+            <xsl:value-of select="$regexp"/>
+            <xsl:text>'</xsl:text>
+          </defect>
         </xsl:if>
       </xsl:for-each>
     </defects>
