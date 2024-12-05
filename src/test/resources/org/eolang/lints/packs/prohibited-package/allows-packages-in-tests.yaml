@@ -20,12 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-xsls:
+sheets:
   - /org/eolang/lints/metas/prohibited-package.xsl
-  - /org/eolang/lints/set-fake-schema.xsl
-tests:
+asserts:
   - /defects[count(defect[@severity='warning'])=0]
-eo: |
+input: |
   +package org.eolang
   +tests
 
