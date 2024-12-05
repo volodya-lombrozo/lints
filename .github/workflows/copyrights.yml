@@ -51,4 +51,4 @@ jobs:
             **/*.properties
             **/*.toml
             **/*.groovy
-            src/test/resources/org/eolang/lints/**/*.eo
+            src/test/resources/org/eolang/lints/*.eo
