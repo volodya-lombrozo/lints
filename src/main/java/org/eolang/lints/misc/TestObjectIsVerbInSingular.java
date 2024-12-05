@@ -37,6 +37,7 @@ import opennlp.tools.postag.POSTaggerME;
 import org.cactoos.list.ListOf;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
+import org.eolang.lints.Severity;
 
 /**
  * Lint that checks test object name is a verb in singular.
@@ -48,7 +49,7 @@ public final class TestObjectIsVerbInSingular implements Lint {
     /**
      * The pattern to split kebab case.
      */
-    private static final Pattern KEBAB = Pattern.compile("(?=\\p{Lu})");
+    private static final Pattern KEBAB = Pattern.compile("-");
 
     /**
      * The Open NLP tagger.
@@ -106,9 +107,19 @@ public final class TestObjectIsVerbInSingular implements Lint {
                         ).map(s -> s.toLowerCase(Locale.ROOT))
                         .toArray(String[]::new)
                 )
-            ).get(0);
-            if ("VB".equals(first) || "VBP".equals(first) || "VBZ".equals(first)) {
-                System.out.println(first);
+            ).get(1);
+            if (!("VB".equals(first) || "VBP".equals(first) || "VBZ".equals(first))) {
+                defects.add(
+                    new Defect.Default(
+                        "test-object-is-not-verb-in-singular",
+                        Severity.WARNING,
+                        Integer.parseInt(object.xpath("@line").get(0)),
+                        String.format(
+                            "Test object name: \"%s\" doesn't start with verb in singular form",
+                            name
+                        )
+                    )
+                );
             }
         }
         return defects;
