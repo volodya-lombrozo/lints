@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-xsls:
+sheets:
   - /org/eolang/lints/errors/unknown-name.xsl
-tests:
+asserts:
   - /defects[count(defect[@severity='error'])=0]
-xmir: |
+document: |
   <program>
     <objects>
       <o name="main">

@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-xsls:
+sheets:
   - /org/eolang/lints/atoms/atom-and-base.xsl
-tests:
+asserts:
   - /defects[count(defect[@severity='critical'])=1]
-xmir: |
+document: |
   <program>
     <objects>
       <o abstract="">

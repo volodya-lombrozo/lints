@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-xsls:
+sheets:
   - /org/eolang/lints/lines/object-line-out-of-listing.xsl
-tests:
+asserts:
   - /defects[count(defect[@severity='error'])=1]
-xmir: |
+document: |
   <program>
     <listing>first line
       second line

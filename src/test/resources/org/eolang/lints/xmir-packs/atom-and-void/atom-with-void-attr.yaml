@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-xsls:
+sheets:
   - /org/eolang/lints/atoms/not-empty-atom.xsl
-tests:
+asserts:
   - /defects[count(defect)=0]
-xmir: |
+document: |
   <program>
     <objects>
       <o atom="org.eolang.number">

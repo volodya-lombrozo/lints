@@ -27,7 +27,11 @@ SOFTWARE.
   <xsl:template match="/defects">
     <xsl:copy>
       <xsl:attribute name="xsi:noNamespaceSchemaLocation">
-        <xsl:text>https://raw.githubusercontent.com/objectionary/lints/refs/heads/master/src/test/resources/fake-schema.xsd</xsl:text>
+        <!--
+        This is a placeholder for the actual schema location,
+        which will be set by the unit test.
+        -->
+        <xsl:text>${file}</xsl:text>
       </xsl:attribute>
       <xsl:apply-templates select="node()|@*"/>
     </xsl:copy>
