@@ -25,7 +25,8 @@ package org.eolang.lints.misc;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -63,7 +64,7 @@ public final class TestObjectIsVerbInSingular implements Lint {
      *
      * @throws IOException if something went wrong.
      */
-    public TestObjectIsVerbInSingular() throws IOException {
+    public TestObjectIsVerbInSingular() throws IOException, URISyntaxException {
         this("https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin");
     }
 
@@ -73,8 +74,8 @@ public final class TestObjectIsVerbInSingular implements Lint {
      * @param url Model URL
      * @throws IOException if something went wrong.
      */
-    public TestObjectIsVerbInSingular(final String url) throws IOException {
-        this(new POSModel(new URL(url)));
+    public TestObjectIsVerbInSingular(final String url) throws IOException, URISyntaxException {
+        this(new POSModel(new URI(url).toURL()));
     }
 
     /**

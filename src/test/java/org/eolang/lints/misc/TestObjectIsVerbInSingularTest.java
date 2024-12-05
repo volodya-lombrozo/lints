@@ -24,6 +24,8 @@
 package org.eolang.lints.misc;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
@@ -53,12 +55,12 @@ final class TestObjectIsVerbInSingularTest {
     private static POSTaggerME model;
 
     @BeforeAll
-    static void setUp() throws IOException {
+    static void setUp() throws IOException, URISyntaxException {
         model = new POSTaggerME(
             new POSModel(
-                new URL(
+                new URI(
                     "https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin"
-                )
+                ).toURL()
             )
         );
     }
