@@ -38,7 +38,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 /**
  * Tests for {@link TestObjectIsVerbInSingular}.
  *
- * @since 0.0.19
+ * @since 0.0.20
  */
 final class TestObjectIsVerbInSingularTest {
 

@@ -42,7 +42,7 @@ import org.eolang.lints.Severity;
 /**
  * Lint that checks test object name is a verb in singular.
  *
- * @since 0.0.19
+ * @since 0.0.20
  */
 public final class TestObjectIsVerbInSingular implements Lint {
 
