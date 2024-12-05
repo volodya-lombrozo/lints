@@ -39,9 +39,17 @@ import org.junit.jupiter.params.ParameterizedTest;
  * Tests for {@link TestObjectIsVerbInSingular}.
  *
  * @since 0.0.20
+ * @todo #72:90min Cache POS model after it's first load.
+ *  Currently, we load the model from the internet for each test run. Instead of
+ *  this, let's cache the model after the first load in both: filesystem, and
+ *  RAM. This optimization should improve local testing experience. This was
+ *  already implemented <a href="https://github.com/volodya-lombrozo/jtcop/blob/main/src/main/java/com/github/lombrozo/testnames/rules/ml/CachedModelSource.java">here<a/>.
  */
 final class TestObjectIsVerbInSingularTest {
 
+    /**
+     * Model.
+     */
     private static POSTaggerME model;
 
     @BeforeAll
