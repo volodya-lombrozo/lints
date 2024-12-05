@@ -24,10 +24,10 @@
 package org.eolang.lints.misc;
 
 import java.io.IOException;
+import opennlp.tools.postag.POSTaggerME;
 import org.cactoos.io.InputOf;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.EoSyntax;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
 /**

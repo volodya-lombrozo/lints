@@ -25,21 +25,83 @@ package org.eolang.lints.misc;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
+import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Locale;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
+import opennlp.tools.postag.POSModel;
+import opennlp.tools.postag.POSTaggerME;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
 
 /**
  * Lint that checks test object name is a verb in singular.
+ *
  * @since 0.0.19
  */
 public final class TestObjectIsVerbInSingular implements Lint {
 
+    /**
+     * The pattern to split kebab case.
+     */
+    private static final Pattern KEBAB = Pattern.compile("(?=\\p{Lu})");
+
+    /**
+     * The Open NLP tagger.
+     */
+    private final POSTaggerME model;
+
+    /**
+     * Ctor.
+     * @throws IOException if something went wrong.
+     */
+    public TestObjectIsVerbInSingular() throws IOException {
+        this("https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin");
+    }
+
+    /**
+     * Ctor.
+     * @param url Model URL
+     * @throws IOException if something went wrong.
+     */
+    public TestObjectIsVerbInSingular(final String url) throws IOException {
+        this(new POSModel(new URL(url)));
+    }
+
+    /**
+     * Ctor.
+     * @param model POS model.
+     */
+    public TestObjectIsVerbInSingular(final POSModel model) {
+        this(new POSTaggerME(model));
+    }
+
+    /**
+     * Ctor.
+     * @param mdl The Open NLP tagger.
+     */
+    public TestObjectIsVerbInSingular(final POSTaggerME mdl) {
+        this.model = mdl;
+    }
+
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
-        System.out.println(xmir.nodes("/program[metas/meta[head='tests']]/objects/o[@name]"));
+        for (final XML object : xmir.nodes("/program[metas/meta[head='tests']]/objects/o[@name]")) {
+            final String name = object.xpath("@name").get(0);
+            final String[] tags = this.model.tag(
+                Stream
+                    .concat(
+                        Stream.of("It"),
+                        Arrays.stream(TestObjectIsVerbInSingular.KEBAB.split(name))
+                    ).map(s -> s.toLowerCase(Locale.ROOT))
+                    .toArray(String[]::new)
+            );
+            System.out.println(Arrays.toString(tags));
+        }
         return defects;
     }
 
