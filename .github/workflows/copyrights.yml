@@ -51,4 +51,5 @@ jobs:
             **/*.properties
             **/*.toml
             **/*.groovy
-            src/test/resources/org/eolang/lints/misc/**/*.eo
+          ignore: >-
+            src/test/resources/org/eolang/lints/**/*.eo
