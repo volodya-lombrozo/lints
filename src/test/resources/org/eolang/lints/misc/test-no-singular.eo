@@ -1,0 +1,5 @@
++tests
+
+# This is test.
+[] > this-is-test
+  42 > foo
