@@ -34,7 +34,7 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
           </xsl:attribute>
-          <xsl:text>Unit test without '@': "</xsl:text>
+          <xsl:text>The unit test doesn't have "@" attribute: "</xsl:text>
           <xsl:value-of select="@name"/>
           <xsl:text>"</xsl:text>
         </xsl:element>

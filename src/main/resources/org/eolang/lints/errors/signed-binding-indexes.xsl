@@ -34,7 +34,8 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>Binding index of application must not be a signed number "</xsl:text>
+          <xsl:text>The index of the argument of application has a number with a sign, </xsl:text>
+          <xsl:text>which is not allowed: "</xsl:text>
           <xsl:value-of select="tail/text()"/>
           <xsl:text>"</xsl:text>
         </xsl:element>

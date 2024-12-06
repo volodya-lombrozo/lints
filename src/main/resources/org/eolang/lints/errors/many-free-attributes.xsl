@@ -24,9 +24,10 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="many-free-attributes" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
+  <xsl:variable name="max" select="5"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[count(o[@name and @base='∅' and not(@atom) and count(o)=0]) &gt; 5]">
+      <xsl:for-each select="//o[count(o[@name and @base='∅' and not(@atom) and count(o)=0]) &gt; $max]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="if (@line) then @line else '0'"/>
@@ -38,7 +39,9 @@ SOFTWARE.
           <xsl:text>"</xsl:text>
           <xsl:value-of select="@name"/>
           <xsl:text>" </xsl:text>
-          <xsl:text>has more than five free attributes, it's too many</xsl:text>
+          <xsl:text>has more than </xsl:text>
+          <xsl:value-of select="$max"/>
+          <xsl:text> free attributes, it's too many</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>

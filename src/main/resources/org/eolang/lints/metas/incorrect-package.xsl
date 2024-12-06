@@ -38,7 +38,7 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>Wrong format of package name "</xsl:text>
+            <xsl:text>The format of the +package meta is wrong: "</xsl:text>
             <xsl:value-of select="$first"/>
             <xsl:text>"</xsl:text>
           </xsl:element>

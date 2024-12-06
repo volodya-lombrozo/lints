@@ -47,7 +47,7 @@ SOFTWARE.
           <xsl:value-of select="@name"/>
           <xsl:text>" </xsl:text>
         </xsl:if>
-        <xsl:text>has attribute without a name</xsl:text>
+        <xsl:text>has an attribute without a name</xsl:text>
       </xsl:element>
     </xsl:for-each>
   </xsl:template>

@@ -35,9 +35,9 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
             </xsl:attribute>
-            <xsl:text>Defining "</xsl:text>
+            <xsl:text>The "</xsl:text>
             <xsl:value-of select="@name"/>
-            <xsl:text>" atom without an +rt meta doesn't make sense</xsl:text>
+            <xsl:text>" atom is defined without the +rt meta, which doesn't make any sense</xsl:text>
           </xsl:element>
         </xsl:for-each>
       </xsl:if>

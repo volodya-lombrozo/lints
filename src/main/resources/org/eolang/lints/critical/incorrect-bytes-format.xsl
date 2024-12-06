@@ -37,7 +37,7 @@ SOFTWARE.
           <xsl:value-of select="if (@line) then @line else '0'"/>
         </xsl:attribute>
         <xsl:attribute name="severity">critical</xsl:attribute>
-        <xsl:text>Incorrect bytes format: "</xsl:text>
+        <xsl:text>The format of bytes is incorrect: "</xsl:text>
         <xsl:value-of select="$bytes"/>
         <xsl:text>"</xsl:text>
       </defect>

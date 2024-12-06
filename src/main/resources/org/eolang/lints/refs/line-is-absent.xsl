@@ -42,7 +42,7 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
             </xsl:attribute>
-            <xsl:text>Attribute @line is absent at "</xsl:text>
+            <xsl:text>The @line attribute is absent at "</xsl:text>
             <xsl:value-of select="$target/@name"/>
             <xsl:text>"</xsl:text>
           </xsl:element>

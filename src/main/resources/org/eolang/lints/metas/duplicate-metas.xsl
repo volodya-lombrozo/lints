@@ -37,9 +37,9 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>Duplicate meta: "</xsl:text>
+            <xsl:text>The meta "</xsl:text>
             <xsl:value-of select="concat(head, ' ', tail)"/>
-            <xsl:text>"</xsl:text>
+            <xsl:text>" is seen more than once</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

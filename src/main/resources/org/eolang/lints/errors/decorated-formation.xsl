@@ -22,7 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="abstract-decoratee" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="decorated-formation" version="2.0">
   <xsl:import href="/org/eolang/parser/_funcs.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
@@ -35,7 +35,7 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
           </xsl:attribute>
-          <xsl:text>Abstract object shouldn't be used as a decoratee</xsl:text>
+          <xsl:text>A formation shouldn't be used as a decoratee</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>
