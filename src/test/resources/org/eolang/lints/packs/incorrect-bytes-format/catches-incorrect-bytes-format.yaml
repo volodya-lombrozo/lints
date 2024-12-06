@@ -23,7 +23,7 @@
 sheets:
   - /org/eolang/lints/critical/incorrect-bytes-format.xsl
 asserts:
-  - /defects[count(defect[@severity='critical'])=7]
+  - /defects[count(defect[@severity='critical'])=8]
 document: |
   <program>
     <objects>
@@ -46,7 +46,18 @@ document: |
         FF-1
       </o>
       <o name="f">
+        FF-11-
+      </o>
+      <o name="f">
         哈囉世界
+      </o>
+      <o name="correct-inners" line="42">
+        <o base="first">
+          <o base="org.eolang.bytes">3F-F0-00-00-00-00-00-00</o>
+        </o>
+        <o base="second">
+          <o base="org.eolang.bytes">00-00-00-00-00-00-00-00</o>
+        </o>
       </o>
     </objects>
   </program>
