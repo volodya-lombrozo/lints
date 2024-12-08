@@ -21,13 +21,16 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/metas/incorrect-jvm-rt.xsl
+  - /org/eolang/lints/metas/incorrect-jvm-rt-location.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=0]
+  - /defects[count(defect[@severity='warning'])=3]
+  - /defects/defect[@line='1']
+  - /defects/defect[@line='2']
+  - /defects/defect[@line='3']
 input: |
-  +rt jvm org.eolang:eo-runtime:0.0.0
-  +rt jvm foo:bar:0.0.1
-  +rt jvm the:great:gatsby:1.2.3
+  +rt jvm test
+  +rt jvm foo:bar
+  +rt jvm привет!
 
   # No comments.
   [] > foo
