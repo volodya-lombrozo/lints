@@ -23,13 +23,15 @@
 sheets:
   - /org/eolang/lints/metas/incorrect-jvm-rt-location.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=3]
+  - /defects[count(defect[@severity='warning'])=4]
   - /defects/defect[@line='1']
   - /defects/defect[@line='2']
   - /defects/defect[@line='3']
+  - /defects/defect[@line='4']
 input: |
   +rt jvm test
   +rt jvm foo:bar
+  +rt jvm foo:bar:xyz
   +rt jvm привет!
 
   # No comments.
