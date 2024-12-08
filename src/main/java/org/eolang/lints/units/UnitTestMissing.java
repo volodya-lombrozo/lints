@@ -21,31 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints;
+package org.eolang.lints.units;
 
+import com.jcabi.xml.XML;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import org.eolang.lints.Defect;
+import org.eolang.lints.Lint;
 
 /**
- * A single checker for an {@code .xmir} file.
+ * A test is missing for a live EO program.
  *
- * @param <T> The type of entity to analyze
- * @since 0.0.1
+ * @since 0.1.0
  */
-public interface Lint<T> {
+public final class UnitTestMissing implements Lint<Map<String, XML>> {
 
-    /**
-     * Find and return defects.
-     * @param entity The entity to analyze (could be {@link com.jcabi.xml.XML}
-     *  or {@link java.nio.file.Path})
-     * @return Defects
-     */
-    Collection<Defect> defects(T entity) throws IOException;
+    @Override
+    public Collection<Defect> defects(final Map<String, XML> pkg) throws IOException {
+        return new ArrayList<>(0);
+    }
 
-    /**
-     * Returns motive for a lint, explaining why this lint exists.
-     * @return Motive text about lint
-     * @throws Exception if something went wrong
-     */
-    String motive() throws Exception;
+    @Override
+    public String motive() throws Exception {
+        return "";
+    }
 }

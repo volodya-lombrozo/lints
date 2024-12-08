@@ -45,6 +45,13 @@ public interface Defect {
     Severity severity();
 
     /**
+     * Name of the program with defect.
+     * @return Name of it, taken from the {@code @name} attribute of
+     *  the {@code program} element in XMIR
+     */
+    String program();
+
+    /**
      * Line where it was found.
      * @return Line number
      */
@@ -79,6 +86,11 @@ public interface Defect {
         private final Severity sev;
 
         /**
+         * Name of the program.
+         */
+        private final String prg;
+
+        /**
          * Line number with the defect.
          */
         private final int lineno;
@@ -92,14 +104,16 @@ public interface Defect {
          * Ctor.
          * @param rule Rule
          * @param severity Severity
+         * @param program Name or the program
          * @param line Line number
          * @param text Description of the defect
          * @checkstyle ParameterNumberCheck (5 lines)
          */
         public Default(final String rule, final Severity severity,
-            final int line, final String text) {
+            final String program, final int line, final String text) {
             this.rle = rule;
             this.sev = severity;
+            this.prg = program;
             this.lineno = line;
             this.txt = text;
         }
@@ -119,6 +133,11 @@ public interface Defect {
         @Override
         public Severity severity() {
             return this.sev;
+        }
+
+        @Override
+        public String program() {
+            return this.prg;
         }
 
         @Override

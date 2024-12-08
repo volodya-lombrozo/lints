@@ -24,57 +24,49 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
-import org.cactoos.iterable.Joined;
+import java.util.Map;
 import org.cactoos.iterable.Sticky;
-import org.eolang.lints.comments.AsciiOnly;
+import org.eolang.lints.units.UnitTestMissing;
 
 /**
- * A single XMIR program to analyze.
+ * A collection of XMIR programs to analyze.
  *
  * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR</a>
  * @since 0.1.0
  */
-public final class Program {
+public final class Programs {
 
     /**
      * Lints to use.
      */
-    private static final Iterable<Lint<XML>> LINTS = new Sticky<>(
-        new Joined<Lint<XML>>(
-            new XslLints(),
-            Arrays.asList(
-                new AsciiOnly()
-            )
-        )
+    private static final Iterable<Lint<Map<String, XML>>> LINTS = new Sticky<>(
+        new UnitTestMissing()
     );
 
     /**
-     * The XMIR program to analyze.
+     * The package of XMIR files.
      */
-    private final XML xmir;
+    private final Map<String, XML> pkg;
 
     /**
      * Ctor.
-     * @param xml The XMIR
+     * @param dir The directory
      */
-    public Program(final XML xml) {
-        this.xmir = xml;
+    public Programs(final Path dir) {
+        this(Programs.discover(dir));
     }
 
     /**
      * Ctor.
-     * @param file The absolute path of the XMIR file
-     * @throws FileNotFoundException If file not found
+     * @param map The map with them
      */
-    public Program(final Path file) throws FileNotFoundException {
-        this(new XMLDocument(file));
+    public Programs(final Map<String, XML> map) {
+        this.pkg = Collections.unmodifiableMap(map);
     }
 
     /**
@@ -83,10 +75,19 @@ public final class Program {
      */
     public Collection<Defect> defects() throws IOException {
         final Collection<Defect> messages = new LinkedList<>();
-        for (final Lint<XML> lint : Program.LINTS) {
-            messages.addAll(lint.defects(this.xmir));
+        for (final Lint<Map<String, XML>> lint : Programs.LINTS) {
+            messages.addAll(lint.defects(this.pkg));
         }
         return messages;
+    }
+
+    /**
+     * Discover all XMIR files in the directory.
+     * @param dir The directory to search for XMIR files in (recursively)
+     * @return Map of XMIR files
+     */
+    private static Map<String, XML> discover(final Path dir) {
+        return Collections.emptyMap();
     }
 
 }

@@ -35,7 +35,7 @@ final class LintsItTest {
     @Test
     void lintsProgram() throws IOException {
         final XML xmir = new XMLDocument("<program/>");
-        for (final Lint lint : new XslLints()) {
+        for (final Lint<XML> lint : new XslLints()) {
             MatcherAssert.assertThat(
                 "passes with no exceptions",
                 lint.defects(xmir),
