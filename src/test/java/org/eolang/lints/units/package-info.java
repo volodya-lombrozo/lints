@@ -27,4 +27,4 @@
  *
  * @since 0.0.1
  */
-package org.eolang.lints.comments;
+package org.eolang.lints.units;

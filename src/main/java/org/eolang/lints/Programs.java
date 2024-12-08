@@ -24,12 +24,19 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.cactoos.iterable.Sticky;
 import org.eolang.lints.units.UnitTestMissing;
 
@@ -55,10 +62,20 @@ public final class Programs {
 
     /**
      * Ctor.
-     * @param dir The directory
+     * @param dirs The directory
+     * @throws IOException If fails
      */
-    public Programs(final Path dir) {
-        this(Programs.discover(dir));
+    public Programs(final Path... dirs) throws IOException {
+        this(Arrays.asList(dirs));
+    }
+
+    /**
+     * Ctor.
+     * @param dirs The directory
+     * @throws IOException If fails
+     */
+    public Programs(final Collection<Path> dirs) throws IOException {
+        this(Programs.discover(dirs));
     }
 
     /**
@@ -83,11 +100,41 @@ public final class Programs {
 
     /**
      * Discover all XMIR files in the directory.
-     * @param dir The directory to search for XMIR files in (recursively)
+     * @param dirs The directories to search for XMIR files in (recursively)
      * @return Map of XMIR files
+     * @throws IOException If fails
      */
-    private static Map<String, XML> discover(final Path dir) {
-        return Collections.emptyMap();
+    private static Map<String, XML> discover(final Iterable<Path> dirs) throws IOException {
+        final Map<String, XML> map = new HashMap<>(0);
+        for (final Path dir : dirs) {
+            map.putAll(Programs.discover(dir));
+        }
+        return map;
+    }
+
+    /**
+     * Discover all XMIR files in the directory.
+     * @param dir The directories to search for XMIR files in (recursively)
+     * @return Map of XMIR files
+     * @throws IOException If fails
+     */
+    private static Map<String, XML> discover(final Path dir) throws IOException {
+        try (Stream<Path> walk = Files.walk(dir)) {
+            return walk
+                .filter(Files::isRegularFile)
+                .collect(
+                    Collectors.toMap(
+                        path -> path.getFileName().toString().replaceAll("\\.xmir$", ""),
+                        path -> {
+                            try {
+                                return new XMLDocument(path);
+                            } catch (final FileNotFoundException ex) {
+                                throw new IllegalArgumentException(ex);
+                            }
+                        }
+                    )
+                );
+        }
     }
 
 }

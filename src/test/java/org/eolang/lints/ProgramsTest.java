@@ -21,49 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.units;
+package org.eolang.lints;
 
-import com.jcabi.xml.XML;
+import com.yegor256.Mktmp;
+import com.yegor256.MktmpResolver;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
-import org.eolang.lints.Defect;
-import org.eolang.lints.Lint;
-import org.eolang.lints.Severity;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.cactoos.io.InputOf;
+import org.eolang.parser.EoSyntax;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
- * A test is missing for a live EO program.
+ * Test for {@link Programs}.
  *
  * @since 0.1.0
  */
-public final class UnitTestMissing implements Lint<Map<String, XML>> {
+@ExtendWith(MktmpResolver.class)
+final class ProgramsTest {
 
-    @Override
-    public Collection<Defect> defects(final Map<String, XML> pkg) throws IOException {
-        final Collection<Defect> defects = new LinkedList<>();
-        for (final String name : pkg.keySet()) {
-            if (name.endsWith("-test")) {
-                continue;
-            }
-            if (pkg.containsKey(String.format("%s-test", name))) {
-                continue;
-            }
-            defects.add(
-                new Defect.Default(
-                    "unit-test-missing",
-                    Severity.WARNING,
-                    name,
-                    0,
-                    String.format("Unit test is not found for %s", name)
-                )
-            );
-        }
-        return defects;
-    }
-
-    @Override
-    public String motive() throws Exception {
-        return "";
+    @Test
+    void simpleTest(@Mktmp final Path dir) throws IOException {
+        final Path path = dir.resolve("a/b/c/foo.xmir");
+        path.toFile().getParentFile().mkdirs();
+        Files.write(
+            path,
+            new EoSyntax(
+                new InputOf("# first.\n[] > foo\n# second.\n[] > foo\n")
+            ).parsed().toString().getBytes(StandardCharsets.UTF_8)
+        );
+        MatcherAssert.assertThat(
+            "the defect is found",
+            new Programs(path).defects().size(),
+            Matchers.greaterThan(0)
+        );
     }
 }
