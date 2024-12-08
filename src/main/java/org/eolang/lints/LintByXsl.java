@@ -42,7 +42,7 @@ import org.cactoos.text.TextOf;
  *
  * @since 0.0.1
  */
-final class LintByXsl implements Lint {
+final class LintByXsl implements Lint<XML> {
 
     /**
      * The name of the rule.
@@ -108,6 +108,7 @@ final class LintByXsl implements Lint {
                 new Defect.Default(
                     this.rule,
                     Severity.parsed(severity.get(0)),
+                    xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
                     this.lineno(defect),
                     defect.xpath("text()").get(0)
                 )

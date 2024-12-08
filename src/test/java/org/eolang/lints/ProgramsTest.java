@@ -23,29 +23,41 @@
  */
 package org.eolang.lints;
 
+import com.yegor256.Mktmp;
+import com.yegor256.MktmpResolver;
 import java.io.IOException;
-import java.util.Collection;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.cactoos.io.InputOf;
+import org.eolang.parser.EoSyntax;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
- * A single checker for an {@code .xmir} file.
+ * Test for {@link Programs}.
  *
- * @param <T> The type of entity to analyze
- * @since 0.0.1
+ * @since 0.1.0
  */
-public interface Lint<T> {
+@ExtendWith(MktmpResolver.class)
+final class ProgramsTest {
 
-    /**
-     * Find and return defects.
-     * @param entity The entity to analyze (could be {@link com.jcabi.xml.XML}
-     *  or {@link java.nio.file.Path})
-     * @return Defects
-     */
-    Collection<Defect> defects(T entity) throws IOException;
-
-    /**
-     * Returns motive for a lint, explaining why this lint exists.
-     * @return Motive text about lint
-     * @throws Exception if something went wrong
-     */
-    String motive() throws Exception;
+    @Test
+    void simpleTest(@Mktmp final Path dir) throws IOException {
+        final Path path = dir.resolve("a/b/c/foo.xmir");
+        path.toFile().getParentFile().mkdirs();
+        Files.write(
+            path,
+            new EoSyntax(
+                new InputOf("# first.\n[] > foo\n# second.\n[] > foo\n")
+            ).parsed().toString().getBytes(StandardCharsets.UTF_8)
+        );
+        MatcherAssert.assertThat(
+            "the defect is found",
+            new Programs(path).defects().size(),
+            Matchers.greaterThan(0)
+        );
+    }
 }

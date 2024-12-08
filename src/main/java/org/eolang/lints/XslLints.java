@@ -23,6 +23,7 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.XML;
 import io.github.secretx33.resourceresolver.PathMatchingResourcePatternResolver;
 import java.io.IOException;
 import java.util.Arrays;
@@ -36,7 +37,7 @@ import org.cactoos.iterable.Mapped;
  *
  * @since 0.1.0
  */
-public final class XslLints extends IterableEnvelope<Lint> {
+public final class XslLints extends IterableEnvelope<Lint<XML>> {
 
     /**
      * XSL extension pattern.
@@ -64,7 +65,7 @@ public final class XslLints extends IterableEnvelope<Lint> {
      *
      * @return List of all lints
      */
-    private static Iterable<Lint> all() {
+    private static Iterable<Lint<XML>> all() {
         try {
             return new Mapped<>(
                 res -> new LintByXsl(

@@ -47,7 +47,7 @@ import org.eolang.lints.Severity;
  *  (Java package name, e.g. `comments`).
  * @checkstyle StringLiteralsConcatenationCheck (30 lines)
  */
-public final class AsciiOnly implements Lint {
+public final class AsciiOnly implements Lint<XML> {
 
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
@@ -66,6 +66,7 @@ public final class AsciiOnly implements Lint {
                 new Defect.Default(
                     "ascii-only",
                     Severity.ERROR,
+                    xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
                     Integer.parseInt(line),
                     String.format(
                         "Only ASCII characters are allowed in comments, while '%s' is used at the %sth line at the %sth position",
