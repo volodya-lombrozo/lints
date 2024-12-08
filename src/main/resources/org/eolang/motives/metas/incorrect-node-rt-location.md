@@ -3,7 +3,7 @@
 The location of NodeJS runtime should follow the regexp:
 
 ```regexp
-^([a-zA-Z0-9_.-]+):([0-9_.-]+)$
+^([a-zA-Z0-9_.-]+):(\d+\.\d+\.\d+)$
 ```
 
 Incorrect:

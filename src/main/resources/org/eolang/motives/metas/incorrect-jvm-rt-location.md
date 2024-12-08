@@ -3,7 +3,7 @@
 The location of JVM runtime should follow the regexp:
 
 ```regexp
-^([a-zA-Z0-9_.-]+):([a-zA-Z0-9_.-]+):([a-zA-Z0-9_.-]+)(?::([a-zA-Z0-9_.-]+))?(?::([a-zA-Z0-9_.-]+))?$
+^([a-zA-Z0-9_.-]+):([a-zA-Z0-9_.-]+):(\d+\.\d+\.\d+)$
 ```
 
 Incorrect:
