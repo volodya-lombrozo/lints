@@ -31,7 +31,7 @@ SOFTWARE.
         <xsl:variable name="meta-tail" select="tail"/>
         <xsl:variable name="runtime" select="normalize-space(substring-before(concat($meta-tail, ' '), ' '))"/>
         <xsl:variable name="location" select="normalize-space(substring-after($meta-tail, ' '))"/>
-        <xsl:if test="$meta-head='rt' and count(part) &gt; 1 and $runtime='jvm' and not(matches($location, '^([a-zA-Z0-9_.-]+):([a-zA-Z0-9_.-]+):([a-zA-Z0-9_.-]+)(?::([a-zA-Z0-9_.-]+))?(?::([a-zA-Z0-9_.-]+))?$'))">
+        <xsl:if test="$meta-head='rt' and count(part) &gt; 1 and $runtime='jvm' and not(matches($location, '^([a-zA-Z0-9_.-]+):([a-zA-Z0-9_.-]+):([0-9_.-]+)$'))">
           <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="if (@line) then @line else '0'"/>
