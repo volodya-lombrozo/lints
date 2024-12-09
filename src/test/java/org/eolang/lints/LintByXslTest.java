@@ -143,6 +143,22 @@ final class LintByXslTest {
     }
 
     @Test
+    void catchesLostNonYamls() throws IOException {
+        Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs"))
+            .filter(Files::isRegularFile)
+            .forEach(
+                path -> MatcherAssert.assertThat(
+                    String.format(
+                        "This is not a YAML file, but it's here: %s",
+                        path
+                    ),
+                    path.toAbsolutePath().toString(),
+                    Matchers.endsWith(".yaml")
+                )
+            );
+    }
+
+    @Test
     void checksFileNaming() throws IOException {
         Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs"))
             .filter(Files::isRegularFile)
