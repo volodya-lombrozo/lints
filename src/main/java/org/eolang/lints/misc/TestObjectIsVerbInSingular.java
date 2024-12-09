@@ -48,7 +48,7 @@ import org.eolang.lints.Severity;
  * @since 0.0.20
  */
 @SuppressWarnings("PMD.TestClassWithoutTestCases")
-public final class TestObjectIsVerbInSingular implements Lint {
+public final class TestObjectIsVerbInSingular implements Lint<XML> {
 
     /**
      * The pattern to split kebab case.
@@ -121,6 +121,7 @@ public final class TestObjectIsVerbInSingular implements Lint {
                     new Defect.Default(
                         "test-object-is-not-verb-in-singular",
                         Severity.WARNING,
+                        xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
                         Integer.parseInt(object.xpath("@line").get(0)),
                         String.format(
                             "Test object name: \"%s\" doesn't start with verb in singular form",

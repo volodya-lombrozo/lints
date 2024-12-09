@@ -23,6 +23,7 @@
  */
 package org.eolang.lints.misc;
 
+import com.jcabi.xml.XML;
 import com.yegor256.MayBeSlow;
 import java.io.IOException;
 import org.cactoos.io.ResourceOf;
@@ -44,7 +45,7 @@ final class TestObjectIsVerbInSingularTest {
     /**
      * Lint.
      */
-    private static Lint lint;
+    private static Lint<XML> lint;
 
     @BeforeAll
     static void setUp() throws Exception {
