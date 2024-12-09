@@ -39,6 +39,8 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 
 /**
@@ -115,6 +117,28 @@ final class LintByXslTest {
                         ),
                         found,
                         new IsEqual<>(true)
+                    );
+                }
+            );
+    }
+
+    @Test
+    @DisabledOnOs(OS.WINDOWS)
+    void catchesLostYamls() throws IOException {
+        Files.walk(Paths.get("src/test/resources/org/eolang/lints"))
+            .filter(Files::isRegularFile)
+            .filter(path -> path.toString().endsWith(".yaml"))
+            .map(path -> path.getParent().getParent().toString())
+            .collect(Collectors.toSet())
+            .forEach(
+                path -> {
+                    MatcherAssert.assertThat(
+                        String.format(
+                            "YAML file is at the wrong place: %s",
+                            path
+                        ),
+                        path,
+                        Matchers.endsWith("org/eolang/lints/packs")
                     );
                 }
             );
