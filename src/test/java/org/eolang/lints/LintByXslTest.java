@@ -131,16 +131,14 @@ final class LintByXslTest {
             .map(path -> path.getParent().getParent().toString())
             .collect(Collectors.toSet())
             .forEach(
-                path -> {
-                    MatcherAssert.assertThat(
-                        String.format(
-                            "YAML file is at the wrong place: %s",
-                            path
-                        ),
-                        path,
-                        Matchers.endsWith("org/eolang/lints/packs")
-                    );
-                }
+                path -> MatcherAssert.assertThat(
+                    String.format(
+                        "YAML file is at the wrong place: %s",
+                        path
+                    ),
+                    path,
+                    Matchers.endsWith("org/eolang/lints/packs")
+                )
             );
     }
 
