@@ -67,6 +67,7 @@ final class TestObjectIsVerbInSingularTest {
         );
     }
 
+    @ExtendWith(MayBeSlow.class)
     @Test
     void allowsGoodNames() throws IOException {
         MatcherAssert.assertThat(
