@@ -24,9 +24,7 @@
 package org.eolang.lints.misc;
 
 import com.yegor256.MayBeSlow;
-import com.yegor256.WeAreOnline;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import org.cactoos.io.ResourceOf;
 import org.eolang.lints.Lint;
 import org.eolang.parser.EoSyntax;
@@ -40,11 +38,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * Tests for {@link TestObjectIsVerbInSingular}.
  *
  * @since 0.0.20
- * @todo #72:90min Cache POS model after it's first load.
- *  Currently, we load the model from the internet for each test run. Instead of
- *  this, let's cache the model after the first load in both: filesystem, and
- *  RAM. This optimization should improve local testing experience. This was
- *  already implemented <a href="https://github.com/volodya-lombrozo/jtcop/blob/main/src/main/java/com/github/lombrozo/testnames/rules/ml/CachedModelSource.java">here</a>.
  */
 final class TestObjectIsVerbInSingularTest {
 
@@ -54,12 +47,11 @@ final class TestObjectIsVerbInSingularTest {
     private static Lint lint;
 
     @BeforeAll
-    static void setUp() throws IOException, URISyntaxException {
+    static void setUp() throws Exception {
         TestObjectIsVerbInSingularTest.lint = new TestObjectIsVerbInSingular();
     }
 
     @ExtendWith(MayBeSlow.class)
-    @ExtendWith(WeAreOnline.class)
     @Test
     void catchesBadName() throws Exception {
         MatcherAssert.assertThat(

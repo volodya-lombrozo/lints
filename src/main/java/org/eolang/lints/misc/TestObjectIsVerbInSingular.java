@@ -25,8 +25,8 @@ package org.eolang.lints.misc;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -65,18 +65,22 @@ public final class TestObjectIsVerbInSingular implements Lint {
      *
      * @throws IOException if something went wrong.
      */
-    public TestObjectIsVerbInSingular() throws IOException, URISyntaxException {
-        this("https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin");
+    public TestObjectIsVerbInSingular() throws IOException {
+        this(
+            Paths.get(
+                "src/main/resources/org/eolang/lints/misc/test-object-is-not-verb-in-singular/en-pos-perceptron.bin"
+            )
+        );
     }
 
     /**
      * Ctor.
      *
-     * @param url Model URL
+     * @param path Model path
      * @throws IOException if something went wrong.
      */
-    public TestObjectIsVerbInSingular(final String url) throws IOException, URISyntaxException {
-        this(new POSModel(new URI(url).toURL()));
+    public TestObjectIsVerbInSingular(final Path path) throws IOException {
+        this(new POSModel(path));
     }
 
     /**

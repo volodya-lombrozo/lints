@@ -34,6 +34,7 @@ import java.util.LinkedList;
 import org.cactoos.iterable.Joined;
 import org.cactoos.iterable.Sticky;
 import org.eolang.lints.comments.AsciiOnly;
+import org.eolang.lints.misc.TestObjectIsVerbInSingular;
 
 /**
  * A single XMIR program to analyze.
@@ -46,14 +47,23 @@ public final class Program {
     /**
      * Lints to use.
      */
-    private static final Iterable<Lint> LINTS = new Sticky<>(
-        new Joined<Lint>(
-            new XslLints(),
-            Arrays.asList(
-                new AsciiOnly()
-            )
-        )
-    );
+    private static Iterable<Lint> LINTS;
+
+    static {
+        try {
+            Program.LINTS = new Sticky<>(
+                new Joined<Lint>(
+                    new XslLints(),
+                    Arrays.asList(
+                        new AsciiOnly(),
+                        new TestObjectIsVerbInSingular()
+                    )
+                )
+            );
+        } catch (final IOException exception) {
+            throw new IllegalStateException("Failed to load lints", exception);
+        }
+    }
 
     /**
      * The XMIR program to analyze.
