@@ -46,7 +46,7 @@ final class XslLintsTest {
     @Test
     void passesOnSimpleXmir() throws IOException {
         final XML xmir = new XMLDocument("<program/>");
-        for (final Lint lint : new XslLints()) {
+        for (final Lint<XML> lint : new XslLints()) {
             MatcherAssert.assertThat(
                 "passes with no exceptions",
                 lint.defects(xmir),
@@ -79,7 +79,7 @@ final class XslLintsTest {
 
     @Test
     void checksAllMotives() throws Exception {
-        for (final Lint lint : new XslLints()) {
+        for (final Lint<XML> lint : new XslLints()) {
             MatcherAssert.assertThat(
                 "Lint's motive is empty, but should not be",
                 lint.motive().isEmpty(),

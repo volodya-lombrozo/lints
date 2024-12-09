@@ -46,8 +46,8 @@ public final class Program {
     /**
      * Lints to use.
      */
-    private static final Iterable<Lint> LINTS = new Sticky<>(
-        new Joined<Lint>(
+    private static final Iterable<Lint<XML>> LINTS = new Sticky<>(
+        new Joined<Lint<XML>>(
             new XslLints(),
             Arrays.asList(
                 new AsciiOnly()
@@ -83,7 +83,7 @@ public final class Program {
      */
     public Collection<Defect> defects() throws IOException {
         final Collection<Defect> messages = new LinkedList<>();
-        for (final Lint lint : Program.LINTS) {
+        for (final Lint<XML> lint : Program.LINTS) {
             messages.addAll(lint.defects(this.xmir));
         }
         return messages;

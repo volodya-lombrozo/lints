@@ -21,31 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints;
-
-import java.io.IOException;
-import java.util.Collection;
 
 /**
- * A single checker for an {@code .xmir} file.
+ * Lints for unit-tests.
  *
- * @param <T> The type of entity to analyze
- * @since 0.0.1
+ * @since 0.1.0
  */
-public interface Lint<T> {
-
-    /**
-     * Find and return defects.
-     * @param entity The entity to analyze (could be {@link com.jcabi.xml.XML}
-     *  or {@link java.nio.file.Path})
-     * @return Defects
-     */
-    Collection<Defect> defects(T entity) throws IOException;
-
-    /**
-     * Returns motive for a lint, explaining why this lint exists.
-     * @return Motive text about lint
-     * @throws Exception if something went wrong
-     */
-    String motive() throws Exception;
-}
+package org.eolang.lints.units;

@@ -39,6 +39,7 @@ final class DefectTest {
         final String version = new Defect.Default(
             "metas/incorrect-architect",
             Severity.WARNING,
+            "",
             3,
             "Something went wrong with an architect"
         ).version();

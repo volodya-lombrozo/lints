@@ -24,7 +24,7 @@ We use this package as a dependency in the
 <dependency>
   <groupId>org.eolang</groupId>
   <artifactId>lints</artifactId>
-  <version>0.0.20</version>
+  <version>0.0.21</version>
 </dependency>
 ```
 
@@ -42,10 +42,32 @@ final class Foo {
   void testValidProgram() {
     Assertions.assertTrue(
       new Program(
-        new StrictXML("<program/>")
+        new StrictXML("<program> your XMIR goes here </program>")
       ).defects().isEmpty()
     );
   }
+}
+```
+
+Then, you can run a whole-program analysis of XMIR files
+in your project, using the `Programs` class (there is a
+different set of lints to be executed here!):
+
+```java
+import java.nio.file.Paths;
+import org.eolang.lints.Programs;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+final class Foo {
+    @Test
+    void testSetOfPrograms() {
+        Assertions.assertTrue(
+            new Programs(
+                Paths.get("xmir-files") // directory with XMIR files
+            ).defects().isEmpty()
+        );
+    }
 }
 ```
 

@@ -22,23 +22,27 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="signed-binding-indexes" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="incorrect-jvm-rt-location" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@as and matches(@as, '^(-|\+)\d+$')]">
-        <xsl:element name="defect">
-          <xsl:attribute name="line">
-            <xsl:value-of select="if (@line) then @line else '0'"/>
-          </xsl:attribute>
-          <xsl:attribute name="severity">
-            <xsl:text>error</xsl:text>
-          </xsl:attribute>
-          <xsl:text>The index of the argument of application has a number with a sign, </xsl:text>
-          <xsl:text>which is not allowed: "</xsl:text>
-          <xsl:value-of select="tail/text()"/>
-          <xsl:text>"</xsl:text>
-        </xsl:element>
+      <xsl:for-each select="/program/metas/meta[head/text()='rt' and count(part) &gt; 1]">
+        <xsl:variable name="meta-tail" select="tail"/>
+        <xsl:variable name="runtime" select="normalize-space(substring-before(concat($meta-tail, ' '), ' '))"/>
+        <xsl:variable name="location" select="normalize-space(substring-after($meta-tail, ' '))"/>
+        <xsl:if test="$runtime='jvm' and not(matches($location, '^([a-zA-Z0-9_.-]+):([a-zA-Z0-9_.-]+):(\d+\.\d+\.\d+)$'))">
+          <xsl:element name="defect">
+            <xsl:attribute name="line">
+              <xsl:value-of select="if (@line) then @line else '0'"/>
+            </xsl:attribute>
+            <xsl:attribute name="severity">
+              <xsl:text>warning</xsl:text>
+            </xsl:attribute>
+            <xsl:text>The format of the location of jvm runtime is wrong: "</xsl:text>
+            <xsl:value-of select="$location"/>
+            <xsl:text>"</xsl:text>
+          </xsl:element>
+        </xsl:if>
       </xsl:for-each>
     </defects>
   </xsl:template>
