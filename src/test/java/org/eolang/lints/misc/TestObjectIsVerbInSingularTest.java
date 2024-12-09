@@ -26,18 +26,15 @@ package org.eolang.lints.misc;
 import com.yegor256.MayBeSlow;
 import com.yegor256.WeAreOnline;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
-import opennlp.tools.postag.POSModel;
-import opennlp.tools.postag.POSTaggerME;
-import org.cactoos.io.InputOf;
-import org.eolang.jucs.ClasspathSource;
+import org.cactoos.io.ResourceOf;
+import org.eolang.lints.Lint;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
 
 /**
  * Tests for {@link TestObjectIsVerbInSingular}.
@@ -52,51 +49,41 @@ import org.junit.jupiter.params.ParameterizedTest;
 final class TestObjectIsVerbInSingularTest {
 
     /**
-     * Model.
+     * Lint.
      */
-    private static POSTaggerME model;
+    private static Lint lint;
 
     @BeforeAll
     static void setUp() throws IOException, URISyntaxException {
-        TestObjectIsVerbInSingularTest.model = new POSTaggerME(
-            new POSModel(
-                new URI(
-                    "https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin"
-                ).toURL()
-            )
-        );
+        TestObjectIsVerbInSingularTest.lint = new TestObjectIsVerbInSingular();
     }
 
     @ExtendWith(MayBeSlow.class)
     @ExtendWith(WeAreOnline.class)
-    @ParameterizedTest
-    @ClasspathSource(
-        value = "org/eolang/lints/misc/test-object-is-not-verb-in-singular/bad",
-        glob = "**.eo"
-    )
-    void catchesBadName(final String source) throws IOException {
+    @Test
+    void catchesBadName() throws Exception {
         MatcherAssert.assertThat(
-            "Defects shouldn't be empty",
-            new TestObjectIsVerbInSingular(TestObjectIsVerbInSingularTest.model).defects(
+            "Defects size doesn't match with expected",
+            TestObjectIsVerbInSingularTest.lint.defects(
                 new EoSyntax(
-                    new InputOf(source)
+                    new ResourceOf(
+                        "org/eolang/lints/misc/test-object-is-not-verb-in-singular/bad-tests.eo"
+                    )
                 ).parsed()
             ),
-            Matchers.hasSize(Matchers.greaterThan(0))
+            Matchers.hasSize(37)
         );
     }
 
-    @ParameterizedTest
-    @ClasspathSource(
-        value = "org/eolang/lints/misc/test-object-is-not-verb-in-singular/good",
-        glob = "**.eo"
-    )
-    void allowsGoodNames(final String source) throws IOException {
+    @Test
+    void allowsGoodNames() throws IOException {
         MatcherAssert.assertThat(
             "Defects are not empty, but they shouldn't be",
-            new TestObjectIsVerbInSingular(TestObjectIsVerbInSingularTest.model).defects(
+            TestObjectIsVerbInSingularTest.lint.defects(
                 new EoSyntax(
-                    new InputOf(source)
+                    new ResourceOf(
+                        "org/eolang/lints/misc/test-object-is-not-verb-in-singular/good-tests.eo"
+                    )
                 ).parsed()
             ),
             Matchers.hasSize(0)
