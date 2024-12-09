@@ -71,7 +71,7 @@ final class TestObjectIsVerbInSingularTest {
                     )
                 ).parsed()
             ),
-            Matchers.hasSize(37)
+            Matchers.hasSize(38)
         );
     }
 
