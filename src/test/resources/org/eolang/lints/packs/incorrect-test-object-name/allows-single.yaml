@@ -20,15 +20,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-xsls:
+sheets:
   - /org/eolang/lints/misc/incorrect-test-object-name.xsl
-  - /org/eolang/lints/set-fake-schema.xsl
-tests:
-  - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='4']
-eo: |
+asserts:
+  - /defects[count(defect[@severity='warning'])=0]
+input: |
   +tests
 
   # Test.
-  [] > test123
-    42 > fooB
+  [] > runs
+    42 > foo

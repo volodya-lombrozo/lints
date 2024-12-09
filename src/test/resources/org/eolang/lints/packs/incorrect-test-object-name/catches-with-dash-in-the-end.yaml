@@ -21,9 +21,13 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/errors/signed-binding-indexes.xsl
+  - /org/eolang/lints/misc/incorrect-test-object-name.xsl
 asserts:
-  - /defects[count(defect[@severity='error'])=3]
-  - /defects/defect[@line='1']
+  - /defects[count(defect[@severity='warning'])=1]
+  - /defects/defect[@line='4']
 input: |
-  object c:-1 d:-2 a:0 b:1 e:+12
+  +tests
+
+  # Test.
+  [] > test-test-
+    42 > foo
