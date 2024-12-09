@@ -36,7 +36,7 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
             </xsl:attribute>
-            <xsl:text>Version must be 0.0.0 during development: "</xsl:text>
+            <xsl:text>This +version may be used only during development: "</xsl:text>
             <xsl:value-of select="tail/text()"/>
             <xsl:text>"</xsl:text>
           </xsl:element>

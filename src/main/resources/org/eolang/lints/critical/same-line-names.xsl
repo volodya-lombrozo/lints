@@ -43,7 +43,7 @@ SOFTWARE.
         </xsl:attribute>
         <xsl:text>The name "</xsl:text>
         <xsl:value-of select="@name"/>
-        <xsl:text>" was already used on the same line</xsl:text>
+        <xsl:text>" has already been used on the same line</xsl:text>
       </xsl:element>
     </xsl:for-each>
   </xsl:template>

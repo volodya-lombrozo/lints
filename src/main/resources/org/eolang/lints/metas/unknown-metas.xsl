@@ -37,9 +37,9 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>Unknown meta used "</xsl:text>
+            <xsl:text>The meta "</xsl:text>
             <xsl:value-of select="$meta-head"/>
-            <xsl:text>"</xsl:text>
+            <xsl:text>" is not supported and its usage has no effect</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

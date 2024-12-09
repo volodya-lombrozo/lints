@@ -35,12 +35,12 @@ SOFTWARE.
               <xsl:value-of select="if (@line) then @line else '0'"/>
             </xsl:attribute>
             <xsl:attribute name="severity">warning</xsl:attribute>
-            <xsl:text>Test object name: "</xsl:text>
+            <xsl:text>The name of the object "</xsl:text>
             <xsl:value-of select="@name"/>
             <xsl:text>"</xsl:text>
-            <xsl:text> doesn't match '</xsl:text>
+            <xsl:text> doesn't match "</xsl:text>
             <xsl:value-of select="$regexp"/>
-            <xsl:text>'</xsl:text>
+            <xsl:text>"</xsl:text>
           </defect>
         </xsl:if>
       </xsl:for-each>

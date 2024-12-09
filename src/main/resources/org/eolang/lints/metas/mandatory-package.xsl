@@ -34,7 +34,7 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
           </xsl:attribute>
-          <xsl:text>Missing package</xsl:text>
+          <xsl:text>The +package meta is mandatory, but is absent</xsl:text>
         </xsl:element>
       </xsl:if>
     </defects>

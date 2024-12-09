@@ -37,7 +37,7 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>Wrong format of architect email "</xsl:text>
+            <xsl:text>The format of the email in the +architect meta is wrong: "</xsl:text>
             <xsl:value-of select="$meta-tail"/>
             <xsl:text>"</xsl:text>
           </xsl:element>

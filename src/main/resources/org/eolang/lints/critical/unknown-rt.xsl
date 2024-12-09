@@ -48,9 +48,18 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>critical</xsl:text>
             </xsl:attribute>
-            <xsl:text>Unknown runtime used "</xsl:text>
+            <xsl:text>The runtime "</xsl:text>
             <xsl:value-of select="$first"/>
-            <xsl:text>"</xsl:text>
+            <xsl:text>" is not supported (only </xsl:text>
+            <xsl:for-each select="$allowed">
+              <xsl:if test="position() &gt; 1">
+                <xsl:text>, </xsl:text>
+              </xsl:if>
+              <xsl:text>"</xsl:text>
+              <xsl:value-of select="."/>
+              <xsl:text>"</xsl:text>
+            </xsl:for-each>
+            <xsl:text>)</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

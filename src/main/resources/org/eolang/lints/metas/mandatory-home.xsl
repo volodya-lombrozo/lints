@@ -34,7 +34,7 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
           </xsl:attribute>
-          <xsl:text>Missing +home meta</xsl:text>
+          <xsl:text>The +home meta is mandatory, but is absent</xsl:text>
         </xsl:element>
       </xsl:if>
     </defects>

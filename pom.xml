@@ -85,7 +85,7 @@ SOFTWARE.
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-xml</artifactId>
-      <version>0.31.0</version>
+      <version>0.32.0</version>
     </dependency>
     <dependency>
       <groupId>io.github.secretx33</groupId>
@@ -134,7 +134,7 @@ SOFTWARE.
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.45.0</version>
+      <version>0.46.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -165,7 +165,7 @@ SOFTWARE.
       <groupId>org.eolang</groupId>
       <artifactId>xax</artifactId>
       <scope>test</scope>
-      <version>0.1.1</version>
+      <version>0.5.1</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

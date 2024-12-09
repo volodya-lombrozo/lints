@@ -64,7 +64,7 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>Package org.eolang is reserved for internal object only</xsl:text>
+            <xsl:text>The "org.eolang" package is reserved for internal object only</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

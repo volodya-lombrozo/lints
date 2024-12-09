@@ -36,7 +36,7 @@ SOFTWARE.
           </xsl:attribute>
           <xsl:text>The atom "</xsl:text>
           <xsl:value-of select="@name"/>
-          <xsl:text>" may not have @base attribute, which exists with "</xsl:text>
+          <xsl:text>" may not have the "@base" attribute, which however exists with "</xsl:text>
           <xsl:value-of select="@base"/>
           <xsl:text>"</xsl:text>
         </xsl:element>

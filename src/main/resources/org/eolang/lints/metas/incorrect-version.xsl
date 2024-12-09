@@ -37,9 +37,9 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>Wrong format of semver"</xsl:text>
+            <xsl:text>The format of the +version meta is wrong: "</xsl:text>
             <xsl:value-of select="$meta-tail"/>
-            <xsl:text>"</xsl:text>
+            <xsl:text>" (SemVer expected instead)</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

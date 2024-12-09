@@ -34,7 +34,7 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>More than one +home specified</xsl:text>
+          <xsl:text>There are more than one +home meta specified</xsl:text>
         </xsl:element>
       </xsl:if>
     </defects>
