@@ -22,19 +22,27 @@
 ---
 sheets:
   - /org/eolang/parser/expand-aliases.xsl
-  - /org/eolang/lints/aliases/broken-alias.xsl
+  - /org/eolang/lints/aliases/broken-alias-first.xsl
 asserts:
-  - /defects[count(defect)=0]
+  - /defects[count(defect[@severity='error'])=17]
 input: |
-  +alias one
-  +alias one-two
-  +alias one-two-three-four
-  +alias i文件
-  +alias i文件 this.is.legal2
-  +alias org.eolang.io.stdout
-  +alias org.eolang.with-dash
-  +alias with-dash
-  +alias with-dash org.eolang.with-dash
+  +alias FirstLetter Capital.Letters.Prohibited.Here
+  +alias the! symbol.is.not.allowed
+  +alias the" symbol.is.not.allowed
+  +alias the# symbol.is.not.allowed
+  +alias the$ symbol.is.not.allowed
+  +alias the& symbol.is.not.allowed
+  +alias the( symbol.is.not.allowed
+  +alias the) symbol.is.not.allowed
+  +alias the. symbol.is.not.allowed
+  +alias the/ symbol.is.not.allowed
+  +alias the: symbol.is.not.allowed
+  +alias the< symbol.is.not.allowed
+  +alias the> symbol.is.not.allowed
+  +alias the@ symbol.is.not.allowed
+  +alias the[ symbol.is.not.allowed
+  +alias the] symbol.is.not.allowed
+  +alias the^ symbol.is.not.allowed
 
-  # foo.
+  # Test.
   [] > foo
