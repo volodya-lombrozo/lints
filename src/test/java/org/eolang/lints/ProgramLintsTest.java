@@ -21,69 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.misc;
+package org.eolang.lints;
 
-import com.jcabi.xml.XML;
 import com.yegor256.MayBeSlow;
 import com.yegor256.WeAreOnline;
-import java.io.IOException;
-import org.cactoos.io.ResourceOf;
-import org.eolang.lints.Lint;
-import org.eolang.parser.EoSyntax;
+import org.cactoos.list.ListOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
- * Tests for {@link UnitTestIsNotVerb}.
+ * Tests for {@link ProgramLints}.
  *
  * @since 0.0.22
  */
-final class UnitTestIsNotVerbTest {
+final class ProgramLintsTest {
 
-    /**
-     * Lint.
-     */
-    private static Lint<XML> lint;
-
-    @BeforeAll
-    static void setUp() throws Exception {
-        UnitTestIsNotVerbTest.lint = new UnitTestIsNotVerb();
-    }
-
-    @ExtendWith(WeAreOnline.class)
     @ExtendWith(MayBeSlow.class)
-    @Test
-    void catchesBadName() throws Exception {
-        MatcherAssert.assertThat(
-            "Defects size doesn't match with expected",
-            UnitTestIsNotVerbTest.lint.defects(
-                new EoSyntax(
-                    new ResourceOf(
-                        "org/eolang/lints/misc/test-object-is-not-verb-in-singular/bad-tests.eo"
-                    )
-                ).parsed()
-            ),
-            Matchers.hasSize(38)
-        );
-    }
-
     @ExtendWith(WeAreOnline.class)
-    @ExtendWith(MayBeSlow.class)
     @Test
-    void allowsGoodNames() throws IOException {
+    void allocatesLints() {
         MatcherAssert.assertThat(
-            "Defects are not empty, but they shouldn't be",
-            UnitTestIsNotVerbTest.lint.defects(
-                new EoSyntax(
-                    new ResourceOf(
-                        "org/eolang/lints/misc/test-object-is-not-verb-in-singular/good-tests.eo"
-                    )
-                ).parsed()
-            ),
-            Matchers.hasSize(0)
+            "Program lints are empty, but they should not",
+            new ListOf<>(new ProgramLints().value()),
+            Matchers.hasSize(Matchers.greaterThan(0))
         );
     }
 }

@@ -24,58 +24,43 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.net.URISyntaxException;
+import java.util.Arrays;
+import org.cactoos.Scalar;
+import org.cactoos.iterable.Joined;
+import org.cactoos.iterable.Sticky;
+import org.eolang.lints.comments.AsciiOnly;
+import org.eolang.lints.misc.UnitTestIsNotVerb;
 
 /**
- * A single XMIR program to analyze.
- *
- * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR</a>
- * @since 0.1.0
+ * Lints for the program.
+ * @since 0.0.22
  */
-public final class Program {
+public final class ProgramLints implements Scalar<Iterable<Lint<XML>>> {
 
-    /**
-     * Lints to use.
-     */
-    private static final Iterable<Lint<XML>> LINTS = new ProgramLints().value();
-
-    /**
-     * The XMIR program to analyze.
-     */
-    private final XML xmir;
-
-    /**
-     * Ctor.
-     * @param xml The XMIR
-     */
-    public Program(final XML xml) {
-        this.xmir = xml;
-    }
-
-    /**
-     * Ctor.
-     * @param file The absolute path of the XMIR file
-     * @throws FileNotFoundException If file not found
-     */
-    public Program(final Path file) throws FileNotFoundException {
-        this(new XMLDocument(file));
-    }
-
-    /**
-     * Find defects possible defects in the XMIR file.
-     * @return All defects found
-     */
-    public Collection<Defect> defects() throws IOException {
-        final Collection<Defect> messages = new LinkedList<>();
-        for (final Lint<XML> lint : Program.LINTS) {
-            messages.addAll(lint.defects(this.xmir));
+    @Override
+    public Iterable<Lint<XML>> value() {
+        try {
+            return new Sticky<>(
+               new Joined<Lint<XML>>(
+                   new XslLints(),
+                   Arrays.asList(
+                       new AsciiOnly(),
+                       new UnitTestIsNotVerb()
+                   )
+               )
+           );
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                "Failed to allocate lints",
+                exception
+            );
+        } catch (final URISyntaxException exception) {
+            throw new IllegalStateException(
+                "URI syntax is broken",
+                exception
+            );
         }
-        return messages;
     }
-
 }
