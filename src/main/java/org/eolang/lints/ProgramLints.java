@@ -35,9 +35,10 @@ import org.eolang.lints.misc.UnitTestIsNotVerb;
 
 /**
  * Lints for the program.
+ *
  * @since 0.0.22
  */
-public final class ProgramLints implements Scalar<Iterable<Lint<XML>>> {
+final class ProgramLints implements Scalar<Iterable<Lint<XML>>> {
 
     @Override
     public Iterable<Lint<XML>> value() {
