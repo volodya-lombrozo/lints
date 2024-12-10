@@ -49,6 +49,29 @@ import org.junit.jupiter.api.extension.ExtendWith;
 final class ProgramTest {
 
     @Test
+    void returnsEmptyListOfDefects() throws IOException {
+        MatcherAssert.assertThat(
+            "the defect is found",
+            new Program(
+                new EoSyntax(
+                    new InputOf(
+                        String.join(
+                            "\n",
+                            "+home https://www.eolang.org",
+                            "+package bar",
+                            "+version 0.0.0",
+                            "",
+                            "# This is just a test object with no functionality.",
+                            "[] > foo\n"
+                        )
+                    )
+                ).parsed()
+            ).defects(),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
     void simpleTest(@Mktmp final Path dir) throws IOException {
         final Path path = dir.resolve("foo.xmir");
         Files.write(
