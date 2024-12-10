@@ -37,11 +37,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
- * Tests for {@link TestObjectIsVerbInSingular}.
+ * Tests for {@link UnitTestIsNotVerb}.
  *
  * @since 0.0.20
  */
-final class TestObjectIsVerbInSingularTest {
+final class UnitTestIsNotVerbTest {
 
     /**
      * Lint.
@@ -50,7 +50,7 @@ final class TestObjectIsVerbInSingularTest {
 
     @BeforeAll
     static void setUp() throws Exception {
-        TestObjectIsVerbInSingularTest.lint = new TestObjectIsVerbInSingular();
+        UnitTestIsNotVerbTest.lint = new UnitTestIsNotVerb();
     }
 
     @ExtendWith(WeAreOnline.class)
@@ -59,7 +59,7 @@ final class TestObjectIsVerbInSingularTest {
     void catchesBadName() throws Exception {
         MatcherAssert.assertThat(
             "Defects size doesn't match with expected",
-            TestObjectIsVerbInSingularTest.lint.defects(
+            UnitTestIsNotVerbTest.lint.defects(
                 new EoSyntax(
                     new ResourceOf(
                         "org/eolang/lints/misc/test-object-is-not-verb-in-singular/bad-tests.eo"
@@ -76,7 +76,7 @@ final class TestObjectIsVerbInSingularTest {
     void allowsGoodNames() throws IOException {
         MatcherAssert.assertThat(
             "Defects are not empty, but they shouldn't be",
-            TestObjectIsVerbInSingularTest.lint.defects(
+            UnitTestIsNotVerbTest.lint.defects(
                 new EoSyntax(
                     new ResourceOf(
                         "org/eolang/lints/misc/test-object-is-not-verb-in-singular/good-tests.eo"

@@ -52,8 +52,7 @@ import org.eolang.lints.Severity;
  *  model file during the build, and place into JAR, so lint will be able to locate
  *  file from resources faster.
  */
-@SuppressWarnings("PMD.TestClassWithoutTestCases")
-public final class TestObjectIsVerbInSingular implements Lint<XML> {
+public final class UnitTestIsNotVerb implements Lint<XML> {
 
     /**
      * The pattern to split kebab case.
@@ -69,7 +68,7 @@ public final class TestObjectIsVerbInSingular implements Lint<XML> {
      * Ctor.
      * @throws IOException if something went wrong.
      */
-    public TestObjectIsVerbInSingular() throws IOException, URISyntaxException {
+    public UnitTestIsNotVerb() throws IOException, URISyntaxException {
         this("https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin");
     }
 
@@ -78,7 +77,7 @@ public final class TestObjectIsVerbInSingular implements Lint<XML> {
      * @param url Model URL
      * @throws IOException if something went wrong.
      */
-    public TestObjectIsVerbInSingular(final String url) throws IOException, URISyntaxException {
+    public UnitTestIsNotVerb(final String url) throws IOException, URISyntaxException {
         this(new POSModel(new URI(url).toURL()));
     }
 
@@ -86,7 +85,7 @@ public final class TestObjectIsVerbInSingular implements Lint<XML> {
      * Ctor.
      * @param pos POS model.
      */
-    public TestObjectIsVerbInSingular(final POSModel pos) {
+    public UnitTestIsNotVerb(final POSModel pos) {
         this(new POSTaggerME(pos));
     }
 
@@ -95,7 +94,7 @@ public final class TestObjectIsVerbInSingular implements Lint<XML> {
      *
      * @param mdl The Open NLP tagger.
      */
-    public TestObjectIsVerbInSingular(final POSTaggerME mdl) {
+    public UnitTestIsNotVerb(final POSTaggerME mdl) {
         this.model = mdl;
     }
 
@@ -109,7 +108,7 @@ public final class TestObjectIsVerbInSingular implements Lint<XML> {
                     Stream
                         .concat(
                             Stream.of("It"),
-                            Arrays.stream(TestObjectIsVerbInSingular.KEBAB.split(name))
+                            Arrays.stream(UnitTestIsNotVerb.KEBAB.split(name))
                         ).map(s -> s.toLowerCase(Locale.ROOT))
                         .toArray(String[]::new)
                 )
@@ -117,7 +116,7 @@ public final class TestObjectIsVerbInSingular implements Lint<XML> {
             if (!("VB".equals(first) || "VBP".equals(first) || "VBZ".equals(first))) {
                 defects.add(
                     new Defect.Default(
-                        "test-object-is-not-verb-in-singular",
+                        "unit-test-is-not-verb",
                         Severity.WARNING,
                         xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
                         Integer.parseInt(object.xpath("@line").get(0)),
