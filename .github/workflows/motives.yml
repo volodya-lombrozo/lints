@@ -45,12 +45,13 @@ jobs:
             for f in $(find "gh-pages/_site/${tag}" -name '*.md'); do
               n=$(basename "${f}" .md)
               printf '<li><a href="%s">%s</a></li>\n' \
-                "/${n}.html" "${n}"
+                "/${tag}/${n}.html" "${n}"
             done
             printf '</ul>\n'
             printf '<p>Published on %s.</p>\n' "$(date)"
             printf '</body></html>' 
           ) > "gh-pages/_site/index.html"
+
       - uses: JamesIves/github-pages-deploy-action@v4.7.2
         with:
           branch: gh-pages
