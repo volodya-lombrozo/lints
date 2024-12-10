@@ -51,7 +51,7 @@ final class ProgramTest {
     @Test
     void returnsEmptyListOfDefects() throws IOException {
         MatcherAssert.assertThat(
-            "the defect is found",
+            "no defects found since the code is clean",
             new Program(
                 new EoSyntax(
                     new InputOf(
