@@ -43,14 +43,14 @@ public final class ProgramLints implements Scalar<Iterable<Lint<XML>>> {
     public Iterable<Lint<XML>> value() {
         try {
             return new Sticky<>(
-               new Joined<Lint<XML>>(
-                   new XslLints(),
-                   Arrays.asList(
-                       new AsciiOnly(),
-                       new UnitTestIsNotVerb()
-                   )
-               )
-           );
+                new Joined<Lint<XML>>(
+                    new XslLints(),
+                    Arrays.asList(
+                        new AsciiOnly(),
+                        new UnitTestIsNotVerb()
+                    )
+                )
+            );
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 "Failed to allocate lints",
