@@ -23,8 +23,8 @@
 name: motives
 'on':
   push:
-    branches:
-      - master
+    tags:
+      - '*'
 concurrency:
   group: motives-${{ github.ref }}
   cancel-in-progress: true
@@ -34,10 +34,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          mkdir -p _site
-          find src/main/resources/org/eolang/motives -name '*.md' -exec cp {} _site \;
+          mkdir -p "gh-pages/_site/${{github.ref_name}}"
+          find src/main/resources/org/eolang/motives -name '*.md' -exec cp {} "gh-pages/_site/${{github.ref_name}}" \;
       - uses: JamesIves/github-pages-deploy-action@v4.7.2
         with:
           branch: gh-pages
-          folder: _site
+          folder: gh-pages
           clean: true
