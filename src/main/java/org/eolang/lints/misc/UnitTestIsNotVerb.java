@@ -46,11 +46,6 @@ import org.eolang.lints.Severity;
  * Lint that checks test object name is a verb in singular.
  *
  * @since 0.0.22
- * @todo #72:60min Configure maven to download model file during the build and place into the JAR.
- *  Currently, we download model file each time when creating the lint, which may
- *  be slow in the usage of this lint. Instead, let's configure maven to download
- *  model file during the build, and place into JAR, so lint will be able to locate
- *  file from resources faster.
  */
 public final class UnitTestIsNotVerb implements Lint<XML> {
 
