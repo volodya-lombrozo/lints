@@ -95,7 +95,7 @@ final class LintByXsl implements Lint<XML> {
 
     @Override
     public Collection<Defect> defects(final XML xmir) {
-        final XML report = this.sheet.transform(LintByXsl.sanitized(xmir));
+        final XML report = this.sheet.transform(xmir);
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML defect : report.nodes("/defects/defect")) {
             final List<String> severity = defect.xpath("@severity");
@@ -120,28 +120,6 @@ final class LintByXsl implements Lint<XML> {
     @Override
     public String motive() throws Exception {
         return new TextOf(this.doc).asString();
-    }
-
-    /**
-     * Do a quick sanity check of the provided XML.
-     * @param xmir The XMIR
-     * @return The same XMIR
-     */
-    private static XML sanitized(final XML xmir) {
-        final String[] paths = {
-            "/program/metas/meta[not(@line) or @line='']",
-        };
-        for (final String xpath : paths) {
-            if (!xmir.nodes(xpath).isEmpty()) {
-                throw new IllegalArgumentException(
-                    String.format(
-                        "There is something wrong with the XMIR, found '%s':%n%s",
-                        xpath, xmir
-                    )
-                );
-            }
-        }
-        return xmir;
     }
 
     /**
