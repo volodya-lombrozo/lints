@@ -25,8 +25,8 @@ package org.eolang.lints.misc;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -46,6 +46,11 @@ import org.eolang.lints.Severity;
  * Lint that checks test object name is a verb in singular.
  *
  * @since 0.0.20
+ * @todo #72:60min Configure maven to download model file during the build and place into the JAR.
+ *  Currently, we download model file each time when creating the lint, which may
+ *  be slow in the usage of this lint. Instead, let's configure maven to download
+ *  model file during the build, and place into JAR, so lint will be able to locate
+ *  file from resources faster.
  */
 @SuppressWarnings("PMD.TestClassWithoutTestCases")
 public final class TestObjectIsVerbInSingular implements Lint<XML> {
@@ -62,34 +67,27 @@ public final class TestObjectIsVerbInSingular implements Lint<XML> {
 
     /**
      * Ctor.
-     *
      * @throws IOException if something went wrong.
      */
-    public TestObjectIsVerbInSingular() throws IOException {
-        this(
-            Paths.get(
-                "src/main/resources/org/eolang/lints/misc/test-object-is-not-verb-in-singular/en-pos-perceptron.bin"
-            )
-        );
+    public TestObjectIsVerbInSingular() throws IOException, URISyntaxException {
+        this("https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin");
     }
 
     /**
      * Ctor.
-     *
-     * @param path Model path
+     * @param url Model URL
      * @throws IOException if something went wrong.
      */
-    public TestObjectIsVerbInSingular(final Path path) throws IOException {
-        this(new POSModel(path));
+    public TestObjectIsVerbInSingular(final String url) throws IOException, URISyntaxException {
+        this(new POSModel(new URI(url).toURL()));
     }
 
     /**
      * Ctor.
-     *
-     * @param model POS model.
+     * @param pos POS model.
      */
-    public TestObjectIsVerbInSingular(final POSModel model) {
-        this(new POSTaggerME(model));
+    public TestObjectIsVerbInSingular(final POSModel pos) {
+        this(new POSTaggerME(pos));
     }
 
     /**

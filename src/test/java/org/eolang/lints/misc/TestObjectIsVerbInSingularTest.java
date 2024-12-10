@@ -25,6 +25,7 @@ package org.eolang.lints.misc;
 
 import com.jcabi.xml.XML;
 import com.yegor256.MayBeSlow;
+import com.yegor256.WeAreOnline;
 import java.io.IOException;
 import org.cactoos.io.ResourceOf;
 import org.eolang.lints.Lint;
@@ -52,6 +53,7 @@ final class TestObjectIsVerbInSingularTest {
         TestObjectIsVerbInSingularTest.lint = new TestObjectIsVerbInSingular();
     }
 
+    @ExtendWith(WeAreOnline.class)
     @ExtendWith(MayBeSlow.class)
     @Test
     void catchesBadName() throws Exception {
@@ -68,6 +70,7 @@ final class TestObjectIsVerbInSingularTest {
         );
     }
 
+    @ExtendWith(WeAreOnline.class)
     @ExtendWith(MayBeSlow.class)
     @Test
     void allowsGoodNames() throws IOException {

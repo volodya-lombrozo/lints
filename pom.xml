@@ -181,26 +181,6 @@ SOFTWARE.
         <activeByDefault>false</activeByDefault>
       </activation>
       <build>
-        <resources>
-          <resource>
-            <directory>src/main/resources</directory>
-            <filtering>false</filtering>
-            <includes>
-              <include>**/*</include>
-            </includes>
-          </resource>
-          <resource>
-            <directory>src/main/resources</directory>
-            <filtering>true</filtering>
-            <includes>
-              <include>**/*.properties</include>
-              <include>**/*.xml</include>
-            </includes>
-            <excludes>
-              <exclude>**/*.bin</exclude>
-            </excludes>
-          </resource>
-        </resources>
         <plugins>
           <plugin>
             <groupId>com.qulice</groupId>
