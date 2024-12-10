@@ -36,7 +36,7 @@ jobs:
       - run: |
           mkdir -p _site
           find src/main/resources/org/eolang/motives -name '*.md' -exec cp {} _site \;
-      - uses: JamesIves/github-pages-deploy-action@v4.6.8
+      - uses: JamesIves/github-pages-deploy-action@v4.7.2
         with:
           branch: gh-pages
           folder: _site
