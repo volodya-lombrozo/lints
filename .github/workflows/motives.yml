@@ -42,11 +42,11 @@ jobs:
             printf '<p>Latest version: %s</p>\n' "${tag}"
             printf '<p>List of lints in this version<p>'
             printf "<ul>\n"
-            for f in $(find "gh-pages/_site/${tag}" -name '*.md'); do
+            while IFS= read -r f; do
               n=$(basename "${f}" .md)
               printf '<li><a href="%s">%s</a></li>\n' \
                 "/${tag}/${n}.html" "${n}"
-            done
+            done < <(find "gh-pages/_site/${tag}" -name '*.md')
             printf '</ul>\n'
             printf '<p>Published on %s.</p>\n' "$(date)"
             printf '</body></html>' 
