@@ -4,7 +4,7 @@ The second part of the `+alias` meta may only contain FQN
 (fully qualified name) of the object. For example, here is how it may look
 in EO:
 
-```
+```eo
 +alias stdout org.eolang.io.stdout
 
 # Basic object.

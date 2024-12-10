@@ -4,7 +4,7 @@ The first part of the `+alias` meta may only contain the name
 of the object, not its FQN. For example, here is how it may look
 in EO:
 
-```
+```eo
 +alias stdout org.eolang.io.stdout
 
 # Basic object.
@@ -13,7 +13,7 @@ in EO:
     "Hello, world!\n"
 ```
 
-Here, the `stdout` part of the `+alias` meta is the name of the 
+Here, the `stdout` part of the `+alias` meta is the name of the
 object used later in the code. It will automatically be replaced
 with `org.eolang.io.stdout`.
 
