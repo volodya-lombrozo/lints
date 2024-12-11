@@ -92,7 +92,8 @@ public final class UnitTestIsNotVerb implements Lint<XML> {
                     .concat(
                         Stream.of("It"),
                         Arrays.stream(UnitTestIsNotVerb.KEBAB.split(name))
-                    ).map(s -> s.toLowerCase(Locale.ROOT))
+                    )
+                    .map(s -> s.toLowerCase(Locale.ROOT))
                     .collect(Collectors.joining(" "))
             );
             this.pipeline.annotate(doc);
