@@ -24,19 +24,19 @@
 package org.eolang.lints.misc;
 
 import com.jcabi.xml.XML;
+import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.pipeline.CoreDocument;
+import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import opennlp.tools.postag.POSModel;
-import opennlp.tools.postag.POSTaggerME;
 import org.cactoos.io.ResourceOf;
-import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
@@ -44,13 +44,20 @@ import org.eolang.lints.Severity;
 
 /**
  * Lint that checks test object name is a verb in singular.
- *
+ * This lint uses <a href="https://stanfordnlp.github.io/CoreNLP/">Stanford CoreNLP model</a>
+ * with POS tagging capabilities in order to determine the part of speech and
+ * tense for test object name. Originally, we used <a href="https://opennlp.apache.org/">OpenNLP</a>
+ * library to do that, but switched to the Stanford CoreNLP, due to merging all
+ * verb tags into single `VERB` POS tag, that sacrifices important information
+ * for us about verb tenses, and appeared in OpenNLP 2.4.0+. You can read more
+ * about the reason of this <a href="https://github.com/objectionary/lints/issues/129">here</a>
+ * and <a href="https://github.com/objectionary/lints/pull/126#issuecomment-2531121073">here</a>.
  * @since 0.0.22
- * @todo #72:60min Configure maven to download model file during the build and place into the JAR.
- *  Currently, we download model file each time when creating the lint, which may
- *  be slow in the usage of this lint. Instead, let's configure maven to download
- *  model file during the build, and place into JAR, so lint will be able to locate
- *  file from resources faster.
+ * @todo #129:60min Library stanford-corenlp-4.5.7-models.jar takes too much in size.
+ *  Currently, JAR takes ~452mb, which may cause some troubles to the users of
+ *  the lints library. Let's think what we can do about this. We should check is
+ *  it possible to get rid of this dependency and download models from the other
+ *  source.
  */
 public final class UnitTestIsNotVerb implements Lint<XML> {
 
@@ -60,42 +67,31 @@ public final class UnitTestIsNotVerb implements Lint<XML> {
     private static final Pattern KEBAB = Pattern.compile("-");
 
     /**
-     * The Open NLP tagger.
+     * NLP pipeline.
      */
-    private final POSTaggerME model;
+    private final StanfordCoreNLP pipeline;
 
     /**
      * Ctor.
-     * @throws IOException if something went wrong.
+     * @param props Pipeline properties
      */
-    public UnitTestIsNotVerb() throws IOException, URISyntaxException {
-        this("https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin");
+    public UnitTestIsNotVerb(final Properties props) {
+        this(new StanfordCoreNLP(props));
     }
 
     /**
      * Ctor.
-     * @param url Model URL
-     * @throws IOException if something went wrong.
      */
-    public UnitTestIsNotVerb(final String url) throws IOException, URISyntaxException {
-        this(new POSModel(new URI(url).toURL()));
+    public UnitTestIsNotVerb() {
+        this(defaults());
     }
 
     /**
-     * Ctor.
-     * @param pos POS model.
+     * Primary ctor.
+     * @param pipe NLP pipeline
      */
-    public UnitTestIsNotVerb(final POSModel pos) {
-        this(new POSTaggerME(pos));
-    }
-
-    /**
-     * Ctor.
-     *
-     * @param mdl The Open NLP tagger.
-     */
-    public UnitTestIsNotVerb(final POSTaggerME mdl) {
-        this.model = mdl;
+    public UnitTestIsNotVerb(final StanfordCoreNLP pipe) {
+        this.pipeline = pipe;
     }
 
     @Override
@@ -103,17 +99,21 @@ public final class UnitTestIsNotVerb implements Lint<XML> {
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML object : xmir.nodes("/program[metas/meta[head='tests']]/objects/o[@name]")) {
             final String name = object.xpath("@name").get(0);
-            final String first = new ListOf<>(
-                this.model.tag(
-                    Stream
-                        .concat(
-                            Stream.of("It"),
-                            Arrays.stream(UnitTestIsNotVerb.KEBAB.split(name))
-                        ).map(s -> s.toLowerCase(Locale.ROOT))
-                        .toArray(String[]::new)
+            final CoreDocument doc = new CoreDocument(
+                Stream
+                    .concat(
+                        Stream.of("It"),
+                        Arrays.stream(UnitTestIsNotVerb.KEBAB.split(name))
+                    )
+                    .map(s -> s.toLowerCase(Locale.ROOT))
+                    .collect(Collectors.joining(" "))
+            );
+            this.pipeline.annotate(doc);
+            if (
+                !"VBZ".equals(
+                    doc.tokens().get(1).get(CoreAnnotations.PartOfSpeechAnnotation.class)
                 )
-            ).get(1);
-            if (!("VB".equals(first) || "VBP".equals(first) || "VBZ".equals(first))) {
+            ) {
                 defects.add(
                     new Defect.Default(
                         "unit-test-is-not-verb",
@@ -138,5 +138,15 @@ public final class UnitTestIsNotVerb implements Lint<XML> {
                 "org/eolang/motives/misc/test-object-is-not-verb-in-singular.md"
             )
         ).asString();
+    }
+
+    /**
+     * Prestructor for default properties.
+     * @return Properties.
+     */
+    private static Properties defaults() {
+        final Properties props = new Properties();
+        props.setProperty("annotators", "tokenize,pos");
+        return props;
     }
 }
