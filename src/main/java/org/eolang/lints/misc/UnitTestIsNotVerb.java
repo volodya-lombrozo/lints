@@ -44,8 +44,20 @@ import org.eolang.lints.Severity;
 
 /**
  * Lint that checks test object name is a verb in singular.
- *
+ * This lint uses <a href="https://stanfordnlp.github.io/CoreNLP/">Stanford CoreNLP model</a>
+ * with POS tagging capabilities in order to determine the part of speech and
+ * tense for test object name. Originally, we used <a href="https://opennlp.apache.org/">OpenNLP</a>
+ * library to do that, but switched to the Stanford CoreNLP, due to merging all
+ * verb tags into single `VERB` POS tag, that sacrifices important information
+ * for us about verb tenses, and appeared in OpenNLP 2.4.0+. You can read more
+ * about the reason of this <a href="https://github.com/objectionary/lints/issues/129">here</a>
+ * and <a href="https://github.com/objectionary/lints/pull/126#issuecomment-2531121073">here</a>.
  * @since 0.0.22
+ * @todo #129:60min Library stanford-corenlp-4.5.7-models.jar takes too much in size.
+ *  Currently, JAR takes ~452mb, which may cause some troubles to the users of
+ *  the lints library. Let's think what we can do about this. We should check is
+ *  it possible to get rid of this dependency and download models from the other
+ *  source.
  */
 public final class UnitTestIsNotVerb implements Lint<XML> {
 
