@@ -24,15 +24,18 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
 import com.yegor256.xsline.Xsline;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
+import org.cactoos.Input;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
@@ -40,7 +43,6 @@ import org.eolang.parser.EoSyntax;
 import org.eolang.parser.TrParsing;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -161,16 +163,19 @@ final class ProgramTest {
 
     @Test
     @Tag("benchmark")
-    void lintsSmallProgram() throws Exception {
+    void lintsSmallXmir() throws Exception {
         final long start = System.currentTimeMillis();
+        final String path = "org/eolang/benchmark/small-program.xmir";
         final Collection<Defect> defects = new Program(
-            new EoSyntax(
-                new ResourceOf(
-                    "org/eolang/benchmark/small-program.eo"
-                )
-            ).parsed()
+            new XMLDocument(new ResourceOf(path).stream())
         ).defects();
-        ProgramTest.writeResults(start);
+        ProgramTest.writeResults(
+            String.format(
+                "small XMIR (see src/test/resources/%s)",
+                path
+            ),
+            System.currentTimeMillis() - start
+        );
         MatcherAssert.assertThat(
             "Defects are empty, but they should not be",
             defects,
@@ -178,13 +183,14 @@ final class ProgramTest {
         );
     }
 
-    private static void writeResults(final long start) throws Exception {
+    private static void writeResults(final String name, final long timing) throws Exception {
         Files.write(
             ProgramTest.RESULTS.toPath(),
             new TextOf(
                 String.format(
-                    "lintsSmallProgram took %s ms",
-                    System.currentTimeMillis() - start
+                    "Linting %s took %d ms",
+                    name,
+                    timing
                 )
             ).asString().getBytes()
         );
