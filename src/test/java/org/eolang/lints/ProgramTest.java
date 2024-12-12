@@ -27,16 +27,20 @@ import com.jcabi.xml.XML;
 import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
 import com.yegor256.xsline.Xsline;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.text.TextOf;
 import org.eolang.parser.EoSyntax;
 import org.eolang.parser.TrParsing;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +52,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
  */
 @ExtendWith(MktmpResolver.class)
 final class ProgramTest {
+
+    /**
+     * Benchmarking results.
+     */
+    private static final File RESULTS = new File("target/lint-summary.txt");
 
     @Test
     void returnsEmptyListOfDefects() throws IOException {
@@ -153,16 +162,31 @@ final class ProgramTest {
     @Test
     @Tag("benchmark")
     void lintsSmallProgram() throws Exception {
+        final long start = System.currentTimeMillis();
+        final Collection<Defect> defects = new Program(
+            new EoSyntax(
+                new ResourceOf(
+                    "org/eolang/benchmark/small-program.eo"
+                )
+            ).parsed()
+        ).defects();
+        ProgramTest.writeResults(start);
         MatcherAssert.assertThat(
             "Defects are empty, but they should not be",
-            new Program(
-                new EoSyntax(
-                    new ResourceOf(
-                        "org/eolang/benchmark/small-program.eo"
-                    )
-                ).parsed()
-            ).defects(),
+            defects,
             Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
+
+    private static void writeResults(final long start) throws Exception {
+        Files.write(
+            ProgramTest.RESULTS.toPath(),
+            new TextOf(
+                String.format(
+                    "lintsSmallProgram took %s ms",
+                    System.currentTimeMillis() - start
+                )
+            ).asString().getBytes()
         );
     }
 
