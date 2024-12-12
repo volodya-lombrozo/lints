@@ -37,6 +37,7 @@ import org.eolang.parser.EoSyntax;
 import org.eolang.parser.TrParsing;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -146,6 +147,22 @@ final class ProgramTest {
             String.format("no errors in canonical code in %s", xmir),
             new Program(xmir).defects(),
             Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    @Tag("benchmark")
+    void lintsSmallProgram() throws Exception {
+        MatcherAssert.assertThat(
+            "Defects are empty, but they should not be",
+            new Program(
+                new EoSyntax(
+                    new ResourceOf(
+                        "org/eolang/benchmark/small-program.eo"
+                    )
+                ).parsed()
+            ).defects(),
+            Matchers.hasSize(Matchers.greaterThan(0))
         );
     }
 
