@@ -30,12 +30,10 @@ import com.yegor256.MktmpResolver;
 import com.yegor256.xsline.Xsline;
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
-import org.cactoos.Input;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
@@ -170,11 +168,9 @@ final class ProgramTest {
             new XMLDocument(new ResourceOf(path).stream())
         ).defects();
         ProgramTest.writeResults(
-            String.format(
-                "small XMIR (see src/test/resources/%s)",
-                path
-            ),
-            System.currentTimeMillis() - start
+            "small",
+            System.currentTimeMillis() - start,
+            path
         );
         MatcherAssert.assertThat(
             "Defects are empty, but they should not be",
@@ -183,14 +179,17 @@ final class ProgramTest {
         );
     }
 
-    private static void writeResults(final String name, final long timing) throws Exception {
+    private static void writeResults(
+        final String name, final long timing, final String path
+    ) throws Exception {
         Files.write(
             ProgramTest.RESULTS.toPath(),
             new TextOf(
                 String.format(
-                    "Linting %s took %d ms",
+                    "Linting %s XMIR took %d ms (see src/test/resources/%s)",
                     name,
-                    timing
+                    timing,
+                    path
                 )
             ).asString().getBytes()
         );
