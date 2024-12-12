@@ -183,6 +183,10 @@ final class ProgramTest {
                     .phase("process-classes")
                     .goals("disassemble");
                 f.exec("process-classes");
+                final Path pre = f.files().file(
+                    "target/generated-sources/jeo-xmir/com/sun/jna/Pointer.xmir"
+                ).path();
+                System.out.println(new XMLDocument(pre));
                 System.out.println(f.log().content());
             }
         );
