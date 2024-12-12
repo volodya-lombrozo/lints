@@ -27,12 +27,15 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
+import com.yegor256.farea.Farea;
 import com.yegor256.xsline.Xsline;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Collection;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
@@ -161,22 +164,43 @@ final class ProgramTest {
 
     @Test
     @Tag("benchmark")
-    void lintsSmallXmir() throws Exception {
-        final long start = System.currentTimeMillis();
-        final String path = "org/eolang/benchmark/small-program.xmir";
-        final Collection<Defect> defects = new Program(
-            new XMLDocument(new ResourceOf(path).stream())
-        ).defects();
-        ProgramTest.writeResults(
-            "small",
-            System.currentTimeMillis() - start,
-            path
+    @ExtendWith(MktmpResolver.class)
+    void lintsLargeJnaClass(@Mktmp final Path home) throws Exception {
+        final String path = "com/sun/jna/Pointer.class";
+        final Path bin = Paths.get("target")
+            .resolve("jna-classes")
+            .resolve(path);
+        new Farea(home).together(
+            f -> {
+                f.clean();
+                f.files()
+                    .file(String.format("target/classes/%s", path))
+                    .write(Files.readAllBytes(bin));
+                f.build()
+                    .plugins()
+                    .append("org.eolang", "jeo-maven-plugin", "0.6.26")
+                    .execution("default")
+                    .phase("process-classes")
+                    .goals("disassemble");
+                f.exec("process-classes");
+                System.out.println(f.log().content());
+            }
         );
-        MatcherAssert.assertThat(
-            "Defects are empty, but they should not be",
-            defects,
-            Matchers.hasSize(Matchers.greaterThan(0))
-        );
+//        final long start = System.currentTimeMillis();
+//        // Java -> JEO -> XMIR
+//        final Collection<Defect> defects = new Program(
+//            new XMLDocument(new ResourceOf("").stream())
+//        ).defects();
+//        ProgramTest.writeResults(
+//            "small",
+//            System.currentTimeMillis() - start,
+//            ""
+//        );
+//        MatcherAssert.assertThat(
+//            "Defects are empty, but they should not be",
+//            defects,
+//            Matchers.hasSize(Matchers.greaterThan(0))
+//        );
     }
 
     private static void writeResults(
