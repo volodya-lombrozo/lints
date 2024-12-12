@@ -212,9 +212,44 @@ SOFTWARE.
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>benchmark</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <!-- version from the parent pom -->
+            <configuration>
+              <!-- In order to include other tests too -->
+              <excludedGroups>!benchmark</excludedGroups>
+              <excludes>
+                <exclude>
+                  generated/**
+                </exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
   <build>
     <plugins>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <!-- version from the parent pom -->
+        <configuration>
+          <excludedGroups>benchmark</excludedGroups>
+          <excludes>
+            <exclude>
+              generated/**
+            </exclude>
+          </excludes>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-invoker-plugin</artifactId>
         <!-- version from the parent pom -->
