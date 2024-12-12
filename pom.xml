@@ -223,7 +223,6 @@ SOFTWARE.
             <artifactId>maven-surefire-plugin</artifactId>
             <!-- version from the parent pom -->
             <configuration>
-              <!-- In order to include other tests too -->
               <excludedGroups>!benchmark</excludedGroups>
               <excludes>
                 <exclude>
