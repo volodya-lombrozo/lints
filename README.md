@@ -102,6 +102,8 @@ This is a non-exhaustive list of lints in the collection:
 It is possible to disable any particular linter in a program,
 with the help of the `+unlint` meta.
 
+## Benchmark
+
 [xmir]: https://news.eolang.org/2022-11-25-xmir-guide.html
 [eo]: https://www.eolang.org
 [aspell]: http://aspell.net/
