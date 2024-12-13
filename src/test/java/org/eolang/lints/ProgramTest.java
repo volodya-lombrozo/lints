@@ -55,11 +55,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
  *  Currently, we measure linting of just one big class. Would be good to measure
  *  other classes in size too, for instance smaller classes (standard program),
  *  large class (JNA pointer), x-large class, and xxl class. Don't forget to
- *  adjust lints-summary.txt file to capture all the measurements.
+ *  adjust lint-summary.txt file to capture all the measurements.
  * @todo #134:90min Capture all the lint timings in timings.csv.
  *  Currently, we just capture total time - amount of milliseconds was required
  *  to lint some XMIR. Would be helpful to get extended statistics - timings of
- *  each lint. Don't forget to include this information into lints-summary.txt.
+ *  each lint. Don't forget to include this information into lint-summary.txt.
+ *  You can check how it was implemented in HONE:
+ *  <a href="https://github.com/objectionary/hone-maven-plugin/blob/master/src/main/java/org/eolang/hone/Timings.java">Timings.java</a>.
  */
 @ExtendWith(MktmpResolver.class)
 final class ProgramTest {
