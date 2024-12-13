@@ -104,6 +104,13 @@ with the help of the `+unlint` meta.
 
 ## Benchmark
 
+Here is the result of linting XMIRs:
+
+<!-- benchmark_begin -->
+...
+<!-- benchmark_end -->
+
 [xmir]: https://news.eolang.org/2022-11-25-xmir-guide.html
 [eo]: https://www.eolang.org
 [aspell]: http://aspell.net/
+[benchmark-gha]:
