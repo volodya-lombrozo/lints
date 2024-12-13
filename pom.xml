@@ -135,7 +135,16 @@ SOFTWARE.
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-log</artifactId>
       <version>0.24.3</version>
-      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.16</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-reload4j</artifactId>
+      <version>2.0.16</version>
     </dependency>
     <dependency>
       <groupId>org.eolang</groupId>
@@ -174,9 +183,9 @@ SOFTWARE.
       <version>0.5.1</version>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-reload4j</artifactId>
-      <version>2.0.16</version>
+      <groupId>com.yegor256</groupId>
+      <artifactId>farea</artifactId>
+      <version>0.14.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -212,9 +221,43 @@ SOFTWARE.
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>benchmark</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <!-- version from the parent pom -->
+            <configuration>
+              <excludedGroups>!benchmark</excludedGroups>
+              <excludes>
+                <exclude>
+                  generated/**
+                </exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
   </profiles>
   <build>
     <plugins>
+      <plugin>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <!-- version from the parent pom -->
+        <configuration>
+          <excludedGroups>benchmark</excludedGroups>
+          <excludes>
+            <exclude>
+              generated/**
+            </exclude>
+          </excludes>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-invoker-plugin</artifactId>
         <!-- version from the parent pom -->
@@ -230,6 +273,37 @@ SOFTWARE.
               <Lints-Version>${project.version}</Lints-Version>
             </manifestEntries>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.8.1</version>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>net.java.dev.jna</groupId>
+                  <artifactId>jna</artifactId>
+                  <version>5.15.0</version>
+                  <type>jar</type>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}/jna-classes</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <!-- version from the parent pom -->
+        <configuration>
+          <source>11</source>
+          <target>11</target>
         </configuration>
       </plugin>
     </plugins>
