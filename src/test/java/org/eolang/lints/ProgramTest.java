@@ -23,8 +23,10 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import com.yegor256.MayBeSlow;
 import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
 import com.yegor256.farea.Farea;
@@ -165,6 +167,7 @@ final class ProgramTest {
     @Test
     @Tag("benchmark")
     @ExtendWith(MktmpResolver.class)
+    @ExtendWith(MayBeSlow.class)
     void lintsLargeJnaClass(@Mktmp final Path home) throws Exception {
         final String path = "com/sun/jna/Pointer.class";
         final Path bin = Paths.get("target")
@@ -186,25 +189,38 @@ final class ProgramTest {
                 final Path pre = f.files().file(
                     "target/generated-sources/jeo-xmir/com/sun/jna/Pointer.xmir"
                 ).path();
-                System.out.println(new XMLDocument(pre));
-                System.out.println(f.log().content());
+                final XML xmir = new XMLDocument(pre);
+                final long start = System.currentTimeMillis();
+                final Collection<Defect> defects = new Program(xmir).defects();
+                final long msec = System.currentTimeMillis() - start;
+                final Path target = Paths.get("target");
+                Files.write(
+                    target.resolve("lint-summary.txt"),
+                    String.join(
+                        "\n",
+                        String.format("Input: %s", path),
+                        Logger.format(
+                            "Size of .class: %[size]s (%1$s bytes)",
+                            bin.toFile().length()
+                        ),
+                        Logger.format(
+                            "Size of .xmir after disassemble: %[size]s (%1$s bytes, %d lines)",
+                            pre.toFile().length(),
+                            Files.readString(pre, StandardCharsets.UTF_8).split("\n").length
+                        ),
+                        Logger.format(
+                            "Lint time: %[ms]s (%d ms)",
+                            msec, msec
+                        )
+                    ).getBytes(StandardCharsets.UTF_8)
+                );
+                MatcherAssert.assertThat(
+                    "Defects are empty, but they should not be",
+                    defects,
+                    Matchers.hasSize(Matchers.greaterThan(0))
+                );
             }
         );
-//        final long start = System.currentTimeMillis();
-//        // Java -> JEO -> XMIR
-//        final Collection<Defect> defects = new Program(
-//            new XMLDocument(new ResourceOf("").stream())
-//        ).defects();
-//        ProgramTest.writeResults(
-//            "small",
-//            System.currentTimeMillis() - start,
-//            ""
-//        );
-//        MatcherAssert.assertThat(
-//            "Defects are empty, but they should not be",
-//            defects,
-//            Matchers.hasSize(Matchers.greaterThan(0))
-//        );
     }
 
     private static void writeResults(
