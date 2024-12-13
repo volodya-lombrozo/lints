@@ -37,11 +37,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.Collection;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
-import org.cactoos.text.TextOf;
 import org.eolang.parser.EoSyntax;
 import org.eolang.parser.TrParsing;
 import org.hamcrest.MatcherAssert;
@@ -220,22 +218,6 @@ final class ProgramTest {
                     Matchers.hasSize(Matchers.greaterThan(0))
                 );
             }
-        );
-    }
-
-    private static void writeResults(
-        final String name, final long timing, final String path
-    ) throws Exception {
-        Files.write(
-            ProgramTest.RESULTS.toPath(),
-            new TextOf(
-                String.format(
-                    "Linting %s XMIR took %d ms (see src/test/resources/%s)",
-                    name,
-                    timing,
-                    path
-                )
-            ).asString().getBytes()
         );
     }
 
