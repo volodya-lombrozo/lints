@@ -28,17 +28,9 @@ SOFTWARE.
     <defects>
       <xsl:for-each select="/program/metas/meta[head='alias']">
         <xsl:if test="count(part) &gt; 2">
-          <xsl:element name="defect">
-            <xsl:attribute name="line">
-              <xsl:value-of select="if (@line) then @line else '0'"/>
-            </xsl:attribute>
-            <xsl:attribute name="severity">
-              <xsl:text>error</xsl:text>
-            </xsl:attribute>
-            <xsl:text>The alias has too many parts: "</xsl:text>
-            <xsl:value-of select="tail"/>
-            <xsl:text>"</xsl:text>
-          </xsl:element>
+          <defect line="{if (@line) then @line else '0'}" severity="error">
+            The alias has too many parts: "<xsl:value-of select="tail"/>"
+          </defect>
         </xsl:if>
       </xsl:for-each>
     </defects>
