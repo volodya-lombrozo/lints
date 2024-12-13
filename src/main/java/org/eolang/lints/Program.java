@@ -30,6 +30,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.LinkedList;
+import org.cactoos.Scalar;
+import org.cactoos.scalar.IoChecked;
+import org.cactoos.scalar.Sticky;
 
 /**
  * A single XMIR program to analyze.
@@ -42,7 +45,9 @@ public final class Program {
     /**
      * Lints to use.
      */
-    private static final Iterable<Lint<XML>> LINTS = new ProgramLints().value();
+    private static final Scalar<Iterable<Lint<XML>>> LINTS = new Sticky<>(
+        () -> new ProgramLints().value()
+    );
 
     /**
      * The XMIR program to analyze.
@@ -72,7 +77,7 @@ public final class Program {
      */
     public Collection<Defect> defects() throws IOException {
         final Collection<Defect> messages = new LinkedList<>();
-        for (final Lint<XML> lint : Program.LINTS) {
+        for (final Lint<XML> lint : new IoChecked<>(Program.LINTS).value()) {
             messages.addAll(lint.defects(this.xmir));
         }
         return messages;

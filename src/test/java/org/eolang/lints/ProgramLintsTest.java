@@ -23,13 +23,10 @@
  */
 package org.eolang.lints;
 
-import com.yegor256.MayBeSlow;
-import com.yegor256.WeAreOnline;
 import org.cactoos.list.ListOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
  * Tests for {@link ProgramLints}.
@@ -38,8 +35,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
  */
 final class ProgramLintsTest {
 
-    @ExtendWith(MayBeSlow.class)
-    @ExtendWith(WeAreOnline.class)
     @Test
     void allocatesLints() {
         MatcherAssert.assertThat(
