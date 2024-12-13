@@ -31,7 +31,6 @@ import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
 import com.yegor256.farea.Farea;
 import com.yegor256.xsline.Xsline;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -52,14 +51,18 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * Test for {@link Program}.
  *
  * @since 0.0.1
+ * @todo #134:45min Measure lint time for smaller/larger classes, similar way to JNA Pointer.
+ *  Currently, we measure linting of just one big class. Would be good to measure
+ *  other classes in size too, for instance smaller classes (standard program),
+ *  large class (JNA pointer), x-large class, and xxl class. Don't forget to
+ *  adjust lints-summary.txt file to capture all the measurements.
+ * @todo #134:90min Capture all the lint timings in timings.csv.
+ *  Currently, we just capture total time - amount of milliseconds was required
+ *  to lint some XMIR. Would be helpful to get extended statistics - timings of
+ *  each lint. Don't forget to include this information into lints-summary.txt.
  */
 @ExtendWith(MktmpResolver.class)
 final class ProgramTest {
-
-    /**
-     * Benchmarking results.
-     */
-    private static final File RESULTS = new File("target/lint-summary.txt");
 
     @Test
     void returnsEmptyListOfDefects() throws IOException {
