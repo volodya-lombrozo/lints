@@ -123,4 +123,4 @@ on Linux with 4 CPUs.
 [xmir]: https://news.eolang.org/2022-11-25-xmir-guide.html
 [eo]: https://www.eolang.org
 [aspell]: http://aspell.net/
-[benchmark-gha]:
+[benchmark-gha]: https://github.com
