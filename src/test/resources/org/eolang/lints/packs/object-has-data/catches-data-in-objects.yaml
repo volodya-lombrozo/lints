@@ -21,7 +21,7 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/critical/data-is-not-in-bytes-object.xsl
+  - /org/eolang/lints/critical/object-has-data.xsl
 asserts:
   - /defects[count(defect[@severity='critical'])=8]
 document: |
