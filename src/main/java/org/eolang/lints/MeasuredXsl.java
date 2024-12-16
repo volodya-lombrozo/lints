@@ -32,7 +32,7 @@ import com.jcabi.xml.XSL;
  * XSL that measures the time of transformation.
  * @since 0.1
  */
-public final class MeasuredXsl implements XSL {
+final class MeasuredXsl implements XSL {
 
     /**
      * Default threshold in milliseconds.
