@@ -36,6 +36,9 @@ import org.cactoos.scalar.Synced;
  * Lints to use.
  * This class is thread-safe.
  * @since 0.23
+ * @todo #148:30min Refactor {@link Lints},{@link ProgramLints} and {@link XslLints} classes.
+ *  We already have ProgramLints and XslLints. Now, we will also have Lints.
+ *  We can we put this functionality into ProgramLints.
  */
 @ThreadSafe
 final class Lints {
