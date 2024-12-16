@@ -25,20 +25,11 @@ package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import io.github.secretx33.resourceresolver.PathMatchingResourcePatternResolver;
-import io.github.secretx33.resourceresolver.Resource;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
-import org.cactoos.Scalar;
-import org.cactoos.iterable.Joined;
-import org.cactoos.scalar.IoChecked;
-import org.cactoos.scalar.Sticky;
-import org.eolang.lints.comments.AsciiOnly;
-import org.eolang.lints.misc.UnitTestIsNotVerb;
 
 /**
  * A single XMIR program to analyze.
@@ -49,23 +40,19 @@ import org.eolang.lints.misc.UnitTestIsNotVerb;
 public final class Program {
 
     /**
-     * Lints to use.
-     */
-    private static final Scalar<Iterable<Lint<XML>>> LINTS = new Sticky<>(
-        () -> new ProgramLints().value()
-    );
-
-    /**
      * The XMIR program to analyze.
      */
     private final XML xmir;
 
-    private final Scalar<Iterable<Lint<XML>>> lints;
+    /**
+     * The lints to use.
+     */
+    private final Lints lints;
 
     /**
      * Ctor.
      * @param file The absolute path of the XMIR file
-     * @throws FileNotFoundException If file not found
+     * @throws FileNotFoundException If file isn't found
      */
     public Program(final Path file) throws FileNotFoundException {
         this(new XMLDocument(file));
@@ -76,10 +63,15 @@ public final class Program {
      * @param xml The XMIR
      */
     public Program(final XML xml) {
-        this(xml, Program.LINTS);
+        this(xml, new Lints());
     }
 
-    public Program(final XML xmir, final Scalar<Iterable<Lint<XML>>> lints) {
+    /**
+     * Ctor.
+     * @param xmir The XMIR
+     * @param lints The lints
+     */
+    public Program(final XML xmir, final Lints lints) {
         this.xmir = xmir;
         this.lints = lints;
     }
@@ -90,30 +82,9 @@ public final class Program {
      */
     public Collection<Defect> defects() throws IOException {
         final Collection<Defect> messages = new LinkedList<>();
-        try {
-            for (final Lint<XML> lint : new IoChecked<>(this.lints).value()) {
-                messages.addAll(lint.defects(this.xmir));
-            }
-        } catch (final NullPointerException exception) {
-            final Resource[] resources = new PathMatchingResourcePatternResolver().getResources(
-                "classpath*:org/eolang/lints/**/*.xsl"
-            );
-            final String context = String.join(
-                "\n",
-                String.format("Thread: %s", Thread.currentThread().getName()),
-                String.format("XMIR: %s", this.xmir),
-                String.format("Lints: %s", this.lints),
-                String.format("Classpath size: %d", resources == null ? -1 : resources.length),
-                String.format("Classpath: %s", Arrays.deepToString(resources)),
-                String.format("new ProgramLints().value(): %s", new ProgramLints().value())
-            );
-            throw new IllegalArgumentException(
-                String.format("Some strange state is detected in the lints.%n%s", context),
-                exception
-            );
-
+        for (final Lint<XML> lint : this.lints.iterator()) {
+            messages.addAll(lint.defects(this.xmir));
         }
         return messages;
     }
-
 }

@@ -23,15 +23,9 @@
  */
 package org.eolang.lints;
 
-import com.jcabi.xml.XML;
-import java.io.IOException;
-import org.cactoos.iterable.Mapped;
 import org.cactoos.list.ListOf;
-import org.cactoos.scalar.IoChecked;
-import org.cactoos.scalar.Sticky;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -49,33 +43,4 @@ final class ProgramLintsTest {
             Matchers.hasSize(Matchers.greaterThan(0))
         );
     }
-
-    @Test
-    void createsProgramLintsThatReturnsNull() {
-        MatcherAssert.assertThat(
-            new ProgramLints().value(),
-            Matchers.notNullValue()
-        );
-    }
-//
-//    @Test
-//    void strangeTest() {
-//        System.out.println(
-//            new ListOf<>(
-//                new Mapped<>(
-//                    (a) -> "prefix-" + a,
-//                    (Iterable) null
-//                )
-//            )
-//        );
-//    }
-//
-//    @RepeatedTest(1000)
-//    void oneMoreStrangeTest() throws IOException {
-//        new IoChecked<>(
-//            new Sticky<>(
-//                () -> new ProgramLints().value()
-//            )
-//        ).value();
-//    }
 }
