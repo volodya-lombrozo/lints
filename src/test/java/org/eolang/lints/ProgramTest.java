@@ -238,30 +238,41 @@ final class ProgramTest {
 
 
     @RepeatedTest(100)
-    void parallelTest() {
+    void parallelTest() throws IOException {
+
+        final XML xmir = new Xsline(new TrParsing()).pass(
+            new EoSyntax(
+                new ResourceOf(
+                    "org/eolang/lints/canonical.eo"
+                )
+            ).parsed()
+        );
+
         final Sticky<Iterable<Lint<XML>>> generator = new Sticky<>(
             () -> new ProgramLints().value()
         );
         final int n = 100;
         final CountDownLatch latch = new CountDownLatch(n);
         final List<Scalar<Integer>> tasks = Stream.generate(
-                () -> ProgramTest.task(generator, latch))
+                () -> ProgramTest.task(xmir, generator, latch))
             .limit(n)
             .collect(Collectors.toList());
         int res = new SumOf(new Threads<>(n, tasks)).intValue();
     }
 
     private static Scalar<Integer> task(
+        final XML xml,
         Scalar<Iterable<Lint<XML>>> generator, final CountDownLatch latch
     ) {
         return () -> {
             try {
                 latch.countDown();
                 latch.await();
-                final Iterable<Lint<XML>> value = new IoChecked<>(generator).value();
-                if (value == null) {
-                    throw new IllegalStateException("Lints are null in test");
-                }
+                new Program(xml, generator).defects();
+//                final Iterable<Lint<XML>> value = new IoChecked<>(generator).value();
+//                if (value == null) {
+//                    throw new IllegalStateException("Lints are null in test");
+//                }
                 return 1;
             } catch (final IOException exception) {
                 throw new RuntimeException(exception);
