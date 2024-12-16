@@ -26,19 +26,16 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="//o" mode="with-data"/>
+      <xsl:apply-templates select="//o[normalize-space(string-join(text(), '')) != '' and not(@base = 'org.eolang.bytes')]" mode="with-data"/>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="with-data">
-    <xsl:variable name="bytes" select="normalize-space(string-join(text(), ''))"/>
-    <xsl:if test="$bytes != '' and not(@base = 'org.eolang.bytes')">
-      <defect>
-        <xsl:attribute name="line">
-          <xsl:value-of select="if (@line) then @line else '0'"/>
-        </xsl:attribute>
-        <xsl:attribute name="severity">critical</xsl:attribute>
-        <xsl:text>The only org.eolang.bytes object may have the data</xsl:text>
-      </defect>
-    </xsl:if>
+    <defect>
+      <xsl:attribute name="line">
+        <xsl:value-of select="if (@line) then @line else '0'"/>
+      </xsl:attribute>
+      <xsl:attribute name="severity">critical</xsl:attribute>
+      <xsl:text>The only org.eolang.bytes object may have the data</xsl:text>
+    </defect>
   </xsl:template>
 </xsl:stylesheet>
