@@ -26,7 +26,7 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="//o[normalize-space(string-join(text(), '')) != '']" mode="with-data"/>
+      <xsl:apply-templates select="//o" mode="with-data"/>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="with-data">

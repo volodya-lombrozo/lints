@@ -28,28 +28,28 @@ document: |
   <program>
     <objects>
       <o name="foo">
-       hello, world!
+       A1-B2-C3-D4-E5
       </o>
       <o name="bar">
-        test
+        A1-B2-C3-D4-E5
       </o>
       <o name="xyz">
-        AB
+        10-20-30-40-50
       </o>
       <o name="abc">
-        12
+        A1-B2-C3-D4-E5
       </o>
       <o name="f">
-        F
-      </o>
-      <o name="f">
-        FF-1
+        12-23
       </o>
       <o name="f">
         FF-11-
       </o>
       <o name="f">
         哈囉世界
+      </o>
+      <o name="o">
+        <o name="i">TEST</o>
       </o>
     </objects>
   </program>
