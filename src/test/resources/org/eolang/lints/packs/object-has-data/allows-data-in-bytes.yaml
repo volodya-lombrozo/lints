@@ -51,5 +51,8 @@ document: |
       <o name="f" base="org.eolang.bytes">
         哈囉世界
       </o>
+      <o name="f" base="bytes">
+        привет, дорогой!
+      </o>
     </objects>
   </program>

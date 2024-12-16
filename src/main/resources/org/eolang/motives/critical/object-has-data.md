@@ -1,7 +1,7 @@
 # Object Has Data
 
 Each object `</o>` in [XMIR] must not have the data, unless it's base is
-`org.eolang.bytes.`
+`org.eolang.bytes` (or just `bytes` for short).
 
 Incorrect:
 
