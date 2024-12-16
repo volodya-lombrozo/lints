@@ -107,7 +107,17 @@ with the help of the `+unlint` meta.
 Here is the result of linting XMIRs:
 
 <!-- benchmark_begin -->
-...
+```text
+Input: com/sun/jna/Pointer.class
+Size of .class: 22Kb (22Kb bytes)
+Size of .xmir after disassemble: 1Mb (1Mb bytes, 29630 lines)
+Lint time: 6s (5807 ms)
+
+```
+
+The results were calculated in [this GHA job][benchmark-gha]
+on 2024-12-16 at 08:39,
+on Linux with 4 CPUs.
 <!-- benchmark_end -->
 
 [xmir]: https://news.eolang.org/2022-11-25-xmir-guide.html
