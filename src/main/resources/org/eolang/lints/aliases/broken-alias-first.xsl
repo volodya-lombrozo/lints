@@ -22,23 +22,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="line-is-absent" version="2.0">
-  <!--
-  Here we go through all objects and find what their @base
-  are referring to. If we find the object they refer to,
-  everything is OK. If we don't, we report an error.
-  -->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="broken-alias-first" version="2.0">
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:key name="objsNoLineByName" match="o[not(@line)]" use="@name"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@base and not(starts-with(@base, '.')) and @base!='$' and @base!='^']">
-        <xsl:variable name="self" select="."/>
-        <xsl:variable name="target" select="key('objsNoLineByName', $self/@base)"/>
-        <xsl:if test="$target">
-          <defect line="{if (@line) then @line else '0'}" severity="error">
-            The @line attribute is absent at <xsl:value-of select="$target/@name"/>
-          </defect>
+      <xsl:for-each select="/program/metas/meta[head='alias']">
+        <xsl:if test="part[1] and not(matches(part[1], '^[a-z]+[^&gt;&lt;.\[\]()!:&quot;@^$#&amp;/\s]*$'))">
+          <xsl:element name="defect">
+            <xsl:attribute name="line">
+              <xsl:value-of select="if (@line) then @line else '0'"/>
+            </xsl:attribute>
+            <xsl:attribute name="severity">
+              <xsl:text>error</xsl:text>
+            </xsl:attribute>
+            <xsl:text>The first part of the alias is invalid: "</xsl:text>
+            <xsl:value-of select="part[1]"/>
+            <xsl:text>" (it may only contain a relative name of the object, not its FQN)</xsl:text>
+          </xsl:element>
         </xsl:if>
       </xsl:for-each>
     </defects>

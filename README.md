@@ -24,7 +24,7 @@ We use this package as a dependency in the
 <dependency>
   <groupId>org.eolang</groupId>
   <artifactId>lints</artifactId>
-  <version>0.0.21</version>
+  <version>0.0.25</version>
 </dependency>
 ```
 
@@ -102,6 +102,25 @@ This is a non-exhaustive list of lints in the collection:
 It is possible to disable any particular linter in a program,
 with the help of the `+unlint` meta.
 
+## Benchmark
+
+Here is the result of linting XMIRs:
+
+<!-- benchmark_begin -->
+```text
+Input: com/sun/jna/Pointer.class
+Size of .class: 22Kb (22Kb bytes)
+Size of .xmir after disassemble: 1Mb (1Mb bytes, 29630 lines)
+Lint time: 6s (5807 ms)
+
+```
+
+The results were calculated in [this GHA job][benchmark-gha]
+on 2024-12-16 at 08:39,
+on Linux with 4 CPUs.
+<!-- benchmark_end -->
+
 [xmir]: https://news.eolang.org/2022-11-25-xmir-guide.html
 [eo]: https://www.eolang.org
 [aspell]: http://aspell.net/
+[benchmark-gha]:

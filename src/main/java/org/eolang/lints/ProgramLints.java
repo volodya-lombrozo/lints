@@ -24,8 +24,6 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import org.cactoos.Scalar;
 import org.cactoos.iterable.Joined;
@@ -35,32 +33,21 @@ import org.eolang.lints.misc.UnitTestIsNotVerb;
 
 /**
  * Lints for the program.
+ *
  * @since 0.0.22
  */
-public final class ProgramLints implements Scalar<Iterable<Lint<XML>>> {
+final class ProgramLints implements Scalar<Iterable<Lint<XML>>> {
 
     @Override
     public Iterable<Lint<XML>> value() {
-        try {
-            return new Sticky<>(
-                new Joined<Lint<XML>>(
-                    new XslLints(),
-                    Arrays.asList(
-                        new AsciiOnly(),
-                        new UnitTestIsNotVerb()
-                    )
+        return new Sticky<>(
+            new Joined<Lint<XML>>(
+                new XslLints(),
+                Arrays.asList(
+                    new AsciiOnly(),
+                    new UnitTestIsNotVerb()
                 )
-            );
-        } catch (final IOException exception) {
-            throw new IllegalStateException(
-                "Failed to allocate lints",
-                exception
-            );
-        } catch (final URISyntaxException exception) {
-            throw new IllegalStateException(
-                "URI syntax is broken",
-                exception
-            );
-        }
+            )
+        );
     }
 }

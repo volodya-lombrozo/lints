@@ -62,24 +62,6 @@ final class LintByXsl implements Lint<XML> {
     /**
      * Ctor.
      * @param xsl Relative path of XSL
-     * @param motive Relative path of motive document
-     * @throws IOException If fails
-     */
-    @SuppressWarnings("PMD.ConstructorOnlyInitializesOrCallOtherConstructors")
-    LintByXsl(final Input xsl, final Input motive) throws IOException {
-        final XML xml = new XMLDocument(
-            new IoCheckedText(
-                new TextOf(xsl)
-            ).asString()
-        );
-        this.rule = xml.xpath("/xsl:stylesheet/@id").get(0);
-        this.sheet = new XSLDocument(xml, this.rule).with(new ClasspathSources());
-        this.doc = motive;
-    }
-
-    /**
-     * Ctor.
-     * @param xsl Relative path of XSL
      * @throws IOException If fails
      */
     LintByXsl(final String xsl) throws IOException {
@@ -91,6 +73,22 @@ final class LintByXsl implements Lint<XML> {
                 String.format("org/eolang/motives/%s.md", xsl)
             )
         );
+    }
+
+    /**
+     * Ctor.
+     * @param xsl Relative path of XSL
+     * @param motive Relative path of a motive document
+     * @throws IOException If fails
+     */
+    @SuppressWarnings("PMD.ConstructorOnlyInitializesOrCallOtherConstructors")
+    LintByXsl(final Input xsl, final Input motive) throws IOException {
+        final XML xml = new XMLDocument(new IoCheckedText(new TextOf(xsl)).asString());
+        this.rule = xml.xpath("/xsl:stylesheet/@id").get(0);
+        this.sheet = new MeasuredXsl(
+            this.rule, new XSLDocument(xml, this.rule).with(new ClasspathSources())
+        );
+        this.doc = motive;
     }
 
     @Override

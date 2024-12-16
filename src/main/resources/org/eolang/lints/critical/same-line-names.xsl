@@ -26,24 +26,25 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@line and @name]">
+      <xsl:for-each select="/program/objects//o[@line and @name]">
         <xsl:apply-templates select="." mode="check"/>
       </xsl:for-each>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="check">
     <xsl:variable name="x" select="."/>
-    <xsl:for-each select="(following::o | descendant::o)[@name=$x/@name and @line=$x/@line]">
+    <xsl:for-each select="/program/objects//o[not(. is $x) and @name=$x/@name and @line=$x/@line]">
       <xsl:element name="defect">
         <xsl:attribute name="line">
-          <xsl:value-of select="if (@line) then @line else '0'"/>
+          <xsl:value-of select="@line"/>
         </xsl:attribute>
         <xsl:attribute name="severity">
           <xsl:text>error</xsl:text>
         </xsl:attribute>
         <xsl:text>The name "</xsl:text>
         <xsl:value-of select="@name"/>
-        <xsl:text>" has already been used on the same line</xsl:text>
+        <xsl:text>" has been used twice on line no.</xsl:text>
+        <xsl:value-of select="@line"/>
       </xsl:element>
     </xsl:for-each>
   </xsl:template>
