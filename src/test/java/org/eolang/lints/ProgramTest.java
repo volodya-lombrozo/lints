@@ -37,12 +37,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.cactoos.Scalar;
+import org.cactoos.experimental.Threads;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.number.SumOf;
+import org.cactoos.scalar.IoChecked;
+import org.cactoos.scalar.Sticky;
 import org.eolang.parser.EoSyntax;
 import org.eolang.parser.TrParsing;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -224,6 +234,42 @@ final class ProgramTest {
                 );
             }
         );
+    }
+
+
+    @RepeatedTest(100)
+    void parallelTest() {
+        final Sticky<Iterable<Lint<XML>>> generator = new Sticky<>(
+            () -> new ProgramLints().value()
+        );
+        final int n = 100;
+        final CountDownLatch latch = new CountDownLatch(n);
+        final List<Scalar<Integer>> tasks = Stream.generate(
+                () -> ProgramTest.task(generator, latch))
+            .limit(n)
+            .collect(Collectors.toList());
+        int res = new SumOf(new Threads<>(n, tasks)).intValue();
+    }
+
+    private static Scalar<Integer> task(
+        Scalar<Iterable<Lint<XML>>> generator, final CountDownLatch latch
+    ) {
+        return () -> {
+            try {
+                latch.countDown();
+                latch.await();
+                final Iterable<Lint<XML>> value = new IoChecked<>(generator).value();
+                if (value == null) {
+                    throw new IllegalStateException("Lints are null in test");
+                }
+                return 1;
+            } catch (final IOException exception) {
+                throw new RuntimeException(exception);
+            } catch (final InterruptedException exception) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(exception);
+            }
+        };
     }
 
 }
