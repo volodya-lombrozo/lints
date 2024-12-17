@@ -26,16 +26,30 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="//o[normalize-space(string-join(text(), '')) != '' and not(@base = 'bytes' or @base = 'org.eolang.bytes')]" mode="with-data"/>
+      <xsl:apply-templates select="//o" mode="with-data"/>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="with-data">
-    <defect>
-      <xsl:attribute name="line">
-        <xsl:value-of select="if (@line) then @line else '0'"/>
-      </xsl:attribute>
-      <xsl:attribute name="severity">critical</xsl:attribute>
-      <xsl:text>The only org.eolang.bytes object may have the data</xsl:text>
-    </defect>
+    <xsl:variable name="data" select="normalize-space(string-join(text(), ''))"/>
+    <xsl:if test="$data != '' and not(@base)">
+      <defect>
+        <xsl:attribute name="line">
+          <xsl:value-of select="if (@line) then @line else '0'"/>
+        </xsl:attribute>
+        <xsl:attribute name="severity">critical</xsl:attribute>
+        <xsl:text>Only objects with their @base attributes containing 'org.eolang.bytes' may contain data, while this object doesn't have @base attribute at all</xsl:text>
+      </defect>
+    </xsl:if>
+    <xsl:if test="$data != '' and @base and not(@base = 'bytes' or @base = 'org.eolang.bytes')">
+      <defect>
+        <xsl:attribute name="line">
+          <xsl:value-of select="if (@line) then @line else '0'"/>
+        </xsl:attribute>
+        <xsl:attribute name="severity">critical</xsl:attribute>
+        <xsl:text>Only objects with their @base attributes containing 'org.eolang.bytes' may contain data, while this object contains "</xsl:text>
+        <xsl:value-of select="$data"/>
+        <xsl:text>"</xsl:text>
+      </defect>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
