@@ -12,13 +12,13 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/objectionary/lints/blob/master/LICENSE.txt)
 
 This Java package is a collection of "lints" (aka "checkers") for
-[XMIR][xmir] (an intermediate representation of a
-[EO][eo] program). This is not about static analysis or code
+[XMIR] (an intermediate representation of a
+[EO] program). This is not about static analysis or code
 formatting. This is about best practices and readiness of code
 for successful compilation and execution.
 
 We use this package as a dependency in the
-[EO-to-Java compiler][eo]:
+[EO-to-Java compiler][EO]:
 
 ```xml
 <dependency>
@@ -29,7 +29,7 @@ We use this package as a dependency in the
 ```
 
 You can also use it in order to validate the validity
-of [XMIR][xmir] documents your software may generate:
+of [XMIR] documents your software may generate:
 
 ```java
 import com.jcabi.xml.StrictXML;
@@ -102,6 +102,29 @@ This is a non-exhaustive list of lints in the collection:
 It is possible to disable any particular linter in a program,
 with the help of the `+unlint` meta.
 
+## Design of This Library
+
+The library is designed as a set of lints, each of which
+is a separate class implementing the `Lint` interface.
+Each lint is responsible for checking one particular aspect
+of the [XMIR] document. The `Program` class is responsible for  
+running all lints and collecting defects for a single XMIR file.
+The `Programs` class is responsible for running all lints and
+collecting defects for a set of XMIR files. All in all,
+there are only four classes and interfaces that are supposed to 
+be exposed to a user of the library:
+
+* `Program` - checker of a single [XMIR]
+* `Programs` - checker of a set of [XMIR]
+* `Defect` - a single defect discovered
+* `Severity` - a severity of a defect
+
+There are also a few classes that implement `Iterable<Lint>`.
+They are supposed to be used only by the `Program` and `Programs`,
+and are not supposed to be exposed to the user of the library.
+They are responsible for providing a set of lints to be executed,
+building them from the information in classpath.
+
 ## Benchmark
 
 Here is the result of linting XMIRs:
@@ -120,11 +143,6 @@ on 2024-12-16 at 08:39,
 on Linux with 4 CPUs.
 <!-- benchmark_end -->
 
-[xmir]: https://news.eolang.org/2022-11-25-xmir-guide.html
-[eo]: https://www.eolang.org
-[aspell]: http://aspell.net/
-[benchmark-gha]: https://github.com
-
 ## How to Contribute
 
 Fork repository, make changes, then send us
@@ -138,3 +156,9 @@ mvn clean install -Pqulice
 ```
 
 You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
+
+[XMIR]: https://news.eolang.org/2022-11-25-xmir-guide.html
+[EO]: https://www.eolang.org
+[aspell]: http://aspell.net/
+[benchmark-gha]: https://github.com
+
