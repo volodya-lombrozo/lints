@@ -29,7 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.LinkedList;
 
 /**
  * A single XMIR program to analyze.
@@ -47,7 +46,7 @@ public final class Program {
     /**
      * The lints to use.
      */
-    private final ProgramLinter lints;
+    private final Lint<XML> lints;
 
     /**
      * Ctor.
@@ -63,7 +62,7 @@ public final class Program {
      * @param xml The XMIR
      */
     public Program(final XML xml) {
-        this(xml, new ProgramLinter());
+        this(xml, new LintProgram());
     }
 
     /**
@@ -71,7 +70,7 @@ public final class Program {
      * @param xmir The XMIR
      * @param lints The lints
      */
-    Program(final XML xmir, final ProgramLinter lints) {
+    Program(final XML xmir, final Lint<XML> lints) {
         this.xmir = xmir;
         this.lints = lints;
     }
@@ -81,10 +80,6 @@ public final class Program {
      * @return All defects found
      */
     public Collection<Defect> defects() throws IOException {
-        final Collection<Defect> messages = new LinkedList<>();
-        for (final Lint<XML> lint : this.lints.iterator()) {
-            messages.addAll(lint.defects(this.xmir));
-        }
-        return messages;
+        return this.lints.defects(this.xmir);
     }
 }

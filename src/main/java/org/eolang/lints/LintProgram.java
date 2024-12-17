@@ -25,7 +25,9 @@ package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 import javax.annotation.concurrent.ThreadSafe;
 import org.cactoos.Scalar;
@@ -42,12 +44,12 @@ import org.eolang.lints.misc.UnitTestIsNotVerb;
  * @since 0.23
  */
 @ThreadSafe
-final class ProgramLinter {
+final class LintProgram implements Lint<XML> {
 
     /**
      * Default lints.
      */
-    private static final Scalar<Iterable<Lint<XML>>> DEFAULT = ProgramLinter.linter();
+    private static final Scalar<Iterable<Lint<XML>>> DEFAULT = LintProgram.linter();
 
     /**
      * All lints.
@@ -57,16 +59,37 @@ final class ProgramLinter {
     /**
      * Default ctor.
      */
-    ProgramLinter() {
-        this(ProgramLinter.DEFAULT);
+    LintProgram() {
+        this(LintProgram.DEFAULT);
     }
 
     /**
      * Ctor.
      * @param all All lints.
      */
-    ProgramLinter(final Scalar<Iterable<Lint<XML>>> all) {
+    LintProgram(final Scalar<Iterable<Lint<XML>>> all) {
         this.all = new Synced<>(all);
+    }
+
+    @Override
+    public Collection<Defect> defects(final XML entity) {
+        try {
+            final Collection<Defect> messages = new ArrayList<>(0);
+            for (final Lint<XML> lint : this.iterator()) {
+                messages.addAll(lint.defects(entity));
+            }
+            return messages;
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format("Failed to iterate over lints %s", this.all),
+                exception
+            );
+        }
+    }
+
+    @Override
+    public String motive() {
+        return "Program has some defects. See the particular defects for more details.";
     }
 
     /**
