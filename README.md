@@ -124,3 +124,17 @@ on Linux with 4 CPUs.
 [eo]: https://www.eolang.org
 [aspell]: http://aspell.net/
 [benchmark-gha]: https://github.com
+
+## How to Contribute
+
+Fork repository, make changes, then send us
+a [pull request](https://www.yegor256.com/2014/04/15/github-guidelines.html).
+We will review your changes and apply them to the `master` branch shortly,
+provided they don't violate our quality standards. To avoid frustration,
+before sending us your pull request please run full Maven build:
+
+```bash
+mvn clean install -Pqulice
+```
+
+You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
