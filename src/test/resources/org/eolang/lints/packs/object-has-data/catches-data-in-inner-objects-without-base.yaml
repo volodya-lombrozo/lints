@@ -23,15 +23,12 @@
 sheets:
   - /org/eolang/lints/critical/object-has-data.xsl
 asserts:
-  - /defects[count(defect[@severity='critical'])=0]
+  - /defects[count(defect[@severity='critical'])=1]
 document: |
   <program>
     <objects>
-      <o name="foo" base="org.eolang.bytes">
-       A1-B2-C3-D4-E5
-      </o>
-      <o name="xyz" base="bytes">
-        привет, дорогой!
+      <o name="foo">
+        <o name="inner">12-23-FF</o>
       </o>
     </objects>
   </program>

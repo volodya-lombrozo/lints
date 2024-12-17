@@ -23,33 +23,15 @@
 sheets:
   - /org/eolang/lints/critical/object-has-data.xsl
 asserts:
-  - /defects[count(defect[@severity='critical'])=8]
+  - /defects[count(defect[@severity='critical'])=2]
 document: |
   <program>
     <objects>
-      <o name="foo">
-       A1-B2-C3-D4-E5
+      <o name="foo" base="x">
+       10-20-30-40-50
       </o>
-      <o name="bar">
-        A1-B2-C3-D4-E5
-      </o>
-      <o name="xyz">
-        10-20-30-40-50
-      </o>
-      <o name="abc">
-        A1-B2-C3-D4-E5
-      </o>
-      <o name="f">
-        12-23
-      </o>
-      <o name="f">
-        FF-11-
-      </o>
-      <o name="f">
+      <o name="f" base="y">
         哈囉世界
-      </o>
-      <o name="o">
-        <o name="i">TEST</o>
       </o>
     </objects>
   </program>
