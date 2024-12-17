@@ -33,6 +33,18 @@ import com.jcabi.manifests.Manifests;
 public interface Defect {
 
     /**
+     * Rule.
+     * @return Unique name of the rule
+     * @todo #148:30min Test or remove {@link Defect#rule()} method.
+     *  This method is not used by any class in the project.
+     *  Moreover, we don't even have a test for it.
+     *  We should either test it or remove it.
+     *  Actually, this method is used
+     *  <a href="https://github.com/objectionary/lints/pull/150/files#r1888310583">somewhere</a>
+     */
+    String rule();
+
+    /**
      * Severity.
      * @return Severity
      */
@@ -103,8 +115,10 @@ public interface Defect {
          * @param text Description of the defect
          * @checkstyle ParameterNumberCheck (5 lines)
          */
-        public Default(final String rule, final Severity severity,
-            final String program, final int line, final String text) {
+        public Default(
+            final String rule, final Severity severity,
+            final String program, final int line, final String text
+        ) {
             this.rle = rule;
             this.sev = severity;
             this.prg = program;
@@ -117,6 +131,11 @@ public interface Defect {
             return String.format(
                 "[%s %s]:%d %s", this.rle, this.sev, this.lineno, this.txt
             );
+        }
+
+        @Override
+        public String rule() {
+            return this.rle;
         }
 
         @Override
