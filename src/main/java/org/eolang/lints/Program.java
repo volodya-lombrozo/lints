@@ -44,7 +44,7 @@ public final class Program {
     private final XML xmir;
 
     /**
-     * The lints to use.
+     * Lints to use.
      */
     private final Lint<XML> lints;
 

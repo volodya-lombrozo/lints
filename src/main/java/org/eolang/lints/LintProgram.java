@@ -39,7 +39,7 @@ import org.eolang.lints.comments.AsciiOnly;
 import org.eolang.lints.misc.UnitTestIsNotVerb;
 
 /**
- * Lints to use.
+ * Program linter.
  * This class is thread-safe.
  * @since 0.23
  */
