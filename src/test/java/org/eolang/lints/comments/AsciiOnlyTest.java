@@ -71,4 +71,17 @@ final class AsciiOnlyTest {
         );
     }
 
+    @Test
+    void setsRuleCorrectly() throws Exception {
+        MatcherAssert.assertThat(
+            "The rule name is set right",
+            new AsciiOnly().defects(
+                new EoSyntax(
+                    new InputOf("# тук тук\n[] > foo\n")
+                ).parsed()
+            ).iterator().next().rule(),
+            Matchers.equalTo("ascii-only")
+        );
+    }
+
 }
