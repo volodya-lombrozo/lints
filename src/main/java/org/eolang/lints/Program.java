@@ -71,7 +71,7 @@ public final class Program {
      * @param xmir The XMIR
      * @param lints The lints
      */
-    public Program(final XML xmir, final Lints lints) {
+    Program(final XML xmir, final Lints lints) {
         this.xmir = xmir;
         this.lints = lints;
     }

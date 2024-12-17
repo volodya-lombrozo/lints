@@ -33,12 +33,6 @@ import com.jcabi.manifests.Manifests;
 public interface Defect {
 
     /**
-     * Rule.
-     * @return Unique name of the rule
-     */
-    String rule();
-
-    /**
      * Severity.
      * @return Severity
      */
@@ -123,11 +117,6 @@ public interface Defect {
             return String.format(
                 "[%s %s]:%d %s", this.rle, this.sev, this.lineno, this.txt
             );
-        }
-
-        @Override
-        public String rule() {
-            return this.rle;
         }
 
         @Override
