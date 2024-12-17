@@ -25,28 +25,30 @@ package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cactoos.Scalar;
 import org.cactoos.experimental.Threads;
+import org.cactoos.iterable.Joined;
 import org.cactoos.number.SumOf;
 import org.cactoos.scalar.Sticky;
+import org.eolang.lints.comments.AsciiOnly;
+import org.eolang.lints.misc.UnitTestIsNotVerb;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
 
 /**
- * Tests for {@link Lints}.
+ * Tests for {@link ProgramLinter}.
  * @since 0.23
  */
 final class LintsTest {
 
     @RepeatedTest(50)
     void createsLintsUsingSameGeneratorManyTimesInParallel() {
-        final Scalar<Iterable<Lint<XML>>> generator = new Sticky<>(
-            () -> new ProgramLints().value()
-        );
+        final Scalar<Iterable<Lint<XML>>> generator = new Sticky<>(XslLints::new);
         final int threads = 100;
         final CountDownLatch latch = new CountDownLatch(threads);
         MatcherAssert.assertThat(
@@ -54,7 +56,7 @@ final class LintsTest {
             new SumOf(
                 new Threads<>(
                     threads,
-                    Stream.generate(() -> LintsTest.task(() -> new Lints(generator), latch))
+                    Stream.generate(() -> LintsTest.task(() -> new ProgramLinter(generator), latch))
                         .limit(threads)
                         .collect(Collectors.toList())
                 )
@@ -72,7 +74,7 @@ final class LintsTest {
             new SumOf(
                 new Threads<>(
                     threads,
-                    Stream.generate(() -> LintsTest.task(Lints::new, latch))
+                    Stream.generate(() -> LintsTest.task(ProgramLinter::new, latch))
                         .limit(threads)
                         .collect(Collectors.toList())
                 )
@@ -118,6 +120,6 @@ final class LintsTest {
          * @return Lints
          * @throws IOException If fails
          */
-        Lints get() throws IOException;
+        ProgramLinter get() throws IOException;
     }
 }

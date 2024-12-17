@@ -25,30 +25,29 @@ package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Objects;
 import javax.annotation.concurrent.ThreadSafe;
 import org.cactoos.Scalar;
+import org.cactoos.iterable.Joined;
 import org.cactoos.scalar.IoChecked;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
+import org.eolang.lints.comments.AsciiOnly;
+import org.eolang.lints.misc.UnitTestIsNotVerb;
 
 /**
  * Lints to use.
  * This class is thread-safe.
  * @since 0.23
- * @todo #148:30min Refactor {@link Lints},{@link ProgramLints} and {@link XslLints} classes.
- *  We already have ProgramLints and XslLints. Now, we will also have Lints.
- *  We can we put this functionality into ProgramLints.
  */
 @ThreadSafe
-final class Lints {
+final class ProgramLinter {
 
     /**
      * Default lints.
      */
-    private static final Scalar<Iterable<Lint<XML>>> DEFAULT = new Sticky<>(
-        () -> new ProgramLints().value()
-    );
+    private static final Scalar<Iterable<Lint<XML>>> DEFAULT = ProgramLinter.linter();
 
     /**
      * All lints.
@@ -58,15 +57,15 @@ final class Lints {
     /**
      * Default ctor.
      */
-    Lints() {
-        this(Lints.DEFAULT);
+    ProgramLinter() {
+        this(ProgramLinter.DEFAULT);
     }
 
     /**
      * Ctor.
      * @param all All lints.
      */
-    Lints(final Scalar<Iterable<Lint<XML>>> all) {
+    ProgramLinter(final Scalar<Iterable<Lint<XML>>> all) {
         this.all = new Synced<>(all);
     }
 
@@ -85,5 +84,23 @@ final class Lints {
             );
         }
         return res;
+    }
+
+    /**
+     * Default linter prestructor.
+     * @return Linter.
+     */
+    private static Sticky<Iterable<Lint<XML>>> linter() {
+        return new Sticky<>(
+            () -> new org.cactoos.iterable.Sticky<>(
+                new Joined<Lint<XML>>(
+                    new XslLints(),
+                    Arrays.asList(
+                        new AsciiOnly(),
+                        new UnitTestIsNotVerb()
+                    )
+                )
+            )
+        );
     }
 }

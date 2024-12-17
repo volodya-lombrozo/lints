@@ -47,7 +47,7 @@ public final class Program {
     /**
      * The lints to use.
      */
-    private final Lints lints;
+    private final ProgramLinter lints;
 
     /**
      * Ctor.
@@ -63,7 +63,7 @@ public final class Program {
      * @param xml The XMIR
      */
     public Program(final XML xml) {
-        this(xml, new Lints());
+        this(xml, new ProgramLinter());
     }
 
     /**
@@ -71,7 +71,7 @@ public final class Program {
      * @param xmir The XMIR
      * @param lints The lints
      */
-    Program(final XML xmir, final Lints lints) {
+    Program(final XML xmir, final ProgramLinter lints) {
         this.xmir = xmir;
         this.lints = lints;
     }

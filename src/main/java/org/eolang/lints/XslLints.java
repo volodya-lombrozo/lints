@@ -56,7 +56,7 @@ public final class XslLints extends IterableEnvelope<Lint<XML>> {
     /**
      * Ctor.
      */
-    public XslLints() {
+    XslLints() {
         super(XslLints.all());
     }
 
