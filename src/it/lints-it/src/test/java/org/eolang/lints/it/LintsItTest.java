@@ -21,26 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import org.junit.jupiter.api.Test;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.eolang.lints.Lint;
-import org.eolang.lints.XslLints;
+import org.eolang.lints.Program;
 import java.io.IOException;
 
 final class LintsItTest {
 
     @Test
     void lintsProgram() throws IOException {
-        final XML xmir = new XMLDocument("<program/>");
-        for (final Lint<XML> lint : new XslLints()) {
-            MatcherAssert.assertThat(
-                "passes with no exceptions",
-                lint.defects(xmir),
-                Matchers.notNullValue()
-            );
-        }
+        MatcherAssert.assertThat(
+            "passes with no exceptions",
+            new Program(new XMLDocument("<program/>")).defects(),
+            Matchers.notNullValue()
+        );
     }
 }

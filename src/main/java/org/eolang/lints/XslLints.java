@@ -37,7 +37,7 @@ import org.cactoos.iterable.Mapped;
  *
  * @since 0.1.0
  */
-public final class XslLints extends IterableEnvelope<Lint<XML>> {
+final class XslLints extends IterableEnvelope<Lint<XML>> {
 
     /**
      * XSL extension pattern.
@@ -56,7 +56,7 @@ public final class XslLints extends IterableEnvelope<Lint<XML>> {
     /**
      * Ctor.
      */
-    public XslLints() {
+    XslLints() {
         super(XslLints.all());
     }
 
