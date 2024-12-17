@@ -111,7 +111,7 @@ of the [XMIR] document. The `Program` class is responsible for
 running all lints and collecting defects for a single XMIR file.
 The `Programs` class is responsible for running all lints and
 collecting defects for a set of XMIR files. All in all,
-there are only four classes and interfaces that are supposed to 
+there are only four classes and interfaces that are supposed to
 be exposed to a user of the library:
 
 * `Program` - checker of a single [XMIR]
@@ -161,4 +161,3 @@ You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
 [EO]: https://www.eolang.org
 [aspell]: http://aspell.net/
 [benchmark-gha]: https://github.com
-
