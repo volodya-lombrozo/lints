@@ -40,7 +40,7 @@ import org.junit.jupiter.api.RepeatedTest;
  * Tests for {@link LintProgram}.
  * @since 0.23
  */
-final class LintsTest {
+final class LintProgramTest {
 
     @RepeatedTest(50)
     void createsLintsUsingSameGeneratorManyTimesInParallel() {
@@ -52,7 +52,7 @@ final class LintsTest {
             new SumOf(
                 new Threads<>(
                     threads,
-                    Stream.generate(() -> LintsTest.task(() -> new LintProgram(generator), latch))
+                    Stream.generate(() -> LintProgramTest.task(() -> new LintProgram(generator), latch))
                         .limit(threads)
                         .collect(Collectors.toList())
                 )
@@ -70,7 +70,7 @@ final class LintsTest {
             new SumOf(
                 new Threads<>(
                     threads,
-                    Stream.generate(() -> LintsTest.task(LintProgram::new, latch))
+                    Stream.generate(() -> LintProgramTest.task(LintProgram::new, latch))
                         .limit(threads)
                         .collect(Collectors.toList())
                 )
