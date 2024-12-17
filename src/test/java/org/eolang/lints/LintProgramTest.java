@@ -47,16 +47,21 @@ final class LintProgramTest {
         final Scalar<Iterable<Lint<XML>>> generator = new Sticky<>(XslLints::new);
         final int threads = 100;
         final CountDownLatch latch = new CountDownLatch(threads);
+        final int actual = new SumOf(
+            new Threads<>(
+                threads,
+                Stream.generate(() -> LintProgramTest.task(() -> new LintProgram(generator), latch))
+                    .limit(threads)
+                    .collect(Collectors.toList())
+            )
+        ).intValue();
         MatcherAssert.assertThat(
-            "We expect lints created using the same generator to be thread-safe",
-            new SumOf(
-                new Threads<>(
-                    threads,
-                    Stream.generate(() -> LintProgramTest.task(() -> new LintProgram(generator), latch))
-                        .limit(threads)
-                        .collect(Collectors.toList())
-                )
-            ).intValue(),
+            String.format(
+                "We expect lints created using the same generator to be thread-safe. However only '%d' among '%d' were created",
+                actual,
+                threads
+            ),
+            actual,
             Matchers.equalTo(threads)
         );
     }
