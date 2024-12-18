@@ -37,10 +37,10 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
 
 /**
- * Tests for {@link LintProgram}.
+ * Tests for {@link CompositeLint}.
  * @since 0.23
  */
-final class LintProgramTest {
+final class CompositeLintTest {
 
     @RepeatedTest(50)
     void createsLintsUsingSameGeneratorManyTimesInParallel() {
@@ -50,7 +50,7 @@ final class LintProgramTest {
         final int actual = new SumOf(
             new Threads<>(
                 threads,
-                Stream.generate(() -> LintProgramTest.task(() -> new LintProgram(generator), latch))
+                Stream.generate(() -> CompositeLintTest.task(() -> new CompositeLint(generator), latch))
                     .limit(threads)
                     .collect(Collectors.toList())
             )
@@ -75,7 +75,7 @@ final class LintProgramTest {
             new SumOf(
                 new Threads<>(
                     threads,
-                    Stream.generate(() -> LintProgramTest.task(LintProgram::new, latch))
+                    Stream.generate(() -> CompositeLintTest.task(CompositeLint::new, latch))
                         .limit(threads)
                         .collect(Collectors.toList())
                 )
@@ -121,6 +121,6 @@ final class LintProgramTest {
          * @return Lints
          * @throws IOException If fails
          */
-        LintProgram get() throws IOException;
+        CompositeLint get() throws IOException;
     }
 }

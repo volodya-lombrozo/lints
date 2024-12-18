@@ -44,9 +44,9 @@ public final class Program {
     private final XML xmir;
 
     /**
-     * Lints to use.
+     * Lint to use.
      */
-    private final Lint<XML> lints;
+    private final Lint<XML> lint;
 
     /**
      * Ctor.
@@ -62,17 +62,17 @@ public final class Program {
      * @param xml The XMIR
      */
     public Program(final XML xml) {
-        this(xml, new LintProgram());
+        this(xml, new CompositeLint());
     }
 
     /**
      * Ctor.
      * @param xmir The XMIR
-     * @param lints The lints
+     * @param lint The lints
      */
-    Program(final XML xmir, final Lint<XML> lints) {
+    Program(final XML xmir, final Lint<XML> lint) {
         this.xmir = xmir;
-        this.lints = lints;
+        this.lint = lint;
     }
 
     /**
@@ -80,6 +80,6 @@ public final class Program {
      * @return All defects found
      */
     public Collection<Defect> defects() throws IOException {
-        return this.lints.defects(this.xmir);
+        return this.lint.defects(this.xmir);
     }
 }

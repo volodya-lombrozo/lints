@@ -44,12 +44,12 @@ import org.eolang.lints.misc.UnitTestIsNotVerb;
  * @since 0.23
  */
 @ThreadSafe
-final class LintProgram implements Lint<XML> {
+final class CompositeLint implements Lint<XML> {
 
     /**
      * Default lints.
      */
-    private static final Scalar<Iterable<Lint<XML>>> DEFAULT = LintProgram.linter();
+    private static final Scalar<Iterable<Lint<XML>>> DEFAULT = CompositeLint.linter();
 
     /**
      * All lints.
@@ -59,15 +59,15 @@ final class LintProgram implements Lint<XML> {
     /**
      * Default ctor.
      */
-    LintProgram() {
-        this(LintProgram.DEFAULT);
+    CompositeLint() {
+        this(CompositeLint.DEFAULT);
     }
 
     /**
      * Ctor.
      * @param all All lints.
      */
-    LintProgram(final Scalar<Iterable<Lint<XML>>> all) {
+    CompositeLint(final Scalar<Iterable<Lint<XML>>> all) {
         this.all = new Synced<>(all);
     }
 
