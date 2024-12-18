@@ -119,7 +119,8 @@ be exposed to a user of the library:
 * `Defect` - a single defect discovered
 * `Severity` - a severity of a defect
 
-There are also a few classes that implement `Iterable<Lint>`.
+There are also a few classes that implement `Iterable<Lint>`: 
+`PkMono`, `PkWpa`, and `PkByXsl`.
 They are supposed to be used only by the `Program` and `Programs`,
 and are not supposed to be exposed to the user of the library.
 They are responsible for providing a set of lints to be executed,
