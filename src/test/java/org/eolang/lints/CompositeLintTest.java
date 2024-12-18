@@ -50,9 +50,9 @@ final class CompositeLintTest {
         final int actual = new SumOf(
             new Threads<>(
                 threads,
-                Stream.generate(() -> CompositeLintTest.task(() -> new CompositeLint(generator), latch))
-                    .limit(threads)
-                    .collect(Collectors.toList())
+                Stream.generate(
+                    () -> CompositeLintTest.task(() -> new CompositeLint(generator), latch)
+                ).limit(threads).collect(Collectors.toList())
             )
         ).intValue();
         MatcherAssert.assertThat(
