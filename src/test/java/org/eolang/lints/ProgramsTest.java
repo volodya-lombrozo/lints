@@ -25,14 +25,17 @@ package org.eolang.lints;
 
 import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
+import com.yegor256.Together;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.cactoos.io.InputOf;
+import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -60,4 +63,25 @@ final class ProgramsTest {
             Matchers.greaterThan(0)
         );
     }
+
+    @RepeatedTest(2)
+    void checksInParallel(@Mktmp final Path dir) throws IOException {
+        final Path path = dir.resolve("foo.xmir");
+        Files.write(
+            path,
+            new EoSyntax(
+                new InputOf("# first.\n[] > foo\n# second.\n[] > foo\n")
+            ).parsed().toString().getBytes(StandardCharsets.UTF_8)
+        );
+        MatcherAssert.assertThat(
+            "",
+            new SetOf<>(
+                new Together<>(
+                    thread -> new Programs(path).defects().size()
+                )
+            ).size(),
+            Matchers.equalTo(1)
+        );
+    }
+
 }
