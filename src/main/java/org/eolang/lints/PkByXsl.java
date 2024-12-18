@@ -35,11 +35,11 @@ import org.cactoos.iterable.Mapped;
 /**
  * All lints defined by XSLs.
  * @since 0.1.0
- * @todo #148:30min The {@link XslLints} class should implement {@link Lint} instead.
+ * @todo #148:30min The {@link PkByXsl} class should implement {@link Lint} instead.
  *  Currently, this class is used as an iterable of lints, but it should be used as a single lint
  *  that aggregates other lints.
  */
-final class XslLints extends IterableEnvelope<Lint<XML>> {
+final class PkByXsl extends IterableEnvelope<Lint<XML>> {
 
     /**
      * XSL extension pattern.
@@ -58,8 +58,8 @@ final class XslLints extends IterableEnvelope<Lint<XML>> {
     /**
      * Ctor.
      */
-    XslLints() {
-        super(XslLints.all());
+    PkByXsl() {
+        super(PkByXsl.all());
     }
 
     /**
@@ -73,8 +73,8 @@ final class XslLints extends IterableEnvelope<Lint<XML>> {
                 res -> new LtByXsl(
                     new InputOf(res.getInputStream()),
                     new InputOf(
-                        XslLints.XSL_PATTERN.matcher(
-                            XslLints.LINTS_PATH.matcher(
+                        PkByXsl.XSL_PATTERN.matcher(
+                            PkByXsl.LINTS_PATH.matcher(
                                 res.getURL().toString()
                             ).replaceAll("eolang/motives")
                         ).replaceAll(".md")

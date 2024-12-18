@@ -86,7 +86,8 @@ final class LtByXsl implements Lint<XML> {
         final XML xml = new XMLDocument(new IoCheckedText(new TextOf(xsl)).asString());
         this.rule = xml.xpath("/xsl:stylesheet/@id").get(0);
         this.sheet = new MeasuredXsl(
-            this.rule, new XSLDocument(xml, this.rule).with(new ClasspathSources())
+            this.rule,
+            new XSLDocument(xml, this.rule).with(new ClasspathSources())
         );
         this.doc = motive;
     }

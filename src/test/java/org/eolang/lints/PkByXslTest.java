@@ -37,16 +37,16 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Test for {@link XslLints}.
+ * Test for {@link PkByXsl}.
  *
  * @since 0.0.1
  */
-final class XslLintsTest {
+final class PkByXslTest {
 
     @Test
     void passesOnSimpleXmir() throws IOException {
         final XML xmir = new XMLDocument("<program/>");
-        for (final Lint<XML> lint : new XslLints()) {
+        for (final Lint<XML> lint : new PkByXsl()) {
             MatcherAssert.assertThat(
                 "passes with no exceptions",
                 lint.defects(xmir),
@@ -79,7 +79,7 @@ final class XslLintsTest {
 
     @Test
     void checksAllMotives() throws Exception {
-        for (final Lint<XML> lint : new XslLints()) {
+        for (final Lint<XML> lint : new PkByXsl()) {
             MatcherAssert.assertThat(
                 "Lint's motive is empty, but should not be",
                 lint.motive().isEmpty(),

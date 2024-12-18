@@ -37,8 +37,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.cactoos.iterable.Sticky;
-import org.eolang.lints.units.LtUnitTestMissing;
 
 /**
  * A collection of XMIR programs to analyze.
@@ -51,9 +49,7 @@ public final class Programs {
     /**
      * Lints to use.
      */
-    private static final Iterable<Lint<Map<String, XML>>> LINTS = new Sticky<>(
-        new LtUnitTestMissing()
-    );
+    private final Iterable<Lint<Map<String, XML>>> lints;
 
     /**
      * The package of XMIR files.
@@ -71,6 +67,10 @@ public final class Programs {
 
     /**
      * Ctor.
+     *
+     * <p>Pay attention, it's important to use {@link Collection} as a type
+     * of argument, because {@link Path} implements {@link Iterable}.</p>
+     *
      * @param dirs The directory
      * @throws IOException If fails
      */
@@ -83,7 +83,21 @@ public final class Programs {
      * @param map The map with them
      */
     public Programs(final Map<String, XML> map) {
+        this(map, new PkWpa());
+    }
+
+    /**
+     * Ctor.
+     *
+     * <p>This constructor is for internal use only. It is not supposed
+     * to be visible by end-users. Keep it this way!</p>
+     *
+     * @param map The map with them
+     * @param list The lints
+     */
+    Programs(final Map<String, XML> map, final Iterable<Lint<Map<String, XML>>> list) {
         this.pkg = Collections.unmodifiableMap(map);
+        this.lints = list;
     }
 
     /**
@@ -92,7 +106,7 @@ public final class Programs {
      */
     public Collection<Defect> defects() throws IOException {
         final Collection<Defect> messages = new LinkedList<>();
-        for (final Lint<Map<String, XML>> lint : Programs.LINTS) {
+        for (final Lint<Map<String, XML>> lint : this.lints) {
             messages.addAll(lint.defects(this.pkg));
         }
         return messages;

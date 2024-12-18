@@ -28,6 +28,7 @@ import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -46,7 +47,7 @@ public final class Program {
     /**
      * Lint to use.
      */
-    private final Lint<XML> lint;
+    private final Iterable<Lint<XML>> lints;
 
     /**
      * Ctor.
@@ -62,17 +63,21 @@ public final class Program {
      * @param xml The XMIR
      */
     public Program(final XML xml) {
-        this(xml, new CompositeLint());
+        this(xml, new PkMono());
     }
 
     /**
      * Ctor.
-     * @param xmir The XMIR
-     * @param lint The lints
+     *
+     * <p>This constructor is for internal use only. It is not supposed
+     * to be visible by end-users. Keep it this way!</p>
+     *
+     * @param xml The XMIR
+     * @param list The lints
      */
-    Program(final XML xmir, final Lint<XML> lint) {
-        this.xmir = xmir;
-        this.lint = lint;
+    Program(final XML xml, final Iterable<Lint<XML>> list) {
+        this.xmir = xml;
+        this.lints = list;
     }
 
     /**
@@ -80,6 +85,17 @@ public final class Program {
      * @return All defects found
      */
     public Collection<Defect> defects() throws IOException {
-        return this.lint.defects(this.xmir);
+        try {
+            final Collection<Defect> messages = new ArrayList<>(0);
+            for (final Lint<XML> lint : this.lints) {
+                messages.addAll(lint.defects(this.xmir));
+            }
+            return messages;
+        } catch (final IOException ex) {
+            throw new IllegalStateException(
+                "Failed to find defects in the XMIR file",
+                ex
+            );
+        }
     }
 }
