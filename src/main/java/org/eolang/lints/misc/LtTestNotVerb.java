@@ -59,7 +59,7 @@ import org.eolang.lints.Severity;
  *  it possible to get rid of this dependency and download models from the other
  *  source.
  */
-public final class UnitTestIsNotVerb implements Lint<XML> {
+public final class LtTestNotVerb implements Lint<XML> {
 
     /**
      * The pattern to split kebab case.
@@ -75,14 +75,14 @@ public final class UnitTestIsNotVerb implements Lint<XML> {
      * Ctor.
      * @param props Pipeline properties
      */
-    public UnitTestIsNotVerb(final Properties props) {
+    public LtTestNotVerb(final Properties props) {
         this(new StanfordCoreNLP(props));
     }
 
     /**
      * Ctor.
      */
-    public UnitTestIsNotVerb() {
+    public LtTestNotVerb() {
         this(defaults());
     }
 
@@ -90,7 +90,7 @@ public final class UnitTestIsNotVerb implements Lint<XML> {
      * Primary ctor.
      * @param pipe NLP pipeline
      */
-    public UnitTestIsNotVerb(final StanfordCoreNLP pipe) {
+    public LtTestNotVerb(final StanfordCoreNLP pipe) {
         this.pipeline = pipe;
     }
 
@@ -103,7 +103,7 @@ public final class UnitTestIsNotVerb implements Lint<XML> {
                 Stream
                     .concat(
                         Stream.of("It"),
-                        Arrays.stream(UnitTestIsNotVerb.KEBAB.split(name))
+                        Arrays.stream(LtTestNotVerb.KEBAB.split(name))
                     )
                     .map(s -> s.toLowerCase(Locale.ROOT))
                     .collect(Collectors.joining(" "))

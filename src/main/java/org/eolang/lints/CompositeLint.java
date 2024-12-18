@@ -35,21 +35,18 @@ import org.cactoos.iterable.Joined;
 import org.cactoos.scalar.IoChecked;
 import org.cactoos.scalar.Sticky;
 import org.cactoos.scalar.Synced;
-import org.eolang.lints.comments.AsciiOnly;
-import org.eolang.lints.misc.UnitTestIsNotVerb;
+import org.eolang.lints.comments.LtAsciiOnly;
+import org.eolang.lints.misc.LtTestNotVerb;
 
 /**
  * Program linter.
- * This class is thread-safe.
+ *
+ * <p>This class is thread-safe.</p>
+ *
  * @since 0.23
  */
 @ThreadSafe
 final class CompositeLint implements Lint<XML> {
-
-    /**
-     * Default lints.
-     */
-    private static final Scalar<Iterable<Lint<XML>>> DEFAULT = CompositeLint.linter();
 
     /**
      * All lints.
@@ -60,15 +57,15 @@ final class CompositeLint implements Lint<XML> {
      * Default ctor.
      */
     CompositeLint() {
-        this(CompositeLint.DEFAULT);
+        this(CompositeLint.linter());
     }
 
     /**
      * Ctor.
-     * @param all All lints.
+     * @param list All lints.
      */
-    CompositeLint(final Scalar<Iterable<Lint<XML>>> all) {
-        this.all = new Synced<>(all);
+    CompositeLint(final Scalar<Iterable<Lint<XML>>> list) {
+        this.all = new Synced<>(list);
     }
 
     @Override
@@ -119,8 +116,8 @@ final class CompositeLint implements Lint<XML> {
                 new Joined<Lint<XML>>(
                     new XslLints(),
                     Arrays.asList(
-                        new AsciiOnly(),
-                        new UnitTestIsNotVerb()
+                        new LtAsciiOnly(),
+                        new LtTestNotVerb()
                     )
                 )
             )

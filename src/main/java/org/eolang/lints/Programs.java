@@ -38,7 +38,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cactoos.iterable.Sticky;
-import org.eolang.lints.units.UnitTestMissing;
+import org.eolang.lints.units.LtUnitTestMissing;
 
 /**
  * A collection of XMIR programs to analyze.
@@ -52,7 +52,7 @@ public final class Programs {
      * Lints to use.
      */
     private static final Iterable<Lint<Map<String, XML>>> LINTS = new Sticky<>(
-        new UnitTestMissing()
+        new LtUnitTestMissing()
     );
 
     /**

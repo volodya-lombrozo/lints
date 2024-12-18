@@ -41,16 +41,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
- * Test for {@link UnitTestMissing}.
+ * Test for {@link LtUnitTestMissing}.
  *
  * @since 0.0.1
  */
 @ExtendWith(MktmpResolver.class)
-final class UnitTestMissingTest {
+final class LtUnitTestMissingTest {
 
     @Test
     void acceptsValidPackage() throws IOException {
-        final Collection<Defect> defects = new UnitTestMissing().defects(
+        final Collection<Defect> defects = new LtUnitTestMissing().defects(
             new MapOf<String, XML>(
                 new MapEntry<>("foo", new XMLDocument("<program/>")),
                 new MapEntry<>("foo-test", new XMLDocument("<program/>"))

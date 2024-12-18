@@ -21,67 +21,69 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.comments;
+package org.eolang.lints.misc;
 
+import com.yegor256.MayBeSlow;
 import java.io.IOException;
-import java.util.Collection;
-import org.cactoos.io.InputOf;
-import org.cactoos.list.ListOf;
-import org.eolang.lints.Defect;
+import org.cactoos.io.ResourceOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
- * Test for {@link AsciiOnly}.
+ * Tests for {@link LtTestNotVerb}.
  *
- * @since 0.0.1
+ * @since 0.0.22
  */
-final class AsciiOnlyTest {
+final class LtTestIsNotVerbTest {
 
     @Test
-    void catchesNonAsciiInComment() throws IOException {
-        final Collection<Defect> defects = new AsciiOnly().defects(
-            new EoSyntax(
-                new InputOf("# привет\n# как дела?\n[] > foo\n")
-            ).parsed()
-        );
+    @ExtendWith(MayBeSlow.class)
+    void catchesBadName() throws Exception {
         MatcherAssert.assertThat(
-            "non-ascii comment is not welcome",
-            defects,
-            Matchers.hasSize(Matchers.greaterThan(0))
-        );
-        MatcherAssert.assertThat(
-            "non-ascii comment error should contain abusive character",
-            new ListOf<>(defects).get(0).text(),
-            Matchers.is(
-                "Only ASCII characters are allowed in comments, while 'п' is used at the 3th line at the 1th position"
-            )
-        );
-    }
-
-    @Test
-    void explainsMotive() throws Exception {
-        MatcherAssert.assertThat(
-            "The motive doesn't contain expected string",
-            new AsciiOnly().motive().contains("# ASCII-Only Characters in Comment"),
-            new IsEqual<>(true)
-        );
-    }
-
-    @Test
-    void setsRuleCorrectly() throws Exception {
-        MatcherAssert.assertThat(
-            "The rule name is set right",
-            new AsciiOnly().defects(
+            "Defects size doesn't match with expected",
+            new LtTestNotVerb().defects(
                 new EoSyntax(
-                    new InputOf("# тук тук\n[] > foo\n")
+                    new ResourceOf(
+                        "org/eolang/lints/misc/test-object-is-not-verb-in-singular/bad-tests.eo"
+                    )
                 ).parsed()
-            ).iterator().next().rule(),
-            Matchers.equalTo("ascii-only")
+            ),
+            Matchers.hasSize(40)
         );
     }
 
+    @Test
+    @ExtendWith(MayBeSlow.class)
+    void allowsGoodNames() throws Exception {
+        MatcherAssert.assertThat(
+            "Defects are not empty, but they shouldn't be",
+            new LtTestNotVerb().defects(
+                new EoSyntax(
+                    new ResourceOf(
+                        "org/eolang/lints/misc/test-object-is-not-verb-in-singular/good-tests.eo"
+                    )
+                ).parsed()
+            ),
+            Matchers.hasSize(0)
+        );
+    }
+
+    @Test
+    @ExtendWith(MayBeSlow.class)
+    void lintsRegexTests() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects size doesn't match with expected",
+            new LtTestNotVerb().defects(
+                new EoSyntax(
+                    new ResourceOf(
+                        "org/eolang/lints/misc/test-object-is-not-verb-in-singular/regex-tests.eo"
+                    )
+                ).parsed()
+            ),
+            Matchers.hasSize(12)
+        );
+    }
 }

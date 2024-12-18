@@ -42,7 +42,7 @@ import org.cactoos.text.TextOf;
  *
  * @since 0.0.1
  */
-final class LintByXsl implements Lint<XML> {
+final class LtByXsl implements Lint<XML> {
 
     /**
      * The name of the rule.
@@ -64,7 +64,7 @@ final class LintByXsl implements Lint<XML> {
      * @param xsl Relative path of XSL
      * @throws IOException If fails
      */
-    LintByXsl(final String xsl) throws IOException {
+    LtByXsl(final String xsl) throws IOException {
         this(
             new ResourceOf(
                 String.format("org/eolang/lints/%s.xsl", xsl)
@@ -82,7 +82,7 @@ final class LintByXsl implements Lint<XML> {
      * @throws IOException If fails
      */
     @SuppressWarnings("PMD.ConstructorOnlyInitializesOrCallOtherConstructors")
-    LintByXsl(final Input xsl, final Input motive) throws IOException {
+    LtByXsl(final Input xsl, final Input motive) throws IOException {
         final XML xml = new XMLDocument(new IoCheckedText(new TextOf(xsl)).asString());
         this.rule = xml.xpath("/xsl:stylesheet/@id").get(0);
         this.sheet = new MeasuredXsl(

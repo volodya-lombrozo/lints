@@ -70,7 +70,7 @@ final class XslLints extends IterableEnvelope<Lint<XML>> {
     private static Iterable<Lint<XML>> all() {
         try {
             return new Mapped<>(
-                res -> new LintByXsl(
+                res -> new LtByXsl(
                     new InputOf(res.getInputStream()),
                     new InputOf(
                         XslLints.XSL_PATTERN.matcher(

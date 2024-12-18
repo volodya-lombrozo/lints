@@ -44,17 +44,17 @@ import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
 
 /**
- * Test for {@link LintByXsl}.
+ * Test for {@link LtByXsl}.
  *
  * @since 0.0.1
  */
-final class LintByXslTest {
+final class LtByXslTest {
 
     @Test
     void lintsOneFile() throws IOException {
         MatcherAssert.assertThat(
             "the objects is found",
-            new LintByXsl("critical/duplicate-names").defects(
+            new LtByXsl("critical/duplicate-names").defects(
                 new EoSyntax(
                     new InputOf("# first\n[] > foo\n# first\n[] > foo\n")
                 ).parsed()
@@ -82,7 +82,7 @@ final class LintByXslTest {
     void returnsMotive() throws Exception {
         MatcherAssert.assertThat(
             "The motive was not found or empty",
-            new LintByXsl("critical/duplicate-names").motive().isEmpty(),
+            new LtByXsl("critical/duplicate-names").motive().isEmpty(),
             new IsEqual<>(false)
         );
     }

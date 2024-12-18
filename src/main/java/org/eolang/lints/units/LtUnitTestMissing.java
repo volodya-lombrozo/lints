@@ -37,7 +37,7 @@ import org.eolang.lints.Severity;
  *
  * @since 0.1.0
  */
-public final class UnitTestMissing implements Lint<Map<String, XML>> {
+public final class LtUnitTestMissing implements Lint<Map<String, XML>> {
 
     @Override
     public Collection<Defect> defects(final Map<String, XML> pkg) throws IOException {

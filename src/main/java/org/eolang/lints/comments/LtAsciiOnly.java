@@ -47,7 +47,7 @@ import org.eolang.lints.Severity;
  *  (Java package name, e.g. `comments`).
  * @checkstyle StringLiteralsConcatenationCheck (30 lines)
  */
-public final class AsciiOnly implements Lint<XML> {
+public final class LtAsciiOnly implements Lint<XML> {
 
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
