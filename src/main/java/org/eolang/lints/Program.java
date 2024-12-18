@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import org.cactoos.iterable.Sticky;
+import org.cactoos.iterable.Synced;
 
 /**
  * A single XMIR program to analyze.
@@ -38,6 +40,15 @@ import java.util.Collection;
  * @since 0.1.0
  */
 public final class Program {
+
+    /**
+     * Collection of mono lints, preloaded on JVM start.
+     */
+    private static final Iterable<Lint<XML>> MONO = new Synced<>(
+        new Sticky<>(
+            new PkMono()
+        )
+    );
 
     /**
      * The XMIR program to analyze.
@@ -63,7 +74,7 @@ public final class Program {
      * @param xml The XMIR
      */
     public Program(final XML xml) {
-        this(xml, new PkMono());
+        this(xml, Program.MONO);
     }
 
     /**

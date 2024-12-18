@@ -28,12 +28,12 @@ import java.util.Arrays;
 import javax.annotation.concurrent.ThreadSafe;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Joined;
-import org.cactoos.iterable.Sticky;
 import org.eolang.lints.comments.LtAsciiOnly;
 import org.eolang.lints.misc.LtTestNotVerb;
 
 /**
- * Collection of lints for individual XML files.
+ * Collection of lints for individual XML files, provided
+ * by the {@link Program} class.
  *
  * <p>This class is thread-safe.</p>
  *
@@ -47,13 +47,11 @@ final class PkMono extends IterableEnvelope<Lint<XML>> {
      */
     PkMono() {
         super(
-            new Sticky<>(
-                new Joined<Lint<XML>>(
-                    new PkByXsl(),
-                    Arrays.asList(
-                        new LtAsciiOnly(),
-                        new LtTestNotVerb()
-                    )
+            new Joined<Lint<XML>>(
+                new PkByXsl(),
+                Arrays.asList(
+                    new LtAsciiOnly(),
+                    new LtTestNotVerb()
                 )
             )
         );

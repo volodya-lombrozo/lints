@@ -27,11 +27,13 @@ import com.jcabi.xml.XML;
 import java.util.Map;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.list.ListOf;
-import org.cactoos.list.Synced;
 import org.eolang.lints.units.LtUnitTestMissing;
 
 /**
- * A collection of lints for Whole Program Analysis (WPA).
+ * A collection of lints for Whole Program Analysis (WPA),
+ * provided by the {@link Programs} class.
+ *
+ * <p>This class is thread-safe.</p>
  *
  * @since 0.1.0
  */
@@ -42,10 +44,8 @@ public final class PkWpa extends IterableEnvelope<Lint<Map<String, XML>>> {
      */
     public PkWpa() {
         super(
-            new Synced<>(
-                new ListOf<>(
-                    new LtUnitTestMissing()
-                )
+            new ListOf<>(
+                new LtUnitTestMissing()
             )
         );
     }

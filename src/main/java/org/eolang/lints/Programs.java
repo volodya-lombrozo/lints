@@ -37,6 +37,9 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.cactoos.iterable.Sticky;
+import org.cactoos.list.ListOf;
+import org.cactoos.list.Synced;
 
 /**
  * A collection of XMIR programs to analyze.
@@ -45,6 +48,17 @@ import java.util.stream.Stream;
  * @since 0.1.0
  */
 public final class Programs {
+
+    /**
+     * Collection of mono lints, preloaded on JVM start.
+     */
+    private static final Iterable<Lint<Map<String, XML>>> WPA = new Synced<>(
+        new ListOf<>(
+            new Sticky<>(
+                new PkWpa()
+            )
+        )
+    );
 
     /**
      * Lints to use.
@@ -83,7 +97,7 @@ public final class Programs {
      * @param map The map with them
      */
     public Programs(final Map<String, XML> map) {
-        this(map, new PkWpa());
+        this(map, Programs.WPA);
     }
 
     /**
