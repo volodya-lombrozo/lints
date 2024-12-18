@@ -34,8 +34,10 @@ import org.cactoos.iterable.Mapped;
 
 /**
  * All lints defined by XSLs.
- *
  * @since 0.1.0
+ * @todo #148:30min The {@link XslLints} class should implement {@link Lint} instead.
+ *  Currently, this class is used as an iterable of lints, but it should be used as a single lint
+ *  that aggregates other lints.
  */
 final class XslLints extends IterableEnvelope<Lint<XML>> {
 
@@ -47,7 +49,7 @@ final class XslLints extends IterableEnvelope<Lint<XML>> {
     );
 
     /**
-     * Lints path pattern.
+     * Lint paths pattern.
      */
     private static final Pattern LINTS_PATH = Pattern.compile(
         "eolang/lints", Pattern.LITERAL
@@ -88,5 +90,4 @@ final class XslLints extends IterableEnvelope<Lint<XML>> {
             throw new IllegalArgumentException(ex);
         }
     }
-
 }

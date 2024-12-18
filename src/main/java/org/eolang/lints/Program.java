@@ -29,10 +29,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.LinkedList;
-import org.cactoos.Scalar;
-import org.cactoos.scalar.IoChecked;
-import org.cactoos.scalar.Sticky;
 
 /**
  * A single XMIR program to analyze.
@@ -43,44 +39,47 @@ import org.cactoos.scalar.Sticky;
 public final class Program {
 
     /**
-     * Lints to use.
-     */
-    private static final Scalar<Iterable<Lint<XML>>> LINTS = new Sticky<>(
-        () -> new ProgramLints().value()
-    );
-
-    /**
      * The XMIR program to analyze.
      */
     private final XML xmir;
 
     /**
-     * Ctor.
-     * @param xml The XMIR
+     * Lint to use.
      */
-    public Program(final XML xml) {
-        this.xmir = xml;
-    }
+    private final Lint<XML> lint;
 
     /**
      * Ctor.
      * @param file The absolute path of the XMIR file
-     * @throws FileNotFoundException If file not found
+     * @throws FileNotFoundException If file isn't found
      */
     public Program(final Path file) throws FileNotFoundException {
         this(new XMLDocument(file));
     }
 
     /**
-     * Find defects possible defects in the XMIR file.
+     * Ctor.
+     * @param xml The XMIR
+     */
+    public Program(final XML xml) {
+        this(xml, new CompositeLint());
+    }
+
+    /**
+     * Ctor.
+     * @param xmir The XMIR
+     * @param lint The lints
+     */
+    Program(final XML xmir, final Lint<XML> lint) {
+        this.xmir = xmir;
+        this.lint = lint;
+    }
+
+    /**
+     * Find defects possible defects in the XM§IR file.
      * @return All defects found
      */
     public Collection<Defect> defects() throws IOException {
-        final Collection<Defect> messages = new LinkedList<>();
-        for (final Lint<XML> lint : new IoChecked<>(Program.LINTS).value()) {
-            messages.addAll(lint.defects(this.xmir));
-        }
-        return messages;
+        return this.lint.defects(this.xmir);
     }
-
 }
