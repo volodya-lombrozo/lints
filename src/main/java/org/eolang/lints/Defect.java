@@ -35,12 +35,6 @@ public interface Defect {
     /**
      * Rule.
      * @return Unique name of the rule
-     * @todo #148:30min Test or remove {@link Defect#rule()} method.
-     *  This method is not used by any class in the project.
-     *  Moreover, we don't even have a test for it.
-     *  We should either test it or remove it.
-     *  Actually, this method is used
-     *  <a href="https://github.com/objectionary/lints/pull/150/files#r1888310583">somewhere</a>
      */
     String rule();
 
