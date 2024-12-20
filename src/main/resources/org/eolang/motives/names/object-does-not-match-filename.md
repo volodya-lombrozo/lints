@@ -9,10 +9,12 @@ Incorrect:
 
 ```eo
 # Foo.
-[] > bar
+[] > foo
 ```
 
 Correct:
+
+`foo.eo`:
 
 ```eo
 # Foo.
