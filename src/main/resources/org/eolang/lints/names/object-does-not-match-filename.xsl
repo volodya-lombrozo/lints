@@ -28,11 +28,11 @@ SOFTWARE.
   <xsl:variable name="tested" select="/program/metas/meta[head='tests']"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="/program/objects/o" mode="with-data"/>
+      <xsl:apply-templates select="/program/objects/o[@name != $filename]" mode="with-data"/>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="with-data">
-    <xsl:if test="not($tested) and @name != $filename">
+    <xsl:if test="not($tested)">
       <defect>
         <xsl:attribute name="line">
           <xsl:value-of select="if (@line) then @line else '0'"/>
