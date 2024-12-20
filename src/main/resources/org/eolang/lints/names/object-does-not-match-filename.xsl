@@ -25,13 +25,14 @@ SOFTWARE.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" id="object-does-not-match-filename">
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:variable name="filename" select="/program/@name"/>
+  <xsl:variable name="tested" select="/program/metas/meta[head='tests']"/>
   <xsl:template match="/">
     <defects>
       <xsl:apply-templates select="/program/objects/o" mode="with-data"/>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="with-data">
-    <xsl:if test="@name != $filename">
+    <xsl:if test="not($tested) and @name != $filename">
       <defect>
         <xsl:attribute name="line">
           <xsl:value-of select="if (@line) then @line else '0'"/>
