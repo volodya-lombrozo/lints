@@ -23,7 +23,7 @@
 sheets:
   - /org/eolang/lints/names/object-does-not-match-filename.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=0]
+  - /defects[count(defect[@severity='warning'])=1]
 document: |
   <program name="bar">
     <objects>

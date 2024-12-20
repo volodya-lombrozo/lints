@@ -24,7 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" id="object-does-not-match-filename">
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:variable name="filename" select="/program[@name]"/>
+  <xsl:variable name="filename" select="/program/@name"/>
   <xsl:template match="/">
     <defects>
       <xsl:apply-templates select="/program/objects/o" mode="with-data"/>
