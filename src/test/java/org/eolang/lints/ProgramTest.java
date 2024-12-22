@@ -83,7 +83,8 @@ final class ProgramTest {
                             "+version 0.0.0",
                             "",
                             "# This is just a test object with no functionality.",
-                            "[] > foo\n"
+                            "[] > foo\n",
+                            "  42 > x"
                         )
                     )
                 ).parsed()
