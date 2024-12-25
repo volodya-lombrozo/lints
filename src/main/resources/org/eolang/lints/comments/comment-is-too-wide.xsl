@@ -29,7 +29,7 @@ SOFTWARE.
     <defects>
       <xsl:for-each select="/program/comments/comment">
         <xsl:variable name="line" select="if (@line) then @line else '0'"/>
-        <xsl:variable name="lines" select="tokenize(replace(., '\\n', '&#xA;'), '&#xA;')"/>
+        <xsl:variable name="lines" select="tokenize(replace(., '\\n', '&#10;'), '&#10;')"/>
         <xsl:choose>
           <xsl:when test="count($lines) &gt; 1">
             <xsl:for-each select="$lines[string-length(.) &gt; $max]">
