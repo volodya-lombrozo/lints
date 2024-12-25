@@ -27,7 +27,7 @@ SOFTWARE.
   <xsl:template match="/">
     <xsl:variable name="min" select="32"/>
     <defects>
-      <xsl:for-each select="/program/comments/comment[not(ends-with(., '.'))]">
+      <xsl:for-each select="/program/comments/comment[not(ends-with(., '.')) and not(ends-with(., '?')) and not(ends-with(., '!')) and not(ends-with(., ':'))]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="if (@line) then @line else '0'"/>
@@ -35,7 +35,7 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
           </xsl:attribute>
-          <xsl:text>The comment for the object doesn't end with a dot</xsl:text>
+          <xsl:text>The comment for the object doesn't end with a dot (or '?', '!', ':')</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>
