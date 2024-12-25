@@ -26,10 +26,10 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="//o[@atom]" mode="with-data"/>
+      <xsl:apply-templates select="//o[@atom]" mode="atom"/>
     </defects>
   </xsl:template>
-  <xsl:template match="o" mode="with-data">
+  <xsl:template match="o" mode="atom">
     <xsl:variable name="data" select="normalize-space(string-join(text(), ''))"/>
     <xsl:if test="$data != ''">
       <defect>
