@@ -27,20 +27,45 @@ SOFTWARE.
   <xsl:template match="/">
     <xsl:variable name="max" select="80"/>
     <defects>
-      <xsl:for-each select="/program/comments/comment[string-length(.) &gt; $max]">
-        <xsl:element name="defect">
-          <xsl:attribute name="line">
-            <xsl:value-of select="if (@line) then @line else '0'"/>
-          </xsl:attribute>
-          <xsl:attribute name="severity">
-            <xsl:text>warning</xsl:text>
-          </xsl:attribute>
-          <xsl:text>The comment width is "</xsl:text>
-          <xsl:value-of select="string-length(.)"/>
-          <xsl:text>", while "</xsl:text>
-          <xsl:value-of select="$max"/>
-          <xsl:text>" is max allowed</xsl:text>
-        </xsl:element>
+      <xsl:for-each select="/program/comments/comment">
+        <xsl:variable name="line" select="if (@line) then @line else '0'"/>
+        <xsl:variable name="lines" select="tokenize(replace(., '\\n', '&#xA;'), '&#xA;')"/>
+        <xsl:choose>
+          <xsl:when test="count($lines) &gt; 1">
+            <xsl:for-each select="$lines[string-length(.) &gt; $max]">
+                <xsl:element name="defect">
+                  <xsl:attribute name="line">
+                    <xsl:value-of select="$line"/>
+                  </xsl:attribute>
+                  <xsl:attribute name="severity">
+                    <xsl:text>warning</xsl:text>
+                  </xsl:attribute>
+                  <xsl:text>The comment line width is "</xsl:text>
+                  <xsl:value-of select="string-length(.)"/>
+                  <xsl:text>", while "</xsl:text>
+                  <xsl:value-of select="$max"/>
+                  <xsl:text>" is max allowed</xsl:text>
+                </xsl:element>
+            </xsl:for-each>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:if test="string-length(.) &gt; $max">
+              <xsl:element name="defect">
+                <xsl:attribute name="line">
+                  <xsl:value-of select="$line"/>
+                </xsl:attribute>
+                <xsl:attribute name="severity">
+                  <xsl:text>warning</xsl:text>
+                </xsl:attribute>
+                <xsl:text>The comment width is "</xsl:text>
+                <xsl:value-of select="string-length(.)"/>
+                <xsl:text>", while "</xsl:text>
+                <xsl:value-of select="$max"/>
+                <xsl:text>" is max allowed</xsl:text>
+              </xsl:element>
+            </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:for-each>
     </defects>
   </xsl:template>
