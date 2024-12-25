@@ -33,19 +33,19 @@ SOFTWARE.
         <xsl:choose>
           <xsl:when test="count($lines) &gt; 1">
             <xsl:for-each select="$lines[string-length(.) &gt; $max]">
-                <xsl:element name="defect">
-                  <xsl:attribute name="line">
-                    <xsl:value-of select="$line"/>
-                  </xsl:attribute>
-                  <xsl:attribute name="severity">
-                    <xsl:text>warning</xsl:text>
-                  </xsl:attribute>
-                  <xsl:text>The comment line width is "</xsl:text>
-                  <xsl:value-of select="string-length(.)"/>
-                  <xsl:text>", while "</xsl:text>
-                  <xsl:value-of select="$max"/>
-                  <xsl:text>" is max allowed</xsl:text>
-                </xsl:element>
+              <xsl:element name="defect">
+                <xsl:attribute name="line">
+                  <xsl:value-of select="$line"/>
+                </xsl:attribute>
+                <xsl:attribute name="severity">
+                  <xsl:text>warning</xsl:text>
+                </xsl:attribute>
+                <xsl:text>The comment line width is "</xsl:text>
+                <xsl:value-of select="string-length(.)"/>
+                <xsl:text>", while "</xsl:text>
+                <xsl:value-of select="$max"/>
+                <xsl:text>" is max allowed</xsl:text>
+              </xsl:element>
             </xsl:for-each>
           </xsl:when>
           <xsl:otherwise>
