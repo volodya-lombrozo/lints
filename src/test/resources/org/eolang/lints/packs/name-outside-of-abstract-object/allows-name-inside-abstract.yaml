@@ -27,7 +27,7 @@ asserts:
 document: |
   <program>
     <objects>
-      <o abstract="">
+      <o>
         <o name="bar"/>
       </o>
     </objects>

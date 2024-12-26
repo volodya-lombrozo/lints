@@ -26,7 +26,7 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="//o[@name and not(../@abstract)]" mode="named"/>
+      <xsl:apply-templates select="//o[@name and ../@base]" mode="named"/>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="named">
@@ -35,7 +35,7 @@ SOFTWARE.
         <xsl:value-of select="if (@line) then @line else '0'"/>
       </xsl:attribute>
       <xsl:attribute name="severity">critical</xsl:attribute>
-      <xsl:text>The "@name" attribute may only be present if the parent of the object has @abstract attribute</xsl:text>
+      <xsl:text>The "@name" attribute may only be present if the parent of the object is abstract</xsl:text>
     </defect>
   </xsl:template>
 </xsl:stylesheet>

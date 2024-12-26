@@ -14,7 +14,7 @@ Incorrect:
 Correct:
 
 ```xml
-<o abstract="">
+<o>
   <o name="bar"/>
 </o>
 ```
