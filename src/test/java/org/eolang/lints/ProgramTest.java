@@ -194,7 +194,7 @@ final class ProgramTest {
     }
 
     @Test
-    void doesNotThrowIOException() {
+    void doesNotThrowIoException() {
         Assertions.assertDoesNotThrow(
             () ->
                 new Program(
