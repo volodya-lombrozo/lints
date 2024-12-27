@@ -24,7 +24,7 @@ sheets:
   - /org/eolang/lints/errors/empty-object.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='60.50.301']
+  - /defects/defect[@line='0']
 document: |
   <program>
     <objects>

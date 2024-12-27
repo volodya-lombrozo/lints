@@ -29,7 +29,7 @@ SOFTWARE.
       <xsl:for-each select="//o[not(o)]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:value-of select="if (@line) then @line else '0'"/>
+            <xsl:value-of select="if (@line and not(number(@line) = NaN) and number(@line) = number(@line)) then @line else '0'"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
