@@ -26,17 +26,15 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="/program/metas/meta[head = 'package' and tail = '']">
-        <xsl:element name="defect">
+      <xsl:for-each select="/program/metas/meta[head = 'package' and tail = '']">
+        <defect>
           <xsl:attribute name="line">
-            <xsl:text>0</xsl:text>
+            <xsl:value-of select="@line"/>
           </xsl:attribute>
-          <xsl:attribute name="severity">
-            <xsl:text>critical</xsl:text>
-          </xsl:attribute>
+          <xsl:attribute name="severity">critical</xsl:attribute>
           <xsl:text>The +package meta must have a tail</xsl:text>
-        </xsl:element>
-      </xsl:if>
+        </defect>
+      </xsl:for-each>
     </defects>
   </xsl:template>
 </xsl:stylesheet>
