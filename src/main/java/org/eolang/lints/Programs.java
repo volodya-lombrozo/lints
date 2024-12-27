@@ -118,10 +118,21 @@ public final class Programs {
      * Find defects possible defects in the XMIR file.
      * @return All defects found
      */
-    public Collection<Defect> defects() throws IOException {
+    public Collection<Defect> defects() {
         final Collection<Defect> messages = new LinkedList<>();
         for (final Lint<Map<String, XML>> lint : this.lints) {
-            messages.addAll(lint.defects(this.pkg));
+            try {
+                messages.addAll(lint.defects(this.pkg));
+            } catch (final IOException exception) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Failed to find defects in the '%s' package with '%s' lint",
+                        this.pkg,
+                        lint
+                    ),
+                    exception
+                );
+            }
         }
         return messages;
     }

@@ -31,10 +31,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.cactoos.io.InputOf;
+import org.cactoos.list.ListOf;
 import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -81,6 +83,14 @@ final class ProgramsTest {
                 )
             ).size(),
             Matchers.equalTo(1)
+        );
+    }
+
+    @Test
+    void doesNotThrowIoException() {
+        Assertions.assertDoesNotThrow(
+            () -> new Programs(new ListOf<>()).defects(),
+            "Exception was thrown, but it should not be"
         );
     }
 
