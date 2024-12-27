@@ -24,6 +24,7 @@ sheets:
   - /org/eolang/lints/metas/architect-duplicate.xsl
 asserts:
   - /defects[count(defect[@severity='error'])=1]
+  - /defects/defect[@line='2']
 input: |
   +architect jeff@google.com
   +architect ivan@google.com

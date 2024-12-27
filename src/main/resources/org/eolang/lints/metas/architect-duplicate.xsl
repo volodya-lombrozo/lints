@@ -29,7 +29,7 @@ SOFTWARE.
       <xsl:if test="count(/program/metas/meta[head ='architect'])&gt;1">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:text>0</xsl:text>
+            <xsl:value-of select="/program/metas/meta[head = 'architect'][2]/@line"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
