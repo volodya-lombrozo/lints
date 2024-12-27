@@ -45,6 +45,7 @@ import org.eolang.parser.EoSyntax;
 import org.eolang.parser.TrParsing;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -189,6 +190,17 @@ final class ProgramTest {
             String.format("no errors in canonical code in %s", xmir),
             new Program(xmir).defects(),
             Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void doesNotThrowIoException() {
+        Assertions.assertDoesNotThrow(
+            () ->
+                new Program(
+                    new XMLDocument("<program/>")
+                ).defects(),
+            "Exception was thrown, but it should not be"
         );
     }
 

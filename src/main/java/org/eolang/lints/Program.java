@@ -95,7 +95,7 @@ public final class Program {
      * Find defects possible defects in the XM§IR file.
      * @return All defects found
      */
-    public Collection<Defect> defects() throws IOException {
+    public Collection<Defect> defects() {
         try {
             final Collection<Defect> messages = new ArrayList<>(0);
             for (final Lint<XML> lint : this.lints) {
