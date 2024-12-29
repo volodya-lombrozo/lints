@@ -92,7 +92,7 @@ public final class Program {
     }
 
     /**
-     * Find defects possible defects in the XM§IR file.
+     * Find defects possible defects in the XMIR file.
      * @return All defects found
      */
     public Collection<Defect> defects() throws IOException {
