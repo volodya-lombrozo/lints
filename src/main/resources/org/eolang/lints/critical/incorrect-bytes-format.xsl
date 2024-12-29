@@ -22,7 +22,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" id="incorrect-bytes-format">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" version="2.0" id="incorrect-bytes-format">
+  <xsl:import href="/org/eolang/_funcs/_lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -34,7 +35,7 @@ SOFTWARE.
     <xsl:if test="$bytes != '' and not(matches($bytes, '^(--|[0-9A-F]{2}(-|(-[0-9A-F]{2})+))$'))">
       <defect>
         <xsl:attribute name="line">
-          <xsl:value-of select="if (@line) then @line else '0'"/>
+          <xsl:value-of select="eo:lineno(@line)"/>
         </xsl:attribute>
         <xsl:attribute name="severity">critical</xsl:attribute>
         <xsl:text>The format of bytes is incorrect: "</xsl:text>

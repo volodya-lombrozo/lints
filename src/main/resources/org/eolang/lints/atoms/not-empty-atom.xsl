@@ -22,14 +22,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="not-empty-atom" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="not-empty-atom" version="2.0">
+  <xsl:import href="/org/eolang/_funcs/_lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="//o[@atom and o[@base and @base!='∅']]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:value-of select="if (@line) then @line else '0'"/>
+            <xsl:value-of select="eo:lineno(@line)"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>

@@ -22,7 +22,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0" id="object-has-data">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" version="2.0" id="object-has-data">
+  <xsl:import href="/org/eolang/_funcs/_lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -34,7 +35,7 @@ SOFTWARE.
     <xsl:if test="$data != '' and not(@base)">
       <defect>
         <xsl:attribute name="line">
-          <xsl:value-of select="if (@line) then @line else '0'"/>
+          <xsl:value-of select="eo:lineno(@line)"/>
         </xsl:attribute>
         <xsl:attribute name="severity">critical</xsl:attribute>
         <xsl:text>Only objects with their @base attributes containing 'org.eolang.bytes' may contain data, while this object doesn't have @base attribute at all</xsl:text>
@@ -43,7 +44,7 @@ SOFTWARE.
     <xsl:if test="$data != '' and @base and not(@base = 'bytes' or @base = 'org.eolang.bytes')">
       <defect>
         <xsl:attribute name="line">
-          <xsl:value-of select="if (@line) then @line else '0'"/>
+          <xsl:value-of select="eo:lineno(@line)"/>
         </xsl:attribute>
         <xsl:attribute name="severity">critical</xsl:attribute>
         <xsl:text>Only objects with their @base attributes containing 'org.eolang.bytes' may contain data, while this object contains "</xsl:text>

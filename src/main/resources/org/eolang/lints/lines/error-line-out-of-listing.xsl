@@ -22,7 +22,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="error-line-out-of-listing" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="error-line-out-of-listing" version="2.0">
+  <xsl:import href="/org/eolang/_funcs/_lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:variable name="max" select="count(tokenize(/program/listing, '&#10;'))"/>
   <xsl:template match="/">
@@ -30,13 +31,13 @@ SOFTWARE.
       <xsl:for-each select="/program/errors/error[number(@line) and @line &gt; $max]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:value-of select="@line"/>
+            <xsl:value-of select="eo:lineno(@line)"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
           <xsl:text>The line "</xsl:text>
-          <xsl:value-of select="@line"/>
+          <xsl:value-of select="eo:lineno(@line)"/>
           <xsl:text>" is out of listing, which contains only </xsl:text>
           <xsl:value-of select="$max"/>
           <xsl:text> lines</xsl:text>
