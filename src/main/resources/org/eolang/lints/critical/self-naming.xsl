@@ -23,6 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" id="self-naming" version="2.0">
+  <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <!-- x > x -->
   <xsl:function name="eo:base-eq-name" as="xs:boolean">
@@ -49,7 +50,7 @@ SOFTWARE.
       <xsl:for-each select="//o[@name and @base and (eo:base-eq-name(.) or eo:with-this(.) or eo:with-method(.) or eo:with-method-and-this(.))]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:value-of select="if (@line) then @line else '0'"/>
+            <xsl:value-of select="eo:lineno(@line)"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>

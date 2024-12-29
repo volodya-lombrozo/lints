@@ -22,7 +22,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="comment-not-capitalized" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="comment-not-capitalized" version="2.0">
+  <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <xsl:variable name="min" select="32"/>
@@ -30,7 +31,7 @@ SOFTWARE.
       <xsl:for-each select="/program/comments/comment[not(matches(., '^[A-Z]'))]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
-            <xsl:value-of select="if (@line) then @line else '0'"/>
+            <xsl:value-of select="eo:lineno(@line)"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
