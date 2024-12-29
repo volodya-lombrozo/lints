@@ -81,6 +81,11 @@ public final class LtAsciiOnly implements Lint<XML> {
     }
 
     @Override
+    public String name() {
+        return "ascii-only";
+    }
+
+    @Override
     public String motive() throws Exception {
         return new TextOf(
             new ResourceOf("org/eolang/motives/comments/ascii-only.md")

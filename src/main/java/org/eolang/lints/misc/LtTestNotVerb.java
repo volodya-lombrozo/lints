@@ -140,6 +140,11 @@ public final class LtTestNotVerb implements Lint<XML> {
         ).asString();
     }
 
+    @Override
+    public String name() {
+        return "unit-test-is-not-verb";
+    }
+
     /**
      * Prestructor for default properties.
      * @return Properties.

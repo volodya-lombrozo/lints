@@ -63,6 +63,11 @@ public final class LtUnitTestMissing implements Lint<Map<String, XML>> {
     }
 
     @Override
+    public String name() {
+        return "unit-test-missing";
+    }
+
+    @Override
     public String motive() throws Exception {
         return "";
     }

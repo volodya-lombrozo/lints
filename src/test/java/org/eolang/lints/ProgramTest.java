@@ -260,6 +260,7 @@ final class ProgramTest {
 
     /**
      * Benchmarked program.
+     * @since 0.0.29
      */
     final class BcProgram {
 
