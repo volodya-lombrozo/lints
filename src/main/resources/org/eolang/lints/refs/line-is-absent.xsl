@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="line-is-absent" version="2.0">
-  <xsl:import href="/org/eolang/_funcs/_lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <!--
   Here we go through all objects and find what their @base
   are referring to. If we find the object they refer to,

@@ -22,7 +22,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="schema-is-absent" version="2.0">
+<xsl:stylesheet xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="schema-is-absent" version="2.0">
+  <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -32,7 +33,7 @@ SOFTWARE.
   <xsl:template match="/program[not(@xsi:noNamespaceSchemaLocation)]">
     <xsl:element name="defect">
       <xsl:attribute name="line">
-        <xsl:text>0</xsl:text>
+        <xsl:value-of select="eo:lineno(@line)"/>
       </xsl:attribute>
       <xsl:attribute name="severity">
         <xsl:text>critical</xsl:text>
