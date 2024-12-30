@@ -45,13 +45,13 @@ public final class LtIncorrectAlias implements Lint<XML> {
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML alias : xmir.nodes("//meta[head='alias']/tail")) {
-            final String pkg = xmir.nodes("//meta[head='package']/tail")
-                .get(0)
-                .xpath("text()")
-                .get(0);
+            if (!"1".equals(xmir.xpath("count(//meta[head='package'])").get(0))) {
+                continue;
+            }
             final String pointer = alias.xpath("text()").get(0);
             final Path candidate = Path.of(
-                pkg, String.format("%s.xmir", pointer)
+                xmir.xpath("//meta[head='package']/tail/text()").get(0),
+                String.format("%s.xmir", pointer)
             );
             if (!Files.exists(candidate)) {
                 defects.add(

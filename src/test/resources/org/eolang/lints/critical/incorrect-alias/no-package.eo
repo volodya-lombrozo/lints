@@ -1,0 +1,5 @@
++alias foo
+
+# Bar.
+[] > bar
+  foo > @

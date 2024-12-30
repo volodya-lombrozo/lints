@@ -66,4 +66,19 @@ final class LtIncorrectAliasTest {
             Matchers.hasSize(0)
         );
     }
+
+    @Test
+    void ignoresAbsenceOfPackage() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects aren't empty, but should be",
+            new LtIncorrectAlias().defects(
+                new EoSyntax(
+                    new ResourceOf(
+                        "org/eolang/lints/critical/incorrect-alias/no-package.eo"
+                    )
+                ).parsed()
+            ),
+            Matchers.hasSize(0)
+        );
+    }
 }
