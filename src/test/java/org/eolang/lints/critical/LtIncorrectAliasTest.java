@@ -30,6 +30,8 @@ import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests for {@link LtIncorrectAlias}.
@@ -72,8 +74,14 @@ final class LtIncorrectAliasTest {
         );
     }
 
-    @Test
-    void passesIfNoAliasInTheProgram() throws IOException {
+    @ParameterizedTest
+    @ValueSource(
+        strings = {
+            "no-aliases.eo",
+            "no-package.eo",
+        }
+    )
+    void passesIfProgramIsBroken(final String name) throws IOException {
         MatcherAssert.assertThat(
             "Defects aren't empty, but should be",
             new LtIncorrectAlias(
@@ -81,24 +89,10 @@ final class LtIncorrectAliasTest {
             ).defects(
                 new EoSyntax(
                     new ResourceOf(
-                        "org/eolang/lints/critical/incorrect-alias/no-aliases.eo"
-                    )
-                ).parsed()
-            ),
-            Matchers.hasSize(0)
-        );
-    }
-
-    @Test
-    void ignoresAbsenceOfPackage() throws IOException {
-        MatcherAssert.assertThat(
-            "Defects aren't empty, but should be",
-            new LtIncorrectAlias(
-                Paths.get("src/test/resources/org/eolang/lints/critical/incorrect-alias")
-            ).defects(
-                new EoSyntax(
-                    new ResourceOf(
-                        "org/eolang/lints/critical/incorrect-alias/no-package.eo"
+                        String.format(
+                            "org/eolang/lints/critical/incorrect-alias/%s",
+                            name
+                        )
                     )
                 ).parsed()
             ),
