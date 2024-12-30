@@ -78,7 +78,7 @@ final class LtIncorrectAliasTest {
     @ValueSource(
         strings = {
             "no-aliases.eo",
-            "no-package.eo",
+            "no-package.eo"
         }
     )
     void passesIfProgramIsBroken(final String name) throws IOException {
