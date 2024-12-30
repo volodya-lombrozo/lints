@@ -59,7 +59,7 @@ public final class LtIncorrectAlias implements Lint<XML> {
                         "incorrect-alias",
                         Severity.CRITICAL,
                         xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
-                        0,
+                        Integer.parseInt(xmir.xpath("//meta[head='alias'][1]/@line").get(0)),
                         String.format(
                             "Incorrect pointing alias '%s', there is no %s",
                             pointer,
@@ -76,7 +76,7 @@ public final class LtIncorrectAlias implements Lint<XML> {
     public String motive() throws Exception {
         return new TextOf(
             new ResourceOf(
-                "org/eolang/motives/critical/broken-alias.md"
+                "org/eolang/motives/critical/incorrect-alias.md"
             )
         ).asString();
     }
