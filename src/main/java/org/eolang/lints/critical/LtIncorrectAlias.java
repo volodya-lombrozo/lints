@@ -24,7 +24,6 @@
 package org.eolang.lints.critical;
 
 import com.jcabi.xml.XML;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -41,8 +40,21 @@ import org.eolang.lints.Severity;
  */
 public final class LtIncorrectAlias implements Lint<XML> {
 
+    /**
+     * Base path.
+     */
+    private final Path base;
+
+    /**
+     * Ctor.
+     * @param bse Base path
+     */
+    public LtIncorrectAlias(final Path bse) {
+        this.base = bse;
+    }
+
     @Override
-    public Collection<Defect> defects(final XML xmir) throws IOException {
+    public Collection<Defect> defects(final XML xmir) {
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML alias : xmir.nodes("//meta[head='alias']/tail")) {
             if (!"1".equals(xmir.xpath("count(//meta[head='package'])").get(0))) {
@@ -50,6 +62,7 @@ public final class LtIncorrectAlias implements Lint<XML> {
             }
             final String pointer = alias.xpath("text()").get(0);
             final Path candidate = Path.of(
+                String.valueOf(this.base.toUri().getPath()),
                 xmir.xpath("//meta[head='package']/tail/text()").get(0),
                 String.format("%s.xmir", pointer)
             );

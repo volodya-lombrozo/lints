@@ -1,0 +1,6 @@
++alias foo
++package ttt
+
+# Bar.
+[] > bar
+  foo > @

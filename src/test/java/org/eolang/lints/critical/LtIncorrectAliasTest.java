@@ -24,6 +24,7 @@
 package org.eolang.lints.critical;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import org.cactoos.io.ResourceOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
@@ -41,7 +42,9 @@ final class LtIncorrectAliasTest {
     void catchesBrokenAlias() throws IOException {
         MatcherAssert.assertThat(
             "Defects are empty, but shouldn't be",
-            new LtIncorrectAlias().defects(
+            new LtIncorrectAlias(
+                Paths.get("src/test/resources/org/eolang/lints/critical/incorrect-alias")
+            ).defects(
                 new EoSyntax(
                     new ResourceOf(
                         "org/eolang/lints/critical/incorrect-alias/bar.eo"
@@ -53,10 +56,29 @@ final class LtIncorrectAliasTest {
     }
 
     @Test
+    void passesIfFileExists() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects aren't empty, but should be",
+            new LtIncorrectAlias(
+                Paths.get("src/test/resources/org/eolang/lints/critical/incorrect-alias/passes")
+            ).defects(
+                new EoSyntax(
+                    new ResourceOf(
+                        "org/eolang/lints/critical/incorrect-alias/passes/bar.eo"
+                    )
+                ).parsed()
+            ),
+            Matchers.hasSize(0)
+        );
+    }
+
+    @Test
     void passesIfNoAliasInTheProgram() throws IOException {
         MatcherAssert.assertThat(
             "Defects aren't empty, but should be",
-            new LtIncorrectAlias().defects(
+            new LtIncorrectAlias(
+                Paths.get("src/test/resources/org/eolang/lints/critical/incorrect-alias")
+            ).defects(
                 new EoSyntax(
                     new ResourceOf(
                         "org/eolang/lints/critical/incorrect-alias/no-aliases.eo"
@@ -71,7 +93,9 @@ final class LtIncorrectAliasTest {
     void ignoresAbsenceOfPackage() throws IOException {
         MatcherAssert.assertThat(
             "Defects aren't empty, but should be",
-            new LtIncorrectAlias().defects(
+            new LtIncorrectAlias(
+                Paths.get("src/test/resources/org/eolang/lints/critical/incorrect-alias")
+            ).defects(
                 new EoSyntax(
                     new ResourceOf(
                         "org/eolang/lints/critical/incorrect-alias/no-package.eo"
