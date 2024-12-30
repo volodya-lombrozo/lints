@@ -21,7 +21,7 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/metas/architect-duplicate.xsl
+  - /org/eolang/lints/metas/unique-metas.xsl
 asserts:
   - /defects[count(defect[@severity='error'])=0]
 input: |

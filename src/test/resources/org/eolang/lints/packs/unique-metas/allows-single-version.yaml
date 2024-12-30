@@ -21,13 +21,11 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/metas/architect-duplicate.xsl
+  - /org/eolang/lints/metas/unique-metas.xsl
 asserts:
-  - /defects[count(defect[@severity='error'])=1]
-  - /defects/defect[@line='2']
+  - /defects[count(defect[@severity='error'])=0]
 input: |
-  +architect jeff@google.com
-  +architect ivan@google.com
+  +version 0.0.0
 
-  # Foo.
-  [] > foo
+  # Document.
+  [] > bar
