@@ -304,6 +304,10 @@ final class ProgramTest {
         /**
          * Defects.
          * @return Defects
+         * @todo #144:35min Resolve code duplication with Program.java class.
+         *  Currently, BcProgram.java is duplication of Program.java. Let's make
+         *  it use the original Program.java, so they will stay synced. Don't forget
+         *  to remove this puzzle.
          */
         public Collection<Defect> defects() {
             try {
