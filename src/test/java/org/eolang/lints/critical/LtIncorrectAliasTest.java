@@ -51,4 +51,19 @@ final class LtIncorrectAliasTest {
             Matchers.hasSize(Matchers.greaterThan(0))
         );
     }
+
+    @Test
+    void passesIfNoAliasInTheProgram() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects aren't empty, but should be",
+            new LtIncorrectAlias().defects(
+                new EoSyntax(
+                    new ResourceOf(
+                        "org/eolang/lints/critical/incorrect-alias/no-aliases.eo"
+                    )
+                ).parsed()
+            ),
+            Matchers.hasSize(0)
+        );
+    }
 }
