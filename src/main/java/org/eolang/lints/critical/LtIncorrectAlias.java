@@ -68,7 +68,6 @@ public final class LtIncorrectAlias implements Lint<XML> {
                     )
                 );
             }
-
         }
         return defects;
     }
