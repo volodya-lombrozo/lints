@@ -36,7 +36,7 @@ SOFTWARE.
         <xsl:value-of select="eo:lineno(@line)"/>
       </xsl:attribute>
       <xsl:attribute name="severity">critical</xsl:attribute>
-      <xsl:text>Atoms must not have void '@' attribute "</xsl:text>
+      <xsl:text>Atoms must not have void '@' attribute</xsl:text>
     </defect>
   </xsl:template>
 </xsl:stylesheet>
