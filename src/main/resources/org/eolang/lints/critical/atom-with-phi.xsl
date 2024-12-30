@@ -27,7 +27,7 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="//o[@atom][.//o[@name='@']]" mode="with-phi"/>
+      <xsl:apply-templates select="//o[@atom and o[@name='@']]" mode="with-phi"/>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="with-phi">
@@ -36,7 +36,7 @@ SOFTWARE.
         <xsl:value-of select="eo:lineno(@line)"/>
       </xsl:attribute>
       <xsl:attribute name="severity">critical</xsl:attribute>
-      <xsl:text>Atoms must not have '@' attribute "</xsl:text>
+      <xsl:text>Atom must not have '@' attribute "</xsl:text>
     </defect>
   </xsl:template>
 </xsl:stylesheet>
