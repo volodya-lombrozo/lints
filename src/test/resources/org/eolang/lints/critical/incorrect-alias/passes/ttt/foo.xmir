@@ -1,1 +1,53 @@
-This file is formal
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+The MIT License (MIT)
+
+Copyright (c) 2016-2024 Objectionary.com
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<program xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         dob="2024-12-27T11:00:08"
+         ms="36"
+         name="foo"
+         revision="27abe8b"
+         source="/Users/aliaksei/code/open/lints/src/test/resources/org/eolang/lints/misc/parsed/foo.eo"
+         time="2024-12-30T13:05:16.827706Z"
+         version="0.50.0"
+         xsi:noNamespaceSchemaLocation="https://www.eolang.org/xsd/XMIR-0.50.0.xsd">
+   <listing># Foo.
+[@] &gt; foo /number
+</listing>
+   <objects>
+      <o atom="number" line="2" name="foo" pos="0">
+         <o base="∅" line="2" name="@" pos="1"/>
+      </o>
+   </objects>
+   <comments>
+      <comment line="2">Foo.</comment>
+   </comments>
+   <sheets>
+      <sheet>move-voids-up</sheet>
+      <sheet>validate-before-stars</sheet>
+      <sheet>resolve-before-star</sheet>
+      <sheet>stars-to-tuples</sheet>
+      <sheet>wrap-method-calls</sheet>
+      <sheet>const-to-dataized</sheet>
+   </sheets>
+</program>
