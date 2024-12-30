@@ -26,7 +26,6 @@ package org.eolang.lints.critical;
 import com.jcabi.xml.XML;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.LinkedList;
 import org.cactoos.io.ResourceOf;
@@ -62,11 +61,9 @@ public final class LtIncorrectAlias implements Lint<XML> {
                 continue;
             }
             final String pointer = alias.xpath("text()").get(0);
-            final Path candidate = Paths.get(
-                this.base.toUri().getPath(),
-                xmir.xpath("//meta[head='package']/tail/text()").get(0),
-                String.format("%s.xmir", pointer)
-            );
+            final Path candidate = this.base.resolve(
+                xmir.xpath("//meta[head='package']/tail/text()").get(0)
+            ).resolve(String.format("%s.xmir", pointer));
             if (!Files.exists(candidate)) {
                 defects.add(
                     new Defect.Default(
