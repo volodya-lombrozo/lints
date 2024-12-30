@@ -62,7 +62,7 @@ public final class LtIncorrectAlias implements Lint<XML> {
             }
             final String pointer = alias.xpath("text()").get(0);
             final Path candidate = Path.of(
-                String.valueOf(this.base.toUri().getPath()),
+                this.base.toUri().getPath(),
                 xmir.xpath("//meta[head='package']/tail/text()").get(0),
                 String.format("%s.xmir", pointer)
             );

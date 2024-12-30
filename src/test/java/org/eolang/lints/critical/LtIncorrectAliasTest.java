@@ -81,7 +81,7 @@ final class LtIncorrectAliasTest {
             "no-package.eo"
         }
     )
-    void passesIfProgramIsBroken(final String name) throws IOException {
+    void ignoresProgram(final String name) throws IOException {
         MatcherAssert.assertThat(
             "Defects aren't empty, but should be",
             new LtIncorrectAlias(
