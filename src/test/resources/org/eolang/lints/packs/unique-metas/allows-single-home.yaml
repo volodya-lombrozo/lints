@@ -21,16 +21,11 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/metas/home-duplicate.xsl
+  - /org/eolang/lints/metas/unique-metas.xsl
 asserts:
-  - /defects[count(defect[@severity='error'])=1]
+  - /defects[count(defect[@severity='error'])=0]
 input: |
-  +alias stdin org.eolang.io.stdin
-  +alias stdout org.eolang.io.stdout
-  +home https://github.com/objectionary/eo
-  +home https://github.com/objectionary/eo-strings
-  +package sandbox
+  +home https://github.com/objectionary/eo-dom
 
-  # No comments.
-  [] > main
-    (stdout "Hello, world!").print
+  # Document.
+  [] > doc
