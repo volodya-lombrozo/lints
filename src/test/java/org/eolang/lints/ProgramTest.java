@@ -220,7 +220,7 @@ final class ProgramTest {
                 ).path();
                 final XML xmir = new XMLDocument(pre);
                 final long start = System.currentTimeMillis();
-                final Collection<Defect> defects = new BcProgram(xmir).defects();
+                final Collection<Defect> defects = new ProgramTest.BcProgram(xmir).defects();
                 final long msec = System.currentTimeMillis() - start;
                 final Path target = Paths.get("target");
                 Files.write(
@@ -256,7 +256,7 @@ final class ProgramTest {
      * Benchmarked program.
      * @since 0.0.29
      */
-    final class BcProgram {
+    private static final class BcProgram {
 
         /**
          * XMIR.
