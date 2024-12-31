@@ -66,7 +66,7 @@ public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
                                 Severity.CRITICAL,
                                 xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
                                 Integer.parseInt(
-                                    xmir.xpath("//meta[head='alias'][1]/@line").get(0)
+                                    xmir.xpath("/program/metas/meta[head='alias'][1]/@line").get(0)
                                 ),
                                 String.format(
                                     "Incorrect pointing alias '%s', there is no %s",
