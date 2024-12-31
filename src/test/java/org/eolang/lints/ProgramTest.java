@@ -31,15 +31,22 @@ import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
 import com.yegor256.Together;
 import com.yegor256.farea.Farea;
+import com.yegor256.tojos.MnCsv;
+import com.yegor256.tojos.TjCached;
+import com.yegor256.tojos.TjDefault;
+import com.yegor256.tojos.Tojos;
 import com.yegor256.xsline.Xsline;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.iterable.Sticky;
+import org.cactoos.iterable.Synced;
 import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
 import org.eolang.parser.TrParsing;
@@ -60,12 +67,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
  *  other classes in size too, for instance smaller classes (standard program),
  *  large class (JNA pointer), x-large class, and xxl class. Don't forget to
  *  adjust lint-summary.txt file to capture all the measurements.
- * @todo #134:90min Capture all the lint timings in timings.csv.
- *  Currently, we just capture total time - amount of milliseconds was required
- *  to lint some XMIR. Would be helpful to get extended statistics - timings of
- *  each lint. Don't forget to include this information into lint-summary.txt.
- *  You can check how it was implemented in HONE:
- *  <a href="https://github.com/objectionary/hone-maven-plugin/blob/master/src/main/java/org/eolang/hone/Timings.java">Timings.java</a>.
  */
 @ExtendWith(MktmpResolver.class)
 final class ProgramTest {
@@ -231,7 +232,7 @@ final class ProgramTest {
                 ).path();
                 final XML xmir = new XMLDocument(pre);
                 final long start = System.currentTimeMillis();
-                final Collection<Defect> defects = new Program(xmir).defects();
+                final Collection<Defect> defects = new ProgramTest.BcProgram(xmir).defects();
                 final long msec = System.currentTimeMillis() - start;
                 final Path target = Paths.get("target");
                 Files.write(
@@ -261,5 +262,82 @@ final class ProgramTest {
                 );
             }
         );
+    }
+
+    /**
+     * Benchmarked program.
+     * @since 0.0.29
+     */
+    private static final class BcProgram {
+
+        /**
+         * XMIR.
+         */
+        private final XML xmir;
+
+        /**
+         * Lints to apply.
+         */
+        private final Iterable<Lint<XML>> lints;
+
+        /**
+         * Timings.
+         */
+        private final Tojos timings;
+
+        /**
+         * Ctor.
+         * @param program XMIR program to lint
+         */
+        BcProgram(final XML program) {
+            this(
+                program,
+                new Synced<>(new Sticky<>(new PkMono())),
+                new TjCached(
+                    new TjDefault(
+                        new MnCsv("target/timings.csv")
+                    )
+                )
+            );
+        }
+
+        /**
+         * Ctor.
+         * @param program XMIR program to lint
+         * @param lnts Lints to apply
+         * @param tmngs Timings
+         */
+        BcProgram(final XML program, final Iterable<Lint<XML>> lnts, final Tojos tmngs) {
+            this.xmir = program;
+            this.lints = lnts;
+            this.timings = tmngs;
+        }
+
+        /**
+         * Defects.
+         * @return Defects
+         * @todo #144:35min Resolve code duplication with Program.java class.
+         *  Currently, BcProgram.java is duplication of Program.java. Let's make
+         *  it use the original Program.java, so they will stay synced. Don't forget
+         *  to remove this puzzle.
+         */
+        public Collection<Defect> defects() {
+            try {
+                final Collection<Defect> messages = new ArrayList<>(0);
+                for (final Lint<XML> lint : this.lints) {
+                    final long start = System.currentTimeMillis();
+                    final Collection<Defect> defects = lint.defects(this.xmir);
+                    final long done = System.currentTimeMillis() - start;
+                    this.timings.add(lint.name()).set("ms", done);
+                    messages.addAll(defects);
+                }
+                return messages;
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "Failed to find defects in the XMIR file",
+                    ex
+                );
+            }
+        }
     }
 }

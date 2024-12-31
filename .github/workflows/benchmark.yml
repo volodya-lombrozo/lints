@@ -50,6 +50,17 @@ jobs:
             printf "\`\`\`text\n"
             cat target/lint-summary.txt
             printf "\n\n"
+            header=true
+            while IFS=, read -r id ms; do
+              if [[ "$id" != "id" ]]; then
+                if $header; then
+                  header=false
+                  continue
+                fi
+                printf "%s (%s ms)\n" "$(echo "$id" | tr -d '"')" "$(echo "$ms" | tr -d '"')"
+              fi
+            done < target/timings.csv
+            printf "\n\n"
             printf "\`\`\`\n\n"
             echo "The results were calculated in [this GHA job][benchmark-gha]"
             echo "on $(date +'%Y-%m-%d') at $(date +'%H:%M'),"

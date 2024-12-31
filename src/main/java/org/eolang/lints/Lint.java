@@ -35,6 +35,12 @@ import java.util.Collection;
 public interface Lint<T> {
 
     /**
+     * Name of the lint.
+     * @return Lint name
+     */
+    String name();
+
+    /**
      * Find and return defects.
      * @param entity The entity to analyze (could be {@link com.jcabi.xml.XML}
      *  or {@link java.nio.file.Path})

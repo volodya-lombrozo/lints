@@ -22,21 +22,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="architect-duplicate" version="2.0">
-  <xsl:output encoding="UTF-8"/>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="atom-with-phi" version="2.0">
+  <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="count(/program/metas/meta[head ='architect'])&gt;1">
-        <xsl:element name="defect">
-          <xsl:attribute name="line">
-            <xsl:value-of select="/program/metas/meta[head = 'architect'][2]/@line"/>
-          </xsl:attribute>
-          <xsl:attribute name="severity">
-            <xsl:text>error</xsl:text>
-          </xsl:attribute>
-          <xsl:text>There are more than one +architect meta specified</xsl:text>
-        </xsl:element>
-      </xsl:if>
+      <xsl:apply-templates select="//o[@atom and o[@name='@']]" mode="with-phi"/>
     </defects>
+  </xsl:template>
+  <xsl:template match="o" mode="with-phi">
+    <defect>
+      <xsl:attribute name="line">
+        <xsl:value-of select="eo:lineno(@line)"/>
+      </xsl:attribute>
+      <xsl:attribute name="severity">critical</xsl:attribute>
+      <xsl:text>Atoms must not have void '@' attribute</xsl:text>
+    </defect>
   </xsl:template>
 </xsl:stylesheet>
