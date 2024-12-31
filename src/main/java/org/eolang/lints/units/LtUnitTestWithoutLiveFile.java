@@ -27,6 +27,8 @@ import com.jcabi.xml.XML;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
+import org.cactoos.io.ResourceOf;
+import org.cactoos.text.TextOf;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
 import org.eolang.lints.Severity;
@@ -50,7 +52,8 @@ public final class LtUnitTestWithoutLiveFile implements Lint<Map<String, XML>> {
             if (!name.endsWith("-test")) {
                 continue;
             }
-            if (pkg.containsKey(name.replace("-test", ""))) {
+            final String live = name.replace("-test", "");
+            if (pkg.containsKey(live)) {
                 continue;
             }
             defects.add(
@@ -59,7 +62,9 @@ public final class LtUnitTestWithoutLiveFile implements Lint<Map<String, XML>> {
                     Severity.WARNING,
                     name,
                     0,
-                    String.format("Live .eo file was not found for %s", name)
+                    String.format(
+                        "Live .eo file '%s' was not found for '%s'", live, name
+                    )
                 )
             );
         }
@@ -68,6 +73,12 @@ public final class LtUnitTestWithoutLiveFile implements Lint<Map<String, XML>> {
 
     @Override
     public String motive() throws Exception {
-        return "";
+        return new TextOf(
+            new ResourceOf(
+                String.format(
+                    "org/eolang/motives/units/%s.md", this.name()
+                )
+            )
+        ).asString();
     }
 }

@@ -58,8 +58,8 @@ final class LtUnitTestWithoutLiveFileTest {
             "Defects are not emtpy, but they should",
             new LtUnitTestWithoutLiveFile().defects(
                 new MapOf<String, XML>(
-                    new MapEntry<>("foo-test", new XMLDocument("</program>")),
-                    new MapEntry<>("foo", new XMLDocument("</program>"))
+                    new MapEntry<>("foo-test", new XMLDocument("<program/>")),
+                    new MapEntry<>("foo", new XMLDocument("<program/>"))
                 )
             ),
             Matchers.emptyIterable()
