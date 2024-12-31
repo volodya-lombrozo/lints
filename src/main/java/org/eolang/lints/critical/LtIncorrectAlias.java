@@ -49,14 +49,14 @@ public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
         final Collection<Defect> defects = new LinkedList<>();
         pkg.values().forEach(
             xmir -> {
-                for (final XML alias : xmir.nodes("//meta[head='alias']/tail")) {
-                    if (!"1".equals(xmir.xpath("count(//meta[head='package'])").get(0))) {
+                for (final XML alias : xmir.nodes("/program/metas/meta[head='alias']/tail")) {
+                    if (xmir.nodes("/program/metas/meta[head='package']").size() != 1) {
                         continue;
                     }
                     final String pointer = alias.xpath("text()").get(0);
                     final String lookup = String.format(
                         "%s/%s",
-                        xmir.xpath("//meta[head='package']/tail/text()").get(0),
+                        xmir.xpath("/program/metas/meta[head='package']/tail/text()").get(0),
                         pointer
                     );
                     if (!pkg.containsKey(lookup)) {
