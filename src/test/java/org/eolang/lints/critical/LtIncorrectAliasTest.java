@@ -25,14 +25,20 @@ package org.eolang.lints.critical;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import com.yegor256.Mktmp;
+import com.yegor256.MktmpResolver;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
+import org.eolang.lints.Programs;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -77,7 +83,7 @@ final class LtIncorrectAliasTest {
                             )
                         ).parsed()
                     ),
-                    new MapEntry<>("ttt/foo.xmir", new XMLDocument("<program/>"))
+                    new MapEntry<>("ttt/foo", new XMLDocument("<program/>"))
                 )
             ),
             Matchers.hasSize(0)
@@ -110,6 +116,28 @@ final class LtIncorrectAliasTest {
                 )
             ),
             Matchers.hasSize(0)
+        );
+    }
+
+    @Test
+    @ExtendWith(MktmpResolver.class)
+    void acceptsValidDirectory(@Mktmp final Path dir) throws IOException {
+        Files.write(
+            dir.resolve("bar.xmir"),
+            new EoSyntax(
+                new ResourceOf(
+                    "org/eolang/lints/critical/incorrect-alias/bar.eo"
+                )
+            ).parsed().toString().getBytes()
+        );
+        Files.createDirectory(dir.resolve("ttt"));
+        Files.write(dir.resolve("ttt/foo.xmir"), "<program/>".getBytes());
+        Files.write(dir.resolve("bar-test.xmir"), "<program/>".getBytes());
+        Files.write(dir.resolve("ttt/foo-test.xmir"), "<program/>".getBytes());
+        MatcherAssert.assertThat(
+            "Defects are not empty, but should be",
+            new Programs(dir).defects(),
+            Matchers.emptyIterable()
         );
     }
 }
