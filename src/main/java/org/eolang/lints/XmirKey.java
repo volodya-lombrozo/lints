@@ -23,6 +23,7 @@
  */
 package org.eolang.lints;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.regex.Pattern;
 import org.cactoos.Text;
@@ -68,7 +69,7 @@ final class XmirKey implements Text {
         if (parent.toString().isEmpty()) {
             key = name;
         } else {
-            key = String.format("%s/%s", parent, name);
+            key = String.format("%s/%s", parent, name).replace("\\", "/");
         }
         return key;
     }
