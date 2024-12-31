@@ -21,36 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints;
-
-import com.jcabi.xml.XML;
-import java.util.Map;
-import org.cactoos.iterable.IterableEnvelope;
-import org.cactoos.list.ListOf;
-import org.eolang.lints.critical.LtIncorrectAlias;
-import org.eolang.lints.units.LtUnitTestMissing;
-import org.eolang.lints.units.LtUnitTestWithoutLiveFile;
-
 /**
- * A collection of lints for Whole Program Analysis (WPA),
- * provided by the {@link Programs} class.
- *
- * <p>This class is thread-safe.</p>
- *
- * @since 0.1.0
+ * Critical Java lints.
+ * @since 0.0.30
  */
-public final class PkWpa extends IterableEnvelope<Lint<Map<String, XML>>> {
-
-    /**
-     * Ctor.
-     */
-    public PkWpa() {
-        super(
-            new ListOf<>(
-                new LtUnitTestMissing(),
-                new LtUnitTestWithoutLiveFile(),
-                new LtIncorrectAlias()
-            )
-        );
-    }
-}
+package org.eolang.lints.critical;
