@@ -93,6 +93,11 @@ final class LtByXsl implements Lint<XML> {
     }
 
     @Override
+    public String name() {
+        return this.rule;
+    }
+
+    @Override
     public Collection<Defect> defects(final XML xmir) {
         final XML report = this.sheet.transform(xmir);
         final Collection<Defect> defects = new LinkedList<>();

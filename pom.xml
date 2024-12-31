@@ -154,6 +154,18 @@ SOFTWARE.
     </dependency>
     <dependency>
       <groupId>com.yegor256</groupId>
+      <artifactId>tojos</artifactId>
+      <version>0.18.4</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
+      <version>5.9</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.yegor256</groupId>
       <artifactId>mktmp</artifactId>
       <version>0.0.5</version>
       <scope>test</scope>
