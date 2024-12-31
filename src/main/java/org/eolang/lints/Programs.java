@@ -162,6 +162,9 @@ public final class Programs {
      * @param dir The directories to search for XMIR files in (recursively)
      * @return Map of XMIR files
      * @throws IOException If fails
+     * @todo #149:35min Introduce new class XmirKey.java
+     *  Let's extract the code that calculates the key for XMIR file into new
+     *  Java class. Don't forget to create unit tests, and remove this puzzle.
      */
     private static Map<String, XML> discover(final Path dir) throws IOException {
         try (Stream<Path> walk = Files.walk(dir)) {
