@@ -29,6 +29,7 @@ import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.list.ListOf;
 import org.eolang.lints.critical.LtIncorrectAlias;
 import org.eolang.lints.units.LtUnitTestMissing;
+import org.eolang.lints.units.LtUnitTestWithoutLiveFile;
 
 /**
  * A collection of lints for Whole Program Analysis (WPA),
@@ -47,6 +48,7 @@ public final class PkWpa extends IterableEnvelope<Lint<Map<String, XML>>> {
         super(
             new ListOf<>(
                 new LtUnitTestMissing(),
+                new LtUnitTestWithoutLiveFile(),
                 new LtIncorrectAlias()
             )
         );
