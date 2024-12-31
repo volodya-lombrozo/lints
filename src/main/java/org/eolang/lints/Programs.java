@@ -35,6 +35,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cactoos.iterable.Sticky;
@@ -59,6 +60,11 @@ public final class Programs {
             )
         )
     );
+
+    /**
+     * XMIR extension.
+     */
+    private static final Pattern XMIR_EXT = Pattern.compile("\\.xmir$");
 
     /**
      * Lints to use.
@@ -156,6 +162,9 @@ public final class Programs {
      * @param dir The directories to search for XMIR files in (recursively)
      * @return Map of XMIR files
      * @throws IOException If fails
+     * @todo #149:35min Introduce new class XmirKey.java
+     *  Let's extract the code that calculates the key for XMIR file into new
+     *  Java class. Don't forget to create unit tests, and remove this puzzle.
      */
     private static Map<String, XML> discover(final Path dir) throws IOException {
         try (Stream<Path> walk = Files.walk(dir)) {
@@ -163,7 +172,19 @@ public final class Programs {
                 .filter(Files::isRegularFile)
                 .collect(
                     Collectors.toMap(
-                        path -> path.getFileName().toString().replaceAll("\\.xmir$", ""),
+                        path -> {
+                            final String key;
+                            final Path parent = dir.relativize(path.getParent());
+                            final String name = Programs.XMIR_EXT.matcher(
+                                path.getFileName().toString()
+                            ).replaceAll("");
+                            if (parent.toString().isEmpty()) {
+                                key = name;
+                            } else {
+                                key = String.format("%s/%s", parent, name);
+                            }
+                            return key;
+                        },
                         path -> {
                             try {
                                 return new XMLDocument(path);
