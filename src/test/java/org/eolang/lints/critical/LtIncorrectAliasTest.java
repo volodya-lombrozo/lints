@@ -23,9 +23,12 @@
  */
 package org.eolang.lints.critical;
 
+import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
-import java.nio.file.Paths;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.map.MapEntry;
+import org.cactoos.map.MapOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -44,14 +47,17 @@ final class LtIncorrectAliasTest {
     void catchesBrokenAlias() throws IOException {
         MatcherAssert.assertThat(
             "Defects are empty, but shouldn't be",
-            new LtIncorrectAlias(
-                Paths.get("src/test/resources/org/eolang/lints/critical/incorrect-alias")
-            ).defects(
-                new EoSyntax(
-                    new ResourceOf(
-                        "org/eolang/lints/critical/incorrect-alias/bar.eo"
+            new LtIncorrectAlias().defects(
+                new MapOf<>(
+                    new MapEntry<>(
+                        "bar",
+                        new EoSyntax(
+                            new ResourceOf(
+                                "org/eolang/lints/critical/incorrect-alias/bar.eo"
+                            )
+                        ).parsed()
                     )
-                ).parsed()
+                )
             ),
             Matchers.hasSize(Matchers.greaterThan(0))
         );
@@ -61,14 +67,18 @@ final class LtIncorrectAliasTest {
     void passesIfFileExists() throws IOException {
         MatcherAssert.assertThat(
             "Defects aren't empty, but should be",
-            new LtIncorrectAlias(
-                Paths.get("src/test/resources/org/eolang/lints/critical/incorrect-alias/passes")
-            ).defects(
-                new EoSyntax(
-                    new ResourceOf(
-                        "org/eolang/lints/critical/incorrect-alias/passes/bar.eo"
-                    )
-                ).parsed()
+            new LtIncorrectAlias().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "bar",
+                        new EoSyntax(
+                            new ResourceOf(
+                                "org/eolang/lints/critical/incorrect-alias/bar.eo"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>("ttt/foo.xmir", new XMLDocument("<program/>"))
+                )
             ),
             Matchers.hasSize(0)
         );
@@ -84,17 +94,20 @@ final class LtIncorrectAliasTest {
     void ignoresProgram(final String name) throws IOException {
         MatcherAssert.assertThat(
             "Defects aren't empty, but should be",
-            new LtIncorrectAlias(
-                Paths.get("src/test/resources/org/eolang/lints/critical/incorrect-alias")
-            ).defects(
-                new EoSyntax(
-                    new ResourceOf(
-                        String.format(
-                            "org/eolang/lints/critical/incorrect-alias/%s",
-                            name
-                        )
+            new LtIncorrectAlias().defects(
+                new MapOf<>(
+                    new MapEntry<>(
+                        "foo",
+                        new EoSyntax(
+                            new ResourceOf(
+                                String.format(
+                                    "org/eolang/lints/critical/incorrect-alias/%s",
+                                    name
+                                )
+                            )
+                        ).parsed()
                     )
-                ).parsed()
+                )
             ),
             Matchers.hasSize(0)
         );

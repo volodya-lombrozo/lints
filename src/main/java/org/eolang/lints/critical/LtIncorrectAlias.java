@@ -24,10 +24,9 @@
 package org.eolang.lints.critical;
 
 import com.jcabi.xml.XML;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Map;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
 import org.eolang.lints.Defect;
@@ -38,48 +37,48 @@ import org.eolang.lints.Severity;
  * Checks that `+alias` is pointing to existing `.xmir` files.
  * @since 0.0.30
  */
-public final class LtIncorrectAlias implements Lint<XML> {
+public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
 
-    /**
-     * Base path.
-     */
-    private final Path base;
-
-    /**
-     * Ctor.
-     * @param bse Base path
-     */
-    public LtIncorrectAlias(final Path bse) {
-        this.base = bse;
+    @Override
+    public String name() {
+        return "incorrect-alias";
     }
 
     @Override
-    public Collection<Defect> defects(final XML xmir) {
+    public Collection<Defect> defects(final Map<String, XML> pkg) {
         final Collection<Defect> defects = new LinkedList<>();
-        for (final XML alias : xmir.nodes("//meta[head='alias']/tail")) {
-            if (!"1".equals(xmir.xpath("count(//meta[head='package'])").get(0))) {
-                continue;
+        pkg.values().forEach(
+            xmir -> {
+                for (final XML alias : xmir.nodes("//meta[head='alias']/tail")) {
+                    if (!"1".equals(xmir.xpath("count(//meta[head='package'])").get(0))) {
+                        continue;
+                    }
+                    final String pointer = alias.xpath("text()").get(0);
+                    final String lookup = String.format(
+                        "%s/%s.xmir",
+                        xmir.xpath("//meta[head='package']/tail/text()").get(0),
+                        pointer
+                    );
+                    if (!pkg.containsKey(lookup)) {
+                        defects.add(
+                            new Defect.Default(
+                                "incorrect-alias",
+                                Severity.CRITICAL,
+                                xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
+                                Integer.parseInt(
+                                    xmir.xpath("//meta[head='alias'][1]/@line").get(0)
+                                ),
+                                String.format(
+                                    "Incorrect pointing alias '%s', there is no %s",
+                                    pointer,
+                                    lookup
+                                )
+                            )
+                        );
+                    }
+                }
             }
-            final String pointer = alias.xpath("text()").get(0);
-            final Path candidate = this.base.resolve(
-                xmir.xpath("//meta[head='package']/tail/text()").get(0)
-            ).resolve(String.format("%s.xmir", pointer));
-            if (!Files.exists(candidate)) {
-                defects.add(
-                    new Defect.Default(
-                        "incorrect-alias",
-                        Severity.CRITICAL,
-                        xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
-                        Integer.parseInt(xmir.xpath("//meta[head='alias'][1]/@line").get(0)),
-                        String.format(
-                            "Incorrect pointing alias '%s', there is no %s",
-                            pointer,
-                            candidate
-                        )
-                    )
-                );
-            }
-        }
+        );
         return defects;
     }
 
