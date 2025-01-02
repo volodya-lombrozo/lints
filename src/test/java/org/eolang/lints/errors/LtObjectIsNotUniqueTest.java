@@ -37,6 +37,7 @@ import org.junit.jupiter.api.Test;
  *
  * @since 0.0.30
  */
+@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 final class LtObjectIsNotUniqueTest {
 
     @Test

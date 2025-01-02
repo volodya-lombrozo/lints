@@ -54,8 +54,6 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
             if (xmir.nodes("/program/objects/o").isEmpty()) {
                 continue;
             }
-            final String name = xmir.xpath("/program/objects/o[1]/@name").get(0);
-            final String pack = LtObjectIsNotUnique.packageName(xmir);
             for (final XML oth : pkg.values()) {
                 if (Objects.equals(oth, xmir)) {
                     continue;
@@ -63,38 +61,28 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 if (oth.nodes("/program/objects/o").isEmpty()) {
                     continue;
                 }
-                final String other = oth.xpath("/program/objects/o[1]/@name").get(0);
-                if (name.equals(other) && LtObjectIsNotUnique.packageName(oth).equals(pack)) {
-                    defects.add(
-                        new Defect.Default(
-                            this.name(),
-                            Severity.ERROR,
-                            oth.xpath("/program/@name").stream()
-                                .findFirst()
-                                .orElse("unknown"),
-                            Integer.parseInt(
-                                oth.xpath("/program/objects/o[1]/@line").get(0)
-                            ),
-                            String.format(
-                                "The object name '%s' is not unique, original object was found in '%s'",
-                                name, src
-                            )
-                        )
-                    );
+                if (!LtObjectIsNotUnique.shareSameName(xmir, oth)) {
+                    continue;
                 }
+                defects.add(
+                    new Defect.Default(
+                        this.name(),
+                        Severity.ERROR,
+                        oth.xpath("/program/@name").stream()
+                            .findFirst()
+                            .orElse("unknown"),
+                        Integer.parseInt(
+                            oth.xpath("/program/objects/o[1]/@line").get(0)
+                        ),
+                        String.format(
+                            "The object name '%s' is not unique, original object was found in '%s'",
+                            xmir.xpath("/program/objects/o[1]/@name"), src
+                        )
+                    )
+                );
             }
         }
         return defects;
-    }
-
-    private static String packageName(final XML xmir) {
-        final String name;
-        if (xmir.nodes("/program/metas/meta[head='package']").size() == 1) {
-            name = xmir.xpath("/program/metas/meta[head='package']/tail/text()").get(0);
-        } else {
-            name = "";
-        }
-        return name;
     }
 
     @Override
@@ -106,5 +94,23 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 )
             )
         ).asString();
+    }
+
+    private static boolean shareSameName(final XML original, final XML oth) {
+        return original.xpath("/program/objects/o[1]/@name").get(0)
+            .equals(oth.xpath("/program/objects/o[1]/@name").get(0))
+            && LtObjectIsNotUnique.packageName(original).equals(
+            LtObjectIsNotUnique.packageName(oth)
+        );
+    }
+
+    private static String packageName(final XML xmir) {
+        final String name;
+        if (xmir.nodes("/program/metas/meta[head='package']").size() == 1) {
+            name = xmir.xpath("/program/metas/meta[head='package']/tail/text()").get(0);
+        } else {
+            name = "";
+        }
+        return name;
     }
 }
