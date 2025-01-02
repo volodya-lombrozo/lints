@@ -51,11 +51,12 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
             xmir -> {
                 final String src = xmir.xpath("/program/@name").get(0);
                 final String name = xmir.xpath("/program/objects/o[1]/@name").get(0);
+                final String pack = LtObjectIsNotUnique.packageName(xmir);
                 pkg.values().forEach(
                     oth -> {
                         if (!Objects.equals(oth, xmir)) {
                             final String other = oth.xpath("/program/objects/o[1]/@name").get(0);
-                            if (name.equals(other)) {
+                            if (name.equals(other) && LtObjectIsNotUnique.packageName(oth).equals(pack)) {
                                 defects.add(
                                     new Defect.Default(
                                         this.name(),
@@ -79,6 +80,16 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
             }
         );
         return defects;
+    }
+
+    private static String packageName(final XML xmir) {
+        final String name;
+        if (xmir.nodes("/program/metas/meta[head='package']").size() == 1) {
+            name = xmir.xpath("/program/metas/meta[head='package']/tail/text()").get(0);
+        } else {
+            name = "";
+        }
+        return name;
     }
 
     @Override
