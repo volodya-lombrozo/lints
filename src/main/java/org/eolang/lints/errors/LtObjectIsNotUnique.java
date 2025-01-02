@@ -49,42 +49,41 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
     @Override
     public Collection<Defect> defects(final Map<String, XML> pkg) {
         final Collection<Defect> defects = new LinkedList<>();
-        pkg.values().forEach(
-            xmir -> {
-                final String src = xmir.xpath("/program/@name").stream().findFirst().orElse("unknown");
-                if (!xmir.nodes("/program/objects/o").isEmpty()) {
-                    final String name = xmir.xpath("/program/objects/o[1]/@name").get(0);
-                    final String pack = LtObjectIsNotUnique.packageName(xmir);
-                    pkg.values().forEach(
-                        oth -> {
-                            if (!Objects.equals(oth, xmir)) {
-                                if (!oth.nodes("/program/objects/o").isEmpty()) {
-                                    final String other = oth.xpath("/program/objects/o[1]/@name").get(0);
-                                    if (name.equals(other) && LtObjectIsNotUnique.packageName(oth).equals(pack)) {
-                                        defects.add(
-                                            new Defect.Default(
-                                                this.name(),
-                                                Severity.ERROR,
-                                                oth.xpath("/program/@name").stream()
-                                                    .findFirst()
-                                                    .orElse("unknown"),
-                                                Integer.parseInt(
-                                                    oth.xpath("/program/objects/o[1]/@line").get(0)
-                                                ),
-                                                String.format(
-                                                    "The object name '%s' is not unique, original object was found in '%s'",
-                                                    name, src
-                                                )
-                                            )
-                                        );
-                                    }
-                                }
-                            }
-                        }
+        for (final XML xmir : pkg.values()) {
+            final String src = xmir.xpath("/program/@name").stream().findFirst().orElse("unknown");
+            if (xmir.nodes("/program/objects/o").isEmpty()) {
+                continue;
+            }
+            final String name = xmir.xpath("/program/objects/o[1]/@name").get(0);
+            final String pack = LtObjectIsNotUnique.packageName(xmir);
+            for (final XML oth : pkg.values()) {
+                if (Objects.equals(oth, xmir)) {
+                    continue;
+                }
+                if (oth.nodes("/program/objects/o").isEmpty()) {
+                    continue;
+                }
+                final String other = oth.xpath("/program/objects/o[1]/@name").get(0);
+                if (name.equals(other) && LtObjectIsNotUnique.packageName(oth).equals(pack)) {
+                    defects.add(
+                        new Defect.Default(
+                            this.name(),
+                            Severity.ERROR,
+                            oth.xpath("/program/@name").stream()
+                                .findFirst()
+                                .orElse("unknown"),
+                            Integer.parseInt(
+                                oth.xpath("/program/objects/o[1]/@line").get(0)
+                            ),
+                            String.format(
+                                "The object name '%s' is not unique, original object was found in '%s'",
+                                name, src
+                            )
+                        )
                     );
                 }
             }
-        );
+        }
         return defects;
     }
 
