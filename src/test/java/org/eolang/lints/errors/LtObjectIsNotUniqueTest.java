@@ -24,7 +24,6 @@
 package org.eolang.lints.errors;
 
 import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
