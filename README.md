@@ -107,12 +107,74 @@ Here is the result of linting XMIRs:
 Input: com/sun/jna/Pointer.class
 Size of .class: 22Kb (22Kb bytes)
 Size of .xmir after disassemble: 1Mb (1Mb bytes, 29630 lines)
-Lint time: 1min (85683 ms)
+Lint time: 1min (88056 ms)
+
+alias-too-long (343 ms)
+alias-without-tail (31 ms)
+broken-alias-first (1191 ms)
+broken-alias-second (29 ms)
+duplicate-aliases (119 ms)
+unused-alias (27 ms)
+atom-and-base (44 ms)
+atom-in-atom (38 ms)
+atom-without-rt (31 ms)
+not-empty-atom (30 ms)
+rt-without-atoms (28 ms)
+comment-is-too-wide (30 ms)
+comment-not-capitalized (20 ms)
+comment-too-short (20 ms)
+comment-without-dot (21 ms)
+atom-with-data (31 ms)
+atom-with-phi (26 ms)
+duplicate-names (171 ms)
+incorrect-bytes-format (270 ms)
+incorrect-rt-parts (21 ms)
+name-outside-of-abstract-object (5794 ms)
+object-has-data (74 ms)
+package-without-tail (13 ms)
+same-line-names (25 ms)
+schema-is-absent (26 ms)
+self-naming (69 ms)
+unknown-rt (21 ms)
+decorated-formation (52 ms)
+empty-object (76015 ms)
+global-noname (14 ms)
+many-free-attributes (32 ms)
+noname-attribute (26 ms)
+unknown-name (87 ms)
+error-line-out-of-listing (21 ms)
+meta-line-out-of-listing (18 ms)
+object-line-out-of-listing (33 ms)
+duplicate-metas (44 ms)
+incorrect-architect (24 ms)
+incorrect-home (19 ms)
+incorrect-jvm-rt-location (20 ms)
+incorrect-node-rt-location (19 ms)
+incorrect-package (36 ms)
+incorrect-version (20 ms)
+mandatory-home (34 ms)
+mandatory-package (15 ms)
+mandatory-version (23 ms)
+package-contains-multiple-parts (15 ms)
+prohibited-package (20 ms)
+unique-metas (18 ms)
+unknown-metas (19 ms)
+unsorted-metas (831 ms)
+zero-version (17 ms)
+incorrect-test-object-name (17 ms)
+sparse-decoration (44 ms)
+object-does-not-match-filename (19 ms)
+broken-ref (26 ms)
+line-is-absent (164 ms)
+unit-test-without-phi (18 ms)
+ascii-only (15 ms)
+unit-test-is-not-verb (18 ms)
+
 
 ```
 
 The results were calculated in [this GHA job][benchmark-gha]
-on 2024-12-29 at 12:53,
+on 2025-01-03 at 07:46,
 on Linux with 4 CPUs.
 <!-- benchmark_end -->
 
@@ -132,4 +194,4 @@ You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
 
 [XMIR]: https://news.eolang.org/2022-11-25-xmir-guide.html
 [EO]: https://www.eolang.org
-[benchmark-gha]: https://github.com/objectionary/lints/actions/runs/12535549518
+[benchmark-gha]: https://github.com/objectionary/lints/actions/runs/12594472874
