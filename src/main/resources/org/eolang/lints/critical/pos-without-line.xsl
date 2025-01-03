@@ -27,7 +27,7 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@pos and not(number(@line))]">
+      <xsl:for-each select="//o[not(@line)]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="eo:lineno(@line)"/>
