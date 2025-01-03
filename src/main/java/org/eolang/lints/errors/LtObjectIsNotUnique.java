@@ -42,7 +42,6 @@ import org.eolang.lints.Severity;
  * Object is not unique.
  *
  * @since 0.0.30
- * @checkstyle NestedForDepthCheck (40 lines)
  */
 public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
 
@@ -67,7 +66,10 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                     continue;
                 }
                 LtObjectIsNotUnique.programObjects(oth).entrySet().stream()
-                    .filter(object -> LtObjectIsNotUnique.containsDuplicate(xmir, oth, object.getKey()))
+                    .filter(
+                        object ->
+                            LtObjectIsNotUnique.containsDuplicate(xmir, oth, object.getKey())
+                    )
                     .map(
                         (Function<Map.Entry<String, String>, Defect>) object ->
                             new Defect.Default(
