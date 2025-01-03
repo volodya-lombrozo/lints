@@ -37,7 +37,6 @@ import org.junit.jupiter.api.Test;
  *
  * @since 0.0.30
  */
-@SuppressWarnings("PMD.AvoidDuplicateLiterals")
 final class LtObjectIsNotUniqueTest {
 
     @Test
@@ -64,8 +63,8 @@ final class LtObjectIsNotUniqueTest {
             "Defects aren't empty, but they should",
             new LtObjectIsNotUnique().defects(
                 new MapOf<String, XML>(
-                    new MapEntry<>("foo", LtObjectIsNotUniqueTest.xmir("foo")),
-                    new MapEntry<>("bar", LtObjectIsNotUniqueTest.xmir("bar"))
+                    new MapEntry<>("c", LtObjectIsNotUniqueTest.xmir("c")),
+                    new MapEntry<>("e", LtObjectIsNotUniqueTest.xmir("e"))
                 )
             ),
             Matchers.emptyIterable()
@@ -78,8 +77,8 @@ final class LtObjectIsNotUniqueTest {
             "Defects aren't empty, but they should",
             new LtObjectIsNotUnique().defects(
                 new MapOf<String, XML>(
-                    new MapEntry<>("foo", LtObjectIsNotUniqueTest.xmir("foo")),
-                    new MapEntry<>("bar", LtObjectIsNotUniqueTest.xmir("foo-packaged"))
+                    new MapEntry<>("baz", LtObjectIsNotUniqueTest.xmir("baz")),
+                    new MapEntry<>("baz-packaged", LtObjectIsNotUniqueTest.xmir("baz-packaged"))
                 )
             ),
             Matchers.emptyIterable()
