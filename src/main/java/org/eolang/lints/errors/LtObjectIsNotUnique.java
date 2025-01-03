@@ -40,6 +40,7 @@ import org.eolang.lints.Severity;
  * Object is not unique.
  *
  * @since 0.0.30
+ * @checkstyle NestedForDepthCheck (40 lines)
  */
 public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
 
