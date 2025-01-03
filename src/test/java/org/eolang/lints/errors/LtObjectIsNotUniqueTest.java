@@ -58,6 +58,24 @@ final class LtObjectIsNotUniqueTest {
     }
 
     @Test
+    void catchesDuplicatesAcrossMultipleObjects() throws Exception {
+        MatcherAssert.assertThat(
+            "Defects are empty, but they should not",
+            new LtObjectIsNotUnique().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "test-1", LtObjectIsNotUniqueTest.xmir("test-1")
+                    ),
+                    new MapEntry<>(
+                        "test-2", LtObjectIsNotUniqueTest.xmir("test-2")
+                    )
+                )
+            ),
+            Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
+
+    @Test
     void allowsAllUnique() throws Exception {
         MatcherAssert.assertThat(
             "Defects aren't empty, but they should",
