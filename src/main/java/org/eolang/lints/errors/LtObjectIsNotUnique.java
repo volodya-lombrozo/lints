@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.cactoos.io.ResourceOf;
@@ -65,29 +66,24 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 if (oth.nodes("/program/objects/o").isEmpty()) {
                     continue;
                 }
-                for (
-                    final Map.Entry<String, String> object : LtObjectIsNotUnique.programObjects(oth)
-                        .entrySet()
-                ) {
-                    final String name = object.getKey();
-                    if (!LtObjectIsNotUnique.containsDuplicate(xmir, oth, name)) {
-                        continue;
-                    }
-                    defects.add(
-                        new Defect.Default(
-                            this.name(),
-                            Severity.ERROR,
-                            oth.xpath("/program/@name").stream()
-                                .findFirst()
-                                .orElse("unknown"),
-                            Integer.parseInt(object.getValue()),
-                            String.format(
-                                "The object name '%s' is not unique, original object was found in '%s'",
-                                name, src
+                LtObjectIsNotUnique.programObjects(oth).entrySet().stream()
+                    .filter(object -> LtObjectIsNotUnique.containsDuplicate(xmir, oth, object.getKey()))
+                    .map(
+                        (Function<Map.Entry<String, String>, Defect>) object ->
+                            new Defect.Default(
+                                this.name(),
+                                Severity.ERROR,
+                                oth.xpath("/program/@name").stream()
+                                    .findFirst()
+                                    .orElse("unknown"),
+                                Integer.parseInt(object.getValue()),
+                                String.format(
+                                    "The object name '%s' is not unique, original object was found in '%s'",
+                                    object.getKey(), src
+                                )
                             )
-                        )
-                    );
-                }
+                    )
+                    .forEach(defects::add);
             }
         }
         return defects;
