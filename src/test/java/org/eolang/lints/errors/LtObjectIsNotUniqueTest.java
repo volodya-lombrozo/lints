@@ -103,6 +103,20 @@ final class LtObjectIsNotUniqueTest {
         );
     }
 
+    @Test
+    void allowsNonUniqueMultipleObjectsInDifferentPackages() throws Exception {
+        MatcherAssert.assertThat(
+            "Defects aren't empty, but they should",
+            new LtObjectIsNotUnique().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>("mul", LtObjectIsNotUniqueTest.xmir("mul")),
+                    new MapEntry<>("mul-packaged", LtObjectIsNotUniqueTest.xmir("mul-packaged"))
+                )
+            ),
+            Matchers.emptyIterable()
+        );
+    }
+
     private static XML xmir(final String name) throws Exception {
         return new EoSyntax(
             name,
