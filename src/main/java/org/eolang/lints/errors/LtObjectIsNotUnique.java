@@ -25,11 +25,12 @@ package org.eolang.lints.errors;
 
 import com.jcabi.xml.XML;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
 import org.eolang.lints.Defect;
@@ -71,8 +72,8 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                     if (
                         !(original.containsKey(name)
                             && LtObjectIsNotUnique.packageName(oth)
-                            .equals(LtObjectIsNotUnique.packageName(xmir))
-                        )
+                                .equals(LtObjectIsNotUnique.packageName(xmir))
+                            )
                     ) {
                         continue;
                     }
@@ -108,13 +109,16 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
     }
 
     private static Map<String, String> programObjects(final XML xmir) {
-        final Map<String, String> objects = new HashMap<>(0);
         final List<String> names = xmir.xpath("/program/objects/o/@name");
-        final List<String> lines = xmir.xpath("/program/objects/o/@line");
-        for (int pos = 0; pos < names.size(); pos++) {
-            objects.put(names.get(pos), lines.get(pos));
-        }
-        return objects;
+        return IntStream.range(0, names.size())
+            .boxed()
+            .collect(
+                Collectors.toMap(
+                    names::get,
+                    pos -> xmir.xpath("/program/objects/o/@line").get(pos),
+                    (existing, replacement) -> replacement
+                )
+            );
     }
 
     private static String packageName(final XML xmir) {
