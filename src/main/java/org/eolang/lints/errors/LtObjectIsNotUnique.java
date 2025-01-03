@@ -58,7 +58,6 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
             if (xmir.nodes("/program/objects/o").isEmpty()) {
                 continue;
             }
-            final Map<String, String> original = LtObjectIsNotUnique.programObjects(xmir);
             for (final XML oth : pkg.values()) {
                 if (Objects.equals(oth, xmir)) {
                     continue;
@@ -69,12 +68,7 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 final Map<String, String> other = LtObjectIsNotUnique.programObjects(oth);
                 for (final Map.Entry<String, String> object : other.entrySet()) {
                     final String name = object.getKey();
-                    if (
-                        !(original.containsKey(name)
-                            && LtObjectIsNotUnique.packageName(oth)
-                                .equals(LtObjectIsNotUnique.packageName(xmir))
-                            )
-                    ) {
+                    if (!LtObjectIsNotUnique.containDuplicate(xmir, oth, name)) {
                         continue;
                     }
                     defects.add(
@@ -106,6 +100,12 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 )
             )
         ).asString();
+    }
+
+    private static boolean containDuplicate(final XML original, final XML oth, final String name) {
+        return LtObjectIsNotUnique.programObjects(original).containsKey(name)
+            && LtObjectIsNotUnique.packageName(oth)
+            .equals(LtObjectIsNotUnique.packageName(original));
     }
 
     private static Map<String, String> programObjects(final XML xmir) {
