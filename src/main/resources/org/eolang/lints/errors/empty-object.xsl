@@ -27,30 +27,28 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o">
-        <xsl:if test="not(o)">
-          <xsl:element name="defect">
-            <xsl:attribute name="line">
-              <xsl:value-of select="eo:lineno(@line)"/>
-            </xsl:attribute>
-            <xsl:attribute name="severity">
-              <xsl:text>warning</xsl:text>
-            </xsl:attribute>
-            <xsl:text>The </xsl:text>
-            <xsl:choose>
-              <xsl:when test="@name">
-                <xsl:text>object </xsl:text>
-                <xsl:text>"</xsl:text>
-                <xsl:value-of select="@name"/>
-                <xsl:text>"</xsl:text>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text>anonymous object</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text> is empty, it doesn't have any attributes, neither void nor attached</xsl:text>
-          </xsl:element>
-        </xsl:if>
+      <xsl:for-each select="/program/objects//o[not(o)]">
+        <xsl:element name="defect">
+          <xsl:attribute name="line">
+            <xsl:value-of select="eo:lineno(@line)"/>
+          </xsl:attribute>
+          <xsl:attribute name="severity">
+            <xsl:text>warning</xsl:text>
+          </xsl:attribute>
+          <xsl:text>The </xsl:text>
+          <xsl:choose>
+            <xsl:when test="@name">
+              <xsl:text>object </xsl:text>
+              <xsl:text>"</xsl:text>
+              <xsl:value-of select="@name"/>
+              <xsl:text>"</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>anonymous object</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text> is empty, it doesn't have any attributes, neither void nor attached</xsl:text>
+        </xsl:element>
       </xsl:for-each>
     </defects>
   </xsl:template>
