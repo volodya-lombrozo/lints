@@ -22,11 +22,32 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:math="http://www.w3.org/2005/xpath-functions/math"
- xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eo="https://www.eolang.org" version="2.0" id="one-high-level-object">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:math="http://www.w3.org/2005/xpath-functions/math" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eo="https://www.eolang.org" version="2.0" id="one-high-level-object">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:variable name="sprintf" select="/program/objects//o[@base='.sprintf']"/>
+  <xsl:variable name="sprintf" select="/program/objects//o[@base = '.sprintf']"/>
+  <xsl:variable name="tupled" select="//o[@base='.sprintf']/o[@base='tuple']/o[not(@base='.empty')]"/>
+  <xsl:variable name="nested">
+    <xsl:for-each select="$tupled">
+      <xsl:call-template name="nested-args">
+        <xsl:with-param name="node" select="."/>
+      </xsl:call-template>
+    </xsl:for-each>
+  </xsl:variable>
+  <xsl:template name="nested-args">
+    <xsl:param name="node"/>
+    <xsl:for-each select="$node/o[not(@base='tuple') and not(@base='.empty')]">
+      <xsl:value-of select="@base"/>
+      <xsl:text> </xsl:text>
+    </xsl:for-each>
+    <xsl:for-each select="$node/o[@base='tuple']">
+      <xsl:call-template name="nested-args">
+        <xsl:with-param name="node" select="."/>
+      </xsl:call-template>
+    </xsl:for-each>
+  </xsl:template>
+  <xsl:variable name="args" select="count($tupled[not(@base='tuple')]/@base) + count(tokenize(substring($nested, 1, string-length($nested) - 1), '\s+'))"/>
+
   <!--<objects>
       <o line="2" name="app" pos="0">
          <o base=".stdout" line="3" name="@" pos="7">
@@ -72,21 +93,8 @@ SOFTWARE.
       </xsl:for-each>
     </xsl:variable>
     <defects>
-      <!--<xsl:if test="sprintf">
-        <defect>
-          <xsl:attribute name="line">
-            <xsl:value-of select="eo:lineno(@line)"/>
-          </xsl:attribute>
-          <xsl:attribute name="severity">warning</xsl:attribute>
-          <xsl:text>Program "</xsl:text>
-          <xsl:value-of select="$program"/>
-          <xsl:text>" has </xsl:text>
-          <xsl:value-of select="$objects"/>
-          <xsl:text> objects, while only 1 is allowed</xsl:text>
-        </defect>
-      </xsl:if> -->
-      <xsl:value-of select="count(matches($placeholder, '%s')) + count(matches($placeholder, '%d'))"/>
+      <xsl:value-of select="$args"/>
+        <!--<xsl:value-of select="count(matches($placeholder, '%s')) + count(matches($placeholder, '%d'))"/>-->
     </defects>
   </xsl:template>
 </xsl:stylesheet>
-
