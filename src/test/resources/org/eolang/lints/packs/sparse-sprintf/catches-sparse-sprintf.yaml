@@ -26,7 +26,7 @@ asserts:
   - /defects[count(defect[@severity='warning'])=1]
   - /defects/defect[@line='4']
 input: |
-  # App that uses sparse sprintf.
+  # App.
   [] > app
   QQ.io.stdout > @
     QQ.txt.sprintf

@@ -69,7 +69,7 @@ SOFTWARE.
   <xsl:variable name="used" select="count($tupled[not(@base='tuple')]/@base) + count(tokenize(substring($nested, 1, string-length($nested) - 1), '\s+'))"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="$declared != $used">
+      <xsl:if test="$sprintf != '' and $declared != $used">
         <defect>
           <xsl:attribute name="line">
             <xsl:value-of select="eo:lineno($sprintf/@line)"/>
