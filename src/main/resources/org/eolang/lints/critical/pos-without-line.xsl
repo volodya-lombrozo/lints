@@ -22,32 +22,22 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="empty-object" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="pos-without-line" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="/program/objects//o[not(o)]">
+      <xsl:for-each select="//o[@pos and not(@line)]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="eo:lineno(@line)"/>
           </xsl:attribute>
           <xsl:attribute name="severity">
-            <xsl:text>warning</xsl:text>
+            <xsl:text>critical</xsl:text>
           </xsl:attribute>
-          <xsl:text>The </xsl:text>
-          <xsl:choose>
-            <xsl:when test="@name">
-              <xsl:text>object </xsl:text>
-              <xsl:text>"</xsl:text>
-              <xsl:value-of select="@name"/>
-              <xsl:text>"</xsl:text>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:text>anonymous object</xsl:text>
-            </xsl:otherwise>
-          </xsl:choose>
-          <xsl:text> is empty, it doesn't have any attributes, neither void nor attached</xsl:text>
+          <xsl:text>Object "</xsl:text>
+          <xsl:value-of select="@name"/>
+          <xsl:text>" have '@pos', but '@line' is absent</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>

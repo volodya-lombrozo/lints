@@ -59,7 +59,7 @@ jobs:
                 fi
                 printf "%s,%s\n" "$(echo "$id" | tr -d '"')" "$(echo "$ms" | tr -d '"')"
               fi
-            done < target/timings.csv | sort -t, -k2 -n -r | while IFS=, read -r id ms; do
+            done < target/timings.csv | sort -t, -k2 -n -r | head -16 | while IFS=, read -r id ms; do
               printf "%s (%s ms)\n" "$id" "$ms"
             done
             printf "\`\`\`\n\n"

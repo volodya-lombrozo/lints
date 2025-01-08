@@ -56,6 +56,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
@@ -117,6 +118,7 @@ final class ProgramTest {
     }
 
     @Test
+    @Timeout(10L)
     void simpleTest(@Mktmp final Path dir) throws IOException {
         final Path path = dir.resolve("foo.xmir");
         Files.write(
@@ -179,6 +181,7 @@ final class ProgramTest {
     }
 
     @Test
+    @Timeout(10L)
     void acceptsCanonicalCode() throws IOException {
         final XML xmir = new Xsline(new TrParsing()).pass(
             new EoSyntax(
