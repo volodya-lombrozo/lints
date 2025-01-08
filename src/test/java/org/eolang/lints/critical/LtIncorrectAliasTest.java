@@ -120,16 +120,6 @@ final class LtIncorrectAliasTest {
         );
     }
 
-    /**
-     * Accepts valid directory.
-     * @param dir Directory
-     * @throws IOException if something went wrong
-     * @todo #107:35min Make `acceptsValidDirectory` faster.
-     *  Currently, it fails with the default timeout (3s), we should speed up
-     *  this test. Alternatively, we can make it deep and move to other Maven
-     *  profile.
-     */
-    @Timeout(5L)
     @Test
     @ExtendWith(MktmpResolver.class)
     void acceptsValidDirectory(@Mktmp final Path dir) throws IOException {
