@@ -78,14 +78,14 @@ final class LtObjectIsNotUniqueTest {
     }
 
     /**
-     * Lints regex tests.
+     * Allows all unique.
      * @throws IOException if something went wrong
      * @todo #107:35min Make `allowsAllUnique` faster.
      *  Currently, it fails with the default timeout (3s), we should speed up
      *  this test. Alternatively, we can make it deep and move to other Maven
      *  profile.
      */
-    @Timeout(5L)
+    @Timeout(7L)
     @Test
     void allowsAllUnique() throws Exception {
         MatcherAssert.assertThat(

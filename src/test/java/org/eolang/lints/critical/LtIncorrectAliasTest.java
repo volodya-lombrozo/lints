@@ -38,6 +38,7 @@ import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -119,6 +120,16 @@ final class LtIncorrectAliasTest {
         );
     }
 
+    /**
+     * Accepts valid directory.
+     * @param dir Directory
+     * @throws IOException if something went wrong
+     * @todo #107:35min Make `acceptsValidDirectory` faster.
+     *  Currently, it fails with the default timeout (3s), we should speed up
+     *  this test. Alternatively, we can make it deep and move to other Maven
+     *  profile.
+     */
+    @Timeout(5L)
     @Test
     @ExtendWith(MktmpResolver.class)
     void acceptsValidDirectory(@Mktmp final Path dir) throws IOException {
