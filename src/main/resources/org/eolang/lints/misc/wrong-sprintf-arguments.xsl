@@ -29,14 +29,7 @@ SOFTWARE.
     <xsl:param name="hex" as="xs:string"/>
     <xsl:variable name="hex-upper" select="upper-case($hex)"/>
     <xsl:variable name="length" select="string-length($hex-upper)"/>
-    <xsl:variable name="decimal" select="
-      sum(
-        for $i in 1 to $length
-        return (index-of(string-to-codepoints('0123456789ABCDEF'),
-                         string-to-codepoints(substring($hex-upper, $i, 1))) - 1)
-               * xs:integer(math:pow(16, $length - $i))
-      )
-    "/>
+    <xsl:variable name="decimal" select="sum(for $i in 1 to $length return (index-of(string-to-codepoints('0123456789ABCDEF'), string-to-codepoints(substring($hex-upper, $i, 1))) - 1) * xs:integer(math:pow(16, $length - $i)))"/>
     <xsl:sequence select="$decimal"/>
   </xsl:function>
   <xsl:variable name="sprintf" select="//o[@base='.sprintf'][o[@base='.txt']/o[@base='QQ']]"/>
@@ -79,9 +72,9 @@ SOFTWARE.
           </xsl:attribute>
           <xsl:text>The sprintf object has wrong number of arguments: </xsl:text>
           <xsl:value-of select="$declared"/>
-          <xsl:text> declared, but </xsl:text>
+          <xsl:text> in the placeholder, but </xsl:text>
           <xsl:value-of select="$used"/>
-          <xsl:text> are used</xsl:text>
+          <xsl:text> are passed</xsl:text>
         </defect>
       </xsl:if>
     </defects>
