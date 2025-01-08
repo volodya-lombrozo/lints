@@ -31,4 +31,4 @@ input: |
   QQ.io.stdout > @
     QQ.txt.sprintf
       "Hello, %s! Your account is %d."
-      * name
+      * name acc
