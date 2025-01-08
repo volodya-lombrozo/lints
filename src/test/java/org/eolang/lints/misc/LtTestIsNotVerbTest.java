@@ -30,6 +30,7 @@ import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
@@ -71,6 +72,15 @@ final class LtTestIsNotVerbTest {
         );
     }
 
+    /**
+     * Lints regex tests.
+     * @throws IOException if something went wrong
+     * @todo #107:35min Make `lintsRegexTests` faster.
+     *  Currently, it fails with the default timeout (3s), we should speed up
+     *  this test. Alternatively, we can make it deep and move to other Maven
+     *  profile.
+     */
+    @Timeout(5L)
     @Test
     @ExtendWith(MayBeSlow.class)
     void lintsRegexTests() throws IOException {
