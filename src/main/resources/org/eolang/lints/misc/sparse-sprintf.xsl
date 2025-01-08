@@ -66,6 +66,11 @@ SOFTWARE.
     <xsl:sequence select="$decimal"/>
   </xsl:function>
   <xsl:template match="/">
+    <xsl:variable name="placeholder">
+      <xsl:for-each select="tokenize($sprintf, '-')">
+        <xsl:value-of select="codepoints-to-string(eo:convert-hex-to-decimal(.))"/>
+      </xsl:for-each>
+    </xsl:variable>
     <defects>
       <!--<xsl:if test="sprintf">
         <defect>
@@ -80,9 +85,7 @@ SOFTWARE.
           <xsl:text> objects, while only 1 is allowed</xsl:text>
         </defect>
       </xsl:if> -->
-      <xsl:for-each select="tokenize($sprintf, '-')">
-        <xsl:value-of select="codepoints-to-string(eo:convert-hex-to-decimal(.))"/>
-      </xsl:for-each>
+      <xsl:value-of select="count(matches($placeholder, '%s')) + count(matches($placeholder, '%d'))"/>
     </defects>
   </xsl:template>
 </xsl:stylesheet>
