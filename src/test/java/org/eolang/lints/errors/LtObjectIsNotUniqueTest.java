@@ -24,7 +24,6 @@
 package org.eolang.lints.errors;
 
 import com.jcabi.xml.XML;
-import java.io.IOException;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
@@ -32,7 +31,6 @@ import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 
 /**
  * Tests for {@link LtObjectIsNotUnique}.
