@@ -24,7 +24,7 @@ sheets:
   - /org/eolang/lints/misc/sparse-sprintf.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='1']
+  - /defects/defect[@line='4']
 input: |
   # App that uses sparse sprintf.
   [] > app

@@ -25,7 +25,27 @@ SOFTWARE.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:math="http://www.w3.org/2005/xpath-functions/math" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eo="https://www.eolang.org" version="2.0" id="one-high-level-object">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
+  <xsl:function name="eo:hex-to-placeholder" as="xs:integer">
+    <xsl:param name="hex" as="xs:string"/>
+    <xsl:variable name="hex-upper" select="upper-case($hex)"/>
+    <xsl:variable name="length" select="string-length($hex-upper)"/>
+    <xsl:variable name="decimal" select="
+      sum(
+        for $i in 1 to $length
+        return (index-of(string-to-codepoints('0123456789ABCDEF'),
+                         string-to-codepoints(substring($hex-upper, $i, 1))) - 1)
+               * xs:integer(math:pow(16, $length - $i))
+      )
+    "/>
+    <xsl:sequence select="$decimal"/>
+  </xsl:function>
   <xsl:variable name="sprintf" select="/program/objects//o[@base = '.sprintf']"/>
+  <xsl:variable name="placeholder">
+    <xsl:for-each select="tokenize($sprintf, '-')">
+      <xsl:value-of select="codepoints-to-string(eo:hex-to-placeholder(.))"/>
+    </xsl:for-each>
+  </xsl:variable>
+  <xsl:variable name="declared" select="count(matches($placeholder, '%s')) + count(matches($placeholder, '%d'))"/>
   <xsl:variable name="tupled" select="//o[@base='.sprintf']/o[@base='tuple']/o[not(@base='.empty')]"/>
   <xsl:variable name="nested">
     <xsl:for-each select="$tupled">
@@ -46,55 +66,24 @@ SOFTWARE.
       </xsl:call-template>
     </xsl:for-each>
   </xsl:template>
-  <xsl:variable name="args" select="count($tupled[not(@base='tuple')]/@base) + count(tokenize(substring($nested, 1, string-length($nested) - 1), '\s+'))"/>
-
-  <!--<objects>
-      <o line="2" name="app" pos="0">
-         <o base=".stdout" line="3" name="@" pos="7">
-            <o base=".io" line="3" pos="4">
-               <o base="QQ" line="3" pos="2"/>
-            </o>
-            <o base=".sprintf" line="4" pos="10">
-               <o base=".txt" line="4" pos="6">
-                  <o base="QQ" line="4" pos="4"/>
-               </o>
-               <o base="string" line="5" pos="6">48-65-6C-6C-6F-2C-20-25-73-21-20-59-6F-75-72-20-61-63-63-6F-75-6E-74-20-69-73-20-25-64-2E</o>
-               <o base="tuple" line="6" pos="6">
-                  <o base="tuple">
-                     <o base=".empty">
-                        <o base="tuple"/>
-                     </o>
-                     <o base="name" line="6" pos="8">
-                  </o>
-                  <o base="acc" line="6" pos="13"/>
-               </o>
-            </o>
-         </o>
-      </o>
-  </objects> -->
-   <xsl:function name="eo:convert-hex-to-decimal" as="xs:integer">
-    <xsl:param name="hex" as="xs:string"/>
-    <xsl:variable name="hex-upper" select="upper-case($hex)"/>
-    <xsl:variable name="length" select="string-length($hex-upper)"/>
-    <xsl:variable name="decimal" select="
-      sum(
-        for $i in 1 to $length
-        return (index-of(string-to-codepoints('0123456789ABCDEF'), 
-                         string-to-codepoints(substring($hex-upper, $i, 1))) - 1)
-               * xs:integer(math:pow(16, $length - $i))
-      )
-    "/>
-    <xsl:sequence select="$decimal"/>
-  </xsl:function>
+  <xsl:variable name="used" select="count($tupled[not(@base='tuple')]/@base) + count(tokenize(substring($nested, 1, string-length($nested) - 1), '\s+'))"/>
   <xsl:template match="/">
-    <xsl:variable name="placeholder">
-      <xsl:for-each select="tokenize($sprintf, '-')">
-        <xsl:value-of select="codepoints-to-string(eo:convert-hex-to-decimal(.))"/>
-      </xsl:for-each>
-    </xsl:variable>
     <defects>
-      <xsl:value-of select="$args"/>
-        <!--<xsl:value-of select="count(matches($placeholder, '%s')) + count(matches($placeholder, '%d'))"/>-->
+      <xsl:if test="$declared != $used">
+        <defect>
+          <xsl:attribute name="line">
+            <xsl:value-of select="eo:lineno($sprintf/@line)"/>
+          </xsl:attribute>
+          <xsl:attribute name="severity">
+            <xsl:text>warning</xsl:text>
+          </xsl:attribute>
+          <xsl:text>The sprintf object has wrong number of arguments: </xsl:text>
+          <xsl:value-of select="$declared"/>
+          <xsl:text> declared, but </xsl:text>
+          <xsl:value-of select="$used"/>
+          <xsl:text> are used</xsl:text>
+        </defect>
+      </xsl:if>
     </defects>
   </xsl:template>
 </xsl:stylesheet>
