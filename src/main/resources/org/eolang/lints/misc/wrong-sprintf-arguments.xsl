@@ -22,7 +22,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:math="http://www.w3.org/2005/xpath-functions/math" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eo="https://www.eolang.org" version="2.0" id="one-high-level-object">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:math="http://www.w3.org/2005/xpath-functions/math" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eo="https://www.eolang.org" version="2.0" id="wrong-sprintf-arguments">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:function name="eo:hex-to-placeholder" as="xs:integer">
@@ -39,7 +39,7 @@ SOFTWARE.
     "/>
     <xsl:sequence select="$decimal"/>
   </xsl:function>
-  <xsl:variable name="sprintf" select="/program/objects//o[@base = '.sprintf']"/>
+  <xsl:variable name="sprintf" select="//o[@base='.sprintf'][o[@base='.txt']/o[@base='QQ']]"/>
   <xsl:variable name="placeholder">
     <xsl:for-each select="tokenize($sprintf, '-')">
       <xsl:value-of select="codepoints-to-string(eo:hex-to-placeholder(.))"/>

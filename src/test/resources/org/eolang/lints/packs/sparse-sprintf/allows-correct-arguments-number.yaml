@@ -21,7 +21,7 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/misc/sparse-sprintf.xsl
+  - /org/eolang/lints/misc/wrong-sprintf-arguments.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=0]
 input: |
