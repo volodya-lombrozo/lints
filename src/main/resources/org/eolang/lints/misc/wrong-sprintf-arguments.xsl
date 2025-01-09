@@ -38,7 +38,14 @@ SOFTWARE.
       <xsl:value-of select="codepoints-to-string(eo:hex-to-placeholder(.))"/>
     </xsl:for-each>
   </xsl:variable>
-  <xsl:variable name="declared" select="count(matches($placeholder, '%s')) + count(matches($placeholder, '%d'))"/>
+  <xsl:variable name="allowed">
+    <xsl:analyze-string select="$placeholder" regex="%[sdfxb]">
+      <xsl:matching-substring>
+        <match/>
+      </xsl:matching-substring>
+    </xsl:analyze-string>
+  </xsl:variable>
+  <xsl:variable name="declared" select="count($allowed/match)"/>
   <xsl:variable name="tupled" select="//o[@base='.sprintf']/o[@base='tuple']/o[not(@base='.empty')]"/>
   <xsl:variable name="nested">
     <xsl:for-each select="$tupled">
