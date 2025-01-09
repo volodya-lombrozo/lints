@@ -176,10 +176,8 @@ final class LtByXsl implements Lint<XML> {
      *  <a href="https://github.com/jcabi/jcabi-xml/issues/289">jcabi/jcabi-xml#289</a>.
      */
     private static String findName(final XML program) {
-        return Optional.of(
-                program.inner().getFirstChild()
-            ).map(Node::getAttributes)
-            .map(attrs -> attrs.getNamedItem("name"))
+        return Optional.of(program.inner().getFirstChild())
+            .map(Node::getAttributes).map(attrs -> attrs.getNamedItem("name"))
             .map(Node::getTextContent).orElse("unknown");
     }
 
