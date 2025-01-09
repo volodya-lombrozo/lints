@@ -167,9 +167,15 @@ final class LtByXsl implements Lint<XML> {
      * Find the name of the program.
      * @param program XML program
      * @return Name of the program.
+     * @todo #199:30min Use {@link XML#xpath(String)} Method Instead.
+     *  This method is using a custom implementation to find the name of the program.
+     *  We should replace it with the {@link XML#xpath(String)} method to make the code cleaner.
+     *  You can use `program.xpath("/program/@name").stream().findFirst().orElse("unknown")`
+     *  to find the name.
+     *  This issue is blocked by
+     *  <a href="https://github.com/jcabi/jcabi-xml/issues/289">jcabi/jcabi-xml#289</a>.
      */
     private static String findName(final XML program) {
-//        return program.xpath("/program/@name").stream().findFirst().orElse("unknown");
         return Optional.of(
                 program.inner().getFirstChild().getAttributes().getNamedItem("name"))
             .map(Node::getTextContent)
@@ -180,9 +186,15 @@ final class LtByXsl implements Lint<XML> {
      * Find defects in the report.
      * @param report XML report.
      * @return Collection of defects.
+     * @todo #199:30min Use {@link XML#nodes(String)} Method Instead.
+     *  This method is using a custom implementation to find defects in the
+     *  report. We should replace it with the {@link XML#nodes(String)} method
+     *  to make the code cleaner.
+     *  You can use `report.nodes("/defects/defect")` to find the defects.
+     *  This issue is blocked by
+     *  <a href="https://github.com/jcabi/jcabi-xml/issues/288">jcabi/jcabi-xml#288</a>.
      */
     private static Collection<XML> findDefects(final XML report) {
-//        return report.nodes("/defects/defect");
         final NodeList nodes = report.inner().getChildNodes();
         final int length = nodes.getLength();
         final List<XML> defects = new ArrayList<>(0);
@@ -201,5 +213,4 @@ final class LtByXsl implements Lint<XML> {
         }
         return defects;
     }
-
 }
