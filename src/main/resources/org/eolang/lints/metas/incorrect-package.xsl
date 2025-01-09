@@ -31,7 +31,7 @@ SOFTWARE.
         <xsl:variable name="meta-head" select="head"/>
         <xsl:variable name="meta-tail" select="tail"/>
         <xsl:variable name="first" select="normalize-space(substring-before(concat($meta-tail, ' '), ' '))"/>
-        <xsl:if test="$meta-head='package' and not(matches($first, '^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]+)*$'))">
+        <xsl:if test="$meta-head='package' and not(matches($first, '^[a-z][a-z0-9_]*(\.[a-z][a-z0-9_]*|\$[a-z][a-z0-9_]*)*$'))">
           <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="eo:lineno(@line)"/>
