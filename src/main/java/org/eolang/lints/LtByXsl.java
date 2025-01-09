@@ -29,13 +29,17 @@ import com.jcabi.xml.XMLDocument;
 import com.jcabi.xml.XSL;
 import com.jcabi.xml.XSLDocument;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Lint by XSL.
@@ -101,7 +105,7 @@ final class LtByXsl implements Lint<XML> {
     public Collection<Defect> defects(final XML xmir) {
         final XML report = this.sheet.transform(xmir);
         final Collection<Defect> defects = new LinkedList<>();
-        for (final XML defect : report.nodes("/defects/defect")) {
+        for (final XML defect : LtByXsl.findDefects(report)) {
             final List<String> severity = defect.xpath("@severity");
             if (severity.isEmpty()) {
                 throw new IllegalStateException(
@@ -112,7 +116,7 @@ final class LtByXsl implements Lint<XML> {
                 new Defect.Default(
                     this.rule,
                     Severity.parsed(severity.get(0)),
-                    xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
+                    LtByXsl.findName(xmir),
                     this.lineno(defect),
                     defect.xpath("text()").get(0)
                 )
@@ -157,6 +161,45 @@ final class LtByXsl implements Lint<XML> {
             );
         }
         return lineno;
+    }
+
+    /**
+     * Find the name of the program.
+     * @param program XML program
+     * @return Name of the program.
+     */
+    private static String findName(final XML program) {
+//        return program.xpath("/program/@name").stream().findFirst().orElse("unknown");
+        return Optional.of(
+                program.inner().getFirstChild().getAttributes().getNamedItem("name"))
+            .map(Node::getTextContent)
+            .orElse("unknown");
+    }
+
+    /**
+     * Find defects in the report.
+     * @param report XML report.
+     * @return Collection of defects.
+     */
+    private static Collection<XML> findDefects(final XML report) {
+//        return report.nodes("/defects/defect");
+        final NodeList nodes = report.inner().getChildNodes();
+        final int length = nodes.getLength();
+        final List<XML> defects = new ArrayList<>(0);
+        for (int index = 0; index < length; ++index) {
+            final Node element = nodes.item(index);
+            if (element.getNodeName().equals("defects")) {
+                final NodeList dnodes = element.getChildNodes();
+                final int all = dnodes.getLength();
+                for (int idx = 0; idx < all; ++idx) {
+                    final Node defect = dnodes.item(idx);
+                    if (defect.getNodeName().equals("defect")) {
+                        defects.add(new XMLDocument(defect.cloneNode(true)));
+                    }
+                }
+            }
+        }
+        return defects;
     }
 
 }
