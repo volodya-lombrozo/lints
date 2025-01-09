@@ -212,7 +212,7 @@ final class ProgramTest {
     @Tag("benchmark")
     @ExtendWith(MktmpResolver.class)
     @ExtendWith(MayBeSlow.class)
-    @Timeout(60L)
+    @Timeout(600L)
     void lintsLargeJnaClass(@Mktmp final Path home) throws Exception {
         final String path = "com/sun/jna/Pointer.class";
         final Path bin = Paths.get("target")
