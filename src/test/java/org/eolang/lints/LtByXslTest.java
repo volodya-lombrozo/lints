@@ -23,13 +23,17 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.cactoos.io.InputOf;
+import org.eolang.jeo.Disassembler;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.EoSyntax;
 import org.eolang.xax.XtSticky;
@@ -39,8 +43,10 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 
 /**
@@ -169,6 +175,28 @@ final class LtByXslTest {
                     new IsEqual<>(true)
                 )
             );
+    }
+
+    @Test
+    @Timeout(20)
+    void checksEmptyObjectOnLargeXmirInReasonableTime(@TempDir final Path tmp) throws IOException {
+        final Path path = Paths.get("com/sun/jna");
+        final String clazz = "Pointer.class";
+        Files.copy(
+            Paths.get("target")
+                .resolve("jna-classes")
+                .resolve(path)
+                .resolve(clazz),
+            tmp.resolve(clazz)
+        );
+        new Disassembler(tmp, tmp).disassemble();
+        MatcherAssert.assertThat(
+            "Huge XMIR must pass without errors related to empty object in reasonable time",
+            new LtByXsl("errors/empty-object").defects(
+                new XMLDocument(tmp.resolve(path).resolve("Pointer.xmir"))
+            ),
+            Matchers.hasSize(0)
+        );
     }
 
 }

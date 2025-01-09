@@ -206,6 +206,12 @@ SOFTWARE.
       <version>0.14.2</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.eolang</groupId>
+      <artifactId>jeo-maven-plugin</artifactId>
+      <version>0.7.0</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <profiles>
     <profile>
