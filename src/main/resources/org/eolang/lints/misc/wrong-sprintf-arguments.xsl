@@ -32,7 +32,7 @@ SOFTWARE.
     <xsl:variable name="decimal" select="sum(for $i in 1 to $length return (index-of(string-to-codepoints('0123456789ABCDEF'), string-to-codepoints(substring($hex-upper, $i, 1))) - 1) * xs:integer(math:pow(16, $length - $i)))"/>
     <xsl:sequence select="$decimal"/>
   </xsl:function>
-  <xsl:variable name="sprintf" select="//o[@base='.sprintf'][o[@base='.txt']/o[@base='QQ']]"/>
+  <xsl:variable name="sprintf" select="//o[@base='.sprintf'][o[@base='.txt']/o[@base='.eolang']/o[@base='org']] | //o[@base='.sprintf'][o[@base='.txt']/o[@base='.eolang']/o[@base='org']/o[@base='Q']]"/>
   <xsl:variable name="placeholder">
     <xsl:for-each select="tokenize($sprintf, '-')">
       <xsl:value-of select="codepoints-to-string(eo:hex-to-placeholder(.))"/>

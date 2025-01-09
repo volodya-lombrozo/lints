@@ -28,6 +28,6 @@ input: |
   # App that uses sparse sprintf.
   [] > app
   QQ.io.stdout > @
-    QQ.txt.sprintf
+    org.eolang.txt.sprintf
       "Hello, %s! Your account is %d."
       * name acc

@@ -28,6 +28,6 @@ input: |
   # App.
   [] > app
   QQ.io.stdout > @
-    QQ.txt.sprintf
+    org.eolang.txt.sprintf
       "Hello, %s (%x, match: %b)! Your account is %d, your temperature %f."
       * name name.as-bytes true acc t
