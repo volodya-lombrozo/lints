@@ -177,8 +177,10 @@ final class LtByXsl implements Lint<XML> {
      */
     private static String findName(final XML program) {
         return Optional.of(
-            program.inner().getFirstChild().getAttributes().getNamedItem("name")
-        ).map(Node::getTextContent).orElse("unknown");
+                program.inner().getFirstChild()
+            ).map(Node::getAttributes)
+            .map(attrs -> attrs.getNamedItem("name"))
+            .map(Node::getTextContent).orElse("unknown");
     }
 
     /**
