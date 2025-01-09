@@ -177,9 +177,8 @@ final class LtByXsl implements Lint<XML> {
      */
     private static String findName(final XML program) {
         return Optional.of(
-                program.inner().getFirstChild().getAttributes().getNamedItem("name"))
-            .map(Node::getTextContent)
-            .orElse("unknown");
+            program.inner().getFirstChild().getAttributes().getNamedItem("name")
+        ).map(Node::getTextContent).orElse("unknown");
     }
 
     /**
@@ -200,12 +199,13 @@ final class LtByXsl implements Lint<XML> {
         final List<XML> defects = new ArrayList<>(0);
         for (int index = 0; index < length; ++index) {
             final Node element = nodes.item(index);
-            if (element.getNodeName().equals("defects")) {
-                final NodeList dnodes = element.getChildNodes();
+            if ("defects".equals(element.getNodeName())) {
+                final NodeList dnodes;
+                dnodes = element.getChildNodes();
                 final int all = dnodes.getLength();
                 for (int idx = 0; idx < all; ++idx) {
                     final Node defect = dnodes.item(idx);
-                    if (defect.getNodeName().equals("defect")) {
+                    if ("defect".equals(defect.getNodeName())) {
                         defects.add(new XMLDocument(defect.cloneNode(true)));
                     }
                 }
