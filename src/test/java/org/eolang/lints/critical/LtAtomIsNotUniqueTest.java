@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.errors;
+package org.eolang.lints.critical;
 
 import com.jcabi.xml.XML;
 import org.cactoos.map.MapEntry;
@@ -32,30 +32,30 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests for {@link LtObjectIsNotUnique}.
+ * Tests for {@link LtAtomIsNotUnique}.
  *
- * @since 0.0.30
+ * @since 0.0.31
  */
-final class LtObjectIsNotUniqueTest {
+final class LtAtomIsNotUniqueTest {
 
     /**
      * Prefix to EO snippet objects.
      */
-    private static final String EO_PREFIX = "org/eolang/lints/errors/object-is-not-unique/";
+    private static final String EO_PREFIX = "org/eolang/lints/critical/atom-is-not-unique/";
 
     @Test
-    void catchesDuplicates() throws Exception {
+    void catchesAtomDuplicates() throws Exception {
         MatcherAssert.assertThat(
             "Defects are empty, but they should not",
-            new LtObjectIsNotUnique().defects(
+            new LtAtomIsNotUnique().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "foo",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "foo").value()
+                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "foo").value()
                     ),
                     new MapEntry<>(
-                        "bar-with-foo",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "bar-with-foo").value()
+                        "bar",
+                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "bar").value()
                     )
                 )
             ),
@@ -64,18 +64,14 @@ final class LtObjectIsNotUniqueTest {
     }
 
     @Test
-    void catchesDuplicatesAcrossMultipleObjects() throws Exception {
+    void catchesDuplicatesInSingleFile() throws Exception {
         MatcherAssert.assertThat(
             "Defects are empty, but they should not",
-            new LtObjectIsNotUnique().defects(
-                new MapOf<String, XML>(
+            new LtAtomIsNotUnique().defects(
+                new MapOf<>(
                     new MapEntry<>(
-                        "test-1",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "test-1").value()
-                    ),
-                    new MapEntry<>(
-                        "test-2",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "test-2").value()
+                        "dup",
+                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "dup").value()
                     )
                 )
             ),
@@ -84,18 +80,18 @@ final class LtObjectIsNotUniqueTest {
     }
 
     @Test
-    void allowsAllUnique() throws Exception {
+    void allowsUniqueAtoms() throws Exception {
         MatcherAssert.assertThat(
             "Defects aren't empty, but they should",
-            new LtObjectIsNotUnique().defects(
+            new LtAtomIsNotUnique().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>(
-                        "c",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "c").value()
+                        "a",
+                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "a").value()
                     ),
                     new MapEntry<>(
-                        "e",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "e").value()
+                        "b",
+                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "b").value()
                     )
                 )
             ),
@@ -104,38 +100,14 @@ final class LtObjectIsNotUniqueTest {
     }
 
     @Test
-    void allowsNonUniqueInDifferentPackages() throws Exception {
+    void allowsUniqueAtomsInSingleFile() throws Exception {
         MatcherAssert.assertThat(
             "Defects aren't empty, but they should",
-            new LtObjectIsNotUnique().defects(
-                new MapOf<String, XML>(
+            new LtAtomIsNotUnique().defects(
+                new MapOf<>(
                     new MapEntry<>(
-                        "baz",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "baz").value()
-                    ),
-                    new MapEntry<>(
-                        "baz-packaged",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "baz-packaged").value()
-                    )
-                )
-            ),
-            Matchers.emptyIterable()
-        );
-    }
-
-    @Test
-    void allowsNonUniqueMultipleObjectsInDifferentPackages() throws Exception {
-        MatcherAssert.assertThat(
-            "Defects aren't empty, but they should",
-            new LtObjectIsNotUnique().defects(
-                new MapOf<String, XML>(
-                    new MapEntry<>(
-                        "mul",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "mul").value()
-                    ),
-                    new MapEntry<>(
-                        "mul-packaged",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "mul-packaged").value()
+                        "spb",
+                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "spb").value()
                     )
                 )
             ),
