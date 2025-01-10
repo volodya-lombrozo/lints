@@ -27,16 +27,17 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="//o[@name and ../@base]" mode="named"/>
+      <xsl:for-each select="//o[@name and ../@base]">
+        <defect>
+          <xsl:attribute name="line">
+            <xsl:value-of select="eo:lineno(@line)"/>
+          </xsl:attribute>
+          <xsl:attribute name="severity">critical</xsl:attribute>
+          <xsl:text>An object may not have the @name attribute if its parent has the @base attribute; </xsl:text>
+          <xsl:text>object naming with the @name attribute make sense only inside formations; </xsl:text>
+          <xsl:text>the @as attribute is supposed to be used for naming inside applications</xsl:text>
+        </defect>
+      </xsl:for-each>
     </defects>
-  </xsl:template>
-  <xsl:template match="o" mode="named">
-    <defect>
-      <xsl:attribute name="line">
-        <xsl:value-of select="eo:lineno(@line)"/>
-      </xsl:attribute>
-      <xsl:attribute name="severity">critical</xsl:attribute>
-      <xsl:text>The "@name" attribute may only be present if the parent of the object is abstract</xsl:text>
-    </defect>
   </xsl:template>
 </xsl:stylesheet>
