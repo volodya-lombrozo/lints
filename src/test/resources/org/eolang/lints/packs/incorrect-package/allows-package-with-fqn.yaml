@@ -25,8 +25,15 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='warning'])=0]
 input: |
+  +package hello.world
+  +package hello.world123
+  +package foo.бар
+  +package test_xyz
   +package j$org.j$eolang.j$jeo
   +package com.foo$bar
+  +package universe@obj
+  +package c.d-test.x-yz
+  +package a.b-привет.c-大家好
 
   # Test.
   [] > foo
