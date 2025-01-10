@@ -23,10 +23,11 @@
 sheets:
   - /org/eolang/lints/metas/incorrect-package.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=2]
+  - /defects[count(defect[@severity='warning'])=0]
 input: |
-  +package test.
-  +package привет, как дела?
+  +package Foo
+  +package Hello.WorLd
+  +package baR.XYZ
 
-  # Foo.
+  # Test.
   [] > foo
