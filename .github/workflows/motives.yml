@@ -35,8 +35,8 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           tag=${{github.ref_name}}
-          mkdir -p "gh-pages/_site/${tag}"
-          find src/main/resources/org/eolang/motives -name '*.md' -exec cp {} "gh-pages/_site/${tag}" \;
+          mkdir -p "gh-pages/${tag}"
+          find src/main/resources/org/eolang/motives -name '*.md' -exec cp {} "gh-pages/${tag}" \;
           (
             printf '<html><body style="font-family: monospace;">\n'
             printf '<p>Latest version: %s</p>\n' "${tag}"
@@ -46,11 +46,11 @@ jobs:
               n=$(basename "${f}" .md)
               printf '<li><a href="%s">%s</a></li>\n' \
                 "/${tag}/${n}.html" "${n}"
-            done < <(find "gh-pages/_site/${tag}" -name '*.md')
+            done < <(find "gh-pages/${tag}" -name '*.md')
             printf '</ul>\n'
             printf '<p>Published on %s.</p>\n' "$(date)"
             printf '</body></html>'
-          ) > "gh-pages/_site/index.html"
+          ) > "gh-pages/index.html"
 
       - uses: JamesIves/github-pages-deploy-action@v4.7.2
         with:
