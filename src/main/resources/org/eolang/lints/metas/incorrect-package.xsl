@@ -32,7 +32,7 @@ SOFTWARE.
         <xsl:variable name="meta-tail" select="tail"/>
         <xsl:variable name="first" select="normalize-space(substring-before(concat($meta-tail, ' '), ' '))"/>
         <xsl:if test="$meta-head='package' and not(matches($first, '^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+|\$[a-zA-Z0-9_]*)*$|[\p{L}\p{M}\p{N}_]+(\.[\p{L}\p{M}\p{N}_]+)*$'))">
-        <xsl:element name="defect">
+          <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="eo:lineno(@line)"/>
             </xsl:attribute>
