@@ -33,7 +33,9 @@ SOFTWARE.
             <xsl:value-of select="eo:lineno(@line)"/>
           </xsl:attribute>
           <xsl:attribute name="severity">critical</xsl:attribute>
-          <xsl:text>An object may not have the @name attribute if its parent has the @base attribute</xsl:text>
+          <xsl:text>An object may not have the @name attribute if its parent has the @base attribute; </xsl:text>
+          <xsl:text>object naming with the @name attribute make sense only inside formations; </xsl:text>
+          <xsl:text>the @as attribute is supposed to be used for naming inside applications</xsl:text>
         </defect>
       </xsl:for-each>
     </defects>
