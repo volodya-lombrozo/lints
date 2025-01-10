@@ -94,9 +94,6 @@ public final class Program {
     /**
      * Find defects possible defects in the XMIR file.
      * @return All defects found
-     * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR guide</a>
-     * @see <a href="https://www.eolang.org/XMIR.html">XMIR specification</a>
-     * @see <a href="https://www.eolang.org/XMIR.xsd">XMIR schema</a>
      */
     public Collection<Defect> defects() {
         try {
