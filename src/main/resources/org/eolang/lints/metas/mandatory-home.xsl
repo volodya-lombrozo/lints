@@ -35,7 +35,7 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
           </xsl:attribute>
-          <xsl:text>The +home meta is mandatory, but is absent</xsl:text>
+          <xsl:text>The +home meta is mandatory, but is absent (must contain URL of repository where object sources may be found)</xsl:text>
         </xsl:element>
       </xsl:if>
     </defects>
