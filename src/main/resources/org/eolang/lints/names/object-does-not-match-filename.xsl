@@ -22,10 +22,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" version="2.0" id="object-does-not-match-filename">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eo="https://www.eolang.org" version="2.0" id="object-does-not-match-filename">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:variable name="filename" select="/program/@name"/>
+  <xsl:variable name="package" select="/program/metas/meta[head='package']"/>
+  <xsl:variable name="program" select="/program/@name"/>
+  <xsl:variable name="filename" as="xs:string">
+    <xsl:choose>
+      <xsl:when test="$package/head != ''">
+        <xsl:value-of select="replace($program, concat($package/tail, '.'), '')"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$program"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
   <xsl:variable name="tested" select="/program/metas/meta[head='tests']"/>
   <xsl:template match="/">
     <defects>
