@@ -30,7 +30,7 @@ SOFTWARE.
   <xsl:variable name="filename" as="xs:string">
     <xsl:choose>
       <xsl:when test="$package/head != ''">
-        <xsl:value-of select="replace($program, concat($package/tail, '.'), '')"/>
+        <xsl:value-of select="substring-after($program, concat($package/tail, '.'))"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$program"/>
