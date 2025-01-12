@@ -23,17 +23,18 @@
 sheets:
   - /org/eolang/lints/names/object-does-not-match-filename.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=0]
+  - /defects[count(defect[@severity='warning'])=1]
+  - /defects/defect[@line='2']
 document: |
-  <program name="foo.foo">
+  <program name="org.foo">
     <metas>
       <meta>
         <head>package</head>
-        <tail>foo</tail>
-        <part>foo</part>
+        <tail>org</tail>
+        <part>org</part>
       </meta>
     </metas>
     <objects>
-      <o line="2" name="foo" pos="0"/>
+      <o line="2" name="bar" pos="0"/>
     </objects>
   </program>
