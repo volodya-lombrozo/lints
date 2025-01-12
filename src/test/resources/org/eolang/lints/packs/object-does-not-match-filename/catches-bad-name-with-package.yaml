@@ -24,7 +24,7 @@ sheets:
   - /org/eolang/lints/names/object-does-not-match-filename.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='1']
+  - /defects/defect[@line='2']
 document: |
   <program name="app.app.app">
     <metas>
