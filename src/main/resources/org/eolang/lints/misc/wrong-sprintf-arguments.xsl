@@ -33,8 +33,9 @@ SOFTWARE.
     <xsl:sequence select="$decimal"/>
   </xsl:function>
   <xsl:variable name="sprintf" select="//o[@base='.sprintf'][o[@base='.txt']/o[@base='.eolang']/o[@base='org']] | //o[@base='.sprintf'][o[@base='.txt']/o[@base='.eolang']/o[@base='org']/o[@base='Q']]"/>
+  <xsl:variable name="sprintf-text" select="$sprintf/o[@base='string'][1]/text()"/>
   <xsl:variable name="placeholder">
-    <xsl:for-each select="tokenize($sprintf, '-')">
+    <xsl:for-each select="tokenize($sprintf-text, '-')">
       <xsl:value-of select="codepoints-to-string(eo:hex-to-placeholder(.))"/>
     </xsl:for-each>
   </xsl:variable>
@@ -69,7 +70,7 @@ SOFTWARE.
   <xsl:variable name="used" select="count($tupled[not(@base='tuple')]/@base) + count(tokenize(substring($nested, 1, string-length($nested) - 1), '\s+'))"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="$sprintf != '' and $declared != $used">
+      <xsl:if test="$sprintf-text != '' and $declared != $used">
         <defect>
           <xsl:attribute name="line">
             <xsl:value-of select="eo:lineno($sprintf/@line)"/>

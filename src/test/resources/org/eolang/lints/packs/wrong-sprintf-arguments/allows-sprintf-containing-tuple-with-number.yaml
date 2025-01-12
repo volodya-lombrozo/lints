@@ -29,5 +29,5 @@ input: |
   [] > app
   QQ.io.stdout > @
     org.eolang.txt.sprintf
-      "Hello, %s! Your account is %d."
-      * name acc
+      "Привет, %d"
+      * 52
