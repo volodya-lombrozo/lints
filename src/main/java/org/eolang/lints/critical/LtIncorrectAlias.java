@@ -53,7 +53,12 @@ public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
                     if (xmir.nodes("/program/metas/meta[head='package']").size() != 1) {
                         continue;
                     }
-                    final String pointer = alias.xpath("text()").get(0);
+                    final String pointer;
+                    if (Boolean.parseBoolean(alias.xpath("contains(text(), ' ')").get(0))) {
+                        pointer = alias.xpath("substring-before(text(), ' ')").get(0);
+                    } else {
+                        pointer = alias.xpath("text()").get(0);
+                    }
                     final String lookup = String.format(
                         "%s/%s",
                         xmir.xpath("/program/metas/meta[head='package']/tail/text()").get(0),

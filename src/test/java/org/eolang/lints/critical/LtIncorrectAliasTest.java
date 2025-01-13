@@ -120,6 +120,29 @@ final class LtIncorrectAliasTest {
     }
 
     @Test
+    void allowsLongerAlias() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects aren't empty, but they should",
+            new LtIncorrectAlias().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "longer-alias",
+                        new EoSyntax(
+                            new ResourceOf(
+                                "org/eolang/lints/critical/incorrect-alias/longer-alias.eo"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "foo/stdout", new XMLDocument("<program/>")
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
     @ExtendWith(MktmpResolver.class)
     void acceptsValidDirectory(@Mktmp final Path dir) throws IOException {
         Files.write(
