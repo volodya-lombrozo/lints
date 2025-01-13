@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
 import org.eolang.lints.Defect;
@@ -38,6 +39,11 @@ import org.eolang.lints.Severity;
  * @since 0.0.30
  */
 public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
+
+    /**
+     * Pattern contains dot.
+     */
+    private static final Pattern DOT_PATTERN = Pattern.compile("\\.");
 
     @Override
     public String name() {
@@ -53,17 +59,19 @@ public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
                     if (xmir.nodes("/program/metas/meta[head='package']").size() != 1) {
                         continue;
                     }
-                    final String pointer;
+                    final String pointer = alias.xpath("text()").get(0);
+                    final String lookup;
                     if (Boolean.parseBoolean(alias.xpath("contains(text(), ' ')").get(0))) {
-                        pointer = alias.xpath("substring-before(text(), ' ')").get(0);
+                        lookup = LtIncorrectAlias.DOT_PATTERN.matcher(
+                            alias.xpath("substring-after(text(), ' ')").get(0)
+                        ).replaceAll("/");
                     } else {
-                        pointer = alias.xpath("text()").get(0);
+                        lookup = String.format(
+                            "%s/%s",
+                            xmir.xpath("/program/metas/meta[head='package']/tail/text()").get(0),
+                            pointer
+                        );
                     }
-                    final String lookup = String.format(
-                        "%s/%s",
-                        xmir.xpath("/program/metas/meta[head='package']/tail/text()").get(0),
-                        pointer
-                    );
                     if (!pkg.containsKey(lookup)) {
                         defects.add(
                             new Defect.Default(
@@ -74,7 +82,7 @@ public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
                                     xmir.xpath("/program/metas/meta[head='alias'][1]/@line").get(0)
                                 ),
                                 String.format(
-                                    "Incorrect pointing alias '%s', there is no %s",
+                                    "Incorrect pointing alias '%s', since there is no %s",
                                     pointer,
                                     lookup
                                 )

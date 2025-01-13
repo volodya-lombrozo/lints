@@ -120,7 +120,7 @@ final class LtIncorrectAliasTest {
     }
 
     @Test
-    void allowsLongerAlias() throws IOException {
+    void scansSecondPartInLongerAlias() throws IOException {
         MatcherAssert.assertThat(
             "Defects aren't empty, but they should",
             new LtIncorrectAlias().defects(
@@ -134,7 +134,7 @@ final class LtIncorrectAliasTest {
                         ).parsed()
                     ),
                     new MapEntry<>(
-                        "foo/stdout", new XMLDocument("<program/>")
+                        "org/eolang/io/stdout", new XMLDocument("<program/>")
                     )
                 )
             ),
