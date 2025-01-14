@@ -177,7 +177,7 @@ final class LtByXslTest {
     }
 
     @Test
-    @Timeout(30)
+    @Timeout(30L)
     void checksEmptyObjectOnLargeXmirInReasonableTime(@TempDir final Path tmp) throws IOException {
         final Path path = Paths.get("com/sun/jna");
         final String clazz = "Pointer.class";
