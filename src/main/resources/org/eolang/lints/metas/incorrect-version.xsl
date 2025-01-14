@@ -30,7 +30,7 @@ SOFTWARE.
       <xsl:for-each select="/program/metas/meta">
         <xsl:variable name="meta-head" select="head"/>
         <xsl:variable name="meta-tail" select="tail"/>
-        <xsl:if test="$meta-head='version' and not(matches($meta-tail, '^\d+\.\d+\.\d+(-[a-zA-Z0-9-]+)?$|^\d+\.\d+(-[a-zA-Z0-9-]+)$'))">
+        <xsl:if test="$meta-head='version' and not(matches($meta-tail, '^\d+\.\d+\.\d+(-[a-zA-Z0-9-]+)?$|^\d+\.\d+-SNAPSHOT$'))">
           <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="eo:lineno(@line)"/>
