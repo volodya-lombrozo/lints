@@ -21,54 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.units;
+package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
-import org.eolang.lints.Defect;
-import org.eolang.lints.Lint;
-import org.eolang.lints.Severity;
 
 /**
- * A test is missing for a live EO program.
+ * Lint that ignores linting if {@code +unlint} meta is present.
  *
- * @since 0.1.0
+ * @since 0.0.1
  */
-public final class LtUnitTestMissing implements Lint<Map<String, XML>> {
+final class LtSuppressed implements Lint<XML> {
+
+    /**
+     * The original lint.
+     */
+    private final Lint<XML> origin;
+
+    /**
+     * Ctor.
+     * @param lint The lint to decorate
+     */
+    LtSuppressed(final Lint<XML> lint) {
+        this.origin = lint;
+    }
 
     @Override
-    public Collection<Defect> defects(final Map<String, XML> pkg) throws IOException {
-        final Collection<Defect> defects = new LinkedList<>();
-        for (final String name : pkg.keySet()) {
-            if (name.endsWith("-test")) {
-                continue;
-            }
-            if (pkg.containsKey(String.format("%s-test", name))) {
-                continue;
-            }
-            defects.add(
-                new Defect.Default(
-                    "unit-test-missing",
-                    Severity.WARNING,
-                    name,
-                    0,
-                    String.format("Unit test is not found for %s", name)
-                )
-            );
+    public String name() {
+        return this.origin.name();
+    }
+
+    @Override
+    public Collection<Defect> defects(final XML xmir) throws IOException {
+        final boolean suppress = !xmir.nodes(
+            String.format(
+                "/program/metas/meta[head='unlint' and tail='%s']",
+                this.origin.name()
+            )
+        ).isEmpty();
+        final Collection<Defect> defects = new ArrayList<>(0);
+        if (!suppress) {
+            defects.addAll(this.origin.defects(xmir));
         }
         return defects;
     }
 
     @Override
-    public String name() {
-        return "unit-test-missing";
+    public String motive() throws IOException {
+        return this.origin.motive();
     }
 
-    @Override
-    public String motive() throws IOException {
-        return "";
-    }
 }

@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
 import org.eolang.lints.Severity;
@@ -132,10 +133,12 @@ public final class LtTestNotVerb implements Lint<XML> {
     }
 
     @Override
-    public String motive() throws Exception {
-        return new TextOf(
-            new ResourceOf(
-                "org/eolang/motives/misc/test-object-is-not-verb-in-singular.md"
+    public String motive() throws IOException {
+        return new UncheckedText(
+            new TextOf(
+                new ResourceOf(
+                    "org/eolang/motives/misc/test-object-is-not-verb-in-singular.md"
+                )
             )
         ).asString();
     }

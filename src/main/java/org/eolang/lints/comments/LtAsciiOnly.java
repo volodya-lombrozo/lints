@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Optional;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
@@ -86,9 +87,11 @@ public final class LtAsciiOnly implements Lint<XML> {
     }
 
     @Override
-    public String motive() throws Exception {
-        return new TextOf(
-            new ResourceOf("org/eolang/motives/comments/ascii-only.md")
+    public String motive() throws IOException {
+        return new IoCheckedText(
+            new TextOf(
+                new ResourceOf("org/eolang/motives/comments/ascii-only.md")
+            )
         ).asString();
     }
 }

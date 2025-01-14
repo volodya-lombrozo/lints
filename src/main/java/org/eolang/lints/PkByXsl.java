@@ -70,14 +70,16 @@ final class PkByXsl extends IterableEnvelope<Lint<XML>> {
         try {
             return new Shuffled<Lint<XML>>(
                 new Mapped<>(
-                    res -> new LtByXsl(
-                        new InputOf(res.getInputStream()),
-                        new InputOf(
-                            PkByXsl.XSL_PATTERN.matcher(
-                                PkByXsl.LINTS_PATH.matcher(
-                                    res.getURL().toString()
-                                ).replaceAll("eolang/motives")
-                            ).replaceAll(".md")
+                    res -> new LtSuppressed(
+                        new LtByXsl(
+                            new InputOf(res.getInputStream()),
+                            new InputOf(
+                                PkByXsl.XSL_PATTERN.matcher(
+                                    PkByXsl.LINTS_PATH.matcher(
+                                        res.getURL().toString()
+                                    ).replaceAll("eolang/motives")
+                                ).replaceAll(".md")
+                            )
                         )
                     ),
                     Arrays.asList(

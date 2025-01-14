@@ -24,11 +24,13 @@
 package org.eolang.lints.critical;
 
 import com.jcabi.xml.XML;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
 import org.eolang.lints.Severity;
@@ -83,10 +85,12 @@ public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
     }
 
     @Override
-    public String motive() throws Exception {
-        return new TextOf(
-            new ResourceOf(
-                "org/eolang/motives/critical/incorrect-alias.md"
+    public String motive() throws IOException {
+        return new UncheckedText(
+            new TextOf(
+                new ResourceOf(
+                    "org/eolang/motives/critical/incorrect-alias.md"
+                )
             )
         ).asString();
     }
