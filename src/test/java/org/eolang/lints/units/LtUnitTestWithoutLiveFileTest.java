@@ -55,7 +55,7 @@ final class LtUnitTestWithoutLiveFileTest {
     @Test
     void acceptsValidPackage() {
         MatcherAssert.assertThat(
-            "Defects are not emtpy, but they should",
+            "Defects are not empty, but they should",
             new LtUnitTestWithoutLiveFile().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>("foo-test", new XMLDocument("<program/>")),
