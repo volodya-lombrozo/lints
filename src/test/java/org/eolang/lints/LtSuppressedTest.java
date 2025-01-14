@@ -40,7 +40,7 @@ final class LtSuppressedTest {
     @Test
     void lintsOneFile() throws IOException {
         MatcherAssert.assertThat(
-            "the error is there",
+            "failed to return one error",
             new LtSuppressed(new LtAlways()).defects(
                 new EoSyntax(new InputOf("# first\n[] > foo\n")).parsed()
             ),
@@ -51,7 +51,7 @@ final class LtSuppressedTest {
     @Test
     void suppressesTheDefect() throws IOException {
         MatcherAssert.assertThat(
-            "the error is there",
+            "failed to return empty list",
             new LtSuppressed(new LtAlways()).defects(
                 new EoSyntax(
                     new InputOf("+unlint always\n\n# first\n[] > foo\n")
