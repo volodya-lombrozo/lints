@@ -107,18 +107,16 @@ final class LtIncorrectAliasTest {
     }
 
     @Test
-    void scansSecondPartInLongerAlias() throws IOException {
+    void scansSecondPartInLongerAlias() throws Exception {
         MatcherAssert.assertThat(
             "Defects aren't empty, but they should",
             new LtIncorrectAlias().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "longer-alias",
-                        new EoSyntax(
-                            new ResourceOf(
-                                "org/eolang/lints/critical/incorrect-alias/longer-alias.eo"
-                            )
-                        ).parsed()
+                        new ParsedEo(
+                            "org/eolang/lints/critical/incorrect-alias/longer-alias.eo"
+                        ).value()
                     ),
                     new MapEntry<>(
                         "org/eolang/io/stdout", new XMLDocument("<program><objects/></program>")
@@ -150,14 +148,11 @@ final class LtIncorrectAliasTest {
 
     @Test
     @ExtendWith(MktmpResolver.class)
-    void acceptsValidDirectoryWithLongerAlias(@Mktmp final Path dir) throws IOException {
+    void acceptsValidDirectoryWithLongerAlias(@Mktmp final Path dir) throws Exception {
         Files.write(
             dir.resolve("main.xmir"),
-            new EoSyntax(
-                new ResourceOf(
-                    "org/eolang/lints/critical/incorrect-alias/longer-alias.eo"
-                )
-            ).parsed().toString().getBytes()
+            new ParsedEo("org/eolang/lints/critical/incorrect-alias/longer-alias.eo")
+                .value().toString().getBytes()
         );
         Files.write(dir.resolve("main-test.xmir"), "<program><objects/></program>".getBytes());
         Files.createDirectory(

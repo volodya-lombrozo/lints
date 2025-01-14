@@ -34,6 +34,9 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.cactoos.io.ResourceOf;
+import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
 import org.eolang.lints.Severity;
@@ -98,8 +101,16 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
     }
 
     @Override
-    public String motive() throws Exception {
-        throw new UnsupportedOperationException("#motive()");
+    public String motive() {
+        return new UncheckedText(
+            new TextOf(
+                new ResourceOf(
+                    String.format(
+                        "org/eolang/motives/errors/%s.md", this.name()
+                    )
+                )
+            )
+        ).asString();
     }
 
     private Defect singleDefect(final XML xmir, final String atom, final int pos) {
