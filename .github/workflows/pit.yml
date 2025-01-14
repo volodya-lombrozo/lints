@@ -30,7 +30,6 @@ on:
       - master
 jobs:
   pit:
-    name: pit
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
