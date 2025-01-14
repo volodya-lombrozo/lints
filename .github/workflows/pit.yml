@@ -20,34 +20,26 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-sheets:
-  - /org/eolang/lints/metas/incorrect-version.xsl
-asserts:
-  - /defects[count(defect[@severity='warning'])=11]
-  - /defects/defect[@line='1']
-  - /defects/defect[@line='2']
-  - /defects/defect[@line='3']
-  - /defects/defect[@line='4']
-  - /defects/defect[@line='5']
-  - /defects/defect[@line='6']
-  - /defects/defect[@line='7']
-  - /defects/defect[@line='8']
-  - /defects/defect[@line='9']
-  - /defects/defect[@line='10']
-  - /defects/defect[@line='11']
-input: |
-  +version alpha
-  +version 1.0.0-alpha.beta
-  +version привет, друг!
-  +version привет, как дела?
-  +version 你好，伙计
-  +version 0.0
-  +version 123
-  +version 1. 1 .1
-  +version 1.1.alpha
-  +version 1-alpha
-  +version alpha.1.1
-
-  # No comments.
-  [x] > foo
-    x.div in.nextInt > @
+name: pit
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  pit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 21
+      - uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ubuntu-jdk-21-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ubuntu-jdk-21-maven-
+      - run: mvn clean install -Ppit

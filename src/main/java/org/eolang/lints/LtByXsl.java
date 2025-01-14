@@ -29,13 +29,17 @@ import com.jcabi.xml.XMLDocument;
 import com.jcabi.xml.XSL;
 import com.jcabi.xml.XSLDocument;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Lint by XSL.
@@ -101,7 +105,7 @@ final class LtByXsl implements Lint<XML> {
     public Collection<Defect> defects(final XML xmir) {
         final XML report = this.sheet.transform(xmir);
         final Collection<Defect> defects = new LinkedList<>();
-        for (final XML defect : report.nodes("/defects/defect")) {
+        for (final XML defect : LtByXsl.findDefects(report)) {
             final List<String> severity = defect.xpath("@severity");
             if (severity.isEmpty()) {
                 throw new IllegalStateException(
@@ -112,7 +116,7 @@ final class LtByXsl implements Lint<XML> {
                 new Defect.Default(
                     this.rule,
                     Severity.parsed(severity.get(0)),
-                    xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
+                    LtByXsl.findName(xmir),
                     this.lineno(defect),
                     defect.xpath("text()").get(0)
                 )
@@ -122,8 +126,8 @@ final class LtByXsl implements Lint<XML> {
     }
 
     @Override
-    public String motive() throws Exception {
-        return new TextOf(this.doc).asString();
+    public String motive() throws IOException {
+        return new IoCheckedText(new TextOf(this.doc)).asString();
     }
 
     /**
@@ -159,4 +163,54 @@ final class LtByXsl implements Lint<XML> {
         return lineno;
     }
 
+    /**
+     * Find the name of the program.
+     * @param program XML program
+     * @return Name of the program.
+     * @todo #199:30min Use {@link XML#xpath(String)} Method Instead.
+     *  This method is using a custom implementation to find the name of the program.
+     *  We should replace it with the {@link XML#xpath(String)} method to make the code cleaner.
+     *  You can use `program.xpath("/program/@name").stream().findFirst().orElse("unknown")`
+     *  to find the name.
+     *  This issue is blocked by
+     *  <a href="https://github.com/jcabi/jcabi-xml/issues/289">jcabi/jcabi-xml#289</a>.
+     */
+    private static String findName(final XML program) {
+        return Optional.of(program.inner().getFirstChild())
+            .map(Node::getAttributes).map(attrs -> attrs.getNamedItem("name"))
+            .map(Node::getTextContent).orElse("unknown");
+    }
+
+    /**
+     * Find defects in the report.
+     * @param report XML report.
+     * @return Collection of defects.
+     * @todo #199:30min Use {@link XML#nodes(String)} Method Instead.
+     *  This method is using a custom implementation to find defects in the
+     *  report. We should replace it with the {@link XML#nodes(String)} method
+     *  to make the code cleaner.
+     *  You can use `report.nodes("/defects/defect")` to find the defects.
+     *  This issue is blocked by
+     *  <a href="https://github.com/jcabi/jcabi-xml/issues/288">jcabi/jcabi-xml#288</a>.
+     */
+    private static Collection<XML> findDefects(final XML report) {
+        final NodeList nodes = report.inner().getChildNodes();
+        final int length = nodes.getLength();
+        final List<XML> defects = new ArrayList<>(0);
+        for (int index = 0; index < length; ++index) {
+            final Node element = nodes.item(index);
+            if ("defects".equals(element.getNodeName())) {
+                final NodeList dnodes;
+                dnodes = element.getChildNodes();
+                final int all = dnodes.getLength();
+                for (int idx = 0; idx < all; ++idx) {
+                    final Node defect = dnodes.item(idx);
+                    if ("defect".equals(defect.getNodeName())) {
+                        defects.add(new XMLDocument(defect.cloneNode(true)));
+                    }
+                }
+            }
+        }
+        return defects;
+    }
 }

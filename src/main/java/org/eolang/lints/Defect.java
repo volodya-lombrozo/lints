@@ -27,7 +27,14 @@ import com.jcabi.manifests.Manifests;
 
 /**
  * A single defect found.
- *
+ * Defect is a node in the XMIR under `/program/defects`, that describes the
+ * issue with EO/XMIR source code. Defect contain the message that addresses
+ * source code and points to the problem in it. Some defects report the problems
+ * on XMIR format itself, consider to check resources on XMIR in order to get
+ * understanding how intermediate representation of EO is structured in XML format.
+ * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR guide</a>
+ * @see <a href="https://www.eolang.org/XMIR.html">XMIR specification</a>
+ * @see <a href="https://www.eolang.org/XMIR.xsd">XMIR schema</a>
  * @since 0.0.1
  */
 public interface Defect {

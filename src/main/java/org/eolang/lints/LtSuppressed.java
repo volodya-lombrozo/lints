@@ -24,40 +24,53 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
-import java.util.Map;
-import org.cactoos.iterable.IterableEnvelope;
-import org.cactoos.iterable.Shuffled;
-import org.cactoos.list.ListOf;
-import org.eolang.lints.critical.LtIncorrectAlias;
-import org.eolang.lints.errors.LtAtomIsNotUnique;
-import org.eolang.lints.errors.LtObjectIsNotUnique;
-import org.eolang.lints.units.LtUnitTestMissing;
-import org.eolang.lints.units.LtUnitTestWithoutLiveFile;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
- * A collection of lints for Whole Program Analysis (WPA),
- * provided by the {@link Programs} class.
+ * Lint that ignores linting if {@code +unlint} meta is present.
  *
- * <p>This class is thread-safe.</p>
- *
- * @since 0.1.0
+ * @since 0.0.1
  */
-public final class PkWpa extends IterableEnvelope<Lint<Map<String, XML>>> {
+final class LtSuppressed implements Lint<XML> {
+
+    /**
+     * The original lint.
+     */
+    private final Lint<XML> origin;
 
     /**
      * Ctor.
+     * @param lint The lint to decorate
      */
-    public PkWpa() {
-        super(
-            new Shuffled<>(
-                new ListOf<>(
-                    new LtUnitTestMissing(),
-                    new LtUnitTestWithoutLiveFile(),
-                    new LtIncorrectAlias(),
-                    new LtObjectIsNotUnique(),
-                    new LtAtomIsNotUnique()
-                )
-            )
-        );
+    LtSuppressed(final Lint<XML> lint) {
+        this.origin = lint;
     }
+
+    @Override
+    public String name() {
+        return this.origin.name();
+    }
+
+    @Override
+    public Collection<Defect> defects(final XML xmir) throws IOException {
+        final boolean suppress = !xmir.nodes(
+            String.format(
+                "/program/metas/meta[head='unlint' and tail='%s']",
+                this.origin.name()
+            )
+        ).isEmpty();
+        final Collection<Defect> defects = new ArrayList<>(0);
+        if (!suppress) {
+            defects.addAll(this.origin.defects(xmir));
+        }
+        return defects;
+    }
+
+    @Override
+    public String motive() throws IOException {
+        return this.origin.motive();
+    }
+
 }

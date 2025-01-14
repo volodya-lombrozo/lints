@@ -23,31 +23,13 @@
 sheets:
   - /org/eolang/lints/metas/incorrect-version.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=11]
+  - /defects[count(defect[@severity='warning'])=2]
   - /defects/defect[@line='1']
   - /defects/defect[@line='2']
-  - /defects/defect[@line='3']
-  - /defects/defect[@line='4']
-  - /defects/defect[@line='5']
-  - /defects/defect[@line='6']
-  - /defects/defect[@line='7']
-  - /defects/defect[@line='8']
-  - /defects/defect[@line='9']
-  - /defects/defect[@line='10']
-  - /defects/defect[@line='11']
 input: |
-  +version alpha
-  +version 1.0.0-alpha.beta
-  +version привет, друг!
-  +version привет, как дела?
-  +version 你好，伙计
-  +version 0.0
-  +version 123
-  +version 1. 1 .1
-  +version 1.1.alpha
-  +version 1-alpha
-  +version alpha.1.1
+  +version x.z-SNAPSHOT
+  +version 1.1-hello
 
   # No comments.
   [x] > foo
-    x.div in.nextInt > @
+    41 > @

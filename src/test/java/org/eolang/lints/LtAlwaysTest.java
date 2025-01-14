@@ -23,41 +23,37 @@
  */
 package org.eolang.lints;
 
-import com.jcabi.xml.XML;
-import java.util.Map;
-import org.cactoos.iterable.IterableEnvelope;
-import org.cactoos.iterable.Shuffled;
-import org.cactoos.list.ListOf;
-import org.eolang.lints.critical.LtIncorrectAlias;
-import org.eolang.lints.errors.LtAtomIsNotUnique;
-import org.eolang.lints.errors.LtObjectIsNotUnique;
-import org.eolang.lints.units.LtUnitTestMissing;
-import org.eolang.lints.units.LtUnitTestWithoutLiveFile;
+import java.io.IOException;
+import org.cactoos.io.InputOf;
+import org.eolang.parser.EoSyntax;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
 /**
- * A collection of lints for Whole Program Analysis (WPA),
- * provided by the {@link Programs} class.
+ * Test for {@link LtAlways}.
  *
- * <p>This class is thread-safe.</p>
- *
- * @since 0.1.0
+ * @since 0.0.1
  */
-public final class PkWpa extends IterableEnvelope<Lint<Map<String, XML>>> {
+final class LtAlwaysTest {
 
-    /**
-     * Ctor.
-     */
-    public PkWpa() {
-        super(
-            new Shuffled<>(
-                new ListOf<>(
-                    new LtUnitTestMissing(),
-                    new LtUnitTestWithoutLiveFile(),
-                    new LtIncorrectAlias(),
-                    new LtObjectIsNotUnique(),
-                    new LtAtomIsNotUnique()
-                )
-            )
+    @Test
+    void complainsAlways() throws IOException {
+        MatcherAssert.assertThat(
+            "didn't return one defect",
+            new LtAlways().defects(
+                new EoSyntax(new InputOf("# first\n[] > foo\n")).parsed()
+            ),
+            Matchers.hasSize(1)
+        );
+    }
+
+    @Test
+    void returnsCorrectLintName() {
+        MatcherAssert.assertThat(
+            "incorrect name of the lint",
+            new LtAlways().name(),
+            Matchers.equalTo("always")
         );
     }
 }

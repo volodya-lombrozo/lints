@@ -47,7 +47,7 @@ SOFTWARE.
               <xsl:text>anonymous object</xsl:text>
             </xsl:otherwise>
           </xsl:choose>
-          <xsl:text> is empty, it doesn't have any attributes, neither void nor attached</xsl:text>
+          <xsl:text> is empty. It doesn't have any attributes, neither void nor attached</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>

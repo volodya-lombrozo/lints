@@ -24,6 +24,7 @@
 package org.eolang.lints.errors;
 
 import com.jcabi.xml.XML;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
 import org.eolang.lints.Severity;
@@ -92,11 +94,13 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
     }
 
     @Override
-    public String motive() throws Exception {
-        return new TextOf(
-            new ResourceOf(
-                String.format(
-                    "org/eolang/motives/errors/%s.md", this.name()
+    public String motive() throws IOException {
+        return new UncheckedText(
+            new TextOf(
+                new ResourceOf(
+                    String.format(
+                        "org/eolang/motives/errors/%s.md", this.name()
+                    )
                 )
             )
         ).asString();
