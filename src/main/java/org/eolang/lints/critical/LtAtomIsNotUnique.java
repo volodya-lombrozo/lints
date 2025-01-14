@@ -32,10 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.eolang.lints.Defect;
@@ -95,56 +92,58 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
                         )
                 );
                 index.forEach(
-                    new BiConsumer<XML, List<String>>() {
-                        @Override
-                        public void accept(final XML next, final List<String> natoms) {
-                            if (!Objects.equals(next, xmir)) {
-                                final String pair;
-                                if (xmir.hashCode() < next.hashCode()) {
-                                    pair = String.format("%d:%d", xmir.hashCode(), next.hashCode());
-                                } else {
-                                    pair = String.format("%d:%d", next.hashCode(), xmir.hashCode());
-                                }
-                                if (!checked.contains(pair)) {
-                                    checked.add(pair);
-                                    natoms.stream()
-                                        .filter(atoms::contains)
-                                        .forEach(
-                                            new Consumer<>() {
-                                                @Override
-                                                public void accept(final String aname) {
-                                                    final String nname = next.xpath("/program/@name").stream()
-                                                        .findFirst().orElse("unknown");
-                                                    final String original = xmir.xpath("/program/@name").stream()
-                                                        .findFirst().orElse("unknown");
-                                                    defects.add(
-                                                        new Defect.Default(
-                                                            LtAtomIsNotUnique.this.name(),
-                                                            Severity.ERROR,
-                                                            nname,
-                                                            0,
-                                                            String.format(
-                                                                "Atom '%s' is duplicated, original was found in '%s'",
-                                                                aname, original
-                                                            )
-                                                        )
-                                                    );
-                                                    defects.add(
-                                                        new Defect.Default(
-                                                            LtAtomIsNotUnique.this.name(),
-                                                            Severity.ERROR,
-                                                            original,
-                                                            0,
-                                                            String.format(
-                                                                "Atom '%s' is duplicated, original was found in '%s'",
-                                                                aname, nname
-                                                            )
-                                                        )
-                                                    );
-                                                }
-                                            }
-                                        );
-                                }
+                    (next, natoms) -> {
+                        if (!Objects.equals(next, xmir)) {
+                            final String pair;
+                            if (xmir.hashCode() < next.hashCode()) {
+                                pair = String.format("%d:%d", xmir.hashCode(), next.hashCode());
+                            } else {
+                                pair = String.format("%d:%d", next.hashCode(), xmir.hashCode());
+                            }
+                            if (!checked.contains(pair)) {
+                                checked.add(pair);
+                                natoms.stream()
+                                    .filter(atoms::contains)
+                                    .forEach(
+                                        aname -> {
+                                            final String nname = next.xpath("/program/@name").stream()
+                                                .findFirst().orElse("unknown");
+                                            final String original = xmir.xpath("/program/@name").stream()
+                                                .findFirst().orElse("unknown");
+                                            defects.add(
+                                                new Defect.Default(
+                                                    this.name(),
+                                                    Severity.ERROR,
+                                                    nname,
+                                                    Integer.parseInt(
+                                                        next.xpath(
+                                                            String.format("//o[@atom='%s']/@line", aname)
+                                                        ).get(0)
+                                                    ),
+                                                    String.format(
+                                                        "Atom '%s' is duplicated, original was found in '%s'",
+                                                        aname, original
+                                                    )
+                                                )
+                                            );
+                                            defects.add(
+                                                new Defect.Default(
+                                                    this.name(),
+                                                    Severity.ERROR,
+                                                    original,
+                                                    Integer.parseInt(
+                                                        xmir.xpath(
+                                                            String.format("//o[@atom='%s']/@line", aname)
+                                                        ).get(0)
+                                                    ),
+                                                    String.format(
+                                                        "Atom '%s' is duplicated, original was found in '%s'",
+                                                        aname, nname
+                                                    )
+                                                )
+                                            );
+                                        }
+                                    );
                             }
                         }
                     }
