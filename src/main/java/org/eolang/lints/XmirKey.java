@@ -60,11 +60,14 @@ final class XmirKey implements Text {
 
     @Override
     public String asString() {
-        final String key;
         final Path parent = this.base.relativize(this.xmir.getParent());
-        final String name = XmirKey.XMIR_EXT.matcher(
-            this.xmir.getFileName().toString()
-        ).replaceAll("");
+        final Path path = this.xmir.getFileName();
+        String fname = "";
+        if (path != null) {
+            fname = path.toString();
+        }
+        final String name = XmirKey.XMIR_EXT.matcher(fname).replaceAll("");
+        final String key;
         if (parent.toString().isEmpty()) {
             key = name;
         } else {
