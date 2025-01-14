@@ -38,11 +38,6 @@ import org.junit.jupiter.api.Test;
  */
 final class LtObjectIsNotUniqueTest {
 
-    /**
-     * Prefix to EO snippet objects.
-     */
-    private static final String EO_PREFIX = "org/eolang/lints/errors/object-is-not-unique/";
-
     @Test
     void catchesDuplicates() throws Exception {
         MatcherAssert.assertThat(
@@ -51,11 +46,15 @@ final class LtObjectIsNotUniqueTest {
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "foo",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "foo").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/foo.eo"
+                        ).value()
                     ),
                     new MapEntry<>(
                         "bar-with-foo",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "bar-with-foo").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/bar-with-foo.eo"
+                        ).value()
                     )
                 )
             ),
@@ -71,11 +70,15 @@ final class LtObjectIsNotUniqueTest {
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "test-1",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "test-1").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/test-1.eo"
+                        ).value()
                     ),
                     new MapEntry<>(
                         "test-2",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "test-2").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/test-2.eo"
+                        ).value()
                     )
                 )
             ),
@@ -91,11 +94,15 @@ final class LtObjectIsNotUniqueTest {
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "c",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "c").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/c.eo"
+                        ).value()
                     ),
                     new MapEntry<>(
                         "e",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "e").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/e.eo"
+                        ).value()
                     )
                 )
             ),
@@ -111,11 +118,15 @@ final class LtObjectIsNotUniqueTest {
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "baz",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "baz").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/baz.eo"
+                        ).value()
                     ),
                     new MapEntry<>(
                         "baz-packaged",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "baz-packaged").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/baz-packaged.eo"
+                        ).value()
                     )
                 )
             ),
@@ -131,11 +142,15 @@ final class LtObjectIsNotUniqueTest {
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "mul",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "mul").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/mul.eo"
+                        ).value()
                     ),
                     new MapEntry<>(
                         "mul-packaged",
-                        new ParsedEo(LtObjectIsNotUniqueTest.EO_PREFIX, "mul-packaged").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/mul-packaged.eo"
+                        ).value()
                     )
                 )
             ),

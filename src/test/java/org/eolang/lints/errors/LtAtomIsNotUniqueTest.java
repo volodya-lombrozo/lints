@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.critical;
+package org.eolang.lints.errors;
 
 import com.jcabi.xml.XML;
 import org.cactoos.map.MapEntry;
@@ -38,11 +38,6 @@ import org.junit.jupiter.api.Test;
  */
 final class LtAtomIsNotUniqueTest {
 
-    /**
-     * Prefix to EO snippet objects.
-     */
-    private static final String EO_PREFIX = "org/eolang/lints/critical/atom-is-not-unique/";
-
     @Test
     void catchesAtomDuplicates() throws Exception {
         MatcherAssert.assertThat(
@@ -51,15 +46,19 @@ final class LtAtomIsNotUniqueTest {
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "foo",
-                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "foo").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/foo.eo"
+                        ).value()
                     ),
                     new MapEntry<>(
                         "bar",
-                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "bar").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/bar.eo"
+                        ).value()
                     )
                 )
             ),
-            Matchers.hasSize(Matchers.greaterThan(0))
+            Matchers.hasSize(2)
         );
     }
 
@@ -71,7 +70,9 @@ final class LtAtomIsNotUniqueTest {
                 new MapOf<>(
                     new MapEntry<>(
                         "dup",
-                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "dup").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/dup.eo"
+                        ).value()
                     )
                 )
             ),
@@ -87,11 +88,15 @@ final class LtAtomIsNotUniqueTest {
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "a",
-                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "a").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/a.eo"
+                        ).value()
                     ),
                     new MapEntry<>(
                         "b",
-                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "b").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/b.eo"
+                        ).value()
                     )
                 )
             ),
@@ -107,7 +112,9 @@ final class LtAtomIsNotUniqueTest {
                 new MapOf<>(
                     new MapEntry<>(
                         "spb",
-                        new ParsedEo(LtAtomIsNotUniqueTest.EO_PREFIX, "spb").value()
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/spb.eo"
+                        ).value()
                     )
                 )
             ),

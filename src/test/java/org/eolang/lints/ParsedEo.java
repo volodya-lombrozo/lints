@@ -24,6 +24,7 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
+import java.io.File;
 import org.cactoos.Scalar;
 import org.cactoos.io.ResourceOf;
 import org.eolang.parser.EoSyntax;
@@ -35,32 +36,23 @@ import org.eolang.parser.EoSyntax;
 public final class ParsedEo implements Scalar<XML> {
 
     /**
-     * Filename prefix.
+     * Path to the EO program.
      */
-    private final String prefix;
-
-    /**
-     * EO filename.
-     */
-    private final String name;
+    private final String path;
 
     /**
      * Ctor.
-     * @param prfx Filename prefix
-     * @param nme EO filename
+     * @param pth Path to EO program
      */
-    public ParsedEo(final String prfx, final String nme) {
-        this.prefix = prfx;
-        this.name = nme;
+    public ParsedEo(final String pth) {
+        this.path = pth;
     }
 
     @Override
     public XML value() throws Exception {
         return new EoSyntax(
-            this.name,
-            new ResourceOf(
-                String.format("%s%s.eo", this.prefix, this.name)
-            )
+            new File(this.path).getName(),
+            new ResourceOf(this.path)
         ).parsed();
     }
 }

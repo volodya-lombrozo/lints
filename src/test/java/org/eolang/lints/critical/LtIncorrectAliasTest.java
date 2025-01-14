@@ -47,11 +47,6 @@ import org.junit.jupiter.params.provider.ValueSource;
  */
 final class LtIncorrectAliasTest {
 
-    /**
-     * Prefix to EO snippet objects.
-     */
-    private static final String EO_PREFIX = "org/eolang/lints/critical/incorrect-alias/";
-
     @Test
     void catchesBrokenAlias() throws Exception {
         MatcherAssert.assertThat(
@@ -60,7 +55,9 @@ final class LtIncorrectAliasTest {
                 new MapOf<>(
                     new MapEntry<>(
                         "bar",
-                        new ParsedEo(LtIncorrectAliasTest.EO_PREFIX, "bar").value()
+                        new ParsedEo(
+                            "org/eolang/lints/critical/incorrect-alias/bar.eo"
+                        ).value()
                     )
                 )
             ),
@@ -76,7 +73,9 @@ final class LtIncorrectAliasTest {
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "bar",
-                        new ParsedEo(LtIncorrectAliasTest.EO_PREFIX, "bar").value()
+                        new ParsedEo(
+                            "org/eolang/lints/critical/incorrect-alias/bar.eo"
+                        ).value()
                     ),
                     new MapEntry<>("ttt/foo", new XMLDocument("<program/>"))
                 )
@@ -88,18 +87,18 @@ final class LtIncorrectAliasTest {
     @ParameterizedTest
     @ValueSource(
         strings = {
-            "no-aliases",
-            "no-package"
+            "org/eolang/lints/critical/incorrect-alias/no-aliases.eo",
+            "org/eolang/lints/critical/incorrect-alias/no-package.eo"
         }
     )
-    void ignoresProgram(final String name) throws Exception {
+    void ignoresProgram(final String path) throws Exception {
         MatcherAssert.assertThat(
             "Defects aren't empty, but should be",
             new LtIncorrectAlias().defects(
                 new MapOf<>(
                     new MapEntry<>(
                         "foo",
-                        new ParsedEo(LtIncorrectAliasTest.EO_PREFIX, name).value()
+                        new ParsedEo(path).value()
                     )
                 )
             ),
@@ -112,8 +111,8 @@ final class LtIncorrectAliasTest {
     void acceptsValidDirectory(@Mktmp final Path dir) throws Exception {
         Files.write(
             dir.resolve("bar.xmir"),
-            new ParsedEo(LtIncorrectAliasTest.EO_PREFIX, "bar").value().toString()
-                .getBytes()
+            new ParsedEo("org/eolang/lints/critical/incorrect-alias/bar.eo")
+                .value().toString().getBytes()
         );
         Files.createDirectory(dir.resolve("ttt"));
         Files.write(dir.resolve("ttt/foo.xmir"), "<program/>".getBytes());

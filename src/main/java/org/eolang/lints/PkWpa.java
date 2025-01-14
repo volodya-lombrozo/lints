@@ -28,6 +28,7 @@ import java.util.Map;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.list.ListOf;
 import org.eolang.lints.critical.LtIncorrectAlias;
+import org.eolang.lints.errors.LtAtomIsNotUnique;
 import org.eolang.lints.errors.LtObjectIsNotUnique;
 import org.eolang.lints.units.LtUnitTestMissing;
 import org.eolang.lints.units.LtUnitTestWithoutLiveFile;
@@ -51,7 +52,8 @@ public final class PkWpa extends IterableEnvelope<Lint<Map<String, XML>>> {
                 new LtUnitTestMissing(),
                 new LtUnitTestWithoutLiveFile(),
                 new LtIncorrectAlias(),
-                new LtObjectIsNotUnique()
+                new LtObjectIsNotUnique(),
+                new LtAtomIsNotUnique()
             )
         );
     }

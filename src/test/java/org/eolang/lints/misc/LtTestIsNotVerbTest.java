@@ -37,18 +37,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
  */
 final class LtTestIsNotVerbTest {
 
-    /**
-     * Prefix to EO snippet objects.
-     */
-    private static final String EO_PREFIX = "org/eolang/lints/misc/test-object-is-not-verb-in-singular/";
-
     @Test
     @ExtendWith(MayBeSlow.class)
     void catchesBadName() throws Exception {
         MatcherAssert.assertThat(
             "Defects size doesn't match with expected",
             new LtTestNotVerb().defects(
-                new ParsedEo(LtTestIsNotVerbTest.EO_PREFIX, "bad-tests.eo").value()
+                new ParsedEo(
+                    "org/eolang/lints/misc/test-object-is-not-verb-in-singular/bad-tests.eo"
+                ).value()
             ),
             Matchers.hasSize(40)
         );
@@ -60,7 +57,9 @@ final class LtTestIsNotVerbTest {
         MatcherAssert.assertThat(
             "Defects are not empty, but they shouldn't be",
             new LtTestNotVerb().defects(
-                new ParsedEo(LtTestIsNotVerbTest.EO_PREFIX, "good-tests.eo").value()
+                new ParsedEo(
+                    "org/eolang/lints/misc/test-object-is-not-verb-in-singular/good-tests.eo"
+                ).value()
             ),
             Matchers.hasSize(0)
         );
@@ -72,7 +71,9 @@ final class LtTestIsNotVerbTest {
         MatcherAssert.assertThat(
             "Defects size doesn't match with expected",
             new LtTestNotVerb().defects(
-                new ParsedEo(LtTestIsNotVerbTest.EO_PREFIX, "regex-tests.eo").value()
+                new ParsedEo(
+                    "org/eolang/lints/misc/test-object-is-not-verb-in-singular/regex-tests.eo"
+                ).value()
             ),
             Matchers.hasSize(12)
         );
