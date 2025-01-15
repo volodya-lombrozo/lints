@@ -33,28 +33,6 @@ SOFTWARE.
     <xsl:sequence select="$decimal"/>
   </xsl:function>
   <xsl:variable name="sprintf" select="//o[@base='.sprintf'][o[@base='.txt']/o[@base='.eolang']/o[@base='org']] | //o[@base='.sprintf'][o[@base='.txt']/o[@base='.eolang']/o[@base='org']/o[@base='Q']]"/>
-  <xsl:variable name="sprintf-text" select="$sprintf/o[@base='string'][1]/text()"/>
-  <xsl:variable name="placeholder">
-    <xsl:for-each select="tokenize($sprintf-text, '-')">
-      <xsl:value-of select="codepoints-to-string(eo:hex-to-placeholder(.))"/>
-    </xsl:for-each>
-  </xsl:variable>
-  <xsl:variable name="allowed">
-    <xsl:analyze-string select="$placeholder" regex="%[sdfxb]">
-      <xsl:matching-substring>
-        <match/>
-      </xsl:matching-substring>
-    </xsl:analyze-string>
-  </xsl:variable>
-  <xsl:variable name="declared" select="count($allowed/match)"/>
-  <xsl:variable name="tupled" select="//o[@base='.sprintf']/o[@base='tuple']/o[not(@base='.empty')]"/>
-  <xsl:variable name="nested">
-    <xsl:for-each select="$tupled">
-      <xsl:call-template name="nested-args">
-        <xsl:with-param name="node" select="."/>
-      </xsl:call-template>
-    </xsl:for-each>
-  </xsl:variable>
   <xsl:template name="nested-args">
     <xsl:param name="node"/>
     <xsl:for-each select="$node/o[not(@base='tuple') and not(@base='.empty')]">
@@ -67,24 +45,49 @@ SOFTWARE.
       </xsl:call-template>
     </xsl:for-each>
   </xsl:template>
-  <xsl:variable name="used" select="count($tupled[not(@base='tuple')]/@base) + count(tokenize(substring($nested, 1, string-length($nested) - 1), '\s+'))"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="$sprintf-text != '' and $declared != $used">
-        <defect>
-          <xsl:attribute name="line">
-            <xsl:value-of select="eo:lineno($sprintf/@line)"/>
-          </xsl:attribute>
-          <xsl:attribute name="severity">
-            <xsl:text>warning</xsl:text>
-          </xsl:attribute>
-          <xsl:text>The sprintf object has wrong number of arguments: </xsl:text>
-          <xsl:value-of select="$declared"/>
-          <xsl:text> in the placeholder, but </xsl:text>
-          <xsl:value-of select="$used"/>
-          <xsl:text> are passed</xsl:text>
-        </defect>
-      </xsl:if>
+      <xsl:for-each select="$sprintf">
+        <xsl:variable name="sprintf-text" select="o[@base='string'][1]/text()"/>
+        <xsl:variable name="tokens" select="tokenize($sprintf-text, '-')"/>
+        <xsl:variable name="placeholder">
+          <xsl:for-each select="$tokens">
+            <xsl:value-of select="codepoints-to-string(eo:hex-to-placeholder(.))"/>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="allowed">
+          <xsl:analyze-string select="$placeholder" regex="%[sdfxb]">
+            <xsl:matching-substring>
+              <match/>
+            </xsl:matching-substring>
+          </xsl:analyze-string>
+        </xsl:variable>
+        <xsl:variable name="declared" select="count($allowed/match)"/>
+        <xsl:variable name="tupled" select="o[@base='tuple']/o[not(@base='.empty')]"/>
+        <xsl:variable name="nested">
+          <xsl:for-each select="$tupled">
+            <xsl:call-template name="nested-args">
+              <xsl:with-param name="node" select="."/>
+            </xsl:call-template>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:variable name="used" select="count($tupled[not(@base='tuple')]/@base) + count(tokenize(substring($nested, 1, string-length($nested) - 1), '\s+'))"/>
+        <xsl:if test="$sprintf-text != '' and $declared != $used">
+          <defect>
+            <xsl:attribute name="line">
+              <xsl:value-of select="eo:lineno(@line)"/>
+            </xsl:attribute>
+            <xsl:attribute name="severity">
+              <xsl:text>warning</xsl:text>
+            </xsl:attribute>
+            <xsl:text>The sprintf object has wrong number of arguments: </xsl:text>
+            <xsl:value-of select="$declared"/>
+            <xsl:text> in the placeholder, but </xsl:text>
+            <xsl:value-of select="$used"/>
+            <xsl:text> are passed</xsl:text>
+          </defect>
+        </xsl:if>
+      </xsl:for-each>
     </defects>
   </xsl:template>
 </xsl:stylesheet>
