@@ -70,7 +70,7 @@ final class GrammarMatcher extends BaseMatcher<String> {
         }
         this.input = obj.toString();
         try {
-            this.errors = tool.check(GrammarMatcher.annonated(this.input));
+            this.errors = tool.check(GrammarMatcher.annotated(this.input));
         } catch (final IOException ex) {
             throw new IllegalArgumentException(ex);
         }
@@ -95,13 +95,13 @@ final class GrammarMatcher extends BaseMatcher<String> {
                 .appendText(" in:\n  ")
                 .appendText(this.input)
                 .appendText("\n  annotated input:\n  ")
-                .appendText(GrammarMatcher.annonated(this.input).toString())
+                .appendText(GrammarMatcher.annotated(this.input).toString())
                 .appendText("\n  suggested correction(s):\n  ")
                 .appendValue(match.getSuggestedReplacements());
         }
     }
 
-    private static AnnotatedText annonated(final String text) {
+    private static AnnotatedText annotated(final String text) {
         final AnnotatedTextBuilder builder = new AnnotatedTextBuilder();
         final Pattern pattern = Pattern.compile("\"([^\"]+)\"");
         final Matcher matcher = pattern.matcher(text);
