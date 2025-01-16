@@ -28,7 +28,7 @@ SOFTWARE.
   <xsl:template match="/">
     <xsl:variable name="void" select="//o[@base='∅']/@name"/>
     <defects>
-      <xsl:for-each select="/program/objects//o[not(@base='∅') and not(o) and not(text())]">
+      <xsl:for-each select="/program/objects//o[not(@base) and not(@base='∅') and not(o) and not(text())]">
         <xsl:if test="not($void = @base)">
           <xsl:element name="defect">
             <xsl:attribute name="line">

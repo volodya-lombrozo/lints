@@ -33,7 +33,7 @@ document: |
          <o base=".print" line="3" name="@" pos="2">
             <o base="stdout" line="4" pos="4">
                <o base="string" line="4" pos="11">48-65-6C-6C-6F-21</o>
-               <o base="y" line="4" pos="20"/>
+               <o name="y" line="4" pos="20"/>
             </o>
          </o>
       </o>
