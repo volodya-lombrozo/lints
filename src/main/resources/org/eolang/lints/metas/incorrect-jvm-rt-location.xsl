@@ -39,7 +39,7 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>The format of the location of jvm runtime is wrong: "</xsl:text>
+            <xsl:text>The format of the location of the "jvm" runtime is wrong: "</xsl:text>
             <xsl:value-of select="$location"/>
             <xsl:text>"</xsl:text>
           </xsl:element>

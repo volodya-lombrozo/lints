@@ -38,7 +38,7 @@ SOFTWARE.
           <xsl:value-of select="eo:lineno(@line)"/>
         </xsl:attribute>
         <xsl:attribute name="severity">critical</xsl:attribute>
-        <xsl:text>Only objects with their @base attributes containing 'org.eolang.bytes' may contain data, while this object doesn't have @base attribute at all</xsl:text>
+        <xsl:text>Only objects with their @base attributes containing "org.eolang.bytes" may contain data, while this object doesn't have @base attribute at all</xsl:text>
       </defect>
     </xsl:if>
     <xsl:if test="$data != '' and @base and not(@base = 'bytes' or @base = 'org.eolang.bytes')">
@@ -47,7 +47,7 @@ SOFTWARE.
           <xsl:value-of select="eo:lineno(@line)"/>
         </xsl:attribute>
         <xsl:attribute name="severity">critical</xsl:attribute>
-        <xsl:text>Only objects with their @base attributes containing 'org.eolang.bytes' may contain data, while this object contains "</xsl:text>
+        <xsl:text>Only objects with their @base attributes containing "org.eolang.bytes" may contain data, while this object contains "</xsl:text>
         <xsl:value-of select="$data"/>
         <xsl:text>"</xsl:text>
       </defect>

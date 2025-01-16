@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="alias-too-long" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -37,7 +38,7 @@ SOFTWARE.
               <xsl:text>error</xsl:text>
             </xsl:attribute>
             <xsl:text>The alias has too many parts: "</xsl:text>
-            <xsl:value-of select="tail"/>
+            <xsl:value-of select="eo:escape(tail)"/>
             <xsl:text>"</xsl:text>
           </xsl:element>
         </xsl:if>

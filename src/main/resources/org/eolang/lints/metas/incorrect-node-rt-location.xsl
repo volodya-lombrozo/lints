@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="incorrect-node-rt-location" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -40,7 +41,7 @@ SOFTWARE.
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
             <xsl:text>The format of the location of node runtime is wrong: "</xsl:text>
-            <xsl:value-of select="$location"/>
+            <xsl:value-of select="eo:escape($location)"/>
             <xsl:text>"</xsl:text>
           </xsl:element>
         </xsl:if>

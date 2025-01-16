@@ -39,7 +39,7 @@ SOFTWARE.
         <xsl:text>critical</xsl:text>
       </xsl:attribute>
       <xsl:text>There is no XSD schema attached to the XML document, </xsl:text>
-      <xsl:text>while xsi:noNamespaceSchemaLocation is expected</xsl:text>
+      <xsl:text>while "xsi:noNamespaceSchemaLocation" is expected</xsl:text>
     </xsl:element>
   </xsl:template>
 </xsl:stylesheet>

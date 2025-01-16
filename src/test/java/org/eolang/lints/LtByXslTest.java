@@ -58,7 +58,7 @@ final class LtByXslTest {
     @Test
     void lintsOneFile() throws IOException {
         MatcherAssert.assertThat(
-            "the objects is found",
+            "No defects found, while a few of them expected",
             new LtByXsl("critical/duplicate-names").defects(
                 new EoSyntax(
                     new InputOf("# first\n[] > foo\n# first\n[] > foo\n")
@@ -72,14 +72,14 @@ final class LtByXslTest {
     @ClasspathSource(value = "org/eolang/lints/packs/", glob = "**.yaml")
     void testsAllLintsByEo(final String yaml) {
         MatcherAssert.assertThat(
-            "must pass without errors",
+            "Doesn't tell the story as it's expected",
             new XtSticky(
                 new XtYaml(
                     yaml,
                     eo -> new EoSyntax("pack", new InputOf(eo)).parsed()
                 )
             ),
-            new XtoryMatcher()
+            new XtoryMatcher(new DefectsMatcher())
         );
     }
 

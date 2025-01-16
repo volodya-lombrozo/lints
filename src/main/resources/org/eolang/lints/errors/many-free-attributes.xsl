@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="many-free-attributes" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:variable name="max" select="5"/>
   <xsl:template match="/">
@@ -38,7 +39,7 @@ SOFTWARE.
           </xsl:attribute>
           <xsl:text>The object </xsl:text>
           <xsl:text>"</xsl:text>
-          <xsl:value-of select="@name"/>
+          <xsl:value-of select="eo:escape(@name)"/>
           <xsl:text>" </xsl:text>
           <xsl:text>has more than </xsl:text>
           <xsl:value-of select="$max"/>
