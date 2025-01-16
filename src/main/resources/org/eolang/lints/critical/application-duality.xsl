@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="application-duality" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -40,9 +41,7 @@ SOFTWARE.
             <xsl:choose>
               <xsl:when test="@name">
                 <xsl:text>object </xsl:text>
-                <xsl:text>"</xsl:text>
-                <xsl:value-of select="@name"/>
-                <xsl:text>"</xsl:text>
+                <xsl:value-of select="eo:escape(@name)"/>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:text>anonymous object</xsl:text>
