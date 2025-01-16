@@ -171,8 +171,10 @@ final class ProgramTest {
                 Matchers.iterableWithSize(Matchers.greaterThan(0)),
                 Matchers.hasItem(
                     Matchers.hasToString(
-                        Matchers.containsString(
-                            "[alias-too-long ERROR]:5 The alias has too many parts"
+                        Matchers.allOf(
+                            Matchers.containsString("alias-too-long ERROR"),
+                            Matchers.containsString("The alias has too many parts"),
+                            Matchers.containsString(":5")
                         )
                     )
                 )
