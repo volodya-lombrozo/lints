@@ -38,10 +38,8 @@ SOFTWARE.
             <xsl:text>warning</xsl:text>
           </xsl:attribute>
           <xsl:text>The object </xsl:text>
-          <xsl:text>"</xsl:text>
           <xsl:value-of select="eo:escape(@name)"/>
-          <xsl:text>" </xsl:text>
-          <xsl:text>has more than </xsl:text>
+          <xsl:text> has more than </xsl:text>
           <xsl:value-of select="$max"/>
           <xsl:text> free attributes, it's too many</xsl:text>
         </xsl:element>

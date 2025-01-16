@@ -40,9 +40,9 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>The "</xsl:text>
+            <xsl:text>The </xsl:text>
             <xsl:value-of select="eo:escape($meta-text)"/>
-            <xsl:text>" meta is out of order</xsl:text>
+            <xsl:text> meta is out of order</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

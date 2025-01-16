@@ -40,9 +40,8 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>The format of the +package meta is wrong: "</xsl:text>
+            <xsl:text>The format of the +package meta is wrong: </xsl:text>
             <xsl:value-of select="eo:escape($first)"/>
-            <xsl:text>"</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

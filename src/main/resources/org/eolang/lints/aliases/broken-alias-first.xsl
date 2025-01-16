@@ -37,9 +37,9 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
             </xsl:attribute>
-            <xsl:text>The first part of the alias is invalid: "</xsl:text>
+            <xsl:text>The first part of the alias is invalid: </xsl:text>
             <xsl:value-of select="eo:escape(part[1])"/>
-            <xsl:text>" (it may only contain a relative name of the object, not its FQN)</xsl:text>
+            <xsl:text> (it may only contain a relative name of the object, not its FQN)</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

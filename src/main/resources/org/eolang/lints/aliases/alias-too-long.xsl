@@ -37,9 +37,8 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
             </xsl:attribute>
-            <xsl:text>The alias has too many parts: "</xsl:text>
+            <xsl:text>The alias has too many parts: </xsl:text>
             <xsl:value-of select="eo:escape(tail)"/>
-            <xsl:text>"</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>
