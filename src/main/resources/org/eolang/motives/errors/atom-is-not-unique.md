@@ -23,4 +23,4 @@ Incorrect:
 [] > a /number
 ```
 
-To fix this, remove duplicated atom.
+To fix this, rename duplicated object.
