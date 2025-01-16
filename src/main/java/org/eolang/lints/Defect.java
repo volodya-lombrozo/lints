@@ -130,7 +130,8 @@ public interface Defect {
         @Override
         public String toString() {
             return String.format(
-                "[%s %s]:%d %s", this.rle, this.sev, this.lineno, this.txt
+                "[%s %s %s]:%d %s",
+                this.prg, this.rle, this.sev, this.lineno, this.txt
             );
         }
 

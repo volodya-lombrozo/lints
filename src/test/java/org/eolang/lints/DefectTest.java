@@ -49,4 +49,20 @@ final class DefectTest {
             Matchers.equalTo("1.2.3")
         );
     }
+
+    @Test
+    void printsProgramName() {
+        final String program = "a.b.c.bar";
+        MatcherAssert.assertThat(
+            "toString() doesn't show program name",
+            new Defect.Default(
+                "foo",
+                Severity.WARNING,
+                program,
+                3,
+                "the message"
+            ),
+            Matchers.hasToString(Matchers.containsString(program))
+        );
+    }
 }
