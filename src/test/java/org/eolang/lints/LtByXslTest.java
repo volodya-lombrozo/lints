@@ -23,6 +23,7 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,6 +32,8 @@ import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.cactoos.io.InputOf;
+import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 import org.eolang.jeo.Disassembler;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.EoSyntax;
@@ -172,6 +175,27 @@ final class LtByXslTest {
                     String.format("Only YAML files are allowed here, while: %s", path),
                     path.toFile().toString().endsWith(".yaml"),
                     new IsEqual<>(true)
+                )
+            );
+    }
+
+    @Test
+    void checksIdsInXslStylesheets() throws IOException {
+        Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
+            .filter(Files::isRegularFile)
+            .filter(file -> file.getFileName().toString().endsWith(".xsl"))
+            .forEach(
+                path -> MatcherAssert.assertThat(
+                    String.format("@id is wrong in: %s", path),
+                    XhtmlMatchers.xhtml(
+                        new UncheckedText(new TextOf(path)).asString()
+                    ),
+                    XhtmlMatchers.hasXPath(
+                        String.format(
+                            "/xsl:stylesheet[@id='%s']",
+                            path.getFileName().toString().replaceAll("\\.xsl$", "")
+                        )
+                    )
                 )
             );
     }
