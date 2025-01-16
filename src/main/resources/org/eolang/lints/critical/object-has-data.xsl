@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" version="2.0" id="object-has-data">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -38,7 +39,8 @@ SOFTWARE.
           <xsl:value-of select="eo:lineno(@line)"/>
         </xsl:attribute>
         <xsl:attribute name="severity">critical</xsl:attribute>
-        <xsl:text>Only objects with their @base attributes containing "org.eolang.bytes" may contain data, while this object doesn't have @base attribute at all</xsl:text>
+        <xsl:text>Only objects with their @base attributes containing "org.eolang.bytes" may contain data, </xsl:text>
+        <xsl:text>while this object doesn't have @base attribute at all</xsl:text>
       </defect>
     </xsl:if>
     <xsl:if test="$data != '' and @base and not(@base = 'bytes' or @base = 'org.eolang.bytes')">
@@ -47,9 +49,9 @@ SOFTWARE.
           <xsl:value-of select="eo:lineno(@line)"/>
         </xsl:attribute>
         <xsl:attribute name="severity">critical</xsl:attribute>
-        <xsl:text>Only objects with their @base attributes containing "org.eolang.bytes" may contain data, while this object contains "</xsl:text>
-        <xsl:value-of select="$data"/>
-        <xsl:text>"</xsl:text>
+        <xsl:text>Only objects with their @base attributes containing "org.eolang.bytes" may contain data, </xsl:text>
+        <xsl:text>while this object contains </xsl:text>
+        <xsl:value-of select="eo:escape($data)"/>
       </defect>
     </xsl:if>
   </xsl:template>
