@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="unknown-name" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -35,9 +36,9 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>The object "</xsl:text>
-          <xsl:value-of select="@base"/>
-          <xsl:text>" is not defined anywhere</xsl:text>
+          <xsl:text>The object </xsl:text>
+          <xsl:value-of select="eo:escape(@base)"/>
+          <xsl:text> is not defined anywhere</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>

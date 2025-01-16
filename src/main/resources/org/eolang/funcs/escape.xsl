@@ -22,29 +22,9 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="broken-ref" version="2.0">
-  <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
-  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
-  <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:template match="/">
-    <defects>
-      <xsl:for-each select="//o[@ref and @base]">
-        <xsl:variable name="o" select="."/>
-        <xsl:if test="not(//o[@name=$o/@base and @line=$o/@ref])">
-          <xsl:element name="defect">
-            <xsl:attribute name="severity">
-              <xsl:text>error</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="line">
-              <xsl:value-of select="eo:lineno(@line)"/>
-            </xsl:attribute>
-            <xsl:text>The object </xsl:text>
-            <xsl:value-of select="eo:escape(@base)"/>
-            <xsl:text> is absent, but is referenced as </xsl:text>
-            <xsl:value-of select="eo:escape(@ref)"/>
-          </xsl:element>
-        </xsl:if>
-      </xsl:for-each>
-    </defects>
-  </xsl:template>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" id="escape" version="2.0">
+  <xsl:function name="eo:escape" as="xs:string">
+    <xsl:param name="text"/>
+    <xsl:value-of select="concat('&quot;', replace(replace($text, ' ', '⌴'), '&quot;', '\\x22'), '&quot;')"/>
+  </xsl:function>
 </xsl:stylesheet>

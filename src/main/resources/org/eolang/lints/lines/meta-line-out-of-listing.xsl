@@ -36,9 +36,9 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>The line "</xsl:text>
+          <xsl:text>The line </xsl:text>
           <xsl:value-of select="eo:lineno(@line)"/>
-          <xsl:text>" is out of listing, which contains only </xsl:text>
+          <xsl:text> is out of listing, which contains only </xsl:text>
           <xsl:value-of select="$max"/>
           <xsl:text> lines</xsl:text>
         </xsl:element>

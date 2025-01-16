@@ -37,7 +37,7 @@ SOFTWARE.
         <xsl:variable name="self" select="."/>
         <xsl:variable name="target" select="key('objsNoLineByName', $self/@base)"/>
         <xsl:if test="$target">
-          <defect line="eo:lineno(@line)" severity="error">
+          <defect line="0" severity="error">
             The @line attribute is absent at <xsl:value-of select="$target/@name"/>
           </defect>
         </xsl:if>
