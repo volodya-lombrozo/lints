@@ -76,12 +76,12 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
                             )
                     );
                 index.forEach(
-                    (next, natoms) -> {
+                    (next, names) -> {
                         if (!Objects.equals(next, xmir)) {
                             final String pair = LtAtomIsNotUnique.pairHash(xmir, next);
                             if (!checked.contains(pair)) {
                                 checked.add(pair);
-                                natoms.stream()
+                                names.stream()
                                     .filter(fqns::contains)
                                     .forEach(
                                         aname -> {
@@ -111,7 +111,7 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         ).asString();
     }
 
-    private Defect singleDefect(final XML xmir, final String name, final int pos) {
+    private Defect singleDefect(final XML xmir, final String fqn, final int pos) {
         return new Defect.Default(
             this.name(),
             Severity.ERROR,
@@ -119,10 +119,13 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
                 .findFirst().orElse("unknown"),
             Integer.parseInt(
                 xmir.xpath(
-                    String.format("//o[@atom and @name='%s']/@line", name)
+                    String.format(
+                        "//o[@atom and @name='%s']/@line",
+                        LtAtomIsNotUnique.oname(fqn)
+                    )
                 ).get(pos)
             ),
-            String.format("Atom '%s' is duplicated", name)
+            String.format("Atom '%s' is duplicated", fqn)
         );
     }
 
