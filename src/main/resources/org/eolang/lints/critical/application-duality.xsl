@@ -27,8 +27,8 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o">
-        <xsl:if test="count(o) != count(o[@as]) and count(o) != count(o[not(@as)]) and not(o/o)">
+      <xsl:for-each select="//o[@base]">
+        <xsl:if test="count(o) != count(o[@as]) and count(o) != count(o[not(@as)])">
           <defect>
             <xsl:attribute name="line">
               <xsl:value-of select="eo:lineno(@line)"/>
