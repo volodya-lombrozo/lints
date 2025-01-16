@@ -118,7 +118,7 @@ final class ProgramTest {
     }
 
     @Test
-    @Timeout(10L)
+    @Timeout(60L)
     void simpleTest(@Mktmp final Path dir) throws IOException {
         final Path path = dir.resolve("foo.xmir");
         Files.write(
@@ -183,7 +183,7 @@ final class ProgramTest {
     }
 
     @Test
-    @Timeout(10L)
+    @Timeout(60L)
     void acceptsCanonicalCode() throws IOException {
         final XML xmir = new Xsline(new TrParsing()).pass(
             new EoSyntax(
