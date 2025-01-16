@@ -39,7 +39,7 @@ import org.junit.jupiter.api.Test;
 final class LtAtomIsNotUniqueTest {
 
     @Test
-    void catchesAtomDuplicates() throws Exception {
+    void catchesAtomDuplicatesWithoutPackages() throws Exception {
         MatcherAssert.assertThat(
             "Defects are empty, but they should not",
             new LtAtomIsNotUnique().defects(
@@ -63,6 +63,30 @@ final class LtAtomIsNotUniqueTest {
     }
 
     @Test
+    void catchesAtomDuplicatesWithinSamePackage() throws Exception {
+        MatcherAssert.assertThat(
+            "Defects are empty, but they should not",
+            new LtAtomIsNotUnique().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "foo-packaged",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/foo-packaged.eo"
+                        ).value()
+                    ),
+                    new MapEntry<>(
+                        "bar-packaged",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/bar-packaged.eo"
+                        ).value()
+                    )
+                )
+            ),
+            Matchers.hasSize(2)
+        );
+    }
+
+    @Test
     void catchesDuplicatesInSingleFile() throws Exception {
         MatcherAssert.assertThat(
             "Defects are empty, but they should not",
@@ -77,6 +101,30 @@ final class LtAtomIsNotUniqueTest {
                 )
             ),
             Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
+
+    @Test
+    void allowsSameNameInDifferentPackages() throws Exception {
+        MatcherAssert.assertThat(
+            "Defects aren't empty, but they should",
+            new LtAtomIsNotUnique().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "x",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/x.eo"
+                        ).value()
+                    ),
+                    new MapEntry<>(
+                        "x-packaged",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/x-packaged.eo"
+                        ).value()
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
         );
     }
 
@@ -114,6 +162,30 @@ final class LtAtomIsNotUniqueTest {
                         "spb",
                         new ParsedEo(
                             "org/eolang/lints/errors/atom-is-not-unique/spb.eo"
+                        ).value()
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void allowsSameNameInComplexPackage() throws Exception {
+        MatcherAssert.assertThat(
+            "Defects aren't empty, but they should",
+            new LtAtomIsNotUnique().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "abc",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/abc.eo"
+                        ).value()
+                    ),
+                    new MapEntry<>(
+                        "abc-packaged",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/abc-packaged.eo"
                         ).value()
                     )
                 )

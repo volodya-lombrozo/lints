@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Dup.
-[attr] > dup
-  [] > foo /int
-  [] > @
-  [] > foo /int
++package xyz
+
+# Foo.
+[] > foo
+  [] > a /int

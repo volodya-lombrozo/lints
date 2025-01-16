@@ -22,4 +22,4 @@
 
 # A.
 [attr] > a
-  [] > test /string
+  [] > x /string
