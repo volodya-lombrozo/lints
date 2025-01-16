@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" id="self-naming" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <!-- x > x -->
   <xsl:function name="eo:base-eq-name" as="xs:boolean">
@@ -55,9 +56,9 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>The object "</xsl:text>
-          <xsl:value-of select="@base"/>
-          <xsl:text>" can't copy itself</xsl:text>
+          <xsl:text>The object </xsl:text>
+          <xsl:value-of select="eo:escape(@base)"/>
+          <xsl:text> can't copy itself</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>
