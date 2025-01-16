@@ -23,46 +23,54 @@
  */
 package org.eolang.lints;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
+import com.jcabi.xml.XML;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
- * Tests for {@link Defect}.
+ * Lint that ignores linting if {@code +unlint} meta is present.
  *
- * @since 0.0.12
+ * @since 0.0.1
  */
-final class DefectTest {
+final class LtSuppressed implements Lint<XML> {
 
-    @Test
-    void returnsVersion() {
-        final String version = new Defect.Default(
-            "metas/incorrect-architect",
-            Severity.WARNING,
-            "",
-            3,
-            "Something went wrong with an architect"
-        ).version();
-        MatcherAssert.assertThat(
-            "Version doesn't match with expected",
-            version,
-            Matchers.equalTo("1.2.3")
-        );
+    /**
+     * The original lint.
+     */
+    private final Lint<XML> origin;
+
+    /**
+     * Ctor.
+     * @param lint The lint to decorate
+     */
+    LtSuppressed(final Lint<XML> lint) {
+        this.origin = lint;
     }
 
-    @Test
-    void printsProgramName() {
-        final String program = "a.b.c.bar";
-        MatcherAssert.assertThat(
-            "toString() doesn't show program name",
-            new Defect.Default(
-                "foo",
-                Severity.WARNING,
-                program,
-                3,
-                "the message"
-            ),
-            Matchers.hasToString(Matchers.containsString(program))
-        );
+    @Override
+    public String name() {
+        return this.origin.name();
     }
+
+    @Override
+    public Collection<Defect> defects(final XML xmir) throws IOException {
+        final boolean suppress = !xmir.nodes(
+            String.format(
+                "/program/metas/meta[head='unlint' and tail='%s']",
+                this.origin.name()
+            )
+        ).isEmpty();
+        final Collection<Defect> defects = new ArrayList<>(0);
+        if (!suppress) {
+            defects.addAll(this.origin.defects(xmir));
+        }
+        return defects;
+    }
+
+    @Override
+    public String motive() throws IOException {
+        return this.origin.motive();
+    }
+
 }

@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-name: pit
-on:
+name: typos
+'on':
   push:
     branches:
       - master
@@ -29,17 +29,10 @@ on:
     branches:
       - master
 jobs:
-  pit:
+  typos:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
+      - uses: crate-ci/typos@master
         with:
-          distribution: 'temurin'
-          java-version: 21
-      - uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ubuntu-jdk-21-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ubuntu-jdk-21-maven-
-      - run: mvn clean install -Ppit
+          config: ./.github/typos.toml

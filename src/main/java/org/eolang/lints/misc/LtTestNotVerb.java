@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
 import org.eolang.lints.Severity;
@@ -67,36 +68,29 @@ public final class LtTestNotVerb implements Lint<XML> {
     private static final Pattern KEBAB = Pattern.compile("-");
 
     /**
-     * NLP pipeline.
+     * Properties of NLP pipeline.
      */
-    private final StanfordCoreNLP pipeline;
+    private final Properties properties;
 
     /**
      * Ctor.
      * @param props Pipeline properties
      */
     public LtTestNotVerb(final Properties props) {
-        this(new StanfordCoreNLP(props));
+        this.properties = new Properties(props);
     }
 
     /**
      * Ctor.
      */
     public LtTestNotVerb() {
-        this(defaults());
-    }
-
-    /**
-     * Primary ctor.
-     * @param pipe NLP pipeline
-     */
-    public LtTestNotVerb(final StanfordCoreNLP pipe) {
-        this.pipeline = pipe;
+        this(LtTestNotVerb.defaults());
     }
 
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
+        final StanfordCoreNLP pipeline = new StanfordCoreNLP(this.properties);
         for (final XML object : xmir.nodes("/program[metas/meta[head='tests']]/objects/o[@name]")) {
             final String name = object.xpath("@name").get(0);
             final CoreDocument doc = new CoreDocument(
@@ -108,7 +102,7 @@ public final class LtTestNotVerb implements Lint<XML> {
                     .map(s -> s.toLowerCase(Locale.ROOT))
                     .collect(Collectors.joining(" "))
             );
-            this.pipeline.annotate(doc);
+            pipeline.annotate(doc);
             if (
                 !"VBZ".equals(
                     doc.tokens().get(1).get(CoreAnnotations.PartOfSpeechAnnotation.class)
@@ -132,10 +126,12 @@ public final class LtTestNotVerb implements Lint<XML> {
     }
 
     @Override
-    public String motive() throws Exception {
-        return new TextOf(
-            new ResourceOf(
-                "org/eolang/motives/misc/test-object-is-not-verb-in-singular.md"
+    public String motive() throws IOException {
+        return new UncheckedText(
+            new TextOf(
+                new ResourceOf(
+                    "org/eolang/motives/misc/test-object-is-not-verb-in-singular.md"
+                )
             )
         ).asString();
     }

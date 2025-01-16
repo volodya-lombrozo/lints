@@ -28,9 +28,6 @@ name: markdown-lint
   pull_request:
     branches:
       - master
-concurrency:
-  group: markdown-lint-${{ github.ref }}
-  cancel-in-progress: true
 jobs:
   markdown-lint:
     runs-on: ubuntu-24.04

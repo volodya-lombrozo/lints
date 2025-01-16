@@ -126,8 +126,8 @@ final class LtByXsl implements Lint<XML> {
     }
 
     @Override
-    public String motive() throws Exception {
-        return new TextOf(this.doc).asString();
+    public String motive() throws IOException {
+        return new IoCheckedText(new TextOf(this.doc)).asString();
     }
 
     /**

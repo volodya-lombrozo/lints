@@ -23,46 +23,38 @@
  */
 package org.eolang.lints;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
+import com.jcabi.xml.XML;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
- * Tests for {@link Defect}.
+ * Lint that always complains.
  *
- * @since 0.0.12
+ * @since 0.0.1
  */
-final class DefectTest {
+final class LtAlways implements Lint<XML> {
 
-    @Test
-    void returnsVersion() {
-        final String version = new Defect.Default(
-            "metas/incorrect-architect",
-            Severity.WARNING,
-            "",
-            3,
-            "Something went wrong with an architect"
-        ).version();
-        MatcherAssert.assertThat(
-            "Version doesn't match with expected",
-            version,
-            Matchers.equalTo("1.2.3")
-        );
+    @Override
+    public String name() {
+        return "always";
     }
 
-    @Test
-    void printsProgramName() {
-        final String program = "a.b.c.bar";
-        MatcherAssert.assertThat(
-            "toString() doesn't show program name",
+    @Override
+    public Collection<Defect> defects(final XML xmir) {
+        return Collections.singleton(
             new Defect.Default(
-                "foo",
-                Severity.WARNING,
-                program,
-                3,
-                "the message"
-            ),
-            Matchers.hasToString(Matchers.containsString(program))
+                this.name(),
+                Severity.ERROR,
+                "noname",
+                0,
+                "always complains"
+            )
         );
     }
+
+    @Override
+    public String motive() {
+        return "";
+    }
+
 }

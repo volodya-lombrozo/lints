@@ -23,6 +23,7 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,6 +32,8 @@ import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.cactoos.io.InputOf;
+import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 import org.eolang.jeo.Disassembler;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.EoSyntax;
@@ -58,7 +61,7 @@ final class LtByXslTest {
     @Test
     void lintsOneFile() throws IOException {
         MatcherAssert.assertThat(
-            "the objects is found",
+            "No defects found, while a few of them expected",
             new LtByXsl("critical/duplicate-names").defects(
                 new EoSyntax(
                     new InputOf("# first\n[] > foo\n# first\n[] > foo\n")
@@ -72,14 +75,14 @@ final class LtByXslTest {
     @ClasspathSource(value = "org/eolang/lints/packs/", glob = "**.yaml")
     void testsAllLintsByEo(final String yaml) {
         MatcherAssert.assertThat(
-            "must pass without errors",
+            "Doesn't tell the story as it's expected",
             new XtSticky(
                 new XtYaml(
                     yaml,
                     eo -> new EoSyntax("pack", new InputOf(eo)).parsed()
                 )
             ),
-            new XtoryMatcher()
+            new XtoryMatcher(new DefectsMatcher())
         );
     }
 
@@ -177,7 +180,28 @@ final class LtByXslTest {
     }
 
     @Test
-    @Timeout(30)
+    void checksIdsInXslStylesheets() throws IOException {
+        Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
+            .filter(Files::isRegularFile)
+            .filter(file -> file.getFileName().toString().endsWith(".xsl"))
+            .forEach(
+                path -> MatcherAssert.assertThat(
+                    String.format("@id is wrong in: %s", path),
+                    XhtmlMatchers.xhtml(
+                        new UncheckedText(new TextOf(path)).asString()
+                    ),
+                    XhtmlMatchers.hasXPath(
+                        String.format(
+                            "/xsl:stylesheet[@id='%s']",
+                            path.getFileName().toString().replaceAll("\\.xsl$", "")
+                        )
+                    )
+                )
+            );
+    }
+
+    @Test
+    @Timeout(30L)
     void checksEmptyObjectOnLargeXmirInReasonableTime(@TempDir final Path tmp) throws IOException {
         final Path path = Paths.get("com/sun/jna");
         final String clazz = "Pointer.class";

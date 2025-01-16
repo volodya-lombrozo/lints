@@ -23,46 +23,46 @@
  */
 package org.eolang.lints;
 
-import org.hamcrest.MatcherAssert;
+import com.jcabi.xml.XML;
+import java.util.Collection;
+import java.util.LinkedList;
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
 
 /**
- * Tests for {@link Defect}.
+ * Hamcrest matcher for defects in XML.
  *
- * @since 0.0.12
+ * @since 0.0.34
  */
-final class DefectTest {
+final class DefectsMatcher extends BaseMatcher<XML> {
 
-    @Test
-    void returnsVersion() {
-        final String version = new Defect.Default(
-            "metas/incorrect-architect",
-            Severity.WARNING,
-            "",
-            3,
-            "Something went wrong with an architect"
-        ).version();
-        MatcherAssert.assertThat(
-            "Version doesn't match with expected",
-            version,
-            Matchers.equalTo("1.2.3")
-        );
+    /**
+     * Synthetic matcher that is built when input arrives.
+     */
+    private Matcher<Iterable<? extends Defect>> matcher;
+
+    @Override
+    public boolean matches(final Object xml) {
+        final Collection<Defect> defects = new LinkedList<>();
+        for (final XML defect : ((XML) xml).nodes("/defects/defect")) {
+            defects.add(
+                new Defect.Default(
+                    "unknown",
+                    Severity.parsed(defect.xpath("@severity").get(0)),
+                    "unknown",
+                    Integer.parseInt(defect.xpath("@line").get(0)),
+                    defect.xpath("text()").get(0)
+                )
+            );
+        }
+        this.matcher = Matchers.everyItem(new DefectMatcher());
+        return this.matcher.matches(defects);
     }
 
-    @Test
-    void printsProgramName() {
-        final String program = "a.b.c.bar";
-        MatcherAssert.assertThat(
-            "toString() doesn't show program name",
-            new Defect.Default(
-                "foo",
-                Severity.WARNING,
-                program,
-                3,
-                "the message"
-            ),
-            Matchers.hasToString(Matchers.containsString(program))
-        );
+    @Override
+    public void describeTo(final Description desc) {
+        this.matcher.describeTo(desc);
     }
 }

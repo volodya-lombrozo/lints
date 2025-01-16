@@ -198,7 +198,7 @@ SOFTWARE.
       <groupId>org.eolang</groupId>
       <artifactId>xax</artifactId>
       <scope>test</scope>
-      <version>0.5.1</version>
+      <version>0.6.2</version>
     </dependency>
     <dependency>
       <groupId>com.yegor256</groupId>
@@ -209,7 +209,19 @@ SOFTWARE.
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>jeo-maven-plugin</artifactId>
-      <version>0.7.0</version>
+      <version>0.7.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.languagetool</groupId>
+      <artifactId>language-en</artifactId>
+      <version>6.5</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.jcabi</groupId>
+      <artifactId>jcabi-matchers</artifactId>
+      <version>1.8.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -308,6 +320,25 @@ SOFTWARE.
   </profiles>
   <build>
     <plugins>
+      <plugin>
+        <groupId>com.github.spotbugs</groupId>
+        <artifactId>spotbugs-maven-plugin</artifactId>
+        <version>4.8.6.6</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs</artifactId>
+            <version>4.9.0</version>
+          </dependency>
+        </dependencies>
+      </plugin>
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <!-- version from the parent pom -->

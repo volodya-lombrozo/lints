@@ -41,11 +41,11 @@ SOFTWARE.
                 <xsl:attribute name="severity">
                   <xsl:text>warning</xsl:text>
                 </xsl:attribute>
-                <xsl:text>The comment line width is "</xsl:text>
+                <xsl:text>The comment line width is </xsl:text>
                 <xsl:value-of select="string-length(.)"/>
-                <xsl:text>", while "</xsl:text>
+                <xsl:text>, while </xsl:text>
                 <xsl:value-of select="$max"/>
-                <xsl:text>" is max allowed</xsl:text>
+                <xsl:text> is max allowed</xsl:text>
               </xsl:element>
             </xsl:for-each>
           </xsl:when>
@@ -58,11 +58,11 @@ SOFTWARE.
                 <xsl:attribute name="severity">
                   <xsl:text>warning</xsl:text>
                 </xsl:attribute>
-                <xsl:text>The comment width is "</xsl:text>
+                <xsl:text>The comment width is </xsl:text>
                 <xsl:value-of select="string-length(.)"/>
-                <xsl:text>", while "</xsl:text>
+                <xsl:text>, while </xsl:text>
                 <xsl:value-of select="$max"/>
-                <xsl:text>" is max allowed</xsl:text>
+                <xsl:text> is max allowed</xsl:text>
               </xsl:element>
             </xsl:if>
           </xsl:otherwise>

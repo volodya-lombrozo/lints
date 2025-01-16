@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="zero-version" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -37,9 +38,8 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>error</xsl:text>
             </xsl:attribute>
-            <xsl:text>This +version may be used only during development: "</xsl:text>
-            <xsl:value-of select="tail/text()"/>
-            <xsl:text>"</xsl:text>
+            <xsl:text>This +version may be used only during development: </xsl:text>
+            <xsl:value-of select="eo:escape(tail/text())"/>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

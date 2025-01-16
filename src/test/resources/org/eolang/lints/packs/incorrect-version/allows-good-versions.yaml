@@ -20,26 +20,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 ---
-name: pit
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-jobs:
-  pit:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: 21
-      - uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ubuntu-jdk-21-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ubuntu-jdk-21-maven-
-      - run: mvn clean install -Ppit
+sheets:
+  - /org/eolang/lints/metas/incorrect-version.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=0]
+input: |
+  +version 0.0.0
+  +version 0.2.1
+  +version 42.0.555555
+  +version 0.0.1-alpha
+  +version 0.0.1-beta-1
+
+  # No comments.
+  [x] > foo
+    x.div in.nextInt > @

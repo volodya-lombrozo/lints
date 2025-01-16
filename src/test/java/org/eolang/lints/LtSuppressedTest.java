@@ -23,46 +23,41 @@
  */
 package org.eolang.lints;
 
+import java.io.IOException;
+import org.cactoos.io.InputOf;
+import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests for {@link Defect}.
+ * Test for {@link LtSuppressed}.
  *
- * @since 0.0.12
+ * @since 0.0.1
  */
-final class DefectTest {
+final class LtSuppressedTest {
 
     @Test
-    void returnsVersion() {
-        final String version = new Defect.Default(
-            "metas/incorrect-architect",
-            Severity.WARNING,
-            "",
-            3,
-            "Something went wrong with an architect"
-        ).version();
+    void lintsOneFile() throws IOException {
         MatcherAssert.assertThat(
-            "Version doesn't match with expected",
-            version,
-            Matchers.equalTo("1.2.3")
+            "failed to return one error",
+            new LtSuppressed(new LtAlways()).defects(
+                new EoSyntax(new InputOf("# first\n[] > foo\n")).parsed()
+            ),
+            Matchers.hasSize(1)
         );
     }
 
     @Test
-    void printsProgramName() {
-        final String program = "a.b.c.bar";
+    void suppressesTheDefect() throws IOException {
         MatcherAssert.assertThat(
-            "toString() doesn't show program name",
-            new Defect.Default(
-                "foo",
-                Severity.WARNING,
-                program,
-                3,
-                "the message"
+            "failed to return empty list",
+            new LtSuppressed(new LtAlways()).defects(
+                new EoSyntax(
+                    new InputOf("+unlint always\n\n# first\n[] > foo\n")
+                ).parsed()
             ),
-            Matchers.hasToString(Matchers.containsString(program))
+            Matchers.emptyIterable()
         );
     }
 }

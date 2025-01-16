@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="unknown-metas" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -38,9 +39,9 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>The meta "</xsl:text>
-            <xsl:value-of select="$meta-head"/>
-            <xsl:text>" is not supported and its usage has no effect</xsl:text>
+            <xsl:text>The meta </xsl:text>
+            <xsl:value-of select="eo:escape($meta-head)"/>
+            <xsl:text> is not supported, and its usage has no effect</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

@@ -24,10 +24,12 @@
 package org.eolang.lints.units;
 
 import com.jcabi.xml.XML;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
@@ -72,11 +74,13 @@ public final class LtUnitTestWithoutLiveFile implements Lint<Map<String, XML>> {
     }
 
     @Override
-    public String motive() throws Exception {
-        return new TextOf(
-            new ResourceOf(
-                String.format(
-                    "org/eolang/motives/units/%s.md", this.name()
+    public String motive() throws IOException {
+        return new IoCheckedText(
+            new TextOf(
+                new ResourceOf(
+                    String.format(
+                        "org/eolang/motives/units/%s.md", this.name()
+                    )
                 )
             )
         ).asString();

@@ -51,7 +51,7 @@ public interface Lint<T> {
     /**
      * Returns motive for a lint, explaining why this lint exists.
      * @return Motive text about lint
-     * @throws Exception if something went wrong
+     * @throws IOException if something went wrong
      */
-    String motive() throws Exception;
+    String motive() throws IOException;
 }
