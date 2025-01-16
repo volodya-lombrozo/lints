@@ -42,9 +42,7 @@ SOFTWARE.
             <xsl:choose>
               <xsl:when test="@name">
                 <xsl:text>object </xsl:text>
-                <xsl:text>"</xsl:text>
                 <xsl:value-of select="eo:escape(@name)"/>
-                <xsl:text>"</xsl:text>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:text>anonymous object</xsl:text>
