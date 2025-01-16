@@ -54,7 +54,7 @@ final class GrammarMatcher extends BaseMatcher<String> {
     /**
      * Errors.
      */
-    private List<RuleMatch> matches;
+    private List<RuleMatch> errors;
 
     @Override
     public boolean matches(final Object obj) {
@@ -63,27 +63,27 @@ final class GrammarMatcher extends BaseMatcher<String> {
         );
         for (final Rule rule : tool.getAllActiveRules()) {
             if (rule instanceof SpellingCheckRule) {
-                ((SpellingCheckRule)rule).addIgnoreTokens(
+                ((SpellingCheckRule) rule).addIgnoreTokens(
                     Arrays.asList("decoratee", "eolang")
                 );
             }
         }
         this.input = obj.toString();
         try {
-            this.matches = tool.check(GrammarMatcher.annonated(this.input));
+            this.errors = tool.check(GrammarMatcher.annonated(this.input));
         } catch (final IOException ex) {
             throw new IllegalArgumentException(ex);
         }
-        return this.matches.isEmpty();
+        return this.errors.isEmpty();
     }
 
     @Override
     public void describeTo(final Description desc) {
-        for (int idx = 0; idx < this.matches.size(); ++idx) {
+        for (int idx = 0; idx < this.errors.size(); ++idx) {
             if (idx > 0) {
                 desc.appendText(" and ");
             }
-            final RuleMatch match = this.matches.get(idx);
+            final RuleMatch match = this.errors.get(idx);
             desc.appendText("\n")
                 .appendValue(match.getRule().getId())
                 .appendText(" (")
