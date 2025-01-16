@@ -24,6 +24,7 @@
 package org.eolang.lints;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,7 +34,9 @@ import org.languagetool.JLanguageTool;
 import org.languagetool.Languages;
 import org.languagetool.markup.AnnotatedText;
 import org.languagetool.markup.AnnotatedTextBuilder;
+import org.languagetool.rules.Rule;
 import org.languagetool.rules.RuleMatch;
+import org.languagetool.rules.spelling.SpellingCheckRule;
 
 /**
  * Hamcrest matcher for a single piece of text, to make sure it's
@@ -58,6 +61,13 @@ final class GrammarMatcher extends BaseMatcher<String> {
         final JLanguageTool tool = new JLanguageTool(
             Languages.getLanguageForShortCode("en-GB")
         );
+        for (final Rule rule : tool.getAllActiveRules()) {
+            if (rule instanceof SpellingCheckRule) {
+                ((SpellingCheckRule)rule).addIgnoreTokens(
+                    Arrays.asList("decoratee", "eolang")
+                );
+            }
+        }
         this.input = obj.toString();
         try {
             this.matches = tool.check(GrammarMatcher.annonated(this.input));
