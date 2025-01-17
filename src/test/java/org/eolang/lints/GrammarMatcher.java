@@ -64,7 +64,7 @@ final class GrammarMatcher extends BaseMatcher<String> {
         for (final Rule rule : tool.getAllActiveRules()) {
             if (rule instanceof SpellingCheckRule) {
                 ((SpellingCheckRule) rule).addIgnoreTokens(
-                    Arrays.asList("decoratee", "eolang")
+                    Arrays.asList("decoratee", "eolang", "sprintf")
                 );
             }
         }

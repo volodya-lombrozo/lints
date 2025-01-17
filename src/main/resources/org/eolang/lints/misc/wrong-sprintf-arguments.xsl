@@ -80,7 +80,7 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>The sprintf object has wrong number of arguments: </xsl:text>
+            <xsl:text>The sprintf object has the wrong number of arguments: </xsl:text>
             <xsl:value-of select="$declared"/>
             <xsl:text> in the placeholder, but </xsl:text>
             <xsl:value-of select="$used"/>
