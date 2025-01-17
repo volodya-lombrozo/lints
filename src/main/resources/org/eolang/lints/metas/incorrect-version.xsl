@@ -24,13 +24,14 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="incorrect-version" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="/program/metas/meta">
         <xsl:variable name="meta-head" select="head"/>
         <xsl:variable name="meta-tail" select="tail"/>
-        <xsl:if test="$meta-head='version' and not(matches($meta-tail, '^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*)?(\+[a-zA-Z0-9]+)?$'))">
+        <xsl:if test="$meta-head='version' and not(matches($meta-tail, '^\d+\.\d+\.\d+(-[a-zA-Z0-9-]+)?$|^\d+\.\d+-SNAPSHOT$'))">
           <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="eo:lineno(@line)"/>
@@ -38,9 +39,9 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>The format of the +version meta is wrong: "</xsl:text>
-            <xsl:value-of select="$meta-tail"/>
-            <xsl:text>" (SemVer expected instead)</xsl:text>
+            <xsl:text>The format of the +version meta is wrong: </xsl:text>
+            <xsl:value-of select="eo:escape($meta-tail)"/>
+            <xsl:text> (SemVer expected instead)</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>

@@ -120,6 +120,29 @@ final class LtIncorrectAliasTest {
     }
 
     @Test
+    void scansSecondPartInLongerAlias() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects aren't empty, but they should",
+            new LtIncorrectAlias().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "longer-alias",
+                        new EoSyntax(
+                            new ResourceOf(
+                                "org/eolang/lints/critical/incorrect-alias/longer-alias.eo"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "org/eolang/io/stdout", new XMLDocument("<program><objects/></program>")
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
     @ExtendWith(MktmpResolver.class)
     void acceptsValidDirectory(@Mktmp final Path dir) throws IOException {
         Files.write(
@@ -134,6 +157,39 @@ final class LtIncorrectAliasTest {
         Files.write(dir.resolve("ttt/foo.xmir"), "<program/>".getBytes());
         Files.write(dir.resolve("bar-test.xmir"), "<program/>".getBytes());
         Files.write(dir.resolve("ttt/foo-test.xmir"), "<program/>".getBytes());
+        MatcherAssert.assertThat(
+            "Defects are not empty, but should be",
+            new Programs(dir).defects(),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    @ExtendWith(MktmpResolver.class)
+    void acceptsValidDirectoryWithLongerAlias(@Mktmp final Path dir) throws IOException {
+        Files.write(
+            dir.resolve("main.xmir"),
+            new EoSyntax(
+                new ResourceOf(
+                    "org/eolang/lints/critical/incorrect-alias/longer-alias.eo"
+                )
+            ).parsed().toString().getBytes()
+        );
+        Files.write(dir.resolve("main-test.xmir"), "<program><objects/></program>".getBytes());
+        Files.createDirectory(
+            Files.createDirectory(
+                Files.createDirectory(
+                    dir.resolve("org")
+                ).resolve("eolang")
+            ).resolve("io")
+        );
+        Files.write(
+            dir.resolve("org/eolang/io/stdout.xmir"), "<program><objects/></program>".getBytes()
+        );
+        Files.write(
+            dir.resolve("org/eolang/io/stdout-test.xmir"),
+            "<program><objects/></program>".getBytes()
+        );
         MatcherAssert.assertThat(
             "Defects are not empty, but should be",
             new Programs(dir).defects(),

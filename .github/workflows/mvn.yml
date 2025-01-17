@@ -30,7 +30,6 @@ on:
       - master
 jobs:
   mvn:
-    name: mvn
     strategy:
       fail-fast: false
       matrix:

@@ -28,6 +28,7 @@ import java.util.Arrays;
 import javax.annotation.concurrent.ThreadSafe;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Joined;
+import org.cactoos.iterable.Shuffled;
 import org.eolang.lints.comments.LtAsciiOnly;
 import org.eolang.lints.misc.LtTestNotVerb;
 
@@ -47,11 +48,13 @@ final class PkMono extends IterableEnvelope<Lint<XML>> {
      */
     PkMono() {
         super(
-            new Joined<Lint<XML>>(
-                new PkByXsl(),
-                Arrays.asList(
-                    new LtAsciiOnly(),
-                    new LtTestNotVerb()
+            new Shuffled<>(
+                new Joined<Lint<XML>>(
+                    new PkByXsl(),
+                    Arrays.asList(
+                        new LtAsciiOnly(),
+                        new LtTestNotVerb()
+                    )
                 )
             )
         );

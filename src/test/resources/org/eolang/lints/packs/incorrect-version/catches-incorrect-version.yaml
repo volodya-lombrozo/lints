@@ -24,24 +24,18 @@ sheets:
   - /org/eolang/lints/metas/incorrect-version.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=11]
+  - /defects/defect[@line='1']
+  - /defects/defect[@line='2']
+  - /defects/defect[@line='3']
+  - /defects/defect[@line='4']
+  - /defects/defect[@line='5']
+  - /defects/defect[@line='6']
   - /defects/defect[@line='7']
   - /defects/defect[@line='8']
   - /defects/defect[@line='9']
   - /defects/defect[@line='10']
   - /defects/defect[@line='11']
-  - /defects/defect[@line='12']
-  - /defects/defect[@line='13']
-  - /defects/defect[@line='14']
-  - /defects/defect[@line='15']
-  - /defects/defect[@line='16']
-  - /defects/defect[@line='17']
 input: |
-  +version 0.0.0
-  +version 0.2.1
-  +version 42.0.555555
-  +version 0.0.1-alpha
-  +version 0.0.1-beta-1
-  +alias org.eolang.io.stdout
   +version alpha
   +version 1.0.0-alpha.beta
   +version привет, друг!

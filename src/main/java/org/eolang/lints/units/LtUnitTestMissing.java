@@ -68,7 +68,7 @@ public final class LtUnitTestMissing implements Lint<Map<String, XML>> {
     }
 
     @Override
-    public String motive() throws Exception {
+    public String motive() throws IOException {
         return "";
     }
 }

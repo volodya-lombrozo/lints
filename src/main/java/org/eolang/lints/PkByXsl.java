@@ -31,6 +31,7 @@ import java.util.regex.Pattern;
 import org.cactoos.io.InputOf;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Mapped;
+import org.cactoos.iterable.Shuffled;
 
 /**
  * All lints defined by XSLs.
@@ -67,20 +68,24 @@ final class PkByXsl extends IterableEnvelope<Lint<XML>> {
      */
     private static Iterable<Lint<XML>> all() {
         try {
-            return new Mapped<>(
-                res -> new LtByXsl(
-                    new InputOf(res.getInputStream()),
-                    new InputOf(
-                        PkByXsl.XSL_PATTERN.matcher(
-                            PkByXsl.LINTS_PATH.matcher(
-                                res.getURL().toString()
-                            ).replaceAll("eolang/motives")
-                        ).replaceAll(".md")
-                    )
-                ),
-                Arrays.asList(
-                    new PathMatchingResourcePatternResolver().getResources(
-                        "classpath*:org/eolang/lints/**/*.xsl"
+            return new Shuffled<Lint<XML>>(
+                new Mapped<>(
+                    res -> new LtSuppressed(
+                        new LtByXsl(
+                            new InputOf(res.getInputStream()),
+                            new InputOf(
+                                PkByXsl.XSL_PATTERN.matcher(
+                                    PkByXsl.LINTS_PATH.matcher(
+                                        res.getURL().toString()
+                                    ).replaceAll("eolang/motives")
+                                ).replaceAll(".md")
+                            )
+                        )
+                    ),
+                    Arrays.asList(
+                        new PathMatchingResourcePatternResolver().getResources(
+                            "classpath*:org/eolang/lints/**/*.xsl"
+                        )
                     )
                 )
             );
