@@ -27,7 +27,7 @@ asserts:
 input: |
   # App.
   [] > app
-  QQ.io.stdout > @
-    not.sprintf
-      "Hello, %s! Your account is %d."
-      * name
+    QQ.io.stdout > @
+      not.sprintf
+        "Hello, %s! Your account is %d."
+        * name

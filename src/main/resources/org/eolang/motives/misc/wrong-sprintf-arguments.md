@@ -6,21 +6,19 @@ and passed arguments.
 Incorrect:
 
 ```eo
-# App.
 [] > app
-QQ.io.stdout > @
-not.sprintf
-  "Hello, %s! Your account is %d."
-  * name
+  QQ.io.stdout > @
+    QQ.txt.sprintf
+      "Hello, %s! Your account is %d."
+      * name
 ```
 
 Correct:
 
 ```eo
-# App.
 [] > app
-QQ.io.stdout > @
-not.sprintf
-  "Hello, %s! Your account is %d."
-  * name acc
+  QQ.io.stdout > @
+    QQ.txt.sprintf
+      "Hello, %s! Your account is %d."
+      * name acc
 ```

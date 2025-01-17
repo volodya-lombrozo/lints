@@ -28,10 +28,10 @@ asserts:
 input: |
   # App.
   [] > app
-  QQ.io.stdout > @
-    org.eolang.txt.sprintf
-      "Hello, %s! Your account is %d."
-      * name acc
-    org.eolang.txt.sprintf
-      "Hello, %s! Your account is %f."
-      * f
+    QQ.io.stdout > @
+      org.eolang.txt.sprintf
+        "Hello, %s! Your account is %d."
+        * name acc
+      org.eolang.txt.sprintf
+        "Hello, %s! Your account is %f."
+        * f

@@ -27,7 +27,7 @@ asserts:
 input: |
   # App.
   [] > app
-  QQ.io.stdout > @
-    org.eolang.txt.sprintf
-      "Hello, %s (%x, match: %b)! Your account is %d, your temperature %f."
-      * name name.as-bytes true acc t
+    QQ.io.stdout > @
+      org.eolang.txt.sprintf
+        "Hello, %s (%x, match: %b)! Your account is %d, your temperature %f."
+        * name name.as-bytes true acc t

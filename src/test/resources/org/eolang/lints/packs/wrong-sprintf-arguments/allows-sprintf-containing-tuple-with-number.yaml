@@ -27,7 +27,7 @@ asserts:
 input: |
   # App.
   [] > app
-  QQ.io.stdout > @
-    org.eolang.txt.sprintf
-      "Привет, %d"
-      * 52
+    QQ.io.stdout > @
+      org.eolang.txt.sprintf
+        "Привет, %d"
+        * 52
