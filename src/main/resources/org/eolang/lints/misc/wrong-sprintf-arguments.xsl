@@ -80,11 +80,11 @@ SOFTWARE.
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>The sprintf object has the wrong number of arguments: </xsl:text>
+            <xsl:text>According to the formatting template of the "sprintf" object, a tuple of </xsl:text>
             <xsl:value-of select="$declared"/>
-            <xsl:text> in the placeholder, but </xsl:text>
+            <xsl:text> elements is expected as the second argument of it, while a tuple of </xsl:text>
             <xsl:value-of select="$used"/>
-            <xsl:text> are passed</xsl:text>
+            <xsl:text> element(s) is provided</xsl:text>
           </defect>
         </xsl:if>
       </xsl:for-each>
