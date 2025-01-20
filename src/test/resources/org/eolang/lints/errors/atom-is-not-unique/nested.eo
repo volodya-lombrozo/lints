@@ -20,6 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# X.
-[] > app
-  [] > x /string
+# Top object with nested atoms inside.
+[] > top
+  [] > test /int
+  [] > f
+    [] > a
+      [] > bar
+        [] > abr /string

@@ -89,19 +89,43 @@ final class LtAtomIsNotUniqueTest {
     @Test
     void catchesAtomDuplicatesWithinSamePackage() throws Exception {
         MatcherAssert.assertThat(
-            "Defects are empty, but they should not",
+            "Defects should be reported",
             new LtAtomIsNotUnique().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "foo-packaged",
                         new ParsedEo(
-                            "org/eolang/lints/errors/atom-is-not-unique/foo-packaged.eo"
+                            "org/eolang/lints/errors/atom-is-not-unique/app-1.eo"
                         ).value()
                     ),
                     new MapEntry<>(
                         "bar-packaged",
                         new ParsedEo(
-                            "org/eolang/lints/errors/atom-is-not-unique/bar-packaged.eo"
+                            "org/eolang/lints/errors/atom-is-not-unique/app-2.eo"
+                        ).value()
+                    )
+                )
+            ),
+            Matchers.hasSize(2)
+        );
+    }
+
+    @Test
+    void catchesNestedAtomDuplicates() throws Exception {
+        MatcherAssert.assertThat(
+            "Defects are empty, but they should not",
+            new LtAtomIsNotUnique().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "nested",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/nested.eo"
+                        ).value()
+                    ),
+                    new MapEntry<>(
+                        "nested-dup",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/nested-dup.eo"
                         ).value()
                     )
                 )
@@ -195,7 +219,7 @@ final class LtAtomIsNotUniqueTest {
     }
 
     @Test
-    void allowsSameNameInComplexPackage() throws Exception {
+    void allowsSameNameWithPackageDifference() throws Exception {
         MatcherAssert.assertThat(
             "Defects aren't empty, but they should",
             new LtAtomIsNotUnique().defects(
