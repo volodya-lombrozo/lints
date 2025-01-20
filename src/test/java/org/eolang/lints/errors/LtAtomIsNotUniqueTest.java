@@ -119,7 +119,7 @@ final class LtAtomIsNotUniqueTest {
                     new MapEntry<>(
                         "dup",
                         new ParsedEo(
-                            "org/eolang/lints/errors/atom-is-not-unique/dup.eo"
+                            "org/eolang/lints/errors/atom-is-not-unique/dups.eo"
                         ).value()
                     )
                 )
