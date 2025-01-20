@@ -2,7 +2,7 @@
 <!--
 The MIT License (MIT)
 
-Copyright (c) 2016-2024 Objectionary.com
+Copyright (c) 2016-2025 Objectionary.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="atom-in-atom" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -35,16 +36,14 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>Atom "</xsl:text>
-          <xsl:value-of select="@name"/>
-          <xsl:text>" may not have any attributes, even if they are atoms, which however exist: </xsl:text>
+          <xsl:text>Atom </xsl:text>
+          <xsl:value-of select="eo:escape(@name)"/>
+          <xsl:text> may not have any attributes, even if they are atoms, which however exist: </xsl:text>
           <xsl:for-each select="o[@atom]">
             <xsl:if test="position() &gt; 1">
               <xsl:text>, </xsl:text>
             </xsl:if>
-            <xsl:text>"</xsl:text>
-            <xsl:value-of select="@name"/>
-            <xsl:text>"</xsl:text>
+            <xsl:value-of select="eo:escape(@name)"/>
           </xsl:for-each>
         </xsl:element>
       </xsl:for-each>

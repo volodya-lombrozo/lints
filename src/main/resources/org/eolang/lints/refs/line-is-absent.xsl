@@ -2,7 +2,7 @@
 <!--
 The MIT License (MIT)
 
-Copyright (c) 2016-2024 Objectionary.com
+Copyright (c) 2016-2025 Objectionary.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,7 @@ SOFTWARE.
         <xsl:variable name="self" select="."/>
         <xsl:variable name="target" select="key('objsNoLineByName', $self/@base)"/>
         <xsl:if test="$target">
-          <defect line="eo:lineno(@line)" severity="error">
+          <defect line="0" severity="error">
             The @line attribute is absent at <xsl:value-of select="$target/@name"/>
           </defect>
         </xsl:if>

@@ -2,7 +2,7 @@
 <!--
 The MIT License (MIT)
 
-Copyright (c) 2016-2024 Objectionary.com
+Copyright (c) 2016-2025 Objectionary.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,11 +41,11 @@ SOFTWARE.
                 <xsl:attribute name="severity">
                   <xsl:text>warning</xsl:text>
                 </xsl:attribute>
-                <xsl:text>The comment line width is "</xsl:text>
+                <xsl:text>The comment line width is </xsl:text>
                 <xsl:value-of select="string-length(.)"/>
-                <xsl:text>", while "</xsl:text>
+                <xsl:text>, while </xsl:text>
                 <xsl:value-of select="$max"/>
-                <xsl:text>" is max allowed</xsl:text>
+                <xsl:text> is max allowed</xsl:text>
               </xsl:element>
             </xsl:for-each>
           </xsl:when>
@@ -58,11 +58,11 @@ SOFTWARE.
                 <xsl:attribute name="severity">
                   <xsl:text>warning</xsl:text>
                 </xsl:attribute>
-                <xsl:text>The comment width is "</xsl:text>
+                <xsl:text>The comment width is </xsl:text>
                 <xsl:value-of select="string-length(.)"/>
-                <xsl:text>", while "</xsl:text>
+                <xsl:text>, while </xsl:text>
                 <xsl:value-of select="$max"/>
-                <xsl:text>" is max allowed</xsl:text>
+                <xsl:text> is max allowed</xsl:text>
               </xsl:element>
             </xsl:if>
           </xsl:otherwise>

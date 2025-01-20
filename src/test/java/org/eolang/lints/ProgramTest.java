@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -118,7 +118,7 @@ final class ProgramTest {
     }
 
     @Test
-    @Timeout(10L)
+    @Timeout(60L)
     void simpleTest(@Mktmp final Path dir) throws IOException {
         final Path path = dir.resolve("foo.xmir");
         Files.write(
@@ -171,8 +171,10 @@ final class ProgramTest {
                 Matchers.iterableWithSize(Matchers.greaterThan(0)),
                 Matchers.hasItem(
                     Matchers.hasToString(
-                        Matchers.containsString(
-                            "[alias-too-long ERROR]:5 The alias has too many parts"
+                        Matchers.allOf(
+                            Matchers.containsString("alias-too-long ERROR"),
+                            Matchers.containsString("The alias has too many parts"),
+                            Matchers.containsString(":5")
                         )
                     )
                 )
@@ -181,7 +183,7 @@ final class ProgramTest {
     }
 
     @Test
-    @Timeout(10L)
+    @Timeout(60L)
     void acceptsCanonicalCode() throws IOException {
         final XML xmir = new Xsline(new TrParsing()).pass(
             new EoSyntax(

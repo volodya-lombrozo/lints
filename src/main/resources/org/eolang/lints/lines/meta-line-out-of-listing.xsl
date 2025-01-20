@@ -2,7 +2,7 @@
 <!--
 The MIT License (MIT)
 
-Copyright (c) 2016-2024 Objectionary.com
+Copyright (c) 2016-2025 Objectionary.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,9 +36,9 @@ SOFTWARE.
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>
-          <xsl:text>The line "</xsl:text>
+          <xsl:text>The line </xsl:text>
           <xsl:value-of select="eo:lineno(@line)"/>
-          <xsl:text>" is out of listing, which contains only </xsl:text>
+          <xsl:text> is out of listing, which contains only </xsl:text>
           <xsl:value-of select="$max"/>
           <xsl:text> lines</xsl:text>
         </xsl:element>

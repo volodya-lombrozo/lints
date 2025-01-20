@@ -2,7 +2,7 @@
 <!--
 The MIT License (MIT)
 
-Copyright (c) 2016-2024 Objectionary.com
+Copyright (c) 2016-2025 Objectionary.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" version="2.0" id="incorrect-bytes-format">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
@@ -38,9 +39,8 @@ SOFTWARE.
           <xsl:value-of select="eo:lineno(@line)"/>
         </xsl:attribute>
         <xsl:attribute name="severity">critical</xsl:attribute>
-        <xsl:text>The format of bytes is incorrect: "</xsl:text>
-        <xsl:value-of select="$bytes"/>
-        <xsl:text>"</xsl:text>
+        <xsl:text>The format of bytes is incorrect: </xsl:text>
+        <xsl:value-of select="eo:escape($bytes)"/>
       </defect>
     </xsl:if>
   </xsl:template>

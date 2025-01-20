@@ -2,7 +2,7 @@
 <!--
 The MIT License (MIT)
 
-Copyright (c) 2016-2024 Objectionary.com
+Copyright (c) 2016-2025 Objectionary.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@ SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" version="2.0" id="incorrect-test-object-name">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:output encoding="UTF-8" method="xml" indent="yes"/>
   <xsl:template match="/">
@@ -36,12 +37,10 @@ SOFTWARE.
               <xsl:value-of select="eo:lineno(@line)"/>
             </xsl:attribute>
             <xsl:attribute name="severity">warning</xsl:attribute>
-            <xsl:text>The name of the object "</xsl:text>
-            <xsl:value-of select="@name"/>
-            <xsl:text>"</xsl:text>
-            <xsl:text> doesn't match "</xsl:text>
-            <xsl:value-of select="$regexp"/>
-            <xsl:text>"</xsl:text>
+            <xsl:text>The name of the object </xsl:text>
+            <xsl:value-of select="eo:escape(@name)"/>
+            <xsl:text> doesn't match </xsl:text>
+            <xsl:value-of select="eo:escape($regexp)"/>
           </defect>
         </xsl:if>
       </xsl:for-each>

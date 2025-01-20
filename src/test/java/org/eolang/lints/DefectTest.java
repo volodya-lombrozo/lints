@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016-2024 Objectionary.com
+ * Copyright (c) 2016-2025 Objectionary.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,6 +47,22 @@ final class DefectTest {
             "Version doesn't match with expected",
             version,
             Matchers.equalTo("1.2.3")
+        );
+    }
+
+    @Test
+    void printsProgramName() {
+        final String program = "a.b.c.bar";
+        MatcherAssert.assertThat(
+            "toString() doesn't show program name",
+            new Defect.Default(
+                "foo",
+                Severity.WARNING,
+                program,
+                3,
+                "the message"
+            ),
+            Matchers.hasToString(Matchers.containsString(program))
         );
     }
 }
