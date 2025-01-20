@@ -23,3 +23,4 @@
 # Spb.
 [attr] > spb
   [] > test /int
+  [] > sfo /int

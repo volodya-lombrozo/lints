@@ -177,7 +177,7 @@ final class LtAtomIsNotUniqueTest {
     }
 
     @Test
-    void allowsUniqueAtomsInSingleFile() throws Exception {
+    void allowsAtomsWithUniqueFqnsInSingleFile() throws Exception {
         MatcherAssert.assertThat(
             "Defects aren't empty, but they should",
             new LtAtomIsNotUnique().defects(
