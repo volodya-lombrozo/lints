@@ -24,6 +24,8 @@
 package org.eolang.lints.errors;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XSL;
+import com.jcabi.xml.XSLDocument;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
@@ -31,11 +33,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.io.UncheckedInput;
 import org.cactoos.list.ListOf;
+import org.cactoos.scalar.IoChecked;
+import org.cactoos.scalar.Unchecked;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.lints.Defect;
@@ -44,10 +51,39 @@ import org.eolang.lints.Severity;
 
 /**
  * All FQNs that have `@atom` in the entire scope must be unique.
+ * This lint already expects the presence of `@fqn` attribute for each atom `o`
+ * in XMIR.
  *
  * @since 0.0.31
  */
 public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
+
+    /**
+     * Stylesheet for adding `@fqn` attribute for atoms.
+     */
+    private final XSL fqns;
+
+    /**
+     * Ctor.
+     */
+    public LtAtomIsNotUnique() {
+        this(
+            new XSLDocument(
+                new UncheckedInput(
+                    new ResourceOf("org/eolang/funcs/atom-fqns.xsl")
+                ).stream()
+            )
+        );
+    }
+
+    /**
+     * Ctor.
+     *
+     * @param sheet Sheet
+     */
+    public LtAtomIsNotUnique(final XSL sheet) {
+        this.fqns = sheet;
+    }
 
     @Override
     public String name() {
@@ -55,11 +91,11 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
     }
 
     @Override
-    public Collection<Defect> defects(final Map<String, XML> pkg) throws IOException {
+    public Collection<Defect> defects(final Map<String, XML> pkg) {
         final Collection<Defect> defects = new LinkedList<>();
-        final Map<XML, List<String>> index = pkg.values().stream().collect(
-            Collectors.toMap(Function.identity(), LtAtomIsNotUnique::fqns)
-        );
+        final Map<XML, List<String>> index = pkg.values().stream()
+            .map(this.fqns::transform)
+            .collect(Collectors.toMap(Function.identity(), LtAtomIsNotUnique::fqns));
         final Collection<String> checked = new HashSet<>(0);
         index.forEach(
             (xmir, fqns) -> {
@@ -150,19 +186,7 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
     }
 
     private static List<String> fqns(final XML xmir) {
-        final List<String> result;
-        final List<String> fqns = xmir.xpath("//o[@atom]/@name");
-        if (xmir.nodes("/program/metas/meta[head='package']").size() == 1) {
-            final String pack = xmir.xpath(
-                "/program/metas/meta[head='package']/tail/text()"
-            ).get(0);
-            result = fqns.stream().map(
-                fqn -> String.format("%s.%s", pack, fqn)
-            ).collect(Collectors.toList());
-        } else {
-            result = fqns;
-        }
-        return result;
+        return new ListOf<>(xmir.xpath("//o[@fqn]/@fqn"));
     }
 
     private static String oname(final String fqn) {

@@ -20,6 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Bar.
-[] > bar
+# Bar, but its foo.
+[] > foo
   [] > test /int
