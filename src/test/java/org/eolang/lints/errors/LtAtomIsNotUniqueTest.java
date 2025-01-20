@@ -53,12 +53,36 @@ final class LtAtomIsNotUniqueTest {
                     new MapEntry<>(
                         "bar",
                         new ParsedEo(
-                            "org/eolang/lints/errors/atom-is-not-unique/bar.eo"
+                            "org/eolang/lints/errors/atom-is-not-unique/bar-but-foo.eo"
                         ).value()
                     )
                 )
             ),
             Matchers.hasSize(2)
+        );
+    }
+
+    @Test
+    void allowsSameAtomsWithDifferentFqns() throws Exception {
+        MatcherAssert.assertThat(
+            "Defects are empty, but they should not",
+            new LtAtomIsNotUnique().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "foo",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/foo.eo"
+                        ).value()
+                    ),
+                    new MapEntry<>(
+                        "bar",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/atom-is-not-unique/bar.eo"
+                        ).value()
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
         );
     }
 
