@@ -23,6 +23,7 @@
  */
 package org.eolang.lints;
 
+import com.github.lombrozo.xnav.Filter;
 import com.github.lombrozo.xnav.Navigator;
 import com.jcabi.xml.ClasspathSources;
 import com.jcabi.xml.XML;
@@ -32,9 +33,11 @@ import com.jcabi.xml.XSLDocument;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.IoCheckedText;
@@ -178,7 +181,7 @@ final class LtByXsl implements Lint<XML> {
      */
     private static String findName(final XML program) {
         return new Navigator(program.inner())
-            .child("program")
+            .element("program")
             .attribute("name")
             .text()
             .orElse("unknown");
@@ -200,23 +203,30 @@ final class LtByXsl implements Lint<XML> {
      *  <a href="https://github.com/jcabi/jcabi-xml/issues/288">jcabi/jcabi-xml#288</a>.
      */
     private static Collection<XML> findDefects(final XML report) {
-        final NodeList nodes = report.inner().getChildNodes();
-        final int length = nodes.getLength();
-        final List<XML> defects = new ArrayList<>(0);
-        for (int index = 0; index < length; ++index) {
-            final Node element = nodes.item(index);
-            if ("defects".equals(element.getNodeName())) {
-                final NodeList dnodes;
-                dnodes = element.getChildNodes();
-                final int all = dnodes.getLength();
-                for (int idx = 0; idx < all; ++idx) {
-                    final Node defect = dnodes.item(idx);
-                    if ("defect".equals(defect.getNodeName())) {
-                        defects.add(new XMLDocument(defect.cloneNode(true)));
-                    }
-                }
-            }
-        }
-        return defects;
+        return new Navigator(report.inner())
+            .element("defects")
+            .elements(Filter.withName("defect"))
+            .map(Navigator::copy)
+            .map(Navigator::node)
+            .map(XMLDocument::new)
+            .collect(Collectors.toList());
+//        final NodeList nodes = report.inner().getChildNodes();
+//        final int length = nodes.getLength();
+//        final List<XML> defects = new ArrayList<>(0);
+//        for (int index = 0; index < length; ++index) {
+//            final Node element = nodes.item(index);
+//            if ("defects".equals(element.getNodeName())) {
+//                final NodeList dnodes;
+//                dnodes = element.getChildNodes();
+//                final int all = dnodes.getLength();
+//                for (int idx = 0; idx < all; ++idx) {
+//                    final Node defect = dnodes.item(idx);
+//                    if ("defect".equals(defect.getNodeName())) {
+//                        defects.add(new XMLDocument(defect.cloneNode(true)));
+//                    }
+//                }
+//            }
+//        }
+//        return defects;
     }
 }
