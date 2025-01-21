@@ -79,7 +79,7 @@ with the help of the `+unlint` meta.
 The library is designed as a set of lints, each of which
 is a separate class implementing the `Lint` interface.
 Each lint is responsible for checking one particular aspect
-of the [XMIR] document. The `Program` class is responsible for  
+of the [XMIR] document. The `Program` class is responsible for
 running all lints and collecting defects for a single XMIR file.
 The `Programs` class is responsible for running all lints and
 collecting defects for a set of XMIR files. All in all,

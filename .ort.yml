@@ -19,21 +19,18 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
+# See https://oss-review-toolkit.org/ort/docs/configuration/ort-yml for file specification
 ---
-name: ort
-on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
-jobs:
-  ort:
-    runs-on: ubuntu-24.04
-    steps:
-      - run: git config --global url.https://github.com/.insteadOf ssh://git@github.com/
-      - uses: actions/checkout@v4
-      - uses: oss-review-toolkit/ort-ci-github-action@v1
-        with:
-          fail-on: 'violations'
+excludes:
+  paths:
+    - comment: It's a test
+      pattern: src/it/**
+      reason: BUILD_TOOL_OF
+  scopes:
+    - pattern: "provided.*"
+      reason: "TEST_DEPENDENCY_OF"
+      comment: "Packages provided"
+    - pattern: "test.*"
+      reason: "TEST_DEPENDENCY_OF"
+      comment: "Packages for testing only"
