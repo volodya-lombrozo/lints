@@ -27,30 +27,27 @@ SOFTWARE.
   <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
-    <xsl:variable name="void" select="//o[@base='∅']/@name"/>
     <defects>
       <xsl:for-each select="/program/objects//o[not(@base) and not(o) and not(@atom)]">
-        <xsl:if test="not($void = @base)">
-          <xsl:element name="defect">
-            <xsl:attribute name="line">
-              <xsl:value-of select="eo:lineno(@line)"/>
-            </xsl:attribute>
-            <xsl:attribute name="severity">
-              <xsl:text>warning</xsl:text>
-            </xsl:attribute>
-            <xsl:text>The </xsl:text>
-            <xsl:choose>
-              <xsl:when test="@name">
-                <xsl:text>object </xsl:text>
-                <xsl:value-of select="eo:escape(@name)"/>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text>anonymous object</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-            <xsl:text> is empty. It doesn't have any attributes, neither void nor attached</xsl:text>
-          </xsl:element>
-        </xsl:if>
+        <xsl:element name="defect">
+          <xsl:attribute name="line">
+            <xsl:value-of select="eo:lineno(@line)"/>
+          </xsl:attribute>
+          <xsl:attribute name="severity">
+            <xsl:text>warning</xsl:text>
+          </xsl:attribute>
+          <xsl:text>The </xsl:text>
+          <xsl:choose>
+            <xsl:when test="@name">
+              <xsl:text>object </xsl:text>
+              <xsl:value-of select="eo:escape(@name)"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>anonymous object</xsl:text>
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text> is empty. It doesn't have any attributes, neither void nor attached</xsl:text>
+        </xsl:element>
       </xsl:for-each>
     </defects>
   </xsl:template>
