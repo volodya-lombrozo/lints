@@ -204,7 +204,7 @@ final class ProgramTest {
         Assertions.assertDoesNotThrow(
             () ->
                 new Program(
-                    new XMLDocument("<program/>")
+                    new XMLDocument("<program name='correct'/>")
                 ).defects(),
             "Exception was thrown, but it should not be"
         );

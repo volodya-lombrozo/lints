@@ -45,7 +45,7 @@ final class PkByXslTest {
 
     @Test
     void passesOnSimpleXmir() throws IOException {
-        final XML xmir = new XMLDocument("<program/>");
+        final XML xmir = new XMLDocument("<program name='no-exceptions'/>");
         for (final Lint<XML> lint : new PkByXsl()) {
             MatcherAssert.assertThat(
                 "passes with no exceptions",
