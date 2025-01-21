@@ -19,18 +19,16 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-# See https://oss-review-toolkit.org/ort/docs/configuration/ort-yml for file specification
 ---
 excludes:
   paths:
     - comment: It's a test
-      pattern: src/it/**
+      pattern: "src/it/**"
       reason: BUILD_TOOL_OF
   scopes:
-    - pattern: "provided.*"
+    - pattern: "provided"
       reason: "TEST_DEPENDENCY_OF"
       comment: "Packages provided"
-    - pattern: "test.*"
+    - pattern: "test"
       reason: "TEST_DEPENDENCY_OF"
       comment: "Packages for testing only"
