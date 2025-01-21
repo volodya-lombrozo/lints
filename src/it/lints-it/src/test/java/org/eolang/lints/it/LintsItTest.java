@@ -34,7 +34,7 @@ final class LintsItTest {
     void lintsProgram() throws IOException {
         MatcherAssert.assertThat(
             "passes with no exceptions",
-            new Program(new XMLDocument("<program/>")).defects(),
+            new Program(new XMLDocument("<program name='it'/>")).defects(),
             Matchers.notNullValue()
         );
     }
