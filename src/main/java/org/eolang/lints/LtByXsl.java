@@ -23,6 +23,7 @@
  */
 package org.eolang.lints;
 
+import com.github.lombrozo.xnav.Navigator;
 import com.jcabi.xml.ClasspathSources;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
@@ -176,9 +177,14 @@ final class LtByXsl implements Lint<XML> {
      *  <a href="https://github.com/jcabi/jcabi-xml/issues/289">jcabi/jcabi-xml#289</a>.
      */
     private static String findName(final XML program) {
-        return Optional.of(program.inner().getFirstChild())
-            .map(Node::getAttributes).map(attrs -> attrs.getNamedItem("name"))
-            .map(Node::getTextContent).orElse("unknown");
+        return new Navigator(program.inner())
+            .child("program")
+            .attribute("name")
+            .text()
+            .orElse("unknown");
+//        return Optional.of(program.inner().getFirstChild())
+//            .map(Node::getAttributes).map(attrs -> attrs.getNamedItem("name"))
+//            .map(Node::getTextContent).orElse("unknown");
     }
 
     /**
