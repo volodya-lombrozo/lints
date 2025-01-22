@@ -36,7 +36,7 @@ import org.hamcrest.Matchers;
  *
  * @since 0.0.34
  */
-final class DefectsMatcher extends BaseMatcher<XML> {
+public final class DefectsMatcher extends BaseMatcher<XML> {
 
     /**
      * Synthetic matcher that is built when input arrives.

@@ -65,7 +65,7 @@ public final class LtUnitTestWithoutLiveFile implements Lint<Map<String, XML>> {
                     name,
                     0,
                     String.format(
-                        "Live .eo file '%s' was not found for '%s'", live, name
+                        "Live \".eo\" file \"%s\" was not found for \"%s\"", live, name
                     )
                 )
             );

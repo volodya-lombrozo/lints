@@ -156,7 +156,7 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
                     )
                 ).get(pos)
             ),
-            String.format("Atom '%s' is duplicated", fqn)
+            String.format("Atom \"%s\" is duplicated", fqn)
         );
     }
 
@@ -174,7 +174,7 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
                 ).get(0)
             ),
             String.format(
-                "Atom with FQN '%s' is duplicated, original was found in '%s'",
+                "Atom with FQN \"%s\" is duplicated, original was found in \"%s\"",
                 fqn, original.xpath("/program/@name").stream().findFirst().orElse("unknown")
             )
         );

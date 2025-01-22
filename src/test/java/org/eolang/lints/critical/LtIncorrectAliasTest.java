@@ -31,6 +31,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
+import org.eolang.lints.Defect;
+import org.eolang.lints.DefectMatcher;
 import org.eolang.lints.ParsedEo;
 import org.eolang.lints.Programs;
 import org.hamcrest.MatcherAssert;
@@ -61,7 +63,10 @@ final class LtIncorrectAliasTest {
                     )
                 )
             ),
-            Matchers.hasSize(Matchers.greaterThan(0))
+            Matchers.allOf(
+                Matchers.<Defect>iterableWithSize(Matchers.greaterThan(0)),
+                Matchers.<Defect>everyItem(new DefectMatcher())
+            )
         );
     }
 

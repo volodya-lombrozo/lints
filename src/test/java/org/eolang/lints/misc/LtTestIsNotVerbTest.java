@@ -24,6 +24,8 @@
 package org.eolang.lints.misc;
 
 import com.yegor256.MayBeSlow;
+import org.eolang.lints.Defect;
+import org.eolang.lints.DefectMatcher;
 import org.eolang.lints.ParsedEo;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -47,7 +49,10 @@ final class LtTestIsNotVerbTest {
                     "org/eolang/lints/misc/test-object-is-not-verb-in-singular/bad-tests.eo"
                 ).value()
             ),
-            Matchers.hasSize(40)
+            Matchers.allOf(
+                Matchers.<Defect>iterableWithSize(40),
+                Matchers.<Defect>everyItem(new DefectMatcher())
+            )
         );
     }
 

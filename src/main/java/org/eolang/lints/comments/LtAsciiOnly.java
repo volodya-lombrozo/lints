@@ -70,7 +70,7 @@ public final class LtAsciiOnly implements Lint<XML> {
                     xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
                     Integer.parseInt(line),
                     String.format(
-                        "Only ASCII characters are allowed in comments, while '%s' is used at the %sth line at the %sth position",
+                        "Only ASCII characters are allowed in comments, while \"%s\" is used at the line no.%s at the position no.%s",
                         chr,
                         line,
                         comment.xpath("text()").get(0).indexOf(chr) + 1

@@ -82,7 +82,7 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                                     .orElse("unknown"),
                                 Integer.parseInt(object.getValue()),
                                 String.format(
-                                    "The object name '%s' is not unique, original object was found in '%s'",
+                                    "The object name \"%s\" is not unique, original object was found in \"%s\"",
                                     object.getKey(), src
                                 )
                             )

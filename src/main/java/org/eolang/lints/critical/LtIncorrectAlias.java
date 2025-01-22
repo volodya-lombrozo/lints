@@ -84,7 +84,7 @@ public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
                                     xmir.xpath("/program/metas/meta[head='alias'][1]/@line").get(0)
                                 ),
                                 String.format(
-                                    "Incorrect pointing alias '%s', since there is no %s",
+                                    "Incorrect pointing alias \"%s\", since there is no \"%s\"",
                                     pointer,
                                     lookup
                                 )

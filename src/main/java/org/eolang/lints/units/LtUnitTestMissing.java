@@ -55,7 +55,7 @@ public final class LtUnitTestMissing implements Lint<Map<String, XML>> {
                     Severity.WARNING,
                     name,
                     0,
-                    String.format("Unit test is not found for %s", name)
+                    String.format("Unit test is not found for \"%s\"", name)
                 )
             );
         }

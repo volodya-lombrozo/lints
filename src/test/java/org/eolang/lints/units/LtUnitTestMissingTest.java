@@ -30,10 +30,10 @@ import com.yegor256.MktmpResolver;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
 import org.eolang.lints.Defect;
+import org.eolang.lints.DefectMatcher;
 import org.eolang.lints.Programs;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -50,27 +50,39 @@ final class LtUnitTestMissingTest {
 
     @Test
     void acceptsValidPackage() throws IOException {
-        final Collection<Defect> defects = new LtUnitTestMissing().defects(
-            new MapOf<String, XML>(
-                new MapEntry<>("foo", new XMLDocument("<program/>")),
-                new MapEntry<>("foo-test", new XMLDocument("<program/>"))
-            )
-        );
         MatcherAssert.assertThat(
-            "no problems found",
-            defects,
+            "some problems found by mistake",
+            new LtUnitTestMissing().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>("bar", new XMLDocument("<program name='bar'/>")),
+                    new MapEntry<>("bar-test", new XMLDocument("<program name='bar-test'/>"))
+                )
+            ),
             Matchers.emptyIterable()
         );
     }
 
     @Test
     void acceptsValidDirectory(@Mktmp final Path dir) throws IOException {
-        Files.write(dir.resolve("foo.xmir"), "<program/>".getBytes());
-        Files.write(dir.resolve("foo-test.xmir"), "<program/>".getBytes());
+        Files.write(dir.resolve("foo.xmir"), "<program name='foo'/>".getBytes());
+        Files.write(dir.resolve("foo-test.xmir"), "<program name='foo-test'/>".getBytes());
         MatcherAssert.assertThat(
-            "no defects found",
+            "some defects found by mistake",
             new Programs(dir).defects(),
             Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void detectsMissingTest(@Mktmp final Path dir) throws IOException {
+        Files.write(dir.resolve("aaa.xmir"), "<program name='aaa'/>".getBytes());
+        MatcherAssert.assertThat(
+            " defects found",
+            new Programs(dir).defects(),
+            Matchers.allOf(
+                Matchers.<Defect>iterableWithSize(Matchers.greaterThan(0)),
+                Matchers.<Defect>everyItem(new DefectMatcher())
+            )
         );
     }
 }
