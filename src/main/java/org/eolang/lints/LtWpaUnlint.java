@@ -23,6 +23,7 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
@@ -59,6 +60,14 @@ final class LtWpaUnlint implements Lint<Map<String, XML>> {
         final Collection<Defect> defects = new LinkedList<>();
         for (final Defect defect : this.origin.defects(map)) {
             final XML xmir = map.get(defect.program());
+            if (xmir == null) {
+                throw new IllegalArgumentException(
+                    Logger.format(
+                        "The \"%s\" defect was found in \"%s\", but this program is not in scope (%[list]s), how come?",
+                        defect.rule(), defect.program(), map.keySet()
+                    )
+                );
+            }
             defects.addAll(new LtUnlint(new Lint.Mono(defect)).defects(xmir));
         }
         return defects;

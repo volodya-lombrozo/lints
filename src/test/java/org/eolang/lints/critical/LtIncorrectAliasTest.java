@@ -27,6 +27,7 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.cactoos.map.MapEntry;
@@ -35,6 +36,7 @@ import org.eolang.lints.Defect;
 import org.eolang.lints.DefectMatcher;
 import org.eolang.lints.ParsedEo;
 import org.eolang.lints.Programs;
+import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -57,9 +59,16 @@ final class LtIncorrectAliasTest {
                 new MapOf<>(
                     new MapEntry<>(
                         "bar",
-                        new ParsedEo(
-                            "org/eolang/lints/critical/incorrect-alias/bar.eo"
-                        ).value()
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "+alias foo ",
+                                "+package ttt\n",
+                                "# Bar",
+                                "[] > bar",
+                                "  foo > @"
+                            )
+                        ).parsed()
                     )
                 )
             ),
@@ -78,11 +87,18 @@ final class LtIncorrectAliasTest {
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "bar",
-                        new ParsedEo(
-                            "org/eolang/lints/critical/incorrect-alias/bar.eo"
-                        ).value()
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "+alias foo ",
+                                "+package ttt\n",
+                                "# Bar",
+                                "[] > bar",
+                                "  foo > @"
+                            )
+                        ).parsed()
                     ),
-                    new MapEntry<>("ttt/foo", new XMLDocument("<program/>"))
+                    new MapEntry<>("ttt.foo", new XMLDocument("<program/>"))
                 )
             ),
             Matchers.hasSize(0)
@@ -119,12 +135,21 @@ final class LtIncorrectAliasTest {
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "longer-alias",
-                        new ParsedEo(
-                            "org/eolang/lints/critical/incorrect-alias/longer-alias.eo"
-                        ).value()
+                        new EoSyntax(
+                            "bar",
+                            String.join(
+                                "\n",
+                                "+alias stdout org.eolang.io.stdout",
+                                "+package foo\n",
+                                "[] > main",
+                                "  stdout > @",
+                                "    \"hi!\""
+                            )
+                        ).parsed()
                     ),
                     new MapEntry<>(
-                        "org/eolang/io/stdout", new XMLDocument("<program><objects/></program>")
+                        "org.eolang.io.stdout",
+                        new XMLDocument("<program><objects/></program>")
                     )
                 )
             ),
@@ -137,8 +162,17 @@ final class LtIncorrectAliasTest {
     void acceptsValidDirectory(@Mktmp final Path dir) throws Exception {
         Files.write(
             dir.resolve("bar.xmir"),
-            new ParsedEo("org/eolang/lints/critical/incorrect-alias/bar.eo")
-                .value().toString().getBytes()
+            new EoSyntax(
+                "bar",
+                String.join(
+                    "\n",
+                    "+alias foo",
+                    "+package ttt\n",
+                    "# Bar",
+                    "[] > bar",
+                    "  foo > @"
+                )
+            ).parsed().toString().getBytes()
         );
         Files.createDirectory(dir.resolve("ttt"));
         Files.write(dir.resolve("ttt/foo.xmir"), "<program/>".getBytes());
@@ -156,10 +190,22 @@ final class LtIncorrectAliasTest {
     void acceptsValidDirectoryWithLongerAlias(@Mktmp final Path dir) throws Exception {
         Files.write(
             dir.resolve("main.xmir"),
-            new ParsedEo("org/eolang/lints/critical/incorrect-alias/longer-alias.eo")
-                .value().toString().getBytes()
+            new EoSyntax(
+                "main",
+                String.join(
+                    "\n",
+                    "+alias stdout org.eolang.io.stdout",
+                    "+package foo\n",
+                    "[] > main",
+                    "  stdout > @",
+                    "    \"hi!\""
+                )
+            ).parsed().toString().getBytes(StandardCharsets.UTF_8)
         );
-        Files.write(dir.resolve("main-test.xmir"), "<program><objects/></program>".getBytes());
+        Files.write(
+            dir.resolve("main-test.xmir"),
+            "<program><objects/></program>".getBytes()
+        );
         Files.createDirectory(
             Files.createDirectory(
                 Files.createDirectory(
@@ -168,7 +214,8 @@ final class LtIncorrectAliasTest {
             ).resolve("io")
         );
         Files.write(
-            dir.resolve("org/eolang/io/stdout.xmir"), "<program><objects/></program>".getBytes()
+            dir.resolve("org/eolang/io/stdout.xmir"),
+            "<program><objects/></program>".getBytes()
         );
         Files.write(
             dir.resolve("org/eolang/io/stdout-test.xmir"),

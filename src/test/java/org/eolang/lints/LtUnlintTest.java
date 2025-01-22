@@ -24,7 +24,6 @@
 package org.eolang.lints;
 
 import java.io.IOException;
-import org.cactoos.io.InputOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -42,7 +41,7 @@ final class LtUnlintTest {
         MatcherAssert.assertThat(
             "failed to return one error",
             new LtUnlint(new LtAlways()).defects(
-                new EoSyntax(new InputOf("# first\n[] > foo\n")).parsed()
+                new EoSyntax("# first\n[] > foo\n").parsed()
             ),
             Matchers.hasSize(1)
         );
@@ -54,7 +53,7 @@ final class LtUnlintTest {
             "failed to return empty list",
             new LtUnlint(new LtAlways()).defects(
                 new EoSyntax(
-                    new InputOf("+unlint always\n\n# first\n[] > foo\n")
+                    "+unlint always\n\n# first\n[] > foo\n"
                 ).parsed()
             ),
             Matchers.emptyIterable()

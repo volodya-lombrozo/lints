@@ -24,7 +24,6 @@
 package org.eolang.lints;
 
 import java.io.IOException;
-import org.cactoos.io.InputOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -42,7 +41,7 @@ final class LtAlwaysTest {
         MatcherAssert.assertThat(
             "didn't return one defect",
             new LtAlways().defects(
-                new EoSyntax(new InputOf("# first\n[] > foo\n")).parsed()
+                new EoSyntax("# first\n[] > foo\n").parsed()
             ),
             Matchers.hasSize(1)
         );

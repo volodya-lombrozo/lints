@@ -79,17 +79,15 @@ final class ProgramTest {
             new Program(
                 new EoSyntax(
                     "foo",
-                    new InputOf(
-                        String.join(
-                            "\n",
-                            "+home https://www.eolang.org",
-                            "+package bar",
-                            "+version 0.0.0",
-                            "",
-                            "# This is just a test object with no functionality.",
-                            "[] > foo\n",
-                            "  42 > x"
-                        )
+                    String.join(
+                        "\n",
+                        "+home https://www.eolang.org",
+                        "+package bar",
+                        "+version 0.0.0",
+                        "",
+                        "# This is just a test object with no functionality.",
+                        "[] > foo\n",
+                        "  42 > x"
                     )
                 ).parsed()
             ).defects(),
@@ -130,7 +128,7 @@ final class ProgramTest {
         Files.write(
             path,
             new EoSyntax(
-                new InputOf("# first.\n[] > foo\n# second.\n[] > foo\n")
+                "# first.\n[] > foo\n# second.\n[] > foo\n"
             ).parsed().toString().getBytes(StandardCharsets.UTF_8)
         );
         MatcherAssert.assertThat(
@@ -151,7 +149,7 @@ final class ProgramTest {
         Files.write(
             path,
             new EoSyntax(
-                new InputOf("# first.\n[] > foo\n# second.\n[] > foo\n")
+                "# first.\n[] > foo\n# second.\n[] > foo\n"
             ).parsed().toString().getBytes(StandardCharsets.UTF_8)
         );
         MatcherAssert.assertThat(

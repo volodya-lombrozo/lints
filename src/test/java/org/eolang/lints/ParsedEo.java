@@ -31,12 +31,13 @@ import org.eolang.parser.EoSyntax;
 
 /**
  * Parsed EO syntax to XMIR.
+ *
  * @since 0.0.31
  */
 public final class ParsedEo implements Scalar<XML> {
 
     /**
-     * Path to the EO program.
+     * Path to the EO program, in classpath (resources).
      */
     private final String path;
 

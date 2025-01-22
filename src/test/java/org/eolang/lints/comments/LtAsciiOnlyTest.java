@@ -24,7 +24,6 @@
 package org.eolang.lints.comments;
 
 import java.io.IOException;
-import org.cactoos.io.InputOf;
 import org.cactoos.list.ListOf;
 import org.eolang.lints.Defect;
 import org.eolang.lints.DefectMatcher;
@@ -47,7 +46,7 @@ final class LtAsciiOnlyTest {
             "non-ascii comment is not welcome",
             new LtAsciiOnly().defects(
                 new EoSyntax(
-                    new InputOf("# привет\n# как дела?\n[] > foo\n")
+                    "# привет\n# как дела?\n[] > foo\n"
                 ).parsed()
             ),
             Matchers.allOf(
@@ -64,7 +63,7 @@ final class LtAsciiOnlyTest {
             new ListOf<>(
                 new LtAsciiOnly().defects(
                     new EoSyntax(
-                        new InputOf("# привет\n# как дела?\n[] > foo\n")
+                        "# привет\n# как дела?\n[] > foo\n"
                     ).parsed()
                 )
             ).get(0).text(),
@@ -87,7 +86,7 @@ final class LtAsciiOnlyTest {
             "The rule name is set right",
             new LtAsciiOnly().defects(
                 new EoSyntax(
-                    new InputOf("# тук тук\n[] > foo\n")
+                    "# тук тук\n[] > foo\n"
                 ).parsed()
             ).iterator().next().rule(),
             Matchers.equalTo("ascii-only")

@@ -71,7 +71,9 @@ final class XmirKey implements Text {
         if (parent.toString().isEmpty()) {
             key = name;
         } else {
-            key = String.format("%s/%s", parent, name).replace("\\", "/");
+            key = String.format("%s/%s", parent, name)
+                .replace("\\", "/")
+                .replace("/", ".");
         }
         return key;
     }

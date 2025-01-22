@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.cactoos.io.InputOf;
 import org.cactoos.list.ListOf;
 import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
@@ -120,7 +119,7 @@ final class ProgramsTest {
         Files.write(
             path,
             new EoSyntax(
-                new InputOf(text)
+                text
             ).parsed().toString().getBytes(StandardCharsets.UTF_8)
         );
         return dir;

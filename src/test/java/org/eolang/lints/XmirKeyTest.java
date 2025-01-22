@@ -41,35 +41,23 @@ final class XmirKeyTest {
 
     @Test
     void returnsXmirName(@Mktmp final Path dir) {
-        final String expected = "foo";
-        final String key = new XmirKey(
-            dir.resolve(String.format("%s.xmir", expected)), dir
-        ).asString();
         MatcherAssert.assertThat(
-            String.format(
-                "XMIR key path: '%s' does not match with expected: '%s'",
-                key,
-                expected
-            ),
-            key,
-            Matchers.equalTo(expected)
+            "invalid key generated",
+            new XmirKey(
+                dir.resolve(String.format("%s.xmir", "bar")), dir
+            ).asString(),
+            Matchers.equalTo("bar")
         );
     }
 
     @Test
     void returnsXmirNameWithParentDirs(@Mktmp final Path dir) {
-        final String expected = "ttt/aaa/foo";
-        final String key = new XmirKey(
-            dir.resolve("ttt").resolve("aaa").resolve("foo.xmir"), dir
-        ).asString();
         MatcherAssert.assertThat(
-            String.format(
-                "XMIR key path: '%s' does not match with expected: '%s'",
-                key,
-                expected
-            ),
-            key,
-            Matchers.equalTo(expected)
+            "invalid key generated",
+            new XmirKey(
+                dir.resolve("ttt").resolve("aaa").resolve("foo.xmir"), dir
+            ).asString(),
+            Matchers.equalTo("ttt.aaa.foo")
         );
     }
 }

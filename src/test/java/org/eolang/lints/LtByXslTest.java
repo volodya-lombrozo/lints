@@ -31,7 +31,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.cactoos.io.InputOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.jeo.Disassembler;
@@ -64,7 +63,7 @@ final class LtByXslTest {
             "No defects found, while a few of them expected",
             new LtByXsl("critical/duplicate-names").defects(
                 new EoSyntax(
-                    new InputOf("# first\n[] > foo\n# first\n[] > foo\n")
+                    "# first\n[] > foo\n# first\n[] > foo\n"
                 ).parsed()
             ),
             Matchers.hasSize(Matchers.greaterThan(0))
@@ -79,7 +78,7 @@ final class LtByXslTest {
             new XtSticky(
                 new XtYaml(
                     yaml,
-                    eo -> new EoSyntax("pack", new InputOf(eo)).parsed()
+                    eo -> new EoSyntax("pack", eo).parsed()
                 )
             ),
             new XtoryMatcher(new DefectsMatcher())
