@@ -75,7 +75,7 @@ final class ProgramTest {
     @Test
     void returnsEmptyListOfDefects() throws IOException {
         MatcherAssert.assertThat(
-            "no defects found since the code is clean",
+            "defects found even though the code is clean",
             new Program(
                 new EoSyntax(
                     "foo",
@@ -89,6 +89,33 @@ final class ProgramTest {
                             "# This is just a test object with no functionality.",
                             "[] > foo\n",
                             "  42 > x"
+                        )
+                    )
+                ).parsed()
+            ).defects(),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void suppressesManyLints() throws IOException {
+        MatcherAssert.assertThat(
+            "defect found even though lint is suppressed",
+            new Program(
+                new EoSyntax(
+                    "foo-11",
+                    new InputOf(
+                        String.join(
+                            "\n",
+                            "+unlint object-does-not-match-filename",
+                            "+unlint empty-object",
+                            "+unlint mandatory-home",
+                            "+unlint mandatory-package",
+                            "+unlint mandatory-version",
+                            "+unlint comment-too-short",
+                            "+unlint unsorted-metas",
+                            "# Test.",
+                            "[] > foo"
                         )
                     )
                 ).parsed()
