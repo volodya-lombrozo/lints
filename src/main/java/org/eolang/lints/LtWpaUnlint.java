@@ -23,41 +23,50 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.XML;
 import java.io.IOException;
-import org.cactoos.io.InputOf;
-import org.eolang.parser.EoSyntax;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Test;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
- * Test for {@link LtSuppressed}.
+ * Lint that ignores linting if {@code +unlint} meta is present.
  *
  * @since 0.0.1
  */
-final class LtSuppressedTest {
+final class LtWpaUnlint implements Lint<Map<String, XML>> {
 
-    @Test
-    void lintsOneFile() throws IOException {
-        MatcherAssert.assertThat(
-            "failed to return one error",
-            new LtSuppressed(new LtAlways()).defects(
-                new EoSyntax(new InputOf("# first\n[] > foo\n")).parsed()
-            ),
-            Matchers.hasSize(1)
-        );
+    /**
+     * The original lint.
+     */
+    private final Lint<Map<String, XML>> origin;
+
+    /**
+     * Ctor.
+     * @param lint The lint to decorate
+     */
+    LtWpaUnlint(final Lint<Map<String, XML>> lint) {
+        this.origin = lint;
     }
 
-    @Test
-    void suppressesTheDefect() throws IOException {
-        MatcherAssert.assertThat(
-            "failed to return empty list",
-            new LtSuppressed(new LtAlways()).defects(
-                new EoSyntax(
-                    new InputOf("+unlint always\n\n# first\n[] > foo\n")
-                ).parsed()
-            ),
-            Matchers.emptyIterable()
-        );
+    @Override
+    public String name() {
+        return this.origin.name();
     }
+
+    @Override
+    public Collection<Defect> defects(final Map<String, XML> map) throws IOException {
+        final Collection<Defect> defects = new LinkedList<>();
+        for (final Defect defect : this.origin.defects(map)) {
+            final XML xmir = map.get(defect.program());
+            defects.addAll(new LtUnlint(new Lint.Mono(defect)).defects(xmir));
+        }
+        return defects;
+    }
+
+    @Override
+    public String motive() throws IOException {
+        return this.origin.motive();
+    }
+
 }

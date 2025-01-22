@@ -70,7 +70,7 @@ final class PkByXsl extends IterableEnvelope<Lint<XML>> {
         try {
             return new Shuffled<Lint<XML>>(
                 new Mapped<>(
-                    res -> new LtSuppressed(
+                    res -> new LtUnlint(
                         new LtByXsl(
                             new InputOf(res.getInputStream()),
                             new InputOf(
