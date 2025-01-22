@@ -23,11 +23,10 @@
 sheets:
   - /org/eolang/lints/misc/incorrect-test-object-name.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='4']
+  - /defects[count(defect[@severity='warning'])=0]
 input: |
   +tests
 
   # Test.
-  [] > t
-    42 > foo
+  [] > tests-ln-of-e-one-is-one
+    42 > @
