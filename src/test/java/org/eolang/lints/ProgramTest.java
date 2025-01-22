@@ -253,7 +253,7 @@ final class ProgramTest {
                     .write(Files.readAllBytes(bin));
                 f.build()
                     .plugins()
-                    .append("org.eolang", "jeo-maven-plugin", "0.6.26")
+                    .append("org.eolang", "jeo-maven-plugin", "0.7.2")
                     .execution("default")
                     .phase("process-classes")
                     .goals("disassemble");
