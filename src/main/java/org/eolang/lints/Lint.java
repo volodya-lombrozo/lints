@@ -44,7 +44,7 @@ public interface Lint<T> {
 
     /**
      * Find and return defects.
-     * @param entity The entity to analyze (could be {@link com.jcabi.xml.XML}
+     * @param entity The entity to analyze (could be {@link XML}
      *  or {@link java.nio.file.Path})
      * @return Defects
      */
