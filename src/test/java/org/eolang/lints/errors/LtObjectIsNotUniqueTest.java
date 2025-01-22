@@ -24,10 +24,9 @@
 package org.eolang.lints.errors;
 
 import com.jcabi.xml.XML;
-import org.cactoos.io.ResourceOf;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
-import org.eolang.parser.EoSyntax;
+import org.eolang.lints.ParsedEo;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -46,10 +45,16 @@ final class LtObjectIsNotUniqueTest {
             new LtObjectIsNotUnique().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>(
-                        "foo", LtObjectIsNotUniqueTest.xmir("foo")
+                        "foo",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/foo.eo"
+                        ).value()
                     ),
                     new MapEntry<>(
-                        "bar-with-foo", LtObjectIsNotUniqueTest.xmir("bar-with-foo")
+                        "bar-with-foo",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/bar-with-foo.eo"
+                        ).value()
                     )
                 )
             ),
@@ -64,10 +69,16 @@ final class LtObjectIsNotUniqueTest {
             new LtObjectIsNotUnique().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>(
-                        "test-1", LtObjectIsNotUniqueTest.xmir("test-1")
+                        "test-1",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/test-1.eo"
+                        ).value()
                     ),
                     new MapEntry<>(
-                        "test-2", LtObjectIsNotUniqueTest.xmir("test-2")
+                        "test-2",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/test-2.eo"
+                        ).value()
                     )
                 )
             ),
@@ -81,8 +92,18 @@ final class LtObjectIsNotUniqueTest {
             "Defects aren't empty, but they should",
             new LtObjectIsNotUnique().defects(
                 new MapOf<String, XML>(
-                    new MapEntry<>("c", LtObjectIsNotUniqueTest.xmir("c")),
-                    new MapEntry<>("e", LtObjectIsNotUniqueTest.xmir("e"))
+                    new MapEntry<>(
+                        "c",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/c.eo"
+                        ).value()
+                    ),
+                    new MapEntry<>(
+                        "e",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/e.eo"
+                        ).value()
+                    )
                 )
             ),
             Matchers.emptyIterable()
@@ -95,8 +116,18 @@ final class LtObjectIsNotUniqueTest {
             "Defects aren't empty, but they should",
             new LtObjectIsNotUnique().defects(
                 new MapOf<String, XML>(
-                    new MapEntry<>("baz", LtObjectIsNotUniqueTest.xmir("baz")),
-                    new MapEntry<>("baz-packaged", LtObjectIsNotUniqueTest.xmir("baz-packaged"))
+                    new MapEntry<>(
+                        "baz",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/baz.eo"
+                        ).value()
+                    ),
+                    new MapEntry<>(
+                        "baz-packaged",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/baz-packaged.eo"
+                        ).value()
+                    )
                 )
             ),
             Matchers.emptyIterable()
@@ -109,23 +140,21 @@ final class LtObjectIsNotUniqueTest {
             "Defects aren't empty, but they should",
             new LtObjectIsNotUnique().defects(
                 new MapOf<String, XML>(
-                    new MapEntry<>("mul", LtObjectIsNotUniqueTest.xmir("mul")),
-                    new MapEntry<>("mul-packaged", LtObjectIsNotUniqueTest.xmir("mul-packaged"))
+                    new MapEntry<>(
+                        "mul",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/mul.eo"
+                        ).value()
+                    ),
+                    new MapEntry<>(
+                        "mul-packaged",
+                        new ParsedEo(
+                            "org/eolang/lints/errors/object-is-not-unique/mul-packaged.eo"
+                        ).value()
+                    )
                 )
             ),
             Matchers.emptyIterable()
         );
-    }
-
-    private static XML xmir(final String name) throws Exception {
-        return new EoSyntax(
-            name,
-            new ResourceOf(
-                String.format(
-                    "org/eolang/lints/errors/object-is-not-unique/%s.eo",
-                    name
-                )
-            )
-        ).parsed();
     }
 }

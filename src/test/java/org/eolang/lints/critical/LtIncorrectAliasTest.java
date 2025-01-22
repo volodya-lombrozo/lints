@@ -27,14 +27,12 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.cactoos.io.ResourceOf;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
+import org.eolang.lints.ParsedEo;
 import org.eolang.lints.Programs;
-import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -50,18 +48,16 @@ import org.junit.jupiter.params.provider.ValueSource;
 final class LtIncorrectAliasTest {
 
     @Test
-    void catchesBrokenAlias() throws IOException {
+    void catchesBrokenAlias() throws Exception {
         MatcherAssert.assertThat(
             "Defects are empty, but shouldn't be",
             new LtIncorrectAlias().defects(
                 new MapOf<>(
                     new MapEntry<>(
                         "bar",
-                        new EoSyntax(
-                            new ResourceOf(
-                                "org/eolang/lints/critical/incorrect-alias/bar.eo"
-                            )
-                        ).parsed()
+                        new ParsedEo(
+                            "org/eolang/lints/critical/incorrect-alias/bar.eo"
+                        ).value()
                     )
                 )
             ),
@@ -70,18 +66,16 @@ final class LtIncorrectAliasTest {
     }
 
     @Test
-    void passesIfFileExists() throws IOException {
+    void passesIfFileExists() throws Exception {
         MatcherAssert.assertThat(
             "Defects aren't empty, but should be",
             new LtIncorrectAlias().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "bar",
-                        new EoSyntax(
-                            new ResourceOf(
-                                "org/eolang/lints/critical/incorrect-alias/bar.eo"
-                            )
-                        ).parsed()
+                        new ParsedEo(
+                            "org/eolang/lints/critical/incorrect-alias/bar.eo"
+                        ).value()
                     ),
                     new MapEntry<>("ttt/foo", new XMLDocument("<program/>"))
                 )
@@ -93,25 +87,18 @@ final class LtIncorrectAliasTest {
     @ParameterizedTest
     @ValueSource(
         strings = {
-            "no-aliases.eo",
-            "no-package.eo"
+            "org/eolang/lints/critical/incorrect-alias/no-aliases.eo",
+            "org/eolang/lints/critical/incorrect-alias/no-package.eo"
         }
     )
-    void ignoresProgram(final String name) throws IOException {
+    void ignoresProgram(final String path) throws Exception {
         MatcherAssert.assertThat(
             "Defects aren't empty, but should be",
             new LtIncorrectAlias().defects(
                 new MapOf<>(
                     new MapEntry<>(
                         "foo",
-                        new EoSyntax(
-                            new ResourceOf(
-                                String.format(
-                                    "org/eolang/lints/critical/incorrect-alias/%s",
-                                    name
-                                )
-                            )
-                        ).parsed()
+                        new ParsedEo(path).value()
                     )
                 )
             ),
@@ -120,18 +107,16 @@ final class LtIncorrectAliasTest {
     }
 
     @Test
-    void scansSecondPartInLongerAlias() throws IOException {
+    void scansSecondPartInLongerAlias() throws Exception {
         MatcherAssert.assertThat(
             "Defects aren't empty, but they should",
             new LtIncorrectAlias().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>(
                         "longer-alias",
-                        new EoSyntax(
-                            new ResourceOf(
-                                "org/eolang/lints/critical/incorrect-alias/longer-alias.eo"
-                            )
-                        ).parsed()
+                        new ParsedEo(
+                            "org/eolang/lints/critical/incorrect-alias/longer-alias.eo"
+                        ).value()
                     ),
                     new MapEntry<>(
                         "org/eolang/io/stdout", new XMLDocument("<program><objects/></program>")
@@ -144,14 +129,11 @@ final class LtIncorrectAliasTest {
 
     @Test
     @ExtendWith(MktmpResolver.class)
-    void acceptsValidDirectory(@Mktmp final Path dir) throws IOException {
+    void acceptsValidDirectory(@Mktmp final Path dir) throws Exception {
         Files.write(
             dir.resolve("bar.xmir"),
-            new EoSyntax(
-                new ResourceOf(
-                    "org/eolang/lints/critical/incorrect-alias/bar.eo"
-                )
-            ).parsed().toString().getBytes()
+            new ParsedEo("org/eolang/lints/critical/incorrect-alias/bar.eo")
+                .value().toString().getBytes()
         );
         Files.createDirectory(dir.resolve("ttt"));
         Files.write(dir.resolve("ttt/foo.xmir"), "<program/>".getBytes());
@@ -166,14 +148,11 @@ final class LtIncorrectAliasTest {
 
     @Test
     @ExtendWith(MktmpResolver.class)
-    void acceptsValidDirectoryWithLongerAlias(@Mktmp final Path dir) throws IOException {
+    void acceptsValidDirectoryWithLongerAlias(@Mktmp final Path dir) throws Exception {
         Files.write(
             dir.resolve("main.xmir"),
-            new EoSyntax(
-                new ResourceOf(
-                    "org/eolang/lints/critical/incorrect-alias/longer-alias.eo"
-                )
-            ).parsed().toString().getBytes()
+            new ParsedEo("org/eolang/lints/critical/incorrect-alias/longer-alias.eo")
+                .value().toString().getBytes()
         );
         Files.write(dir.resolve("main-test.xmir"), "<program><objects/></program>".getBytes());
         Files.createDirectory(

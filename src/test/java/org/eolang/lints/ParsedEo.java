@@ -24,40 +24,35 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
-import java.util.Map;
-import org.cactoos.iterable.IterableEnvelope;
-import org.cactoos.iterable.Shuffled;
-import org.cactoos.list.ListOf;
-import org.eolang.lints.critical.LtIncorrectAlias;
-import org.eolang.lints.errors.LtAtomIsNotUnique;
-import org.eolang.lints.errors.LtObjectIsNotUnique;
-import org.eolang.lints.units.LtUnitTestMissing;
-import org.eolang.lints.units.LtUnitTestWithoutLiveFile;
+import java.io.File;
+import org.cactoos.Scalar;
+import org.cactoos.io.ResourceOf;
+import org.eolang.parser.EoSyntax;
 
 /**
- * A collection of lints for Whole Program Analysis (WPA),
- * provided by the {@link Programs} class.
- *
- * <p>This class is thread-safe.</p>
- *
- * @since 0.1.0
+ * Parsed EO syntax to XMIR.
+ * @since 0.0.31
  */
-public final class PkWpa extends IterableEnvelope<Lint<Map<String, XML>>> {
+public final class ParsedEo implements Scalar<XML> {
+
+    /**
+     * Path to the EO program.
+     */
+    private final String path;
 
     /**
      * Ctor.
+     * @param pth Path to EO program
      */
-    public PkWpa() {
-        super(
-            new Shuffled<>(
-                new ListOf<>(
-                    new LtUnitTestMissing(),
-                    new LtUnitTestWithoutLiveFile(),
-                    new LtIncorrectAlias(),
-                    new LtObjectIsNotUnique(),
-                    new LtAtomIsNotUnique()
-                )
-            )
-        );
+    public ParsedEo(final String pth) {
+        this.path = pth;
+    }
+
+    @Override
+    public XML value() throws Exception {
+        return new EoSyntax(
+            new File(this.path).getName(),
+            new ResourceOf(this.path)
+        ).parsed();
     }
 }
