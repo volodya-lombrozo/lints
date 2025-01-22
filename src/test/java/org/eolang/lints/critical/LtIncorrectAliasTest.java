@@ -176,8 +176,8 @@ final class LtIncorrectAliasTest {
         );
         Files.createDirectory(dir.resolve("ttt"));
         Files.write(dir.resolve("ttt/foo.xmir"), "<program/>".getBytes());
-        Files.write(dir.resolve("bar-test.xmir"), "<program/>".getBytes());
-        Files.write(dir.resolve("ttt/foo-test.xmir"), "<program/>".getBytes());
+        Files.write(dir.resolve("bar-tests.xmir"), "<program/>".getBytes());
+        Files.write(dir.resolve("ttt/foo-tests.xmir"), "<program/>".getBytes());
         MatcherAssert.assertThat(
             "Defects are not empty, but should be",
             new Programs(dir).defects(),
@@ -203,7 +203,7 @@ final class LtIncorrectAliasTest {
             ).parsed().toString().getBytes(StandardCharsets.UTF_8)
         );
         Files.write(
-            dir.resolve("main-test.xmir"),
+            dir.resolve("main-tests.xmir"),
             "<program><objects/></program>".getBytes()
         );
         Files.createDirectory(
@@ -218,7 +218,7 @@ final class LtIncorrectAliasTest {
             "<program><objects/></program>".getBytes()
         );
         Files.write(
-            dir.resolve("org/eolang/io/stdout-test.xmir"),
+            dir.resolve("org/eolang/io/stdout-tests.xmir"),
             "<program><objects/></program>".getBytes()
         );
         MatcherAssert.assertThat(
