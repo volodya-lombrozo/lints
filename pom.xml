@@ -212,12 +212,6 @@ SOFTWARE.
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.eolang</groupId>
-      <artifactId>jeo-maven-plugin</artifactId>
-      <version>0.7.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.languagetool</groupId>
       <artifactId>language-en</artifactId>
       <version>6.5</version>
