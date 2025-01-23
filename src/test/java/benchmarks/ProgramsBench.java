@@ -62,6 +62,7 @@ public class ProgramsBench {
      */
     private final Path home;
 
+    @SuppressWarnings("PMD.ConstructorOnlyInitializesOrCallOtherConstructors")
     public ProgramsBench() {
         try {
             this.home = Files.createTempDirectory("tmp");
