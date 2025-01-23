@@ -50,7 +50,7 @@ import org.eolang.lints.Severity;
  * with POS tagging capabilities in order to determine the part of speech and
  * tense for test object name.
  * @since 0.0.22
- * @todo #72:60min Configure model download only during the build and place into the JAR.
+ * @todo #257:60min Configure model download only during the build and place into the JAR.
  *  Currently, we download model file each time when creating the lint, which may
  *  be slow in the usage of this lint. Instead, let's configure maven to download
  *  model file during the build, and place into JAR, so lint will be able to locate
