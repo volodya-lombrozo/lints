@@ -51,7 +51,7 @@ final class LtTestIsNotVerbTest {
             ),
             Matchers.allOf(
                 Matchers.<Defect>iterableWithSize(40),
-                Matchers.<Defect>everyItem(new DefectMatcher())
+                Matchers.everyItem(new DefectMatcher())
             )
         );
     }
