@@ -24,7 +24,7 @@
 package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Filter;
-import com.github.lombrozo.xnav.Navigator;
+import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.ClasspathSources;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
@@ -168,7 +168,7 @@ final class LtByXsl implements Lint<XML> {
      * @return Name of the program.
      */
     private static String findName(final XML program) {
-        return new Navigator(program.inner())
+        return new Xnav(program.inner())
             .element("program")
             .attribute("name")
             .text()
@@ -181,11 +181,11 @@ final class LtByXsl implements Lint<XML> {
      * @return Collection of defects.
      */
     private static Collection<XML> findDefects(final XML report) {
-        return new Navigator(report.inner())
+        return new Xnav(report.inner())
             .element("defects")
             .elements(Filter.withName("defect"))
-            .map(Navigator::copy)
-            .map(Navigator::node)
+            .map(Xnav::copy)
+            .map(Xnav::node)
             .map(XMLDocument::new)
             .collect(Collectors.toList());
     }
