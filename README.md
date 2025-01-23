@@ -144,6 +144,12 @@ before sending us your pull request please run full Maven build:
 mvn clean install -Pqulice
 ```
 
+Also, run this and make sure your changes don't slow us down:
+
+```bash
+mvn jmh:benchmark
+```
+
 You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
 
 [XMIR]: https://news.eolang.org/2022-11-25-xmir-guide.html
