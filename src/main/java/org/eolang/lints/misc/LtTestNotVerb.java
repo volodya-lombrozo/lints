@@ -34,7 +34,6 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import opennlp.tools.postag.POSModel;
-import opennlp.tools.postag.POSTagFormat;
 import opennlp.tools.postag.POSTaggerME;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
@@ -80,7 +79,7 @@ public final class LtTestNotVerb implements Lint<XML> {
      * @param mdl Part-Of-Speech model
      */
     public LtTestNotVerb(final POSModel mdl) {
-        this(new POSTaggerME(mdl, POSTagFormat.PENN));
+        this(new POSTaggerME(mdl));
     }
 
     /**
