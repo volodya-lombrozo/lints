@@ -43,6 +43,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.iterable.Sticky;
@@ -250,7 +252,15 @@ final class ProgramTest {
                 f.clean();
                 f.files()
                     .file(String.format("target/classes/%s", path))
-                    .write(Files.readAllBytes(bin));
+                    .write(
+                        new UncheckedBytes(
+                            new BytesOf(
+                                new ResourceOf(
+                                    "com/sun/jna/Pointer.class"
+                                )
+                            )
+                        ).asBytes()
+                    );
                 f.build()
                     .plugins()
                     .append("org.eolang", "jeo-maven-plugin", "0.7.2")

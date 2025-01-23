@@ -31,6 +31,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.bytes.UncheckedBytes;
+import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.jeo.Disassembler;
@@ -204,12 +207,15 @@ final class LtByXslTest {
     void checksEmptyObjectOnLargeXmirInReasonableTime(@TempDir final Path tmp) throws IOException {
         final Path path = Paths.get("com/sun/jna");
         final String clazz = "Pointer.class";
-        Files.copy(
-            Paths.get("target")
-                .resolve("jna-classes")
-                .resolve(path)
-                .resolve(clazz),
-            tmp.resolve(clazz)
+        Files.write(
+            tmp.resolve(clazz),
+            new UncheckedBytes(
+                new BytesOf(
+                    new ResourceOf(
+                        "com/sun/jna/Pointer.class"
+                    )
+                )
+            ).asBytes()
         );
         new Disassembler(tmp, tmp).disassemble();
         Assertions.assertDoesNotThrow(
