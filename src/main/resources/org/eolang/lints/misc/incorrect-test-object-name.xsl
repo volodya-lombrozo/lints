@@ -30,7 +30,7 @@ SOFTWARE.
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="/program[metas/meta[head='tests']]/objects/o[@name]">
-        <xsl:variable name="regexp" select="'^[a-z][a-z0-9]+(-[a-z0-9][a-z0-9]+)*$'"/>
+        <xsl:variable name="regexp" select="'^[a-z][a-z0-9]*(-[a-z0-9]+)*$'"/>
         <xsl:if test="not(matches(@name, $regexp))">
           <defect>
             <xsl:attribute name="line">
