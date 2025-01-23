@@ -23,12 +23,15 @@
  */
 package benchmarks;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import fixtures.LargeXmir;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
-import org.cactoos.scalar.Unchecked;
+import org.cactoos.scalar.IoChecked;
 import org.eolang.lints.Program;
+import org.eolang.lints.Programs;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -52,25 +55,31 @@ import org.openjdk.jmh.annotations.Warmup;
 @Warmup(iterations = 1)
 @Measurement(iterations = 3, time = 1, timeUnit = TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
-public class ProgramBench {
+public class ProgramsBench {
 
     /**
      * Large XMIR document.
      */
-    private static final XML LARGE = new Unchecked<>(new LargeXmir()).value();
+    private final Path home;
 
-    /**
-     * Small XMIR document.
-     */
-    private static final XML SMALL = new XMLDocument("<program name='foo'/>");
-
-    @Benchmark
-    public final void scansLargeXmir() {
-        new Program(ProgramBench.LARGE).defects();
+    public ProgramsBench() {
+        try {
+            this.home = Files.createTempDirectory("tmp");
+            for (int idx = 0; idx < 10; ++idx) {
+                final String name = String.format("program-%d.xmir", idx);
+                Files.write(
+                    this.home.resolve(String.format("%s.xmir", name)),
+                    new IoChecked<>(new LargeXmir(name))
+                        .value().toString().getBytes(StandardCharsets.UTF_8)
+                );
+            }
+        } catch (final IOException ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
     @Benchmark
-    public final void scansSmallXmir() {
-        new Program(ProgramBench.SMALL).defects();
+    public final void scansLargeProgram() throws IOException {
+        new Programs(this.home).defects();
     }
 }

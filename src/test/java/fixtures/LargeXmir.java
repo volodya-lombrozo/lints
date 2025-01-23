@@ -33,6 +33,8 @@ import org.cactoos.Scalar;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.ResourceOf;
+import org.xembly.Directives;
+import org.xembly.Xembler;
 
 /**
  * Large XMIR document.
@@ -40,6 +42,16 @@ import org.cactoos.io.ResourceOf;
  * @since 0.0.31
  */
 public final class LargeXmir implements Scalar<XML> {
+
+    private final String name;
+
+    public LargeXmir() {
+        this("unknown");
+    }
+
+    public LargeXmir(final String nme) {
+        this.name = nme;
+    }
 
     @Override
     public XML value() throws Exception {
@@ -76,6 +88,10 @@ public final class LargeXmir implements Scalar<XML> {
                 );
             }
         );
-        return ref.get();
+        final XML xml = ref.get();
+        new Xembler(
+            new Directives().xpath("/program").attr("name", this.name)
+        ).apply(xml.inner());
+        return xml;
     }
 }
