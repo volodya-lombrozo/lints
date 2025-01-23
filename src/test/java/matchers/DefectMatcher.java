@@ -21,48 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints;
+package matchers;
 
-import com.jcabi.xml.XML;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
+import org.eolang.lints.Defect;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 
 /**
- * Hamcrest matcher for defects in XML.
+ * Hamcrest matcher for a single defect.
  *
  * @since 0.0.34
  */
-public final class DefectsMatcher extends BaseMatcher<XML> {
+public final class DefectMatcher extends BaseMatcher<Defect> {
 
     /**
      * Synthetic matcher that is built when input arrives.
      */
-    private Matcher<Iterable<? extends Defect>> matcher;
+    private final List<Matcher<?>> matchers = new ArrayList<>(0);
 
     @Override
-    public boolean matches(final Object xml) {
-        final Collection<Defect> defects = new LinkedList<>();
-        for (final XML defect : ((XML) xml).nodes("/defects/defect")) {
-            defects.add(
-                new Defect.Default(
-                    "unknown",
-                    Severity.parsed(defect.xpath("@severity").get(0)),
-                    "unknown",
-                    Integer.parseInt(defect.xpath("@line").get(0)),
-                    defect.xpath("text()").get(0)
-                )
-            );
-        }
-        this.matcher = Matchers.everyItem(new DefectMatcher());
-        return this.matcher.matches(defects);
+    public boolean matches(final Object input) {
+        final Defect defect = (Defect) input;
+        return this.saved(Matchers.greaterThanOrEqualTo(0)).matches(defect.line())
+            && this.saved(Matchers.not(Matchers.emptyString())).matches(defect.text())
+            && this.saved(new GrammarMatcher()).matches(defect.text());
     }
 
     @Override
     public void describeTo(final Description desc) {
-        this.matcher.describeTo(desc);
+        for (int idx = 0; idx < this.matchers.size(); ++idx) {
+            if (idx > 0) {
+                desc.appendText(" and ");
+            }
+            final Matcher<?> matcher = this.matchers.get(idx);
+            matcher.describeTo(desc);
+        }
+    }
+
+    private Matcher<?> saved(final Matcher<?> matcher) {
+        this.matchers.add(matcher);
+        return matcher;
     }
 }
