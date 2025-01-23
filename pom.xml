@@ -231,7 +231,7 @@ SOFTWARE.
     </dependency>
     <dependency>
       <groupId>org.openjdk.jmh</groupId>
-      <artifactId>jmh-generator-annprocess</artifactId>
+      <artifactId>jmh-core</artifactId>
       <version>1.37</version>
       <scope>test</scope>
     </dependency>
@@ -386,6 +386,11 @@ SOFTWARE.
           <source>11</source>
           <target>11</target>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>pw.krejci</groupId>
+        <artifactId>jmh-maven-plugin</artifactId>
+        <version>0.2.2</version>
       </plugin>
     </plugins>
   </build>
