@@ -43,12 +43,22 @@ import org.xembly.Xembler;
  */
 public final class LargeXmir implements Scalar<XML> {
 
+    /**
+     * Name of the program.
+     */
     private final String name;
 
+    /**
+     * Constructor.
+     */
     public LargeXmir() {
         this("unknown");
     }
 
+    /**
+     * Constructor.
+     * @param nme Program name.
+     */
     public LargeXmir(final String nme) {
         this.name = nme;
     }
