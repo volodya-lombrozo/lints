@@ -32,7 +32,7 @@ SOFTWARE.
         <xsl:variable name="violates" as="xs:boolean">
           <xsl:choose>
             <xsl:when test="starts-with(@base, '.')">
-              <xsl:value-of select="count(o[position() > 1 and not(starts-with(@base, '.'))]) != count(o[@as]) and count(o[position() > 1 and not(starts-with(@base, '.'))]) != count(o[not(@as)])"/>
+              <xsl:value-of select="count(o[@as]) != 0 and count(o[position() > 1 and not(starts-with(@base, '.'))]) != count(o[@as]) and count(o[position() > 1 and not(starts-with(@base, '.'))]) != count(o[not(@as)])"/>
             </xsl:when>
             <xsl:otherwise>
               <xsl:value-of select="count(o) != count(o[@as]) and count(o) != count(o[not(@as)])"/>
