@@ -22,14 +22,24 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="application-duality" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eo="https://www.eolang.org" id="application-duality" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="//o[@base]">
-        <xsl:if test="count(o) != count(o[@as]) and count(o) != count(o[not(@as)])">
+        <xsl:variable name="violates" as="xs:boolean">
+          <xsl:choose>
+            <xsl:when test="starts-with(@base, '.')">
+              <xsl:value-of select="count(o[position() > 1 and not(starts-with(@base, '.'))]) != count(o[@as]) and count(o[position() > 1 and not(starts-with(@base, '.'))]) != count(o[not(@as)])"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="count(o) != count(o[@as]) and count(o) != count(o[not(@as)])"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:if test="$violates">
           <defect>
             <xsl:attribute name="line">
               <xsl:value-of select="eo:lineno(@line)"/>
