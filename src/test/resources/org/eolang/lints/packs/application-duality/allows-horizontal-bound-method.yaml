@@ -25,7 +25,7 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='critical'])=0]
 input: |
-  # Compact vertical bound method.
+  # Horizontal bound method.
   [] > vertical-bound-method
     eq. > @
       true.if
