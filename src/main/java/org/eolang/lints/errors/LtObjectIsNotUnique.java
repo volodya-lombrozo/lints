@@ -119,7 +119,9 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
             .collect(
                 Collectors.toMap(
                     names::get,
-                    pos -> xmir.xpath("/program/objects/o/@line").get(pos),
+                    pos -> xmir.xpath(
+                        String.format("/program/objects/o[%d]/@line", pos + 1)
+                    ).stream().findFirst().orElse("0"),
                     (existing, replacement) -> replacement
                 )
             );

@@ -24,9 +24,9 @@
 package org.eolang.lints.misc;
 
 import com.yegor256.MayBeSlow;
+import fixtures.ParsedEo;
+import matchers.DefectMatcher;
 import org.eolang.lints.Defect;
-import org.eolang.lints.DefectMatcher;
-import org.eolang.lints.ParsedEo;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -51,7 +51,7 @@ final class LtTestIsNotVerbTest {
             ),
             Matchers.allOf(
                 Matchers.<Defect>iterableWithSize(40),
-                Matchers.<Defect>everyItem(new DefectMatcher())
+                Matchers.everyItem(new DefectMatcher())
             )
         );
     }

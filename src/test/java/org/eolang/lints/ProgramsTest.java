@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import matchers.DefectMatcher;
 import org.cactoos.list.ListOf;
 import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;

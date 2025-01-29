@@ -24,9 +24,9 @@
 package org.eolang.lints.comments;
 
 import java.io.IOException;
+import matchers.DefectMatcher;
 import org.cactoos.list.ListOf;
 import org.eolang.lints.Defect;
-import org.eolang.lints.DefectMatcher;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;

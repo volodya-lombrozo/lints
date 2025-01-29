@@ -30,10 +30,10 @@ import com.yegor256.MktmpResolver;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import matchers.DefectMatcher;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
 import org.eolang.lints.Defect;
-import org.eolang.lints.DefectMatcher;
 import org.eolang.lints.Programs;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -55,7 +55,7 @@ final class LtUnitTestMissingTest {
             new LtUnitTestMissing().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>("bar", new XMLDocument("<program name='bar'/>")),
-                    new MapEntry<>("bar-test", new XMLDocument("<program name='bar-test'/>"))
+                    new MapEntry<>("bar-tests", new XMLDocument("<program name='bar-tests'/>"))
                 )
             ),
             Matchers.emptyIterable()
@@ -65,7 +65,7 @@ final class LtUnitTestMissingTest {
     @Test
     void acceptsValidDirectory(@Mktmp final Path dir) throws IOException {
         Files.write(dir.resolve("foo.xmir"), "<program name='foo'/>".getBytes());
-        Files.write(dir.resolve("foo-test.xmir"), "<program name='foo-test'/>".getBytes());
+        Files.write(dir.resolve("foo-tests.xmir"), "<program name='foo-tests'/>".getBytes());
         MatcherAssert.assertThat(
             "some defects found by mistake",
             new Programs(dir).defects(),

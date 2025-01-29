@@ -24,11 +24,11 @@
 package org.eolang.lints.errors;
 
 import com.jcabi.xml.XML;
+import fixtures.ParsedEo;
+import matchers.DefectMatcher;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
 import org.eolang.lints.Defect;
-import org.eolang.lints.DefectMatcher;
-import org.eolang.lints.ParsedEo;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

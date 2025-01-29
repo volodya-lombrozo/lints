@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints;
+package matchers;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -44,7 +44,7 @@ import org.languagetool.rules.spelling.SpellingCheckRule;
  *
  * @since 0.0.34
  */
-final class GrammarMatcher extends BaseMatcher<String> {
+public final class GrammarMatcher extends BaseMatcher<String> {
 
     /**
      * The item to be matched.

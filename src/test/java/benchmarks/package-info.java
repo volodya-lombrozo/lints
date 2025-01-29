@@ -21,39 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints;
-
-import com.jcabi.xml.XML;
-import java.io.File;
-import org.cactoos.Scalar;
-import org.cactoos.io.ResourceOf;
-import org.eolang.parser.EoSyntax;
 
 /**
- * Parsed EO syntax to XMIR.
+ * Benchmarks.
  *
- * @since 0.0.31
+ * @since 0.0.1
  */
-public final class ParsedEo implements Scalar<XML> {
-
-    /**
-     * Path to the EO program, in classpath (resources).
-     */
-    private final String path;
-
-    /**
-     * Ctor.
-     * @param pth Path to EO program
-     */
-    public ParsedEo(final String pth) {
-        this.path = pth;
-    }
-
-    @Override
-    public XML value() throws Exception {
-        return new EoSyntax(
-            new File(this.path).getName(),
-            new ResourceOf(this.path)
-        ).parsed();
-    }
-}
+package benchmarks;

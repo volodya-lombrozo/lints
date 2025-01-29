@@ -25,9 +25,9 @@ package org.eolang.lints.units;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import matchers.DefectMatcher;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
-import org.eolang.lints.DefectMatcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;

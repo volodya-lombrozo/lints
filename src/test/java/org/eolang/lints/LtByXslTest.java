@@ -24,16 +24,16 @@
 package org.eolang.lints;
 
 import com.jcabi.matchers.XhtmlMatchers;
-import com.jcabi.xml.XMLDocument;
+import fixtures.LargeXmir;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Collectors;
+import matchers.DefectsMatcher;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
-import org.eolang.jeo.Disassembler;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.EoSyntax;
 import org.eolang.xax.XtSticky;
@@ -47,7 +47,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
-import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 
 /**
@@ -201,20 +200,10 @@ final class LtByXslTest {
 
     @Test
     @Timeout(30L)
-    void checksEmptyObjectOnLargeXmirInReasonableTime(@TempDir final Path tmp) throws IOException {
-        final Path path = Paths.get("com/sun/jna");
-        final String clazz = "Pointer.class";
-        Files.copy(
-            Paths.get("target")
-                .resolve("jna-classes")
-                .resolve(path)
-                .resolve(clazz),
-            tmp.resolve(clazz)
-        );
-        new Disassembler(tmp, tmp).disassemble();
+    void checksEmptyObjectOnLargeXmirInReasonableTime() {
         Assertions.assertDoesNotThrow(
             () -> new LtByXsl("errors/empty-object").defects(
-                new XMLDocument(tmp.resolve(path).resolve("Pointer.xmir"))
+                new LargeXmir().value()
             ),
             "Huge XMIR must pass in reasonable time. See the timeout value."
         );
