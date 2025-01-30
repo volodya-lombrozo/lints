@@ -117,7 +117,7 @@ SOFTWARE.
     <dependency>
       <groupId>com.yegor256</groupId>
       <artifactId>xsline</artifactId>
-      <version>0.22.1</version>
+      <version>0.23.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
