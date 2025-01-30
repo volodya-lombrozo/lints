@@ -23,7 +23,7 @@
 sheets:
   - /org/eolang/lints/misc/sparse-decoration.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=2]
+  - /defects[count(defect[@severity='warning'])=1]
 input: |
   # No comments.
   [] > test

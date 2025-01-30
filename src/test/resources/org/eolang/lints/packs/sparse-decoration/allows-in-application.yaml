@@ -26,8 +26,8 @@ asserts:
   - /defects[count(defect[@severity='warning'])=0]
 input: |
   # No comments.
-  [] > decorates-application
-    if > @
-      true
-      5
-      five
+  [] > test
+    if. > @
+      a
+      42
+      88
