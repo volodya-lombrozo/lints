@@ -28,7 +28,7 @@ SOFTWARE.
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="//o">
-        <xsl:if test="(count(descendant::o)=1 and o[@name='@'] and (not(@base) or @base!='^') and not(o[@base='∅'])) or count(o[@name='@' and o[@name='@']])&gt;0">
+        <xsl:if test="(count(descendant::o[not(@base='Q.org.eolang.bytes')])=1 and o[@name='@'] and (not(@base) or @base!='^') and not(o[@base='∅'])) or count(o[@name='@' and o[@name='@']])&gt;0">
           <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="eo:lineno(@line)"/>
