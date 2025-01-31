@@ -26,22 +26,21 @@ SOFTWARE.
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
+  <xsl:variable name="pattern" select="'^Q\.[a-z]+[^&gt;&lt;.\[\]()!:&quot;@^$#&amp;/\s]*(\.[a-z]+[^&gt;&lt;.\[\]()!:&quot;@^$#&amp;/\s]*)*$'"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="/program/metas/meta[head='alias']">
-        <xsl:if test="part[2] and not(matches(part[2], '^[a-z]+[^&gt;&lt;.\[\]()!:&quot;@^$#&amp;/\s]*(\.[a-z]+[^&gt;&lt;.\[\]()!:&quot;@^$#&amp;/\s]*)*$'))">
-          <xsl:element name="defect">
-            <xsl:attribute name="line">
-              <xsl:value-of select="eo:lineno(@line)"/>
-            </xsl:attribute>
-            <xsl:attribute name="severity">
-              <xsl:text>error</xsl:text>
-            </xsl:attribute>
-            <xsl:text>The second part of the alias is invalid: </xsl:text>
-            <xsl:value-of select="eo:escape(part[2])"/>
-            <xsl:text> (it may only contain FQN)</xsl:text>
-          </xsl:element>
-        </xsl:if>
+      <xsl:for-each select="/program/metas/meta[head='alias' and not(matches(part[last()], $pattern))]">
+        <xsl:element name="defect">
+          <xsl:attribute name="line">
+            <xsl:value-of select="eo:lineno(@line)"/>
+          </xsl:attribute>
+          <xsl:attribute name="severity">
+            <xsl:text>error</xsl:text>
+          </xsl:attribute>
+          <xsl:text>The second part of the alias is invalid: </xsl:text>
+          <xsl:value-of select="eo:escape(part[last()])"/>
+          <xsl:text> (it may only contain FQN started with 'Q.')</xsl:text>
+        </xsl:element>
       </xsl:for-each>
     </defects>
   </xsl:template>

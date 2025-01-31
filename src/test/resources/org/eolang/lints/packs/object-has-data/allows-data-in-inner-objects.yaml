@@ -28,7 +28,7 @@ document: |
   <program>
     <objects>
       <o name="foo">
-        <o name="inner" base="bytes">12-23-FF</o>
+        <o name="inner" base="Q.org.eolang.bytes">12-23-FF</o>
       </o>
     </objects>
   </program>

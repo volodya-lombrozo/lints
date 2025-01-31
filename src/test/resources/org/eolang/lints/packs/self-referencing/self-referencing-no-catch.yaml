@@ -21,11 +21,16 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/critical/self-naming.xsl
+  - /org/eolang/lints/critical/self-referencing.xsl
 asserts:
-  - /defects[count(defect[@severity='error'])=1]
-  - /defects/defect[@line='3']
+  - /defects[count(defect)=0]
 input: |
   # No comments.
   [] > first
-    a.plus 1 > a
+    5.plus a > a
+    ^.size > size
+  # No comments.
+  [size] > more
+    # No comments.
+    [] > inner
+      ^.size > size

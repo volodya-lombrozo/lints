@@ -21,7 +21,6 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/parser/wrap-method-calls.xsl
   - /org/eolang/lints/errors/noname-attribute.xsl
 asserts:
   - /defects[count(defect[@severity='error'])=4]

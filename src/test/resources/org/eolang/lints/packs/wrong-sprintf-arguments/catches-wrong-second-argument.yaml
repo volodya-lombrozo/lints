@@ -21,14 +21,14 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/errors/unknown-name.xsl
+  - /org/eolang/lints/misc/wrong-sprintf-arguments.xsl
 asserts:
-  - /defects[count(defect[@severity='error'])=0]
-document: |
-  <program>
-    <objects>
-      <o name="main">
-        <o base="∅" name="foo"/>
-      </o>
-    </objects>
-  </program>
+  - /defects[count(defect[@severity='warning'])=1]
+  - /defects/defect[@line='4']
+input: |
+  # App.
+  [] > app
+    QQ.io.stdout > @
+      QQ.txt.sprintf
+        "Hey, Jeff"
+        wrong

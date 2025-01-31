@@ -21,11 +21,14 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/aliases/alias-without-tail.xsl
+  - /org/eolang/lints/aliases/empty-alias.xsl
 asserts:
-  - /defects[count(defect[@severity='error'])=1]
+  - /defects[count(defect[@severity='error'])=0]
 input: |
-  +alias
+  +alias a
+  +alias a b
+  +alias a b c
+  +alias a b c d
 
   # Foo.
   [] > foo

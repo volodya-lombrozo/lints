@@ -28,19 +28,17 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="/program/metas/meta[head='alias']">
-        <xsl:if test="count(part) &gt; 2">
-          <xsl:element name="defect">
-            <xsl:attribute name="line">
-              <xsl:value-of select="eo:lineno(@line)"/>
-            </xsl:attribute>
-            <xsl:attribute name="severity">
-              <xsl:text>error</xsl:text>
-            </xsl:attribute>
-            <xsl:text>The alias has too many parts: </xsl:text>
-            <xsl:value-of select="eo:escape(tail)"/>
-          </xsl:element>
-        </xsl:if>
+      <xsl:for-each select="/program/metas/meta[head='alias' and count(part)&gt;2]">
+        <xsl:element name="defect">
+          <xsl:attribute name="line">
+            <xsl:value-of select="eo:lineno(@line)"/>
+          </xsl:attribute>
+          <xsl:attribute name="severity">
+            <xsl:text>error</xsl:text>
+          </xsl:attribute>
+          <xsl:text>The alias has too many parts: </xsl:text>
+          <xsl:value-of select="eo:escape(tail)"/>
+        </xsl:element>
       </xsl:for-each>
     </defects>
   </xsl:template>

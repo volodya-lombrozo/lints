@@ -25,34 +25,22 @@ SOFTWARE.
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" version="2.0" id="object-has-data">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:import href="/org/eolang/funcs/escape.xsl"/>
+  <xsl:import href="/org/eolang/parser/_funcs.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="//o" mode="with-data"/>
+      <xsl:for-each select="//o[eo:has-data(.) and (not(@base) or @base!='Q.org.eolang.bytes')]">
+        <defect>
+          <xsl:attribute name="line">
+            <xsl:value-of select="eo:lineno(@line)"/>
+          </xsl:attribute>
+          <xsl:attribute name="severity">critical</xsl:attribute>
+          <xsl:text>Only object with @base equal to "Q.org.eolang.bytes" may contain data, </xsl:text>
+          <xsl:text>while object with @base "</xsl:text>
+          <xsl:value-of select="@base"/>
+          <xsl:text>" provided</xsl:text>
+        </defect>
+      </xsl:for-each>
     </defects>
-  </xsl:template>
-  <xsl:template match="o" mode="with-data">
-    <xsl:variable name="data" select="normalize-space(string-join(text(), ''))"/>
-    <xsl:if test="$data != '' and not(@base)">
-      <defect>
-        <xsl:attribute name="line">
-          <xsl:value-of select="eo:lineno(@line)"/>
-        </xsl:attribute>
-        <xsl:attribute name="severity">critical</xsl:attribute>
-        <xsl:text>Only objects with their @base attributes containing "org.eolang.bytes" may contain data, </xsl:text>
-        <xsl:text>while this object doesn't have @base attribute at all</xsl:text>
-      </defect>
-    </xsl:if>
-    <xsl:if test="$data != '' and @base and not(@base = 'bytes' or @base = 'org.eolang.bytes')">
-      <defect>
-        <xsl:attribute name="line">
-          <xsl:value-of select="eo:lineno(@line)"/>
-        </xsl:attribute>
-        <xsl:attribute name="severity">critical</xsl:attribute>
-        <xsl:text>Only objects with their @base attributes containing "org.eolang.bytes" may contain data, </xsl:text>
-        <xsl:text>while this object contains </xsl:text>
-        <xsl:value-of select="eo:escape($data)"/>
-      </defect>
-    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
