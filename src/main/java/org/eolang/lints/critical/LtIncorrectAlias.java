@@ -23,12 +23,16 @@
  */
 package org.eolang.lints.critical;
 
+import com.github.lombrozo.xnav.Filter;
+import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
@@ -38,6 +42,7 @@ import org.eolang.lints.Severity;
 
 /**
  * Checks that `+alias` is pointing to existing `.xmir` files.
+ *
  * @since 0.0.30
  */
 public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
@@ -52,29 +57,21 @@ public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
         final Collection<Defect> defects = new LinkedList<>();
         pkg.values().forEach(
             xmir -> {
-                for (final XML alias : xmir.nodes("/program/metas/meta[head='alias']/tail")) {
-                    if (xmir.nodes("/program/metas/meta[head='package']").size() != 1) {
-                        continue;
-                    }
-                    final String pointer = alias.xpath("text()").get(0);
-                    final String lookup;
-                    if (Boolean.parseBoolean(alias.xpath("contains(text(), ' ')").get(0))) {
-                        lookup = alias.xpath("substring-after(text(), ' ')").get(0);
-                    } else {
-                        lookup = String.format(
-                            "%s.%s",
-                            xmir.xpath("/program/metas/meta[head='package']/tail/text()").get(0),
-                            pointer
-                        );
-                    }
+                final Xnav program = new Xnav(xmir.inner()).element("program");
+                for (final XML alias : xmir.nodes("/program/metas/meta[head='alias']")) {
+                    final Xnav xml = new Xnav(alias.inner());
+                    final String pointer = xml.element("tail").text().get();
+                    final List<Xnav> parts = xml.elements(Filter.withName("part"))
+                        .collect(Collectors.toList());
+                    final String lookup = parts.get(parts.size() - 1).text().get().substring(2);
                     if (!pkg.containsKey(lookup)) {
                         defects.add(
                             new Defect.Default(
                                 "incorrect-alias",
                                 Severity.CRITICAL,
-                                xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
+                                program.attribute("name").text().orElse("unknown"),
                                 Integer.parseInt(
-                                    xmir.xpath("/program/metas/meta[head='alias'][1]/@line").get(0)
+                                    xml.attribute("line").text().orElse("0")
                                 ),
                                 Logger.format(
                                     "Alias \"%s\" points to \"%s\", but it's not in scope (%d): %[list]s",

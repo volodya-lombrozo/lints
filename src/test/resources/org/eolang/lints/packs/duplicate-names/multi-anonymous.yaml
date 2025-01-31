@@ -21,7 +21,6 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/parser/optimize/abstracts-float-up.xsl
   - /org/eolang/lints/critical/duplicate-names.xsl
 asserts:
   - /defects[count(defect)=0]

@@ -10,3 +10,4 @@ target/
 temp/
 *.tgz
 *.DS_Store
+gh-pages/

@@ -21,12 +21,16 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/parser/add-refs.xsl
-  - /org/eolang/lints/refs/broken-ref.xsl
+  - /org/eolang/lints/critical/application-duality.xsl
 asserts:
-  - /defects[count(*)=0]
+  - /defects[count(defect[@severity='critical'])=0]
 input: |
-  # No comments.
-  [] > app
-    42 > a
-    a.plus 1 > @
+  # Vertical bound method with an application.
+  [] > vertical-bound-method
+    eq. > @
+      if.
+        true
+        "second":1
+        "first"
+        .as-bytes:0
+      "first"

@@ -21,7 +21,7 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/critical/self-naming.xsl
+  - /org/eolang/lints/critical/self-referencing.xsl
 asserts:
   - /defects[count(defect)=0]
 input: |

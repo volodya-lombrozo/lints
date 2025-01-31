@@ -21,14 +21,14 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/refs/broken-ref.xsl
+  - /org/eolang/lints/misc/wrong-sprintf-arguments.xsl
 asserts:
-  - /defects[count(defect[@severity='error'])=1]
-document: |
-  <program>
-    <objects>
-      <o abstract="">
-        <o name="foo" base="bar" ref="555"/>
-      </o>
-    </objects>
-  </program>
+  - /defects[count(defect[@severity='warning'])=1]
+  - /defects/defect[@line='4']
+input: |
+  # App.
+  [] > app
+    QQ.io.stdout > @
+      QQ.txt.sprintf
+        "Hey, Jeff"
+        wrong

@@ -29,7 +29,17 @@ SOFTWARE.
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="//o[@base]">
-        <xsl:if test="count(o) != count(o[@as]) and count(o) != count(o[not(@as)])">
+        <xsl:variable name="args">
+          <xsl:choose>
+            <xsl:when test="starts-with(@base, '.')">
+              <xsl:copy-of select="o[position()&gt;1]"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:copy-of select="o"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+        <xsl:if test="count($args/*) != count($args/*[@as]) and count($args/*) != count($args/*[not(@as)])">
           <defect>
             <xsl:attribute name="line">
               <xsl:value-of select="eo:lineno(@line)"/>

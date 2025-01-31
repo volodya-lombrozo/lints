@@ -1,4 +1,4 @@
-# Self Naming
+# Self Referencing
 
 Object must not refer to itself.
 

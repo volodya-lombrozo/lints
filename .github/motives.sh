@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # The MIT License (MIT)
 #
 # Copyright (c) 2016-2025 Objectionary.com
@@ -19,13 +21,36 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
----
-sheets:
-  - /org/eolang/lints/critical/self-naming.xsl
-asserts:
-  - /defects[count(defect[@severity='error'])=1]
-  - /defects/defect[@line='3']
-input: |
-  # No comments.
-  [] > first
-    $.a > a
+
+set -e
+
+tag=$1
+if [ -z "${tag}" ]; then
+  echo "Provide tag name as the first argument, for example '0.0.1'"
+  exit 1
+fi
+
+rm -rf "gh-pages/${tag}"
+mkdir -p "gh-pages/${tag}"
+
+while IFS= read -r f; do
+  n=$(basename "${f}" .md)
+  html=gh-pages/${tag}/${n}.html
+  pandoc "${f}" -o "${html}"
+  echo "${n} -> $(du -b "${html}" | cut -f1) bytes"
+done < <(find src/main/resources/org/eolang/motives -name '*.md')
+
+(
+  printf '<html><body style="font-family: monospace;">\n'
+  printf '<p>Latest version: %s</p>\n' "${tag}"
+  printf '<p>List of lints in this version<p>'
+  printf "<ul>\n"
+  while IFS= read -r f; do
+    n=$(basename "${f}" ".html")
+    printf '<li><a href="%s">%s</a></li>\n' \
+      "/lints/${tag}/${n}.html" "${n}"
+  done < <(find "gh-pages/${tag}" -name '*.html' | sort)
+  printf '</ul>\n'
+  printf '<p>Published on %s.</p>\n' "$(date)"
+  printf '</body></html>'
+) > "gh-pages/index.html"

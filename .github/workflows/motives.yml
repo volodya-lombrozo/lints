@@ -33,25 +33,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - run: |
-          tag=${{github.ref_name}}
-          mkdir -p "gh-pages/${tag}"
-          find src/main/resources/org/eolang/motives -name '*.md' -exec cp {} "gh-pages/${tag}" \;
-          (
-            printf '<html><body style="font-family: monospace;">\n'
-            printf '<p>Latest version: %s</p>\n' "${tag}"
-            printf '<p>List of lints in this version<p>'
-            printf "<ul>\n"
-            while IFS= read -r f; do
-              n=$(basename "${f}" .md)
-              printf '<li><a href="%s">%s</a></li>\n' \
-                "/${tag}/${n}.html" "${n}"
-            done < <(find "gh-pages/${tag}" -name '*.md')
-            printf '</ul>\n'
-            printf '<p>Published on %s.</p>\n' "$(date)"
-            printf '</body></html>'
-          ) > "gh-pages/index.html"
-
+      - run: sudo apt-get update --yes --fix-missing && sudo apt-get install --yes pandoc
+      - run: .github/motives.sh "${github.ref_name}"
       - uses: JamesIves/github-pages-deploy-action@v4.7.2
         with:
           branch: gh-pages

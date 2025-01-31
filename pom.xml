@@ -85,7 +85,7 @@ SOFTWARE.
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-xml</artifactId>
-      <version>0.33.3</version>
+      <version>0.33.5</version>
     </dependency>
     <dependency>
       <groupId>io.github.secretx33</groupId>
@@ -117,7 +117,7 @@ SOFTWARE.
     <dependency>
       <groupId>com.yegor256</groupId>
       <artifactId>xsline</artifactId>
-      <version>0.22.1</version>
+      <version>0.23.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -138,13 +138,13 @@ SOFTWARE.
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.50.0</version>
+      <version>0.51.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.github.volodya-lombrozo</groupId>
       <artifactId>xnav</artifactId>
-      <version>0.1.4</version>
+      <version>0.1.7</version>
     </dependency>
     <dependency>
       <groupId>org.apache.opennlp</groupId>

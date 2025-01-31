@@ -90,7 +90,7 @@ final class LtIncorrectAliasTest {
                         new EoSyntax(
                             String.join(
                                 "\n",
-                                "+alias foo ",
+                                "+alias foo",
                                 "+package ttt\n",
                                 "# Bar",
                                 "[] > bar",
@@ -98,7 +98,7 @@ final class LtIncorrectAliasTest {
                             )
                         ).parsed()
                     ),
-                    new MapEntry<>("ttt.foo", new XMLDocument("<program/>"))
+                    new MapEntry<>("foo", new XMLDocument("<program/>"))
                 )
             ),
             Matchers.hasSize(0)
@@ -166,7 +166,7 @@ final class LtIncorrectAliasTest {
                 "bar",
                 String.join(
                     "\n",
-                    "+alias foo",
+                    "+alias ttt.foo",
                     "+package ttt\n",
                     "# Bar",
                     "[] > bar",

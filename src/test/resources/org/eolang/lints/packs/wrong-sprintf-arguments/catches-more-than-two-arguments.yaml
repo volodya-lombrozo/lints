@@ -21,11 +21,15 @@
 # SOFTWARE.
 ---
 sheets:
-  - /org/eolang/lints/critical/self-naming.xsl
+  - /org/eolang/lints/misc/wrong-sprintf-arguments.xsl
 asserts:
-  - /defects[count(defect[@severity='error'])=1]
-  - /defects/defect[@line='3']
+  - /defects[count(defect[@severity='warning'])=1]
+  - /defects/defect[@line='4']
 input: |
-  # No comments.
-  [] > first
-    $.a.plus 1 > a
+  # App.
+  [] > app
+    QQ.io.stdout > @
+      QQ.txt.sprintf
+        "Hey, Jeff"
+        *
+        unnecessary

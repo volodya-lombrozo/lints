@@ -27,7 +27,7 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="//o[@atom and o[@name='@']]" mode="with-phi"/>
+      <xsl:apply-templates select="//o[@atom and o[@base='∅' and @name='@']]" mode="with-phi"/>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="with-phi">
