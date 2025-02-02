@@ -23,11 +23,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="sparse-decoration" version="2.0">
+  <xsl:import href="/org/eolang/parser/_funcs.xsl"/>
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[count(o)=1 and o[@name='@' and (not(@base) or @base!='^') and not(o[@base='∅'])]]">
+      <xsl:for-each select="//o[eo:abstract(.) and count(o)=1 and o[1][@name='@']]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="eo:lineno(@line)"/>
