@@ -30,13 +30,13 @@ SOFTWARE.
     <defects>
       <xsl:for-each select="//o[eo:abstract(.) and count(o)=1 and o[1][@name='@']]">
         <xsl:element name="defect">
-        <xsl:attribute name="line">
+          <xsl:attribute name="line">
             <xsl:value-of select="eo:lineno(@line)"/>
-        </xsl:attribute>
-        <xsl:attribute name="severity">
+          </xsl:attribute>
+          <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
-        </xsl:attribute>
-        <xsl:text>Sparse decoration is prohibited</xsl:text>
+          </xsl:attribute>
+          <xsl:text>Sparse decoration is prohibited</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>
