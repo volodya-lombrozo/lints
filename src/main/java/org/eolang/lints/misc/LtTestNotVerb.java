@@ -25,8 +25,6 @@ package org.eolang.lints.misc;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -36,6 +34,7 @@ import java.util.stream.Stream;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.io.UncheckedInput;
 import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
@@ -49,11 +48,6 @@ import org.eolang.lints.Severity;
  * with POS tagging capabilities in order to determine the part of speech and
  * tense for test object name.
  * @since 0.0.22
- * @todo #257:60min Configure model download only during the build and place into the JAR.
- *  Currently, we download model file each time when creating the lint, which may
- *  be slow in the usage of this lint. Instead, let's configure maven to download
- *  model file during the build, and place into JAR, so lint will be able to locate
- *  file from resources faster.
  */
 public final class LtTestNotVerb implements Lint<XML> {
 
@@ -143,17 +137,13 @@ public final class LtTestNotVerb implements Lint<XML> {
     private static POSModel defaultPosModel() {
         try {
             return new POSModel(
-                new URI(
-                    "https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin"
-                ).toURL()
+                new UncheckedInput(
+                    new ResourceOf("en-pos-perceptron.bin")
+                ).stream()
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 "Failed to read from I/O", exception
-            );
-        } catch (final URISyntaxException exception) {
-            throw new IllegalStateException(
-                "URI syntax is broken", exception
             );
         }
     }
