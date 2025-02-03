@@ -24,12 +24,16 @@
 package org.eolang.lints.misc;
 
 import com.yegor256.MayBeSlow;
+import com.yegor256.Together;
 import fixtures.ParsedEo;
 import matchers.DefectMatcher;
+import org.cactoos.set.SetOf;
 import org.eolang.lints.Defect;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
@@ -81,6 +85,24 @@ final class LtTestIsNotVerbTest {
                 ).value()
             ),
             Matchers.hasSize(12)
+        );
+    }
+
+    @Timeout(60L)
+    @RepeatedTest(2)
+    void lintsInMultipleThreads() {
+        MatcherAssert.assertThat(
+            "wrong number of defects found, in parallel",
+            new SetOf<>(
+                new Together<>(
+                    t -> new LtTestNotVerb().defects(
+                        new ParsedEo(
+                            "org/eolang/lints/misc/test-object-is-not-verb-in-singular/regex-tests.eo"
+                        ).value()
+                    ).size()
+                ).asList()
+            ).size(),
+            Matchers.equalTo(1)
         );
     }
 }
