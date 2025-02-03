@@ -121,26 +121,6 @@ final class ProgramTest {
         );
     }
 
-    @RepeatedTest(2)
-    void checksInParallel(@Mktmp final Path dir) throws IOException {
-        final Path path = dir.resolve("foo.xmir");
-        Files.write(
-            path,
-            new EoSyntax(
-                "# first.\n[] > foo\n# second.\n[] > foo\n"
-            ).parsed().toString().getBytes(StandardCharsets.UTF_8)
-        );
-        MatcherAssert.assertThat(
-            "",
-            new SetOf<>(
-                new Together<>(
-                    thread -> new Program(path).defects().size()
-                )
-            ).size(),
-            Matchers.equalTo(1)
-        );
-    }
-
     @Test
     @Timeout(60L)
     void simpleTest(@Mktmp final Path dir) throws IOException {
@@ -155,6 +135,24 @@ final class ProgramTest {
             "the defect is found",
             new Program(path).defects().size(),
             Matchers.greaterThan(0)
+        );
+    }
+
+    @Timeout(60L)
+    @RepeatedTest(2)
+    void lintsInMultipleThreads() {
+        MatcherAssert.assertThat(
+            "wrong number of defects found, in parallel",
+            new SetOf<>(
+                new Together<>(
+                    t -> new Program(
+                        new EoSyntax(
+                            "# first.\n[] > foo\n"
+                        ).parsed()
+                    ).defects().size()
+                ).asList()
+            ).size(),
+            Matchers.equalTo(1)
         );
     }
 
