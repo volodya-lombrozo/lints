@@ -143,8 +143,9 @@ public final class LtTestNotVerb implements Lint<XML> {
     private static POSModel defaultPosModel() {
         try {
             return new POSModel(
-                new URI("https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin")
-                    .toURL()
+                new URI(
+                    "https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin"
+                ).toURL()
             );
         } catch (final IOException exception) {
             throw new IllegalStateException(
