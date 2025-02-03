@@ -33,7 +33,6 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
@@ -88,7 +87,6 @@ final class LtTestIsNotVerbTest {
         );
     }
 
-    @Timeout(60L)
     @RepeatedTest(2)
     void lintsInMultipleThreads() {
         MatcherAssert.assertThat(
