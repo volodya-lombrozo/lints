@@ -23,9 +23,11 @@
 sheets:
   - /org/eolang/lints/names/object-does-not-match-filename.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=1]
+  - /defects[count(defect[@severity='warning'])=2]
   - /defects/defect[@line='4']
+  - /defects/defect[@line='5']
   - /defects/defect[1][normalize-space()='Object "f.main" does not match with filename "foo.x.main"']
+  - /defects/defect[2][normalize-space()='Object "f.foo" does not match with filename "foo.x.main"']
 document: |
   <program name="foo.x.main">
     <metas>
@@ -37,5 +39,6 @@ document: |
     </metas>
     <objects>
       <o line="4" name="main" pos="0"/>
+      <o line="5" name="foo" pos="0"/>
     </objects>
   </program>
