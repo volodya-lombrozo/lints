@@ -29,22 +29,40 @@ import java.util.Collection;
 import java.util.Set;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.iterable.Filtered;
+import org.cactoos.iterable.Joined;
 import org.cactoos.iterable.Mapped;
+import org.cactoos.iterable.Sticky;
 import org.cactoos.list.ListOf;
 import org.cactoos.set.SetOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
-import org.eolang.lints.AllLints;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
+import org.eolang.lints.PkMono;
+import org.eolang.lints.PkWpa;
 import org.eolang.lints.Severity;
 
 /**
  * Lint that all unlint metas point to existing lint.
  *
- * @since 0.0.0
+ * @since 0.0.38
  */
 public final class LtIncorrectUnlint implements Lint<XML> {
+    /**
+     * All lints in project.
+     */
+    private static final Set<String> ALL = new SetOf<>(
+        new Sticky<String>(
+            new Mapped<>(
+                Lint::name,
+                new Joined<Lint<?>>(
+                    new PkWpa(),
+                    new PkMono()
+                )
+            )
+        )
+    );
+
     @Override
     public String name() {
         return "incorrect-unlint";
@@ -52,12 +70,6 @@ public final class LtIncorrectUnlint implements Lint<XML> {
 
     @Override
     public Collection<Defect> defects(final XML entity) throws IOException {
-        final Set<String> alllints = new SetOf<>(
-            new Mapped<String>(
-                Lint::name,
-                new AllLints()
-            )
-        );
         return new ListOf<>(
             new Mapped<Defect>(
                 xml -> new Defect.Default(
@@ -68,7 +80,7 @@ public final class LtIncorrectUnlint implements Lint<XML> {
                     "Uselessly \"unlint\", because a lint with that name does not exist"
                 ),
                 new Filtered<>(
-                    xml -> !alllints.contains(xml.xpath("tail/text()").get(0)),
+                    xml -> !ALL.contains(xml.xpath("tail/text()").get(0)),
                     entity.nodes("/program/metas/meta[head='unlint']")
                 )
             )

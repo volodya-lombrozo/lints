@@ -41,12 +41,12 @@ import org.eolang.lints.misc.LtTestNotVerb;
  * @since 0.23
  */
 @ThreadSafe
-final class PkMono extends IterableEnvelope<Lint<XML>> {
+public final class PkMono extends IterableEnvelope<Lint<XML>> {
 
     /**
      * Default ctor.
      */
-    PkMono() {
+    public PkMono() {
         super(
             new Shuffled<>(
                 new Joined<Lint<XML>>(
