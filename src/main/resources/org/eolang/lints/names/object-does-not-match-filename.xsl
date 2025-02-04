@@ -28,34 +28,36 @@ SOFTWARE.
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:variable name="package" select="/program/metas/meta[head='package'][1]"/>
   <xsl:variable name="program" select="/program/@name"/>
-  <xsl:variable name="filename" as="xs:string">
-    <xsl:choose>
-      <xsl:when test="$package">
-        <xsl:value-of select="substring-after($program, concat($package/tail/text(), '.'))"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$program"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
   <xsl:variable name="tested" select="/program/metas/meta[head='tests']"/>
   <xsl:template match="/">
     <defects>
       <xsl:if test="not($tested)">
-        <xsl:apply-templates select="/program/objects/o[@name != $filename]" mode="confused-name"/>
+        <xsl:apply-templates select="/program/objects/o" mode="live"/>
       </xsl:if>
     </defects>
   </xsl:template>
-  <xsl:template match="o" mode="confused-name">
-    <defect>
-      <xsl:attribute name="line">
-        <xsl:value-of select="eo:lineno(@line)"/>
-      </xsl:attribute>
-      <xsl:attribute name="severity">warning</xsl:attribute>
-      <xsl:text>Object </xsl:text>
-      <xsl:value-of select="eo:escape(@name)"/>
-      <xsl:text> does not match with filename </xsl:text>
-      <xsl:value-of select="eo:escape($filename)"/>
-    </defect>
+  <xsl:template match="o" mode="live">
+    <xsl:variable name="opath" as="xs:string">
+      <xsl:choose>
+        <xsl:when test="$package">
+          <xsl:value-of select="concat($package/tail/text(), '.', @name)"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:if test="$program != $opath">
+      <defect>
+        <xsl:attribute name="line">
+          <xsl:value-of select="eo:lineno(@line)"/>
+        </xsl:attribute>
+        <xsl:attribute name="severity">warning</xsl:attribute>
+        <xsl:text>Object </xsl:text>
+        <xsl:value-of select="eo:escape($opath)"/>
+        <xsl:text> does not match with filename </xsl:text>
+        <xsl:value-of select="eo:escape($program)"/>
+      </defect>
+    </xsl:if>
   </xsl:template>
 </xsl:stylesheet>
