@@ -46,6 +46,21 @@ import org.eolang.lints.Severity;
  * Object is not unique.
  *
  * @since 0.0.30
+ * @todo #264:35min Check program source with xnav instead of `XML#xpath()`.
+ *  Check the following line in `defects()`:
+ *  <pre>
+ *  {@code
+ *  final String src = xmir.xpath("/program/@name").stream().findFirst().orElse("unknown");
+ *  }
+ *  </pre>
+ *  It should be substituted with xnav usage:
+ *  <pre>
+ *  {@code
+ *  final String src = xml.element("program").attribute("name").text().orElse("unknown");
+ *  }
+ *  </pre>
+ *  We should replaced it after <a href="https://github.com/volodya-lombrozo/xnav/issues/49#issuecomment-2636521337">this</a>
+ *  issue will be resolved.
  */
 public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
 
@@ -58,8 +73,7 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
     public Collection<Defect> defects(final Map<String, XML> pkg) {
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML xmir : pkg.values()) {
-            final Xnav xml = new Xnav(xmir.inner());
-            final String src = xml.element("program").attribute("name").text().orElse("unknown");
+            final String src = xmir.xpath("/program/@name").stream().findFirst().orElse("unknown");
             if (xmir.nodes("/program/objects/o").isEmpty()) {
                 continue;
             }
@@ -81,7 +95,10 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                             new Defect.Default(
                                 this.name(),
                                 Severity.ERROR,
-                                second.element("program").attribute("name").text().orElse("unknown"),
+                                second.element("program")
+                                    .attribute("name")
+                                    .text()
+                                    .orElse("unknown"),
                                 Integer.parseInt(object.getValue()),
                                 String.format(
                                     "The object name \"%s\" is not unique, original object was found in \"%s\"",

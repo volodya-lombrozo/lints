@@ -176,7 +176,11 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             String.format(
                 "Atom with FQN \"%s\" is duplicated, original was found in \"%s\"",
                 fqn,
-                new Xnav(original.inner()).element("program").attribute("name").text().orElse("unknown")
+                new Xnav(original.inner())
+                    .element("program")
+                    .attribute("name")
+                    .text()
+                    .orElse("unknown")
             )
         );
     }
