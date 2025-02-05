@@ -135,8 +135,8 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
 
     private static boolean containsDuplicate(final XML original, final XML oth, final String name) {
         return LtObjectIsNotUnique.programObjects(original).containsKey(name)
-            && LtObjectIsNotUnique.packageName(new Xnav(oth.inner()))
-            .equals(LtObjectIsNotUnique.packageName(new Xnav(original.inner())));
+            && LtObjectIsNotUnique.packageName(oth)
+            .equals(LtObjectIsNotUnique.packageName(original));
     }
 
     private static Map<String, String> programObjects(final XML xmir) {
@@ -158,11 +158,10 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
             );
     }
 
-    private static String packageName(final Xnav xml) {
+    private static String packageName(final XML xmir) {
         final String name;
-        if (xml.path("/program/metas/meta[head='package']").collect(Collectors.toList()).size() == 1) {
-            name = xml.path("/program/metas/meta[head='package']/tail/text()").findFirst().get().text().get();
-//            name = xmir.xpath("/program/metas/meta[head='package']/tail/text()").get(0);
+        if (xmir.nodes("/program/metas/meta[head='package']").size() == 1) {
+            name = xmir.xpath("/program/metas/meta[head='package']/tail/text()").get(0);
         } else {
             name = "";
         }
