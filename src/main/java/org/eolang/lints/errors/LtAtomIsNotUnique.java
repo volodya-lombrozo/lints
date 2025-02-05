@@ -23,6 +23,7 @@
  */
 package org.eolang.lints.errors;
 
+import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XSL;
 import com.jcabi.xml.XSLDocument;
@@ -146,8 +147,7 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         return new Defect.Default(
             this.name(),
             Severity.ERROR,
-            xmir.xpath("/program/@name").stream()
-                .findFirst().orElse("unknown"),
+            new Xnav(xmir.inner()).element("program").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
                 xmir.xpath(
                     String.format(
@@ -164,7 +164,7 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         return new Defect.Default(
             this.name(),
             Severity.ERROR,
-            xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
+            new Xnav(xmir.inner()).element("program").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
                 xmir.xpath(
                     String.format(
@@ -175,11 +175,22 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             ),
             String.format(
                 "Atom with FQN \"%s\" is duplicated, original was found in \"%s\"",
-                fqn, original.xpath("/program/@name").stream().findFirst().orElse("unknown")
+                fqn,
+                new Xnav(original.inner()).element("program").attribute("name").text().orElse("unknown")
             )
         );
     }
 
+    /**
+     * Atom FQNs.
+     * @param xmir XMIR
+     * @return List of atom FQNs
+     * @todo #264:35min Replace `XML#xpath()` method with `Xnav#path()`.
+     *  Currently, `Xnav#path()` does not work with XPath correctly, once it
+     *  will be implemented, we should replace all our XPaths with that method.
+     *  See <a herf="https://github.com/volodya-lombrozo/xnav/issues/48">this</a>
+     *  for more details.
+     */
     private static List<String> fqns(final XML xmir) {
         final List<String> result;
         final List<String> fqns = xmir.xpath("//o[@fqn]/@fqn");
