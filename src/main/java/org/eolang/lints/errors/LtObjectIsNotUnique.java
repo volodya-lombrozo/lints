@@ -137,8 +137,8 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 Collectors.toMap(
                     names::get,
                     pos ->
-                        xml.path(String.format("/program/objects/o[%d]/@line", pos + 1))
-                            .findFirst().get().text().orElse("o"),
+                        xml.path(String.format("/program/objects/o[%d]", pos + 1))
+                            .findFirst().get().attribute("line").text().orElse("0"),
                     (existing, replacement) -> replacement
                 )
             );
