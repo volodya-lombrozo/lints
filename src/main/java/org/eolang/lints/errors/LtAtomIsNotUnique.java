@@ -179,16 +179,6 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         );
     }
 
-    /**
-     * Atom FQNs.
-     * @param xml Navigation XML
-     * @return List of atom FQNs
-     * @todo #264:35min Replace `XML#xpath()` method with `Xnav#path()`.
-     *  Currently, `Xnav#path()` does not work with XPath correctly, once it
-     *  will be implemented, we should replace all our XPaths with that method.
-     *  See <a herf="https://github.com/volodya-lombrozo/xnav/issues/48">this</a>
-     *  for more details.
-     */
     private static List<String> fqns(final Xnav xml) {
         final List<String> result;
         final List<String> fqns = xml.path("//o[@fqn]")
