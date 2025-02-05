@@ -30,7 +30,6 @@ import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Joined;
 import org.cactoos.iterable.Shuffled;
 import org.eolang.lints.comments.LtAsciiOnly;
-import org.eolang.lints.misc.LtTestNotVerb;
 
 /**
  * Collection of lints for individual XML files, provided
@@ -39,6 +38,11 @@ import org.eolang.lints.misc.LtTestNotVerb;
  * <p>This class is thread-safe.</p>
  *
  * @since 0.23
+ * @todo #297:35min Return `LtTestNotVerb` back.
+ *  For some reason this lint produces errors in EO-to-Java Compiler. Check
+ *  <a href="https://github.com/objectionary/lints/issues/297#issuecomment-2636540673">this</a>
+ *  issue for more details. We should return it in the fixed state, once we understand
+ *  the root cause of the problem.
  */
 @ThreadSafe
 final class PkMono extends IterableEnvelope<Lint<XML>> {
@@ -52,8 +56,7 @@ final class PkMono extends IterableEnvelope<Lint<XML>> {
                 new Joined<Lint<XML>>(
                     new PkByXsl(),
                     Arrays.asList(
-                        new LtAsciiOnly(),
-                        new LtTestNotVerb()
+                        new LtAsciiOnly()
                     )
                 )
             )
