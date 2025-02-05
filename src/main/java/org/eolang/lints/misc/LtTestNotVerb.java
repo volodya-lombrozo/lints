@@ -31,8 +31,10 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import opennlp.tools.postag.POSModel;
 import opennlp.tools.postag.POSTaggerME;
@@ -94,9 +96,12 @@ public final class LtTestNotVerb implements Lint<XML> {
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
-        for (final XML object : xmir.nodes("/program[metas/meta[head='tests']]/objects/o[@name]")) {
-            final Xnav xml = new Xnav(object.inner());
-            final String name = xml.attribute("name").text().get();
+        final Xnav xml = new Xnav(xmir.inner());
+        final List<Xnav> objects = xml
+            .path("/program[metas/meta[head='tests']]/objects/o[@name]")
+            .collect(Collectors.toList());
+        for (final Xnav object : objects) {
+            final String name = object.attribute("name").text().get();
             final String first = new ListOf<>(
                 this.model.tag(
                     Stream
@@ -113,11 +118,10 @@ public final class LtTestNotVerb implements Lint<XML> {
                     new Defect.Default(
                         "unit-test-is-not-verb",
                         Severity.WARNING,
-                        new Xnav(xmir.inner())
-                            .element("program")
+                        xml.element("program")
                             .attribute("name")
                             .text().orElse("unknown"),
-                        Integer.parseInt(xml.attribute("line").text().orElse("0")),
+                        Integer.parseInt(object.attribute("line").text().orElse("0")),
                         String.format(
                             "Test object name: \"%s\" doesn't start with verb in singular form",
                             name
