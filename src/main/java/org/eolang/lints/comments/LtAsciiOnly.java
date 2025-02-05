@@ -57,8 +57,8 @@ public final class LtAsciiOnly implements Lint<XML> {
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
         final Xnav xml = new Xnav(xmir.inner());
-        final List<Xnav> comments = xml
-            .path("/program/comments/comment").collect(Collectors.toList());
+        final List<Xnav> comments = xml.path("/program/comments/comment")
+            .collect(Collectors.toList());
         for (final Xnav comment : comments) {
             final Optional<Character> abusive = comment.text().get().chars()
                 .filter(chr -> chr < 32 || chr > 127)
