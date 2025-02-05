@@ -164,7 +164,9 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             Severity.ERROR,
             xml.element("program").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
-                xml.path(String.format("//o[@atom and @name='%s']/@line", LtAtomIsNotUnique.oname(fqn)))
+                xml.path(
+                    String.format("//o[@atom and @name='%s']/@line", LtAtomIsNotUnique.oname(fqn))
+                    )
                     .map(o -> o.text().get())
                     .collect(Collectors.toList()).get(0)
             ),
