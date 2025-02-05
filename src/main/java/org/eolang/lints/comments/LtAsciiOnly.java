@@ -56,7 +56,8 @@ public final class LtAsciiOnly implements Lint<XML> {
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
-        final List<Xnav> comments = new Xnav(xmir.inner())
+        final Xnav xml = new Xnav(xmir.inner());
+        final List<Xnav> comments = xml
             .path("/program/comments/comment").collect(Collectors.toList());
         for (final Xnav comment : comments) {
             final Optional<Character> abusive = comment.text().get().chars()
@@ -72,7 +73,7 @@ public final class LtAsciiOnly implements Lint<XML> {
                 new Defect.Default(
                     "ascii-only",
                     Severity.ERROR,
-                    xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
+                    xml.element("program").attribute("name").text().orElse("unknown"),
                     Integer.parseInt(line),
                     String.format(
                         "Only ASCII characters are allowed in comments, while \"%s\" is used at the line no.%s at the position no.%s",
