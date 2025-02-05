@@ -73,8 +73,9 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
     public Collection<Defect> defects(final Map<String, XML> pkg) {
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML xmir : pkg.values()) {
-            final String src = xmir.xpath("/program/@name").stream().findFirst().orElse("unknown");
-            if (xmir.nodes("/program/objects/o").isEmpty()) {
+            final Xnav xml = new Xnav(xmir.inner());
+            final String src = xml.element("program").attribute("name").text().orElse("unknown");
+            if (LtObjectIsNotUnique.objectsAreEmpty(xml)) {
                 continue;
             }
             for (final XML oth : pkg.values()) {
@@ -82,7 +83,7 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 if (Objects.equals(oth, xmir)) {
                     continue;
                 }
-                if (oth.nodes("/program/objects/o").isEmpty()) {
+                if (LtObjectIsNotUnique.objectsAreEmpty(second)) {
                     continue;
                 }
                 LtObjectIsNotUnique.programObjects(oth).entrySet().stream()
@@ -123,6 +124,13 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 )
             )
         ).asString();
+    }
+
+    private static boolean objectsAreEmpty(final Xnav xml) {
+        return xml.element("program")
+            .element("objects")
+            .elements(Filter.withName("o"))
+            .collect(Collectors.toList()).isEmpty();
     }
 
     private static boolean containsDuplicate(final XML original, final XML oth, final String name) {
