@@ -23,6 +23,8 @@
  */
 package org.eolang.lints.errors;
 
+import com.github.lombrozo.xnav.Filter;
+import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
@@ -56,11 +58,13 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
     public Collection<Defect> defects(final Map<String, XML> pkg) {
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML xmir : pkg.values()) {
-            final String src = xmir.xpath("/program/@name").stream().findFirst().orElse("unknown");
+            final Xnav xml = new Xnav(xmir.inner());
+            final String src = xml.element("program").attribute("name").text().orElse("unknown");
             if (xmir.nodes("/program/objects/o").isEmpty()) {
                 continue;
             }
             for (final XML oth : pkg.values()) {
+                final Xnav second = new Xnav(oth.inner());
                 if (Objects.equals(oth, xmir)) {
                     continue;
                 }
@@ -77,9 +81,7 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                             new Defect.Default(
                                 this.name(),
                                 Severity.ERROR,
-                                oth.xpath("/program/@name").stream()
-                                    .findFirst()
-                                    .orElse("unknown"),
+                                second.element("program").attribute("name").text().orElse("unknown"),
                                 Integer.parseInt(object.getValue()),
                                 String.format(
                                     "The object name \"%s\" is not unique, original object was found in \"%s\"",
@@ -113,7 +115,11 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
     }
 
     private static Map<String, String> programObjects(final XML xmir) {
-        final List<String> names = xmir.xpath("/program/objects/o/@name");
+        final List<String> names = new Xnav(xmir.inner())
+            .element("program").element("objects")
+            .elements(Filter.withName("o"))
+            .map(o -> o.attribute("name").text().get())
+            .collect(Collectors.toList());
         return IntStream.range(0, names.size())
             .boxed()
             .collect(
