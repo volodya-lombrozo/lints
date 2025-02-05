@@ -46,21 +46,6 @@ import org.eolang.lints.Severity;
  * Object is not unique.
  *
  * @since 0.0.30
- * @todo #264:35min Check program source with xnav instead of `XML#xpath()`.
- *  Check the following line in `defects()`:
- *  <pre>
- *  {@code
- *  final String src = xmir.xpath("/program/@name").stream().findFirst().orElse("unknown");
- *  }
- *  </pre>
- *  It should be substituted with xnav usage:
- *  <pre>
- *  {@code
- *  final String src = xml.element("program").attribute("name").text().orElse("unknown");
- *  }
- *  </pre>
- *  We should replaced it after <a href="https://github.com/volodya-lombrozo/xnav/issues/49#issuecomment-2636521337">this</a>
- *  issue will be resolved.
  */
 public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
 
