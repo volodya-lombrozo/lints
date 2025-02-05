@@ -164,8 +164,8 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             Severity.ERROR,
             xml.element("program").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
-                xml.path(String.format("//o[@atom and @name='%s']", LtAtomIsNotUnique.oname(fqn)))
-                    .map(o -> o.attribute("line").text().get())
+                xml.path(String.format("//o[@atom and @name='%s']/@line", LtAtomIsNotUnique.oname(fqn)))
+                    .map(o -> o.text().get())
                     .collect(Collectors.toList()).get(0)
             ),
             String.format(
@@ -188,8 +188,8 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             xml.path("/program/metas/meta[head='package']")
                 .collect(Collectors.toList()).size() == 1
         ) {
-            final String pack = xml.path("/program/metas/meta[head='package']")
-                .map(o -> o.element("tail").text().get())
+            final String pack = xml.path("/program/metas/meta[head='package']/tail")
+                .map(o -> o.text().get())
                 .findFirst().get();
             result = fqns.stream().map(fqn -> String.format("%s.%s", pack, fqn))
                 .collect(Collectors.toList());

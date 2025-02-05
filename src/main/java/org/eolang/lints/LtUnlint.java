@@ -23,10 +23,12 @@
  */
 package org.eolang.lints;
 
+import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * Lint that ignores linting if {@code +unlint} meta is present.
@@ -55,12 +57,12 @@ final class LtUnlint implements Lint<XML> {
 
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
-        final boolean suppress = !xmir.nodes(
+        final boolean suppress = !new Xnav(xmir.inner()).path(
             String.format(
                 "/program/metas/meta[head='unlint' and tail='%s']",
                 this.origin.name()
             )
-        ).isEmpty();
+        ).collect(Collectors.toList()).isEmpty();
         final Collection<Defect> defects = new ArrayList<>(0);
         if (!suppress) {
             defects.addAll(this.origin.defects(xmir));
