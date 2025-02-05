@@ -33,7 +33,7 @@ import com.jcabi.xml.XSLDocument;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
@@ -109,8 +109,9 @@ final class LtByXsl implements Lint<XML> {
         final XML report = this.sheet.transform(xmir);
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML defect : LtByXsl.findDefects(report)) {
-            final List<String> severity = defect.xpath("@severity");
-            if (severity.isEmpty()) {
+            final Xnav xml = new Xnav(defect.inner());
+            final Optional<String> sever = xml.attribute("severity").text();
+            if (sever.isEmpty()) {
                 throw new IllegalStateException(
                     String.format("No severity reported by %s", this.rule)
                 );
@@ -118,10 +119,10 @@ final class LtByXsl implements Lint<XML> {
             defects.add(
                 new Defect.Default(
                     this.rule,
-                    Severity.parsed(severity.get(0)),
+                    Severity.parsed(sever.get()),
                     LtByXsl.findName(xmir),
-                    this.lineno(defect),
-                    defect.xpath("text()").get(0)
+                    this.lineno(xml),
+                    xml.text().get()
                 )
             );
         }
@@ -138,14 +139,14 @@ final class LtByXsl implements Lint<XML> {
      * @param defect XML defect
      * @return Line number
      */
-    private int lineno(final XML defect) {
-        final List<String> lines = defect.xpath("@line");
-        if (lines.isEmpty()) {
+    private int lineno(final Xnav defect) {
+        final Optional<String> oline = defect.attribute("line").text();
+        if (oline.isEmpty()) {
             throw new IllegalStateException(
                 String.format("No line number reported by %s", this.rule)
             );
         }
-        final String line = lines.get(0);
+        final String line = oline.get();
         if (line.isEmpty()) {
             throw new IllegalStateException(
                 String.format("Empty line number reported by %s", this.rule)
@@ -158,7 +159,7 @@ final class LtByXsl implements Lint<XML> {
             throw new IllegalStateException(
                 String.format(
                     "Wrong line number reported by %s: '%s'",
-                    this.rule, lines.get(0)
+                    this.rule, line
                 ),
                 ex
             );
