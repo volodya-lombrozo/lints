@@ -40,10 +40,7 @@ while IFS= read -r f; do
   echo "${n} -> $(du -b "${html}" | cut -f1) bytes"
 done < <(find src/main/resources/org/eolang/motives -name '*.md')
 
-(
-  printf '<html><body style="font-family: monospace;">\n'
-  printf '<p>Latest version: %s</p>\n' "${tag}"
-  printf '<p>List of lints in this version<p>'
+function list_them() {
   printf "<ul>\n"
   while IFS= read -r f; do
     n=$(basename "${f}" ".html")
@@ -51,6 +48,28 @@ done < <(find src/main/resources/org/eolang/motives -name '*.md')
       "/lints/${tag}/${n}.html" "${n}"
   done < <(find "gh-pages/${tag}" -name '*.html' | sort)
   printf '</ul>\n'
+}
+
+function head() {
+  printf '<html><body style="font-family: monospace;">\n'
+}
+
+function tail() {
   printf '<p>Published on %s.</p>\n' "$(date)"
   printf '</body></html>'
+}
+
+(
+  head
+  printf '<p>Latest version: <a href="/lints/%s/index.html">%s</a></p>\n' "${tag}" "${tag}"
+  printf '<p>List of lints in this version:<p>'
+  list_them
+  tail
 ) > "gh-pages/index.html"
+
+(
+  head
+  printf "<p>List of lints in %s:<p>" "${tag}"
+  list_them
+  tail
+) > "gh-pages/${tag}/index.html"
