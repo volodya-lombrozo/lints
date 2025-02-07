@@ -233,15 +233,15 @@ final class ProgramTest {
 
     @Test
     void createsProgramWithoutSomeLints() throws IOException {
-        final String skipped = "ascii-only";
+        final String disabled = "ascii-only";
         MatcherAssert.assertThat(
-            "Defects for skipped lint are not empty, but should be",
+            "Defects for disabled lint are not empty, but should be",
             new Program(
                 new EoSyntax(
                     "# привет\n# как дела?\n[] > foo\n"
                 ).parsed()
-            ).without(skipped).defects().stream()
-                .filter(defect -> defect.rule().equals(skipped))
+            ).without(disabled).defects().stream()
+                .filter(defect -> defect.rule().equals(disabled))
                 .collect(Collectors.toList()),
             Matchers.emptyIterable()
         );

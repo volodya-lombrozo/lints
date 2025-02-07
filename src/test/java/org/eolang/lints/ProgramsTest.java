@@ -116,17 +116,17 @@ final class ProgramsTest {
 
     @Test
     void createsProgramsWithoutSomeLints(@Mktmp final Path dir) throws IOException {
-        final String skipped = "unit-test-missing";
+        final String disabled = "unit-test-missing";
         MatcherAssert.assertThat(
-            "Defects for skipped lint are not empty, but should be",
+            "Defects for disabled lint are not empty, but should be",
             new Programs(
                 this.withProgram(
                     dir,
                     "bar.xmir",
                     "# first.\n# second.\n[] > bar\n"
                 )
-            ).without(skipped).defects().stream()
-                .filter(defect -> defect.rule().equals(skipped))
+            ).without(disabled).defects().stream()
+                .filter(defect -> defect.rule().equals(disabled))
                 .collect(Collectors.toList()),
             Matchers.emptyIterable()
         );
