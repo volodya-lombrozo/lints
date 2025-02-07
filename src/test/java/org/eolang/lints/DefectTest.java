@@ -65,4 +65,19 @@ final class DefectTest {
             Matchers.hasToString(Matchers.containsString(program))
         );
     }
+
+    @Test
+    void printsWithoutZeroLineNumber() {
+        MatcherAssert.assertThat(
+            "toString() prints zero for line number",
+            new Defect.Default(
+                "foo",
+                Severity.WARNING,
+                "foo.bar",
+                0,
+                "the message"
+            ),
+            Matchers.hasToString(Matchers.not(Matchers.containsString(":0")))
+        );
+    }
 }

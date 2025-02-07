@@ -129,10 +129,14 @@ public interface Defect {
 
         @Override
         public String toString() {
-            return String.format(
-                "[%s %s %s]:%d %s",
-                this.prg, this.rle, this.sev, this.lineno, this.txt
-            );
+            final StringBuilder text = new StringBuilder(0)
+                .append('[').append(this.prg).append(' ')
+                .append(this.rle).append(' ')
+                .append(this.sev).append(']');
+            if (this.lineno > 0) {
+                text.append(':').append(this.lineno);
+            }
+            return text.append(' ').append(this.txt).toString();
         }
 
         @Override
