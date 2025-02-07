@@ -37,6 +37,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.list.ListOf;
 import org.cactoos.list.Synced;
@@ -112,6 +113,18 @@ public final class Programs {
     Programs(final Map<String, XML> map, final Iterable<Lint<Map<String, XML>>> list) {
         this.pkg = Collections.unmodifiableMap(map);
         this.lints = list;
+    }
+
+    /**
+     * Programs without lint.
+     * @param name Lint name
+     * @return Program analysis without specifics name
+     */
+    public Programs without(final String name) {
+        return new Programs(
+            this.pkg,
+            new Filtered<>(this.lints, lint -> () -> !lint.name().equals(name))
+        );
     }
 
     /**

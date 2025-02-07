@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 import matchers.DefectMatcher;
 import org.cactoos.list.ListOf;
 import org.cactoos.set.SetOf;
@@ -110,6 +111,24 @@ final class ProgramsTest {
         Assertions.assertDoesNotThrow(
             () -> new Programs(new ListOf<>()).defects(),
             "Exception was thrown, but it should not be"
+        );
+    }
+
+    @Test
+    void createsProgramsWithoutSomeLints(@Mktmp final Path dir) throws IOException {
+        final String skipped = "unit-test-missing";
+        MatcherAssert.assertThat(
+            "Defects for skipped lint are not empty, but should be",
+            new Programs(
+                this.withProgram(
+                    dir,
+                    "bar.xmir",
+                    "# first.\n# second.\n[] > bar\n"
+                )
+            ).without(skipped).defects().stream()
+                .filter(defect -> defect.rule().equals(skipped))
+                .collect(Collectors.toList()),
+            Matchers.emptyIterable()
         );
     }
 

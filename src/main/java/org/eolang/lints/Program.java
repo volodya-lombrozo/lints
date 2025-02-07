@@ -30,8 +30,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import org.cactoos.Func;
-import org.cactoos.Scalar;
 import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
@@ -97,15 +95,12 @@ public final class Program {
     /**
      * Program without lint.
      * @param name Lint name
-     * @return Program analysis without specific name.
+     * @return Program analysis without specific name
      */
     public Program without(final String name) {
         return new Program(
             this.xmir,
-            new Filtered<>(
-                this.lints,
-                lint -> () -> !lint.name().equals(name)
-            )
+            new Filtered<>(this.lints, lint -> () -> !lint.name().equals(name))
         );
     }
 
