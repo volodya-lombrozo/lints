@@ -187,8 +187,7 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             .map(o -> o.attribute("fqn").text().get())
             .collect(Collectors.toList());
         if (
-            xml.path("/program/metas/meta[head='package']")
-                .collect(Collectors.toList()).size() == 1
+            xml.path("/program/metas/meta[head='package']").count() == 1L
         ) {
             final String pack = xml.path("/program/metas/meta[head='package']/tail")
                 .map(o -> o.text().get())

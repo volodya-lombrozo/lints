@@ -60,7 +60,7 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
         for (final XML xmir : pkg.values()) {
             final Xnav xml = new Xnav(xmir.inner());
             final String src = xml.element("program").attribute("name").text().orElse("unknown");
-            if (LtObjectIsNotUnique.objectsAreEmpty(xml)) {
+            if (LtObjectIsNotUnique.hasObjects(xml)) {
                 continue;
             }
             for (final XML oth : pkg.values()) {
@@ -68,7 +68,7 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 if (Objects.equals(oth, xmir)) {
                     continue;
                 }
-                if (LtObjectIsNotUnique.objectsAreEmpty(second)) {
+                if (LtObjectIsNotUnique.hasObjects(second)) {
                     continue;
                 }
                 LtObjectIsNotUnique.programObjects(second).entrySet().stream()
@@ -111,11 +111,10 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
         ).asString();
     }
 
-    private static boolean objectsAreEmpty(final Xnav xml) {
+    private static boolean hasObjects(final Xnav xml) {
         return xml.element("program")
             .element("objects")
-            .elements(Filter.withName("o"))
-            .collect(Collectors.toList()).isEmpty();
+            .elements(Filter.withName("o")).findAny().isEmpty();
     }
 
     private static boolean containsDuplicate(
@@ -127,9 +126,8 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
     }
 
     private static Map<String, String> programObjects(final Xnav xml) {
-        final List<String> names = xml.element("program").element("objects")
-            .elements(Filter.withName("o"))
-            .map(o -> o.attribute("name").text().get())
+        final List<String> names = xml.path("/program/objects/o/@name")
+            .map(oname -> oname.text().get())
             .collect(Collectors.toList());
         return IntStream.range(0, names.size())
             .boxed()
@@ -137,8 +135,8 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 Collectors.toMap(
                     names::get,
                     pos ->
-                        xml.path(String.format("/program/objects/o[%d]", pos + 1))
-                            .findFirst().get().attribute("line").text().orElse("0"),
+                        xml.path(String.format("/program/objects/o[%d]/@line", pos + 1))
+                            .findFirst().get().text().orElse("0"),
                     (existing, replacement) -> replacement
                 )
             );
@@ -147,8 +145,7 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
     private static String packageName(final Xnav xml) {
         final String name;
         if (
-            xml.path("/program/metas/meta[head='package']")
-                .collect(Collectors.toList()).size() == 1
+            xml.path("/program/metas/meta[head='package']").count() == 1L
         ) {
             name = xml.path("/program/metas/meta[head='package']/tail")
                 .findFirst().get().text().get();
