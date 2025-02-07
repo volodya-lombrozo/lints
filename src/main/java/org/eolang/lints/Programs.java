@@ -116,14 +116,16 @@ public final class Programs {
     }
 
     /**
-     * Programs without lint.
-     * @param name Lint name
-     * @return Program analysis without specifics name
+     * Programs with disabled lints.
+     * @param names Lint names
+     * @return Program analysis without specifics names
      */
-    public Programs without(final String name) {
+    public Programs without(final String... names) {
         return new Programs(
             this.pkg,
-            new Filtered<>(this.lints, lint -> () -> !lint.name().equals(name))
+            new Filtered<>(
+                this.lints, lint -> () -> !new ListOf<>(names).contains(lint.name())
+            )
         );
     }
 

@@ -115,7 +115,7 @@ final class ProgramsTest {
     }
 
     @Test
-    void createsProgramsWithoutSomeLints(@Mktmp final Path dir) throws IOException {
+    void createsProgramsWithoutOneLint(@Mktmp final Path dir) throws IOException {
         final String disabled = "unit-test-missing";
         MatcherAssert.assertThat(
             "Defects for disabled lint are not empty, but should be",
@@ -128,6 +128,26 @@ final class ProgramsTest {
             ).without(disabled).defects().stream()
                 .filter(defect -> defect.rule().equals(disabled))
                 .collect(Collectors.toList()),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void createsProgramsWithoutMultipleLints(@Mktmp final Path dir) throws IOException {
+        MatcherAssert.assertThat(
+            "Defects for disabled lint are not empty, but should be",
+            new Programs(
+                this.withProgram(
+                    dir,
+                    "bar.xmir",
+                    "# first.\n# second.\n[] > bar\n"
+                ),
+                this.withProgram(
+                    dir,
+                    "foo-test.xmir",
+                    "# first.\n# second.\n[] > x\n"
+                )
+            ).without("unit-test-missing", "unit-test-without-live-file").defects(),
             Matchers.emptyIterable()
         );
     }
