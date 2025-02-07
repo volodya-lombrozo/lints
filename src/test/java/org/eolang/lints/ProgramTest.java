@@ -42,10 +42,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
+import org.cactoos.list.ListOf;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
@@ -227,6 +232,22 @@ final class ProgramTest {
                     new XMLDocument("<program name='correct'/>")
                 ).defects(),
             "Exception was thrown, but it should not be"
+        );
+    }
+
+    @Test
+    void createsProgramWithoutSomeLints() throws IOException {
+        final String skipped = "ascii-only";
+        MatcherAssert.assertThat(
+            "Defects are not empty, but should be",
+            new Program(
+                new EoSyntax(
+                    "# привет\n# как дела?\n[] > foo\n"
+                ).parsed()
+            ).without(skipped).defects().stream()
+                .filter(defect -> defect.rule().equals(skipped))
+                .collect(Collectors.toList()),
+            Matchers.emptyIterable()
         );
     }
 
