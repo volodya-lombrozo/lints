@@ -232,7 +232,7 @@ final class ProgramTest {
     }
 
     @Test
-    void createsProgramWithoutSomeLints() throws IOException {
+    void createsProgramWithoutOneLint() throws IOException {
         final String disabled = "ascii-only";
         MatcherAssert.assertThat(
             "Defects for disabled lint are not empty, but should be",
@@ -243,6 +243,28 @@ final class ProgramTest {
             ).without(disabled).defects().stream()
                 .filter(defect -> defect.rule().equals(disabled))
                 .collect(Collectors.toList()),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void createsProgramWithoutMultipleLints() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects for disabled lints are not empty, but should be",
+            new Program(
+                new EoSyntax(
+                    "# привет\n# как дела?\n[] > foo\n"
+                ).parsed()
+            ).without(
+                "ascii-only",
+                "object-does-not-match-filename",
+                "comment-not-capitalized",
+                "empty-object",
+                "mandatory-home",
+                "mandatory-version",
+                "mandatory-package",
+                "comment-too-short"
+            ).defects(),
             Matchers.emptyIterable()
         );
     }
