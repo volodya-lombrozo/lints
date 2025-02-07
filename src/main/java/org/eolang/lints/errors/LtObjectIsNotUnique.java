@@ -136,7 +136,7 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                     names::get,
                     pos ->
                         xml.path(String.format("/program/objects/o[%d]/@line", pos + 1))
-                            .findFirst().get().text().orElse("0"),
+                            .findFirst().flatMap(Xnav::text).orElse("0"),
                     (existing, replacement) -> replacement
                 )
             );
