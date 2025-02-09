@@ -99,10 +99,11 @@ public final class Program {
      * @return Program analysis without specific name
      */
     public Program without(final String... names) {
+        final Collection<String> listed = new ListOf<>(names);
         return new Program(
             this.xmir,
             new Filtered<>(
-                this.lints, lint -> () -> !new ListOf<>(names).contains(lint.name())
+                this.lints, lint -> () -> !listed.contains(lint.name())
             )
         );
     }

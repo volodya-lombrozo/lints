@@ -121,10 +121,11 @@ public final class Programs {
      * @return Program analysis without specifics names
      */
     public Programs without(final String... names) {
+        final Collection<String> listed = new ListOf<>(names);
         return new Programs(
             this.pkg,
             new Filtered<>(
-                this.lints, lint -> () -> !new ListOf<>(names).contains(lint.name())
+                this.lints, lint -> () -> !listed.contains(lint.name())
             )
         );
     }
