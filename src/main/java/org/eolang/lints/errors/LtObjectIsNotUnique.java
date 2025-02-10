@@ -23,6 +23,8 @@
  */
 package org.eolang.lints.errors;
 
+import com.github.lombrozo.xnav.Filter;
+import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
@@ -56,29 +58,32 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
     public Collection<Defect> defects(final Map<String, XML> pkg) {
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML xmir : pkg.values()) {
-            final String src = xmir.xpath("/program/@name").stream().findFirst().orElse("unknown");
-            if (xmir.nodes("/program/objects/o").isEmpty()) {
+            final Xnav xml = new Xnav(xmir.inner());
+            final String src = xml.element("program").attribute("name").text().orElse("unknown");
+            if (LtObjectIsNotUnique.hasObjects(xml)) {
                 continue;
             }
             for (final XML oth : pkg.values()) {
+                final Xnav second = new Xnav(oth.inner());
                 if (Objects.equals(oth, xmir)) {
                     continue;
                 }
-                if (oth.nodes("/program/objects/o").isEmpty()) {
+                if (LtObjectIsNotUnique.hasObjects(second)) {
                     continue;
                 }
-                LtObjectIsNotUnique.programObjects(oth).entrySet().stream()
+                LtObjectIsNotUnique.programObjects(second).entrySet().stream()
                     .filter(
                         object ->
-                            LtObjectIsNotUnique.containsDuplicate(xmir, oth, object.getKey())
+                            LtObjectIsNotUnique.containsDuplicate(xml, second, object.getKey())
                     )
                     .map(
                         (Function<Map.Entry<String, String>, Defect>) object ->
                             new Defect.Default(
                                 this.name(),
                                 Severity.ERROR,
-                                oth.xpath("/program/@name").stream()
-                                    .findFirst()
+                                second.element("program")
+                                    .attribute("name")
+                                    .text()
                                     .orElse("unknown"),
                                 Integer.parseInt(object.getValue()),
                                 String.format(
@@ -106,31 +111,44 @@ public final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
         ).asString();
     }
 
-    private static boolean containsDuplicate(final XML original, final XML oth, final String name) {
+    private static boolean hasObjects(final Xnav xml) {
+        return xml.element("program")
+            .element("objects")
+            .elements(Filter.withName("o")).findAny().isEmpty();
+    }
+
+    private static boolean containsDuplicate(
+        final Xnav original, final Xnav oth, final String name
+    ) {
         return LtObjectIsNotUnique.programObjects(original).containsKey(name)
             && LtObjectIsNotUnique.packageName(oth)
             .equals(LtObjectIsNotUnique.packageName(original));
     }
 
-    private static Map<String, String> programObjects(final XML xmir) {
-        final List<String> names = xmir.xpath("/program/objects/o/@name");
+    private static Map<String, String> programObjects(final Xnav xml) {
+        final List<String> names = xml.path("/program/objects/o/@name")
+            .map(oname -> oname.text().get())
+            .collect(Collectors.toList());
         return IntStream.range(0, names.size())
             .boxed()
             .collect(
                 Collectors.toMap(
                     names::get,
-                    pos -> xmir.xpath(
-                        String.format("/program/objects/o[%d]/@line", pos + 1)
-                    ).stream().findFirst().orElse("0"),
+                    pos ->
+                        xml.path(String.format("/program/objects/o[%d]/@line", pos + 1))
+                            .findFirst().flatMap(Xnav::text).orElse("0"),
                     (existing, replacement) -> replacement
                 )
             );
     }
 
-    private static String packageName(final XML xmir) {
+    private static String packageName(final Xnav xml) {
         final String name;
-        if (xmir.nodes("/program/metas/meta[head='package']").size() == 1) {
-            name = xmir.xpath("/program/metas/meta[head='package']/tail/text()").get(0);
+        if (
+            xml.path("/program/metas/meta[head='package']").count() == 1L
+        ) {
+            name = xml.path("/program/metas/meta[head='package']/tail")
+                .findFirst().get().text().get();
         } else {
             name = "";
         }

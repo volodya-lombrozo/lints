@@ -23,6 +23,7 @@
  */
 package org.eolang.lints.errors;
 
+import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XSL;
 import com.jcabi.xml.XSLDocument;
@@ -88,8 +89,9 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
     @Override
     public Collection<Defect> defects(final Map<String, XML> pkg) {
         final Collection<Defect> defects = new LinkedList<>();
-        final Map<XML, List<String>> index = pkg.values().stream()
+        final Map<Xnav, List<String>> index = pkg.values().stream()
             .map(this.pre::transform)
+            .map(xmir -> new Xnav(xmir.inner()))
             .collect(Collectors.toMap(Function.identity(), LtAtomIsNotUnique::fqns));
         final Collection<String> checked = new HashSet<>(0);
         index.forEach(
@@ -142,50 +144,54 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         ).asString();
     }
 
-    private Defect singleDefect(final XML xmir, final String fqn, final int pos) {
+    private Defect singleDefect(final Xnav xml, final String fqn, final int pos) {
         return new Defect.Default(
             this.name(),
             Severity.ERROR,
-            xmir.xpath("/program/@name").stream()
-                .findFirst().orElse("unknown"),
+            xml.element("program").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
-                xmir.xpath(
-                    String.format(
-                        "//o[@atom and @name='%s']/@line",
-                        LtAtomIsNotUnique.oname(fqn)
-                    )
-                ).get(pos)
+                xml.path(String.format("//o[@atom and @name='%s']", LtAtomIsNotUnique.oname(fqn)))
+                    .map(o -> o.attribute("line").text().get())
+                    .collect(Collectors.toList()).get(pos)
             ),
             String.format("Atom \"%s\" is duplicated", fqn)
         );
     }
 
-    private Defect sharedDefect(final XML xmir, final XML original, final String fqn) {
+    private Defect sharedDefect(final Xnav xml, final Xnav original, final String fqn) {
         return new Defect.Default(
             this.name(),
             Severity.ERROR,
-            xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
+            xml.element("program").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
-                xmir.xpath(
-                    String.format(
-                        "//o[@atom and @name='%s']/@line",
-                        LtAtomIsNotUnique.oname(fqn)
+                xml.path(
+                    String.format("//o[@atom and @name='%s']/@line", LtAtomIsNotUnique.oname(fqn))
                     )
-                ).get(0)
+                    .map(o -> o.text().get())
+                    .collect(Collectors.toList()).get(0)
             ),
             String.format(
                 "Atom with FQN \"%s\" is duplicated, original was found in \"%s\"",
-                fqn, original.xpath("/program/@name").stream().findFirst().orElse("unknown")
+                fqn,
+                original.element("program")
+                    .attribute("name")
+                    .text()
+                    .orElse("unknown")
             )
         );
     }
 
-    private static List<String> fqns(final XML xmir) {
+    private static List<String> fqns(final Xnav xml) {
         final List<String> result;
-        final List<String> fqns = xmir.xpath("//o[@fqn]/@fqn");
-        if (xmir.nodes("/program/metas/meta[head='package']").size() == 1) {
-            final String pack = xmir.xpath("/program/metas/meta[head='package']/tail/text()")
-                .get(0);
+        final List<String> fqns = xml.path("//o[@fqn]")
+            .map(o -> o.attribute("fqn").text().get())
+            .collect(Collectors.toList());
+        if (
+            xml.path("/program/metas/meta[head='package']").count() == 1L
+        ) {
+            final String pack = xml.path("/program/metas/meta[head='package']/tail")
+                .map(o -> o.text().get())
+                .findFirst().get();
             result = fqns.stream().map(fqn -> String.format("%s.%s", pack, fqn))
                 .collect(Collectors.toList());
         } else {
@@ -207,7 +213,7 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         return result;
     }
 
-    private static String pairHash(final XML first, final XML second) {
+    private static String pairHash(final Xnav first, final Xnav second) {
         final String pair;
         if (first.hashCode() < second.hashCode()) {
             pair = String.format("%d:%d", first.hashCode(), second.hashCode());

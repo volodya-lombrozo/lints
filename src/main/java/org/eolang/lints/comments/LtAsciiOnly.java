@@ -23,11 +23,14 @@
  */
 package org.eolang.lints.comments;
 
+import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
@@ -53,27 +56,30 @@ public final class LtAsciiOnly implements Lint<XML> {
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
-        for (final XML comment : xmir.nodes("/program/comments/comment")) {
-            final Optional<Character> abusive = comment.xpath("text()").get(0).chars()
+        final Xnav xml = new Xnav(xmir.inner());
+        final List<Xnav> comments = xml.path("/program/comments/comment")
+            .collect(Collectors.toList());
+        for (final Xnav comment : comments) {
+            final Optional<Character> abusive = comment.text().get().chars()
                 .filter(chr -> chr < 32 || chr > 127)
                 .mapToObj(chr -> (char) chr)
                 .findFirst();
             if (!abusive.isPresent()) {
                 continue;
             }
-            final String line = comment.xpath("@line").get(0);
+            final String line = comment.attribute("line").text().orElse("0");
             final Character chr = abusive.get();
             defects.add(
                 new Defect.Default(
                     "ascii-only",
                     Severity.ERROR,
-                    xmir.xpath("/program/@name").stream().findFirst().orElse("unknown"),
+                    xml.element("program").attribute("name").text().orElse("unknown"),
                     Integer.parseInt(line),
                     String.format(
                         "Only ASCII characters are allowed in comments, while \"%s\" is used at the line no.%s at the position no.%s",
                         chr,
                         line,
-                        comment.xpath("text()").get(0).indexOf(chr) + 1
+                        comment.text().get().indexOf(chr) + 1
                     )
                 )
             );

@@ -40,7 +40,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
  *
  * @since 0.0.22
  */
-final class LtTestIsNotVerbTest {
+final class LtTestNotVerbTest {
 
     @Test
     @ExtendWith(MayBeSlow.class)

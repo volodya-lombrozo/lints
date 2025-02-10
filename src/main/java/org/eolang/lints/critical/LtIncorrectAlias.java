@@ -57,11 +57,12 @@ public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
         final Collection<Defect> defects = new LinkedList<>();
         pkg.values().forEach(
             xmir -> {
-                final Xnav program = new Xnav(xmir.inner()).element("program");
-                for (final XML alias : xmir.nodes("/program/metas/meta[head='alias']")) {
-                    final Xnav xml = new Xnav(alias.inner());
-                    final String pointer = xml.element("tail").text().get();
-                    final List<Xnav> parts = xml.elements(Filter.withName("part"))
+                final Xnav xml = new Xnav(xmir.inner());
+                final List<Xnav> aliased = xml.path("/program/metas/meta[head='alias']")
+                    .collect(Collectors.toList());
+                for (final Xnav alias : aliased) {
+                    final String pointer = alias.element("tail").text().get();
+                    final List<Xnav> parts = alias.elements(Filter.withName("part"))
                         .collect(Collectors.toList());
                     final String lookup = parts.get(parts.size() - 1).text().get().substring(2);
                     if (!pkg.containsKey(lookup)) {
@@ -69,9 +70,9 @@ public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
                             new Defect.Default(
                                 "incorrect-alias",
                                 Severity.CRITICAL,
-                                program.attribute("name").text().orElse("unknown"),
+                                xml.element("program").attribute("name").text().orElse("unknown"),
                                 Integer.parseInt(
-                                    xml.attribute("line").text().orElse("0")
+                                    alias.attribute("line").text().orElse("0")
                                 ),
                                 Logger.format(
                                     "Alias \"%s\" points to \"%s\", but it's not in scope (%d): %[list]s",

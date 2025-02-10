@@ -24,6 +24,7 @@
 package org.eolang.lints.errors;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import fixtures.ParsedEo;
 import matchers.DefectMatcher;
 import org.cactoos.map.MapEntry;
@@ -31,6 +32,7 @@ import org.cactoos.map.MapOf;
 import org.eolang.lints.Defect;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -160,6 +162,21 @@ final class LtObjectIsNotUniqueTest {
                 )
             ),
             Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void doesNotThrowExceptionOnEmptyXmir() {
+        Assertions.assertDoesNotThrow(
+            () -> new LtObjectIsNotUnique().defects(
+                new MapOf<>(
+                    new MapEntry<>(
+                        "empty",
+                        new XMLDocument("<program/>")
+                    )
+                )
+            ),
+            () -> "Exception was thrown, but it should not"
         );
     }
 }
