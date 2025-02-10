@@ -30,8 +30,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
+import org.cactoos.list.ListOf;
 
 /**
  * A single XMIR program to analyze.
@@ -89,6 +91,21 @@ public final class Program {
     Program(final XML xml, final Iterable<Lint<XML>> list) {
         this.xmir = xml;
         this.lints = list;
+    }
+
+    /**
+     * Program with disabled lints.
+     * @param names Lint names
+     * @return Program analysis without specific name
+     */
+    public Program without(final String... names) {
+        final Collection<String> listed = new ListOf<>(names);
+        return new Program(
+            this.xmir,
+            new Filtered<>(
+                this.lints, lint -> () -> !listed.contains(lint.name())
+            )
+        );
     }
 
     /**

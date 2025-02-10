@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 import matchers.DefectMatcher;
 import org.cactoos.list.ListOf;
 import org.cactoos.set.SetOf;
@@ -110,6 +111,44 @@ final class ProgramsTest {
         Assertions.assertDoesNotThrow(
             () -> new Programs(new ListOf<>()).defects(),
             "Exception was thrown, but it should not be"
+        );
+    }
+
+    @Test
+    void createsProgramsWithoutOneLint(@Mktmp final Path dir) throws IOException {
+        final String disabled = "unit-test-missing";
+        MatcherAssert.assertThat(
+            "Defects for disabled lint are not empty, but should be",
+            new Programs(
+                this.withProgram(
+                    dir,
+                    "bar.xmir",
+                    "# first.\n# second.\n[] > bar\n"
+                )
+            ).without(disabled).defects().stream()
+                .filter(defect -> defect.rule().equals(disabled))
+                .collect(Collectors.toList()),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void createsProgramsWithoutMultipleLints(@Mktmp final Path dir) throws IOException {
+        MatcherAssert.assertThat(
+            "Defects for disabled lint are not empty, but should be",
+            new Programs(
+                this.withProgram(
+                    dir,
+                    "bar.xmir",
+                    "# first.\n# second.\n[] > bar\n"
+                ),
+                this.withProgram(
+                    dir,
+                    "foo-test.xmir",
+                    "# first.\n# second.\n[] > x\n"
+                )
+            ).without("unit-test-missing", "unit-test-without-live-file").defects(),
+            Matchers.emptyIterable()
         );
     }
 
