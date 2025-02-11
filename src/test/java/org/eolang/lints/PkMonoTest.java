@@ -38,7 +38,6 @@ import org.junit.jupiter.api.RepeatedTest;
  */
 final class PkMonoTest {
 
-    @Disabled
     @RepeatedTest(5)
     void createsLintsInParallel() {
         MatcherAssert.assertThat(
