@@ -23,6 +23,7 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.manifests.Manifests;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
@@ -154,6 +155,15 @@ public final class Programs {
             }
         }
         return messages;
+    }
+
+    /**
+     * Lints version.
+     * @return Version
+     * @checkstyle NonStaticMethodCheck (3 lines)
+     */
+    public String version() {
+        return Manifests.read("Lints-Version");
     }
 
     /**

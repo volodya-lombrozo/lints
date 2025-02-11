@@ -152,6 +152,15 @@ final class ProgramsTest {
         );
     }
 
+    @Test
+    void returnsVersion() throws IOException {
+        MatcherAssert.assertThat(
+            "Version doesn't match with expected",
+            new Programs(new ListOf<>()).version(),
+            Matchers.equalTo("1.2.3")
+        );
+    }
+
     private Path withProgram(final Path dir, final String name,
         final String text) throws IOException {
         final Path path = dir.resolve(name);
