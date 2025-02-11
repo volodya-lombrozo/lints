@@ -21,45 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints;
+package org.eolang.lints.errors;
 
-import com.jcabi.xml.XML;
-import java.util.Arrays;
-import javax.annotation.concurrent.ThreadSafe;
-import org.cactoos.iterable.IterableEnvelope;
-import org.cactoos.iterable.Joined;
-import org.cactoos.iterable.Shuffled;
-import org.eolang.lints.comments.LtAsciiOnly;
+import matchers.DefectMatcher;
+import org.eolang.lints.Defect;
+import org.eolang.parser.EoSyntax;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 
 /**
- * Collection of lints for individual XML files, provided
- * by the {@link Program} class.
+ * Tests for {@link LtIncorrectUnlint}.
  *
- * <p>This class is thread-safe.</p>
- *
- * @since 0.23
- * @todo #297:35min Return `LtTestNotVerb` back.
- *  For some reason this lint produces errors in EO-to-Java Compiler. Check
- *  <a href="https://github.com/objectionary/lints/issues/297#issuecomment-2636540673">this</a>
- *  issue for more details. We should return it in the fixed state, once we understand
- *  the root cause of the problem.
+ * @since 0.0.38
  */
-@ThreadSafe
-public final class PkMono extends IterableEnvelope<Lint<XML>> {
-
-    /**
-     * Default ctor.
-     */
-    public PkMono() {
-        super(
-            new Shuffled<>(
-                new Joined<Lint<XML>>(
-                    new PkByXsl(),
-                    Arrays.asList(
-                        new LtAsciiOnly()
-                    )
-                )
+final class LtIncorrectUnlintTest {
+    @Test
+    void catchesIncorrectUnlints() throws Exception {
+        MatcherAssert.assertThat(
+            "unlint must point to existing lint",
+            new LtIncorrectUnlint().defects(
+                new EoSyntax(
+                    "+unlint abracadabra\n+unlint vingardium-leviosa"
+                ).parsed()
+            ),
+            Matchers.allOf(
+                Matchers.<Defect>iterableWithSize(2),
+                Matchers.everyItem(new DefectMatcher())
             )
+        );
+    }
+
+    @Test
+    void allowsCorrectUnlints() throws Exception {
+        MatcherAssert.assertThat(
+            "Defects are not empty, but they shouldn't be",
+            new LtIncorrectUnlint().defects(
+                new EoSyntax(
+                    "+unlint ascii-only"
+                ).parsed()
+            ),
+            Matchers.emptyIterable()
         );
     }
 }
