@@ -391,6 +391,24 @@ SOFTWARE.
         <artifactId>jmh-maven-plugin</artifactId>
         <version>0.2.2</version>
       </plugin>
+      <plugin>
+        <groupId>com.googlecode.maven-download-plugin</groupId>
+        <artifactId>download-maven-plugin</artifactId>
+        <version>1.9.0</version>
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>wget</goal>
+            </goals>
+            <configuration>
+              <url>https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin</url>
+              <outputFileName>en-pos-perceptron.bin</outputFileName>
+              <outputDirectory>${project.build.directory}/classes</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>
