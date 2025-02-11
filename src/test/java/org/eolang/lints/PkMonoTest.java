@@ -28,7 +28,6 @@ import org.cactoos.scalar.LengthOf;
 import org.cactoos.set.SetOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.RepeatedTest;
 
 /**
@@ -38,7 +37,6 @@ import org.junit.jupiter.api.RepeatedTest;
  */
 final class PkMonoTest {
 
-    @Disabled
     @RepeatedTest(5)
     void createsLintsInParallel() {
         MatcherAssert.assertThat(
