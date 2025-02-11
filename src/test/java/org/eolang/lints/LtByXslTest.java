@@ -26,10 +26,12 @@ package org.eolang.lints;
 import com.jcabi.matchers.XhtmlMatchers;
 import fixtures.LargeXmir;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import matchers.DefectsMatcher;
 import org.cactoos.text.TextOf;
@@ -195,6 +197,30 @@ final class LtByXslTest {
                         )
                     )
                 )
+            );
+    }
+
+    @Test
+    void checksMotivesPresence() throws IOException {
+        Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
+            .filter(Files::isRegularFile)
+            .filter(f -> f.getFileName().toString().endsWith(".xsl"))
+            .forEach(
+                path -> {
+                    final Path motive = Path.of(
+                        path.toString()
+                            .replace("lints", "motives")
+                            .replace(".xsl", ".md")
+                    );
+                    MatcherAssert.assertThat(
+                        String.format(
+                            "Motive .md file is missing: %s",
+                            motive
+                        ),
+                        Files.exists(motive),
+                        new IsEqual<>(true)
+                    );
+                }
             );
     }
 
