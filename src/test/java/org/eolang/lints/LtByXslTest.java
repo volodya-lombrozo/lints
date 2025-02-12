@@ -199,6 +199,30 @@ final class LtByXslTest {
     }
 
     @Test
+    void checksMotivesForPresence() throws IOException {
+        Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
+            .filter(Files::isRegularFile)
+            .filter(f -> f.getFileName().toString().endsWith(".xsl"))
+            .forEach(
+                path -> {
+                    final Path motive = Path.of(
+                        path.toString()
+                            .replace("lints", "motives")
+                            .replace(".xsl", ".md")
+                    );
+                    MatcherAssert.assertThat(
+                        String.format(
+                            "Motive file '%s' is missing for lint '%s'",
+                            motive, path
+                        ),
+                        Files.exists(motive),
+                        new IsEqual<>(true)
+                    );
+                }
+            );
+    }
+
+    @Test
     @Timeout(30L)
     void checksEmptyObjectOnLargeXmirInReasonableTime() {
         Assertions.assertDoesNotThrow(
