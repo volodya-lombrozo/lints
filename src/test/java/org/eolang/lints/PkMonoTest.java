@@ -23,16 +23,11 @@
  */
 package org.eolang.lints;
 
-import com.jcabi.xml.XML;
-import com.jcabi.xml.XMLDocument;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import com.yegor256.Together;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.cactoos.list.ListOf;
 import org.cactoos.scalar.LengthOf;
@@ -85,17 +80,16 @@ final class PkMonoTest {
         new ListOf<>(new PkMono()).stream()
             .filter(lint -> !lint.getClass().equals(LtIncorrectUnlint.class))
             .collect(Collectors.toList()).forEach(
-            lint -> {
-                MatcherAssert.assertThat(
-                    String.format(
-                        "Lint '%s' can not be unlinted, since its not wrapped by LtUnlint",
-                        lint.name()
-                    ),
-                    lint.getClass().equals(LtUnlint.class),
-                    new IsEqual<>(true)
-                );
-            }
-        );
+                lint ->
+                    MatcherAssert.assertThat(
+                        String.format(
+                            "Lint '%s' can not be unlinted, since its not wrapped by LtUnlint",
+                            lint.name()
+                        ),
+                        lint.getClass().equals(LtUnlint.class),
+                        new IsEqual<>(true)
+                    )
+            );
     }
 
     @Test
