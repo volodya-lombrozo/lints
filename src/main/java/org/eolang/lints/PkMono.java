@@ -54,7 +54,7 @@ final class PkMono extends IterableEnvelope<Lint<XML>> {
         new Joined<Lint<XML>>(
             new PkByXsl(),
             List.of(
-                new LtAsciiOnly()
+                new LtUnlint(new LtAsciiOnly())
             )
         )
     );

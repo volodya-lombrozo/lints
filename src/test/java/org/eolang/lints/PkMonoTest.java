@@ -23,12 +23,19 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.XMLDocument;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import com.yegor256.Together;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import org.cactoos.list.ListOf;
 import org.cactoos.scalar.LengthOf;
 import org.cactoos.set.SetOf;
+import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
@@ -51,6 +58,22 @@ final class PkMonoTest {
                 )
             ).size(),
             Matchers.equalTo(1)
+        );
+    }
+
+    @Test
+    void allowsUnlint() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects found, though they were unlinted",
+            new Program(
+                new EoSyntax(
+                    "+unlint ascii-only\n # привет\n# как дела?\n[] > foo\n"
+                ).parsed(),
+                new PkMono()
+            ).defects().stream().filter(
+                defect -> "ascii-only".equals(defect.rule())
+            ).collect(Collectors.toList()),
+            Matchers.emptyIterable()
         );
     }
 
