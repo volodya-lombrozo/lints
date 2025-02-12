@@ -31,6 +31,7 @@ import org.cactoos.set.SetOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -86,6 +87,7 @@ final class LtTestNotVerbTest {
         );
     }
 
+    @Tag("deep")
     @RepeatedTest(2)
     void lintsInMultipleThreads() {
         MatcherAssert.assertThat(

@@ -139,6 +139,7 @@ final class ProgramTest {
         );
     }
 
+    @Tag("deep")
     @Timeout(60L)
     @RepeatedTest(2)
     void lintsInMultipleThreads() {
