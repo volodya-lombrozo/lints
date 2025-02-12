@@ -82,15 +82,16 @@ final class PkMonoTest {
 
     @Test
     void checksThatLintsCanBeUnlinted() {
-        new PkMono().forEach(
+        new ListOf<>(new PkMono()).stream()
+            .filter(lint -> !lint.getClass().equals(LtIncorrectUnlint.class))
+            .collect(Collectors.toList()).forEach(
             lint -> {
-                final Class<? extends Lint> clazz = lint.getClass();
                 MatcherAssert.assertThat(
                     String.format(
-                        "Lint '%s' can not be unlinted, since it not wrapped by LtUnlint",
+                        "Lint '%s' can not be unlinted, since its not wrapped by LtUnlint",
                         lint.name()
                     ),
-                    clazz.equals(LtUnlint.class) || clazz.equals(LtIncorrectUnlint.class),
+                    lint.getClass().equals(LtUnlint.class),
                     new IsEqual<>(true)
                 );
             }
