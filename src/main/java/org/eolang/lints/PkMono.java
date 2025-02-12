@@ -26,7 +26,6 @@ package org.eolang.lints;
 import com.jcabi.xml.XML;
 import java.util.List;
 import javax.annotation.concurrent.ThreadSafe;
-import org.cactoos.Func;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Joined;
 import org.cactoos.iterable.Mapped;
