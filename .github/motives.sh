@@ -52,9 +52,11 @@ function list_them() {
 
 function head() {
   printf '<html>\n'
+  printf '<head>\n'
   printf '<meta charset="UTF-8"/>\n'
   printf '<meta name="viewport" content="width=device-width, initial-scale=1.0"/>\n'
   printf '<link href="//cdn.jsdelivr.net/npm/tacit-css@1.8.1/dist/tacit-css.min.css" rel="stylesheet" integrity="sha384-JbsYayq5Otme+gjh/pl7NrA/qMIU0bxbdzKvYqQGHvvag0lHhM62TQnDzz+EyzXj" crossorigin="anonymous"/>\n'
+  printf '</head>\n'
   printf '<body style="font-family: monospace;">\n'
 }
 
