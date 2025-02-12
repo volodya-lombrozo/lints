@@ -70,7 +70,7 @@ final class PkByXsl extends IterableEnvelope<Lint<XML>> {
         try {
             return new Shuffled<Lint<XML>>(
                 new Mapped<>(
-                    res -> new LtUnlint(
+                    res ->
                         new LtByXsl(
                             new InputOf(res.getInputStream()),
                             new InputOf(
@@ -80,8 +80,7 @@ final class PkByXsl extends IterableEnvelope<Lint<XML>> {
                                     ).replaceAll("eolang/motives")
                                 ).replaceAll(".md")
                             )
-                        )
-                    ),
+                        ),
                     Arrays.asList(
                         new PathMatchingResourcePatternResolver().getResources(
                             "classpath*:org/eolang/lints/**/*.xsl"
