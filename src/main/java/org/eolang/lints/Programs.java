@@ -44,7 +44,15 @@ import org.cactoos.list.Synced;
 
 /**
  * A collection of XMIR programs to analyze.
+ * To get the current version of `lints`, you should read it from
+ * MANIFEST.MF file, packaged with library. You can do it like this:
+ * <pre>
+ * {@code
+ * import com.jcabi.manifests.Manifests;
  *
+ * final String version = Manifests.read("Lints-Version");
+ * }
+ * </pre>
  * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR</a>
  * @since 0.1.0
  */
