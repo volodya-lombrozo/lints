@@ -57,12 +57,12 @@ function head() {
   printf '<meta name="viewport" content="width=device-width, initial-scale=1.0"/>\n'
   printf '<link href="//cdn.jsdelivr.net/npm/tacit-css@1.8.1/dist/tacit-css.min.css" rel="stylesheet" integrity="sha384-JbsYayq5Otme+gjh/pl7NrA/qMIU0bxbdzKvYqQGHvvag0lHhM62TQnDzz+EyzXj" crossorigin="anonymous"/>\n'
   printf '</head>\n'
-  printf '<body style="font-family: monospace;">\n'
+  printf '<body><section><article>\n'
 }
 
 function tail() {
   printf '<p>Published on %s.</p>\n' "$(date)"
-  printf '</body></html>'
+  printf '</article></section></body></html>'
 }
 
 (
