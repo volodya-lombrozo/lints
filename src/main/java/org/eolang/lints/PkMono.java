@@ -51,10 +51,13 @@ final class PkMono extends IterableEnvelope<Lint<XML>> {
      * All XML-based lints.
      */
     private static final Iterable<Lint<XML>> LINTS = new Shuffled<>(
-        new Joined<Lint<XML>>(
-            new PkByXsl(),
-            List.of(
-                new LtAsciiOnly()
+        new Mapped<Lint<XML>>(
+            LtUnlint::new,
+            new Joined<Lint<XML>>(
+                new PkByXsl(),
+                List.of(
+                    new LtAsciiOnly()
+                )
             )
         )
     );
