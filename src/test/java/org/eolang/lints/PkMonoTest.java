@@ -23,12 +23,16 @@
  */
 package org.eolang.lints;
 
+import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.core.importer.ImportOption;
+import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import com.yegor256.Together;
 import org.cactoos.scalar.LengthOf;
 import org.cactoos.set.SetOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests for {@link PkMono}.
@@ -48,6 +52,17 @@ final class PkMonoTest {
             ).size(),
             Matchers.equalTo(1)
         );
+    }
+
+    @Test
+    void staysInsideThePackage() {
+        ArchRuleDefinition.classes()
+            .that().haveSimpleName("PkMono")
+            .should().bePackagePrivate()
+            .check(new ClassFileImporter()
+                .withImportOption(new ImportOption.DoNotIncludeTests())
+                .importPackages("org.eolang.lints")
+            );
     }
 
 }
