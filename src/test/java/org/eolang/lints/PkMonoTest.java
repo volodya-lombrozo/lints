@@ -23,6 +23,7 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
@@ -30,6 +31,7 @@ import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import com.yegor256.Together;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.cactoos.list.ListOf;
@@ -38,6 +40,7 @@ import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
@@ -74,6 +77,23 @@ final class PkMonoTest {
                 defect -> "ascii-only".equals(defect.rule())
             ).collect(Collectors.toList()),
             Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void checksThatLintsCanBeUnlinted() {
+        new PkMono().forEach(
+            lint -> {
+                final Class<? extends Lint> clazz = lint.getClass();
+                MatcherAssert.assertThat(
+                    String.format(
+                        "Lint '%s' can not be unlinted, since it not wrapped by LtUnlint",
+                        lint.name()
+                    ),
+                    clazz.equals(LtUnlint.class) || clazz.equals(LtIncorrectUnlint.class),
+                    new IsEqual<>(true)
+                );
+            }
         );
     }
 
