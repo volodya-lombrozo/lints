@@ -23,6 +23,7 @@
  */
 package org.eolang.lints.errors;
 
+import java.util.List;
 import matchers.DefectMatcher;
 import org.eolang.lints.Defect;
 import org.eolang.parser.EoSyntax;
@@ -40,7 +41,7 @@ final class LtIncorrectUnlintTest {
     void catchesIncorrectUnlints() throws Exception {
         MatcherAssert.assertThat(
             "unlint must point to existing lint",
-            new LtIncorrectUnlint().defects(
+            new LtIncorrectUnlint(List.of("hello")).defects(
                 new EoSyntax(
                     "+unlint abracadabra\n+unlint vingardium-leviosa"
                 ).parsed()
@@ -56,7 +57,7 @@ final class LtIncorrectUnlintTest {
     void allowsCorrectUnlints() throws Exception {
         MatcherAssert.assertThat(
             "Defects are not empty, but they shouldn't be",
-            new LtIncorrectUnlint().defects(
+            new LtIncorrectUnlint(List.of("ascii-only")).defects(
                 new EoSyntax(
                     "+unlint ascii-only"
                 ).parsed()

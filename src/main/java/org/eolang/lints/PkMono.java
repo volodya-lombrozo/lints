@@ -24,12 +24,14 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
-import java.util.Arrays;
+import java.util.List;
 import javax.annotation.concurrent.ThreadSafe;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Joined;
+import org.cactoos.iterable.Mapped;
 import org.cactoos.iterable.Shuffled;
 import org.eolang.lints.comments.LtAsciiOnly;
+import org.eolang.lints.errors.LtIncorrectUnlint;
 
 /**
  * Collection of lints for individual XML files, provided
@@ -45,18 +47,36 @@ import org.eolang.lints.comments.LtAsciiOnly;
  *  the root cause of the problem.
  */
 @ThreadSafe
-public final class PkMono extends IterableEnvelope<Lint<XML>> {
+final class PkMono extends IterableEnvelope<Lint<XML>> {
+
+    /**
+     * All XML-based lints.
+     */
+    private static final Iterable<Lint<XML>> LINTS = new Shuffled<>(
+        new Joined<Lint<XML>>(
+            new PkByXsl(),
+            List.of(
+                new LtAsciiOnly()
+            )
+        )
+    );
 
     /**
      * Default ctor.
      */
-    public PkMono() {
+    PkMono() {
         super(
-            new Shuffled<>(
-                new Joined<Lint<XML>>(
-                    new PkByXsl(),
-                    Arrays.asList(
-                        new LtAsciiOnly()
+            new Joined<Lint<XML>>(
+                PkMono.LINTS,
+                List.of(
+                    new LtIncorrectUnlint(
+                        new Mapped<>(
+                            Lint::name,
+                            new Joined<Lint<?>>(
+                                new PkWpa(),
+                                PkMono.LINTS
+                            )
+                        )
                     )
                 )
             )

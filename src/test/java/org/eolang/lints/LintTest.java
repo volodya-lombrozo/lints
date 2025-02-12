@@ -23,45 +23,26 @@
  */
 package org.eolang.lints;
 
-import com.jcabi.xml.XML;
-import java.util.Map;
-import org.cactoos.iterable.IterableEnvelope;
-import org.cactoos.iterable.Mapped;
-import org.cactoos.iterable.Shuffled;
-import org.cactoos.list.ListOf;
-import org.eolang.lints.critical.LtIncorrectAlias;
-import org.eolang.lints.errors.LtAtomIsNotUnique;
-import org.eolang.lints.errors.LtObjectIsNotUnique;
-import org.eolang.lints.units.LtUnitTestMissing;
-import org.eolang.lints.units.LtUnitTestWithoutLiveFile;
+import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.core.importer.ImportOption;
+import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
+import org.junit.jupiter.api.Test;
 
 /**
- * A collection of lints for Whole Program Analysis (WPA),
- * provided by the {@link Programs} class.
+ * Tests for {@link Lint}.
  *
- * <p>This class is thread-safe.</p>
- *
- * @since 0.1.0
+ * @since 0.23
  */
-final class PkWpa extends IterableEnvelope<Lint<Map<String, XML>>> {
+final class LintTest {
 
-    /**
-     * Ctor.
-     */
-    PkWpa() {
-        super(
-            new Shuffled<>(
-                new Mapped<>(
-                    lnt -> new LtWpaUnlint(lnt),
-                    new ListOf<>(
-                        new LtUnitTestMissing(),
-                        new LtUnitTestWithoutLiveFile(),
-                        new LtIncorrectAlias(),
-                        new LtObjectIsNotUnique(),
-                        new LtAtomIsNotUnique()
-                    )
-                )
-            )
-        );
+    @Test
+    void ensuresEveryLintHasProperPrefix() {
+        ArchRuleDefinition.classes()
+            .that().haveSimpleNameStartingWith("Lt")
+            .should().implement(Lint.class)
+            .check(new ClassFileImporter()
+                .withImportOption(new ImportOption.DoNotIncludeTests())
+                .importPackages("org.eolang.lints")
+            );
     }
 }

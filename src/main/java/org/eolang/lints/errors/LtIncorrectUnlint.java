@@ -26,20 +26,15 @@ package org.eolang.lints.errors;
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Set;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.iterable.Filtered;
-import org.cactoos.iterable.Joined;
 import org.cactoos.iterable.Mapped;
-import org.cactoos.iterable.Sticky;
 import org.cactoos.list.ListOf;
 import org.cactoos.set.SetOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.lints.Defect;
 import org.eolang.lints.Lint;
-import org.eolang.lints.PkMono;
-import org.eolang.lints.PkWpa;
 import org.eolang.lints.Severity;
 
 /**
@@ -48,20 +43,19 @@ import org.eolang.lints.Severity;
  * @since 0.0.38
  */
 public final class LtIncorrectUnlint implements Lint<XML> {
+
     /**
-     * All lints in project.
+     * All possible names.
      */
-    private static final Set<String> ALL = new SetOf<>(
-        new Sticky<String>(
-            new Mapped<>(
-                Lint::name,
-                new Joined<Lint<?>>(
-                    new PkWpa(),
-                    new PkMono()
-                )
-            )
-        )
-    );
+    private final Collection<String> names;
+
+    /**
+     * Ctor.
+     * @param lints All possible lint names
+     */
+    public LtIncorrectUnlint(final Iterable<String> lints) {
+        this.names = new SetOf<>(lints);
+    }
 
     @Override
     public String name() {
@@ -80,7 +74,7 @@ public final class LtIncorrectUnlint implements Lint<XML> {
                     "Uselessly \"unlint\", because a lint with that name does not exist"
                 ),
                 new Filtered<>(
-                    xml -> !ALL.contains(xml.xpath("tail/text()").get(0)),
+                    xml -> !this.names.contains(xml.xpath("tail/text()").get(0)),
                     entity.nodes("/program/metas/meta[head='unlint']")
                 )
             )
