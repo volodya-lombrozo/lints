@@ -23,7 +23,6 @@
  */
 package org.eolang.lints;
 
-import com.jcabi.manifests.Manifests;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
@@ -45,7 +44,15 @@ import org.cactoos.list.Synced;
 
 /**
  * A collection of XMIR programs to analyze.
+ * To get the current version of `lints`, you should read it from
+ * MANIFEST.MF file, packaged with library. You can do it like this:
+ * <pre>
+ * {@code
+ * import com.jcabi.manifests.Manifests;
  *
+ * final String version = Manifests.read("Lints-Version");
+ * }
+ * </pre>
  * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR</a>
  * @since 0.1.0
  */
@@ -155,15 +162,6 @@ public final class Programs {
             }
         }
         return messages;
-    }
-
-    /**
-     * Lints version.
-     * @return Version
-     * @checkstyle NonStaticMethodCheck (3 lines)
-     */
-    public String version() {
-        return Manifests.read("Lints-Version");
     }
 
     /**
