@@ -68,7 +68,7 @@ final class LtWpaUnlint implements Lint<Map<String, XML>> {
                     )
                 );
             }
-            defects.addAll(new LtUnlint(new Lint.Mono(defect)).defects(xmir));
+            defects.addAll(new LtUnlint(new LtMono(defect)).defects(xmir));
         }
         return defects;
     }

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.errors;
+package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
@@ -41,9 +41,6 @@ import org.cactoos.io.UncheckedInput;
 import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
-import org.eolang.lints.Defect;
-import org.eolang.lints.Lint;
-import org.eolang.lints.Severity;
 
 /**
  * All FQNs that have `@atom` in the entire scope must be unique.
@@ -52,7 +49,7 @@ import org.eolang.lints.Severity;
  *
  * @since 0.0.31
  */
-public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
+final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
 
     /**
      * Stylesheet for adding `@fqn` attribute for atoms.
@@ -62,7 +59,7 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
     /**
      * Ctor.
      */
-    public LtAtomIsNotUnique() {
+    LtAtomIsNotUnique() {
         this(
             new XSLDocument(
                 new UncheckedInput(
@@ -77,7 +74,7 @@ public final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
      *
      * @param sheet Sheet
      */
-    public LtAtomIsNotUnique(final XSL sheet) {
+    LtAtomIsNotUnique(final XSL sheet) {
         this.pre = sheet;
     }
 

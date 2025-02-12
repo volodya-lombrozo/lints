@@ -21,8 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.eolang.lints;
+
+import com.jcabi.xml.XML;
+import java.util.Collection;
+import java.util.Collections;
+
 /**
- * Critical Java lints.
- * @since 0.0.30
+ * Lint that always returns a given defect.
+ *
+ * @since 0.0.35
  */
-package org.eolang.lints.critical;
+final class LtMono implements Lint<XML> {
+    /**
+     * The defect to return.
+     */
+    private final Defect defect;
+
+    /**
+     * Ctor.
+     *
+     * @param dft The defect to return
+     */
+    LtMono(final Defect dft) {
+        this.defect = dft;
+    }
+
+    @Override
+    public String name() {
+        return this.defect.rule();
+    }
+
+    @Override
+    public Collection<Defect> defects(final XML xmir) {
+        return Collections.singleton(this.defect);
+    }
+
+    @Override
+    public String motive() {
+        throw new UnsupportedOperationException("#motive()");
+    }
+}

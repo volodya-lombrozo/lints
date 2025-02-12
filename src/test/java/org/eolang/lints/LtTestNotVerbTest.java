@@ -21,14 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.misc;
+package org.eolang.lints;
 
 import com.yegor256.MayBeSlow;
 import com.yegor256.Together;
 import fixtures.ParsedEo;
 import matchers.DefectMatcher;
 import org.cactoos.set.SetOf;
-import org.eolang.lints.Defect;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;

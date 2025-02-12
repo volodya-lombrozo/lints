@@ -21,63 +21,66 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.units;
+package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
+import com.yegor256.Mktmp;
+import com.yegor256.MktmpResolver;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import matchers.DefectMatcher;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
- * Tests for {@link LtUnitTestWithoutLiveFile}.
+ * Test for {@link LtUnitTestMissing}.
  *
- * @since 0.0.30
+ * @since 0.0.1
  */
-final class LtUnitTestWithoutLiveFileTest {
+@ExtendWith(MktmpResolver.class)
+final class LtUnitTestMissingTest {
 
     @Test
-    void catchesAbsenceOfLiveFile() {
+    void acceptsValidPackage() throws IOException {
         MatcherAssert.assertThat(
-            "Defects are empty, but they should not",
-            new LtUnitTestWithoutLiveFile().defects(
+            "some problems found by mistake",
+            new LtUnitTestMissing().defects(
                 new MapOf<String, XML>(
-                    new MapEntry<>("abc-test", new XMLDocument("<program/>")),
-                    new MapEntry<>("cde", new XMLDocument("<program/>"))
-                )
-            ),
-            Matchers.hasSize(Matchers.greaterThan(0))
-        );
-    }
-
-    @Test
-    void reportsProperly() {
-        MatcherAssert.assertThat(
-            "Defects are empty, but they should not",
-            new LtUnitTestWithoutLiveFile().defects(
-                new MapOf<String, XML>(
-                    new MapEntry<>("xyz-test", new XMLDocument("<program name='xyz-test'/>")),
-                    new MapEntry<>("bar", new XMLDocument("<program name='bar'/>"))
-                )
-            ),
-            Matchers.everyItem(new DefectMatcher())
-        );
-    }
-
-    @Test
-    void acceptsValidPackage() {
-        MatcherAssert.assertThat(
-            "Defects are not empty, but they should",
-            new LtUnitTestWithoutLiveFile().defects(
-                new MapOf<String, XML>(
-                    new MapEntry<>("foo-test", new XMLDocument("<program name='foo-test'/>")),
-                    new MapEntry<>("foo", new XMLDocument("<program name='foo'/>"))
+                    new MapEntry<>("bar", new XMLDocument("<program name='bar'/>")),
+                    new MapEntry<>("bar-tests", new XMLDocument("<program name='bar-tests'/>"))
                 )
             ),
             Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void acceptsValidDirectory(@Mktmp final Path dir) throws IOException {
+        Files.write(dir.resolve("foo.xmir"), "<program name='foo'/>".getBytes());
+        Files.write(dir.resolve("foo-tests.xmir"), "<program name='foo-tests'/>".getBytes());
+        MatcherAssert.assertThat(
+            "some defects found by mistake",
+            new Programs(dir).defects(),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void detectsMissingTest(@Mktmp final Path dir) throws IOException {
+        Files.write(dir.resolve("aaa.xmir"), "<program name='aaa'/>".getBytes());
+        MatcherAssert.assertThat(
+            " defects found",
+            new Programs(dir).defects(),
+            Matchers.allOf(
+                Matchers.<Defect>iterableWithSize(Matchers.greaterThan(0)),
+                Matchers.<Defect>everyItem(new DefectMatcher())
+            )
         );
     }
 }

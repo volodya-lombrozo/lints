@@ -26,7 +26,6 @@ package org.eolang.lints;
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * A single checker for an {@code .xmir} file.
@@ -57,38 +56,4 @@ public interface Lint<T> {
      */
     String motive() throws IOException;
 
-    /**
-     * Lint that always returns a given defect.
-     *
-     * @since 0.0.35
-     */
-    final class Mono implements Lint<XML> {
-        /**
-         * The defect to return.
-         */
-        private final Defect defect;
-
-        /**
-         * Ctor.
-         * @param dft The defect to return
-         */
-        public Mono(final Defect dft) {
-            this.defect = dft;
-        }
-
-        @Override
-        public String name() {
-            return this.defect.rule();
-        }
-
-        @Override
-        public Collection<Defect> defects(final XML xmir) {
-            return Collections.singleton(this.defect);
-        }
-
-        @Override
-        public String motive() {
-            throw new UnsupportedOperationException("#motive()");
-        }
-    }
 }

@@ -46,12 +46,16 @@ function list_them() {
     n=$(basename "${f}" ".html")
     printf '<li><a href="%s">%s</a></li>\n' \
       "/lints/${tag}/${n}.html" "${n}"
-  done < <(find "gh-pages/${tag}" -name '*.html' | sort)
+  done < <(find "gh-pages/${tag}" -name '*.html' -not -name 'index.html' | sort)
   printf '</ul>\n'
 }
 
 function head() {
-  printf '<html><body style="font-family: monospace;">\n'
+  printf '<html>\n'
+  printf '<meta charset="UTF-8"/>\n'
+  printf '<meta name="viewport" content="width=device-width, initial-scale=1.0"/>\n'
+  printf '<link href="//cdn.jsdelivr.net/npm/tacit-css@1.8.1/dist/tacit-css.min.css" rel="stylesheet" integrity="sha384-JbsYayq5Otme+gjh/pl7NrA/qMIU0bxbdzKvYqQGHvvag0lHhM62TQnDzz+EyzXj" crossorigin="anonymous"/>\n'
+  printf '<body style="font-family: monospace;">\n'
 }
 
 function tail() {

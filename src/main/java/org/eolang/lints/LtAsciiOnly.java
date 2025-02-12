@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.comments;
+package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
@@ -34,9 +34,6 @@ import java.util.stream.Collectors;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
-import org.eolang.lints.Defect;
-import org.eolang.lints.Lint;
-import org.eolang.lints.Severity;
 
 /**
  * A comment must include only ASCII characters.
@@ -51,7 +48,7 @@ import org.eolang.lints.Severity;
  *  (Java package name, e.g. `comments`).
  * @checkstyle StringLiteralsConcatenationCheck (30 lines)
  */
-public final class LtAsciiOnly implements Lint<XML> {
+final class LtAsciiOnly implements Lint<XML> {
 
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {

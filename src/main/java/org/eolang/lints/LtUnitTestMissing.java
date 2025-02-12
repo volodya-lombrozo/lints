@@ -21,23 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.units;
+package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Map;
-import org.eolang.lints.Defect;
-import org.eolang.lints.Lint;
-import org.eolang.lints.Severity;
 
 /**
  * A test is missing for a live EO program.
  *
  * @since 0.1.0
  */
-public final class LtUnitTestMissing implements Lint<Map<String, XML>> {
+final class LtUnitTestMissing implements Lint<Map<String, XML>> {
 
     @Override
     public Collection<Defect> defects(final Map<String, XML> pkg) throws IOException {

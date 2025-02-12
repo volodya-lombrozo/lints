@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.critical;
+package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Filter;
 import com.github.lombrozo.xnav.Xnav;
@@ -36,16 +36,13 @@ import java.util.stream.Collectors;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
-import org.eolang.lints.Defect;
-import org.eolang.lints.Lint;
-import org.eolang.lints.Severity;
 
 /**
  * Checks that `+alias` is pointing to existing `.xmir` files.
  *
  * @since 0.0.30
  */
-public final class LtIncorrectAlias implements Lint<Map<String, XML>> {
+final class LtIncorrectAlias implements Lint<Map<String, XML>> {
 
     @Override
     public String name() {

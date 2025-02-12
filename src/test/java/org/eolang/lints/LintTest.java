@@ -45,4 +45,15 @@ final class LintTest {
                 .importPackages("org.eolang.lints")
             );
     }
+
+    @Test
+    void ensuresLintsStayInTheirPackages() {
+        ArchRuleDefinition.classes()
+            .that().implement(Lint.class)
+            .should().bePackagePrivate()
+            .check(new ClassFileImporter()
+                .withImportOption(new ImportOption.DoNotIncludeTests())
+                .importPackages("org.eolang.lints")
+            );
+    }
 }

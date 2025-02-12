@@ -21,11 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.errors;
+package org.eolang.lints;
 
 import java.util.List;
 import matchers.DefectMatcher;
-import org.eolang.lints.Defect;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;

@@ -30,8 +30,6 @@ import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Joined;
 import org.cactoos.iterable.Mapped;
 import org.cactoos.iterable.Shuffled;
-import org.eolang.lints.comments.LtAsciiOnly;
-import org.eolang.lints.errors.LtIncorrectUnlint;
 
 /**
  * Collection of lints for individual XML files, provided

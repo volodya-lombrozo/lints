@@ -21,66 +21,69 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.units;
+package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Map;
 import org.cactoos.io.ResourceOf;
-import org.cactoos.text.IoCheckedText;
+import org.cactoos.iterable.Filtered;
+import org.cactoos.iterable.Mapped;
+import org.cactoos.list.ListOf;
+import org.cactoos.set.SetOf;
 import org.cactoos.text.TextOf;
-import org.eolang.lints.Defect;
-import org.eolang.lints.Lint;
-import org.eolang.lints.Severity;
+import org.cactoos.text.UncheckedText;
 
 /**
- * Unit test without live file.
+ * Lint that all unlint metas point to existing lint.
  *
- * @since 0.0.30
+ * @since 0.0.38
  */
-public final class LtUnitTestWithoutLiveFile implements Lint<Map<String, XML>> {
+final class LtIncorrectUnlint implements Lint<XML> {
 
-    @Override
-    public String name() {
-        return "unit-test-without-live-file";
+    /**
+     * All possible names.
+     */
+    private final Collection<String> names;
+
+    /**
+     * Ctor.
+     * @param lints All possible lint names
+     */
+    LtIncorrectUnlint(final Iterable<String> lints) {
+        this.names = new SetOf<>(lints);
     }
 
     @Override
-    public Collection<Defect> defects(final Map<String, XML> pkg) {
-        final Collection<Defect> defects = new LinkedList<>();
-        for (final String name : pkg.keySet()) {
-            if (!name.endsWith("-test")) {
-                continue;
-            }
-            final String live = name.replace("-test", "");
-            if (pkg.containsKey(live)) {
-                continue;
-            }
-            defects.add(
-                new Defect.Default(
+    public String name() {
+        return "incorrect-unlint";
+    }
+
+    @Override
+    public Collection<Defect> defects(final XML entity) throws IOException {
+        return new ListOf<>(
+            new Mapped<Defect>(
+                xml -> new Defect.Default(
                     this.name(),
-                    Severity.WARNING,
-                    name,
-                    0,
-                    String.format(
-                        "Live \".eo\" file \"%s\" was not found for \"%s\"", live, name
-                    )
+                    Severity.ERROR,
+                    entity.xpath("/program/@name").stream().findFirst().orElse("unknown"),
+                    Integer.parseInt(xml.xpath("@line").get(0)),
+                    "Uselessly \"unlint\", because a lint with that name does not exist"
+                ),
+                new Filtered<>(
+                    xml -> !this.names.contains(xml.xpath("tail/text()").get(0)),
+                    entity.nodes("/program/metas/meta[head='unlint']")
                 )
-            );
-        }
-        return defects;
+            )
+        );
     }
 
     @Override
     public String motive() throws IOException {
-        return new IoCheckedText(
+        return new UncheckedText(
             new TextOf(
                 new ResourceOf(
-                    String.format(
-                        "org/eolang/motives/units/%s.md", this.name()
-                    )
+                    "org/eolang/motives/errors/lt-incorrect-unlint.md"
                 )
             )
         ).asString();

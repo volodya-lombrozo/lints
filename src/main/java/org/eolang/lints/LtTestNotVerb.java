@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.misc;
+package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
@@ -41,9 +41,6 @@ import org.cactoos.io.UncheckedInput;
 import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
-import org.eolang.lints.Defect;
-import org.eolang.lints.Lint;
-import org.eolang.lints.Severity;
 
 /**
  * Lint that checks test object name is a verb in singular.
@@ -52,7 +49,7 @@ import org.eolang.lints.Severity;
  * tense for test object name.
  * @since 0.0.22
  */
-public final class LtTestNotVerb implements Lint<XML> {
+final class LtTestNotVerb implements Lint<XML> {
 
     /**
      * The pattern to split kebab case.
@@ -67,7 +64,7 @@ public final class LtTestNotVerb implements Lint<XML> {
     /**
      * Ctor.
      */
-    public LtTestNotVerb() {
+    LtTestNotVerb() {
         this(LtTestNotVerb.defaultPosModel());
     }
 
@@ -75,7 +72,7 @@ public final class LtTestNotVerb implements Lint<XML> {
      * Ctor.
      * @param mdl Part-Of-Speech model
      */
-    public LtTestNotVerb(final POSModel mdl) {
+    LtTestNotVerb(final POSModel mdl) {
         this(new POSTaggerME(mdl));
     }
 
@@ -83,7 +80,7 @@ public final class LtTestNotVerb implements Lint<XML> {
      * Ctor.
      * @param pos Part-Of-Speech tagger
      */
-    public LtTestNotVerb(final POSTaggerME pos) {
+    LtTestNotVerb(final POSTaggerME pos) {
         this.model = pos;
     }
 

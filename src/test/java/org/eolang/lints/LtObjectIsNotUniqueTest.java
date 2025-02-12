@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.eolang.lints.errors;
+package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
@@ -29,7 +29,6 @@ import fixtures.ParsedEo;
 import matchers.DefectMatcher;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
-import org.eolang.lints.Defect;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
