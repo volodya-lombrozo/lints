@@ -30,7 +30,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
+import org.cactoos.text.IoCheckedText;
+import org.cactoos.text.TextOf;
 
 /**
  * Lints.
@@ -60,20 +63,7 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
-        final Collection<String> present = new ListOf<>();
-        this.lints.forEach(
-            lint -> {
-                try {
-                    present.addAll(
-                        lint.defects(xmir).stream()
-                            .map(Defect::rule)
-                            .collect(Collectors.toList())
-                    );
-                } catch (final IOException exception) {
-                    throw new IllegalStateException(exception);
-                }
-            }
-        );
+        final Collection<String> present = this.existingDefects(xmir);
         final Xnav xml = new Xnav(xmir.inner());
         final Set<String> unlints = xml.path("/program/metas/meta[head='unlint']/tail")
             .map(xnav -> xnav.text().get())
@@ -83,10 +73,9 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
             .forEach(
                 unlint ->
                     xml.path(
-                            String.format(
-                                "program/metas/meta[head='unlint' and tail='%s']/@line",
-                                unlint
-                            )
+                        String.format(
+                            "program/metas/meta[head='unlint' and tail='%s']/@line", unlint
+                        )
                         ).map(xnav -> xnav.text().get())
                         .collect(Collectors.toList())
                         .forEach(
@@ -95,7 +84,10 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
                                     new Defect.Default(
                                         this.name(),
                                         Severity.WARNING,
-                                        xml.element("program").attribute("name").text().orElse("unknown"),
+                                        xml.element("program")
+                                            .attribute("name")
+                                            .text()
+                                            .orElse("unknown"),
                                         Integer.parseInt(line),
                                         String.format(
                                             "Unlinting rule '%s' doesn't make sense, since there are no defects with it",
@@ -110,6 +102,32 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
 
     @Override
     public String motive() throws IOException {
-        throw new UnsupportedOperationException("#motive()");
+        return new IoCheckedText(
+            new TextOf(
+                new ResourceOf(
+                    String.format(
+                        "org/eolang/motives/misc/%s.md", this.name()
+                    )
+                )
+            )
+        ).asString();
+    }
+
+    private Collection<String> existingDefects(final XML xmir) {
+        final Collection<String> existing = new ListOf<>();
+        this.lints.forEach(
+            lint -> {
+                try {
+                    existing.addAll(
+                        lint.defects(xmir).stream()
+                            .map(Defect::rule)
+                            .collect(Collectors.toList())
+                    );
+                } catch (final IOException exception) {
+                    throw new IllegalStateException(exception);
+                }
+            }
+        );
+        return existing;
     }
 }
