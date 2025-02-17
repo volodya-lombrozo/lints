@@ -57,7 +57,7 @@ SOFTWARE.
                 <xsl:text>anonymous object</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:text> has duality in the application, which is prohibited</xsl:text>
+            <xsl:text> has both @name and @as attributes, which is prohibited due to duality in the application. Please use only one type of attributes.</xsl:text>
           </defect>
         </xsl:if>
       </xsl:for-each>
