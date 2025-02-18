@@ -48,6 +48,7 @@ public final class DefectMatcher extends BaseMatcher<Defect> {
         final Defect defect = (Defect) input;
         return this.saved(Matchers.greaterThanOrEqualTo(0)).matches(defect.line())
             && this.saved(Matchers.not(Matchers.emptyString())).matches(defect.text())
+            && this.saved(Matchers.not(Matchers.endsWith("."))).matches(defect.text())
             && this.saved(new GrammarMatcher()).matches(defect.text());
     }
 
