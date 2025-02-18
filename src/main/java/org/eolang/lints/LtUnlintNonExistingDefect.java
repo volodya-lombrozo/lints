@@ -37,7 +37,8 @@ import org.cactoos.text.TextOf;
 
 /**
  * Lints.
- * @since 0.0.0
+ *
+ * @since 0.0.40
  */
 final class LtUnlintNonExistingDefect implements Lint<XML> {
 
@@ -76,7 +77,8 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
                         String.format(
                             "program/metas/meta[head='unlint' and tail='%s']/@line", unlint
                         )
-                        ).map(xnav -> xnav.text().get())
+                        )
+                        .map(xnav -> xnav.text().get())
                         .collect(Collectors.toList())
                         .forEach(
                             line ->

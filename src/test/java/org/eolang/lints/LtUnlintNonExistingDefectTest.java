@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests for {@link LtUnlintNonExistingDefect}.
  *
- * @since 0.0.0
+ * @since 0.0.40
  */
 final class LtUnlintNonExistingDefectTest {
 
