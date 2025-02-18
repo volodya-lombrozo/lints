@@ -117,12 +117,15 @@ final class LtByXsl implements Lint<XML> {
                 );
             }
             defects.add(
-                new Defect.Default(
-                    this.rule,
-                    Severity.parsed(sever.get()),
-                    LtByXsl.findName(xmir),
-                    this.lineno(xml),
-                    xml.text().get()
+                new DfContext(
+                    new Defect.Default(
+                        this.rule,
+                        Severity.parsed(sever.get()),
+                        LtByXsl.findName(xmir),
+                        this.lineno(xml),
+                        xml.text().get()
+                    ),
+                    LtByXsl.context(xml)
                 )
             );
         }
@@ -165,6 +168,10 @@ final class LtByXsl implements Lint<XML> {
             );
         }
         return lineno;
+    }
+
+    private static String context(final Xnav defect) {
+        return defect.attribute("context").text().orElse("");
     }
 
     /**

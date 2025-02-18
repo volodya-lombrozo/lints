@@ -47,9 +47,9 @@ SOFTWARE.
               <xsl:value-of select="$line"/>
             </xsl:attribute>
             <xsl:if test="$line = '0'">
-                <xsl:attribute name="context">
-                  <xsl:value-of select="eo:defect-context(.)"/>
-                </xsl:attribute>
+              <xsl:attribute name="context">
+                <xsl:value-of select="eo:defect-context(.)"/>
+              </xsl:attribute>
             </xsl:if>
             <xsl:attribute name="severity">
               <xsl:text>critical</xsl:text>
