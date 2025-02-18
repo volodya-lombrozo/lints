@@ -125,7 +125,7 @@ final class LtByXsl implements Lint<XML> {
                         this.lineno(xml),
                         xml.text().get()
                     ),
-                    LtByXsl.context(xml)
+                    xml.attribute("context").text().orElse("")
                 )
             );
         }
@@ -168,10 +168,6 @@ final class LtByXsl implements Lint<XML> {
             );
         }
         return lineno;
-    }
-
-    private static String context(final Xnav defect) {
-        return defect.attribute("context").text().orElse("");
     }
 
     /**
