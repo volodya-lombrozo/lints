@@ -25,7 +25,7 @@ package org.eolang.lints;
 
 /**
  * Defect with context.
- * @since 0.0.0
+ * @since 0.0.40
  */
 final class DfContext implements Defect {
 
