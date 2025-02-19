@@ -13,7 +13,7 @@ QQ.io.stdout > @
     *
 ```
 
-Corrrect:
+Correct:
 
 ```eo
 [] > app
