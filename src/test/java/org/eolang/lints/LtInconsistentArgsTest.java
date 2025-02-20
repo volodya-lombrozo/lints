@@ -46,7 +46,7 @@ final class LtInconsistentArgsTest {
             new LtInconsistentArgs().defects(
                 new MapOf<>(
                     new MapEntry<>(
-                        "foo",
+                        "app",
                         new EoSyntax(
                             String.join(
                                 "\n",
