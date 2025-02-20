@@ -9,9 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -46,15 +44,17 @@ public final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                 local.forEach(
                     (base, counts) -> {
                         if (counts.stream().distinct().count() != 1L) {
-                            program.path(
+                            final List<Integer> lines = program.path(
                                     String.format(
                                         "//o[@base='%s']",
                                         base
                                     )
                                 )
                                 .map(o -> Integer.parseInt(o.attribute("line").text().orElse("0")))
-                                .forEach(
-                                    line -> defects.add(
+                                .collect(Collectors.toList());
+                            lines.forEach(
+                                line ->
+                                    defects.add(
                                         new Defect.Default(
                                             this.name(),
                                             Severity.WARNING,
@@ -62,12 +62,15 @@ public final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                                                 .text().orElse("unknown"),
                                             line,
                                             String.format(
-                                                "Object '%s' has arguments inconsistency",
-                                                base
+                                                "Object '%s' has arguments inconsistency: different number of arguments were passed in %s",
+                                                base,
+                                                LtInconsistentArgs.oppositeRefs(
+                                                    program, base, lines, line
+                                                )
                                             )
                                         )
                                     )
-                                );
+                            );
                         }
                     }
                 );
@@ -100,5 +103,31 @@ public final class LtInconsistentArgs implements Lint<Map<String, XML>> {
     @Override
     public String motive() throws IOException {
         throw new UnsupportedOperationException("#motive()");
+    }
+
+    private static String oppositeRefs(
+        final Xnav program,
+        final String base,
+        final List<Integer> lines,
+        final Integer problematic
+    ) {
+        final String source = program.element("program").attribute("name").text()
+            .orElse("unknown");
+        final StringBuilder out = new StringBuilder(0);
+        lines.forEach(
+            line -> {
+                if (!line.equals(problematic)) {
+                    out.append(
+                        String.format(
+                            "%s:%s:%d",
+                            source,
+                            base,
+                            line
+                        )
+                    );
+                }
+            }
+        );
+        return out.toString();
     }
 }
