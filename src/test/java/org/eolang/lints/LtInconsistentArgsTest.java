@@ -35,7 +35,7 @@ final class LtInconsistentArgsTest {
                     )
                 )
             ),
-            Matchers.hasSize(Matchers.greaterThan(0))
+            Matchers.hasSize(2)
         );
     }
 }
