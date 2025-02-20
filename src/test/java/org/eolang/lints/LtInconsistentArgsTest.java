@@ -38,4 +38,28 @@ final class LtInconsistentArgsTest {
             Matchers.hasSize(2)
         );
     }
+
+    @Test
+    void allowsConsistentArgumentsPassing() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are not empty, but they should",
+            new LtInconsistentArgs().defects(
+                new MapOf<>(
+                    new MapEntry<>(
+                        "foo",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# This is app",
+                                "[] > app",
+                                "  foo 42 > x",
+                                "  foo 52 > spb"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
+        );
+    }
 }
