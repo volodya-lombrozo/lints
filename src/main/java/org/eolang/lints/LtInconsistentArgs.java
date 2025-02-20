@@ -62,7 +62,7 @@ public final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                                                 .text().orElse("unknown"),
                                             line,
                                             String.format(
-                                                "Object '%s' has arguments inconsistency: different number of arguments were passed in %s",
+                                                "Object '%s' has arguments inconsistency: different number of arguments found in %s",
                                                 base,
                                                 LtInconsistentArgs.oppositeRefs(
                                                     program, base, lines, line
