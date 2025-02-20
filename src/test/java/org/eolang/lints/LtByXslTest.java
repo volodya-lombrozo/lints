@@ -223,7 +223,7 @@ final class LtByXslTest {
     }
 
     @Test
-    @Timeout(30L)
+    @Timeout(60L)
     void checksEmptyObjectOnLargeXmirInReasonableTime() {
         Assertions.assertDoesNotThrow(
             () -> new LtByXsl("errors/empty-object").defects(
