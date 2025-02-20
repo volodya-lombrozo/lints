@@ -26,7 +26,7 @@ asserts:
   - /defects[count(defect[@severity='warning'])=1]
   - /defects/defect[@line='2']
 document: |
-  <program name="foo.bar.xyz">
+  <program source="foo/bar/xyz.eo">
     <metas>
       <meta>
         <head>package</head>

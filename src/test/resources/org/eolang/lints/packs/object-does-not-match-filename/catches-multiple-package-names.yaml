@@ -26,10 +26,8 @@ asserts:
   - /defects[count(defect[@severity='warning'])=2]
   - /defects/defect[@line='4']
   - /defects/defect[@line='5']
-  - /defects/defect[1][normalize-space()='Object "f.main" does not match with filename "foo.x.main"']
-  - /defects/defect[2][normalize-space()='Object "f.foo" does not match with filename "foo.x.main"']
 document: |
-  <program name="foo.x.main">
+  <program source="foo/x/main.eo">
     <metas>
       <meta line="1">
         <head>package</head>

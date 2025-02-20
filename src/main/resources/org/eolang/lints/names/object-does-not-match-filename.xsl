@@ -27,11 +27,9 @@ SOFTWARE.
   <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:variable name="package" select="/program/metas/meta[head='package'][1]"/>
-  <xsl:variable name="program" select="/program/@name"/>
-  <xsl:variable name="tested" select="/program/metas/meta[head='tests']"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="not($tested)">
+      <xsl:if test="not(/program/metas/meta[head='tests']) and /program/@source">
         <xsl:apply-templates select="/program/objects/o" mode="live"/>
       </xsl:if>
     </defects>
@@ -47,16 +45,21 @@ SOFTWARE.
         </xsl:otherwise>
       </xsl:choose>
     </xsl:variable>
-    <xsl:if test="$program != $opath">
+    <xsl:variable name="source" as="xs:string" select="replace($opath, '\.', '/')"/>
+    <xsl:if test="not(starts-with(/program/@source, concat($source, '.')))">
       <defect>
         <xsl:attribute name="line">
           <xsl:value-of select="eo:lineno(@line)"/>
         </xsl:attribute>
         <xsl:attribute name="severity">warning</xsl:attribute>
-        <xsl:text>Object </xsl:text>
+        <xsl:text>It is expected that the </xsl:text>
         <xsl:value-of select="eo:escape($opath)"/>
-        <xsl:text> does not match with filename </xsl:text>
-        <xsl:value-of select="eo:escape($program)"/>
+        <xsl:text> object is coming from either </xsl:text>
+        <xsl:value-of select="eo:escape(concat($source, '.eo'))"/>
+        <xsl:text> or </xsl:text>
+        <xsl:value-of select="eo:escape(concat($source, '.phi'))"/>
+        <xsl:text> file, however its "program/@source" points to </xsl:text>
+        <xsl:value-of select="eo:escape(/program/@source)"/>
       </defect>
     </xsl:if>
   </xsl:template>

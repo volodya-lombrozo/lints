@@ -25,7 +25,7 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='warning'])=0]
 document: |
-  <program name="foo.bar.app">
+  <program source="foo/bar/app.phi">
     <metas>
       <meta>
         <head>package</head>

@@ -25,7 +25,7 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='warning'])=0]
 document: |
-  <program name="foo">
+  <program source="foo.eo">
     <objects>
       <o line="2" name="foo" pos="0"/>
     </objects>
