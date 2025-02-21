@@ -73,6 +73,7 @@ final class LtInconsistentArgsTest {
                     new MapEntry<>(
                         "app",
                         new EoSyntax(
+                            "f-one-arg",
                             String.join(
                                 "\n",
                                 "# App",
@@ -84,11 +85,12 @@ final class LtInconsistentArgsTest {
                     new MapEntry<>(
                         "main",
                         new EoSyntax(
+                            "f-three-arg",
                             String.join(
                                 "\n",
                                 "# Main",
                                 "[] > main",
-                                "  f 42 52 > x"
+                                "  f 1 2 3 > y"
                             )
                         ).parsed()
                     )

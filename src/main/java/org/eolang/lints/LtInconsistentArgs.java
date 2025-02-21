@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +26,7 @@ public final class LtInconsistentArgs implements Lint<Map<String, XML>> {
     @Override
     public Collection<Defect> defects(final Map<String, XML> pkg) throws IOException {
         final List<Defect> defects = new LinkedList<>();
-//        final Map<String, List<Integer>> whole = new HashMap<>();
+        final Map<Xnav, Map<String, List<Integer>>> whole = new HashMap<>(0);
         pkg.values().forEach(
             xmir -> {
                 final Map<String, List<Integer>> local = new HashMap<>(0);
@@ -41,15 +40,31 @@ public final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                         ).add(args);
                     }
                 );
-                local.forEach(
-                    (base, counts) -> {
-                        if (counts.stream().distinct().count() != 1L) {
-                            final List<Integer> lines = program.path(
-                                    String.format(
-                                        "//o[@base='%s']",
-                                        base
-                                    )
-                                )
+                whole.put(program, local);
+            }
+        );
+        final Map<String, List<Integer>> merged = new HashMap<>(0);
+        for (final Map<String, List<Integer>> localized : whole.values()) {
+            for (final Map.Entry<String, List<Integer>> entry : localized.entrySet()) {
+                merged.computeIfAbsent(entry.getKey(), k -> new ArrayList<>())
+                    .addAll(entry.getValue());
+            }
+        }
+        final Map<String, List<Xnav>> inverted = new HashMap<>(0);
+        for (final Map.Entry<Xnav, Map<String, List<Integer>>> entry : whole.entrySet()) {
+            final Xnav program = entry.getKey();
+            for (final Map.Entry<String, List<Integer>> local : entry.getValue().entrySet()) {
+                final String base = local.getKey();
+                inverted.computeIfAbsent(base, k -> new ArrayList<>()).add(program);
+            }
+        }
+        merged.forEach(
+            (base, counts) -> {
+                if (counts.stream().distinct().count() != 1L) {
+                    final List<Xnav> programs = inverted.get(base);
+                    programs.forEach(
+                        program -> {
+                            final List<Integer> lines = program.path(String.format("//o[@base='%s']", base))
                                 .map(o -> Integer.parseInt(o.attribute("line").text().orElse("0")))
                                 .collect(Collectors.toList());
                             lines.forEach(
@@ -61,42 +76,16 @@ public final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                                             program.element("program").attribute("name")
                                                 .text().orElse("unknown"),
                                             line,
-                                            String.format(
-                                                "Object '%s' has arguments inconsistency: different number of arguments found in %s",
-                                                base,
-                                                LtInconsistentArgs.oppositeRefs(
-                                                    program, base, lines, line
-                                                )
-                                            )
+                                            String.format("Object '%s' has arguments inconsistency", base)
                                         )
                                     )
                             );
                         }
-                    }
-                );
+                    );
+                }
             }
         );
-//        whole.forEach(
-//            new BiConsumer<String, List<Integer>>() {
-//                @Override
-//                public void accept(final String base, final List<Integer> counts) {
-//                    if (counts.stream().distinct().count() != 1L) {
-//                        defects.add(
-//                            new Defect.Default(
-//                                LtInconsistentArgs.this.name(),
-//                                Severity.WARNING,
-//                                "",
-//                                0,
-//                                String.format(
-//                                    "Object '%s' has arguments inconsistency",
-//                                    base
-//                                )
-//                            )
-//                        );
-//                    }
-//                }
-//            }
-//        );
+
         return defects;
     }
 
