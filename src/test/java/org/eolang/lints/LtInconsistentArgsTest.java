@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests for {@link LtInconsistentArgs}.
  *
- * @since 0.41.0
+ * @since 0.0.41
  */
 final class LtInconsistentArgsTest {
 
