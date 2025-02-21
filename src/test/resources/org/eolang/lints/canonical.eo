@@ -23,7 +23,6 @@
 +architect yegor256@gmail.com
 +home https://www.eolang.org
 +package canonical
-+unlint object-does-not-match-filename
 +version 0.0.0
 
 # Times table, which is a canonical example of EO program.
