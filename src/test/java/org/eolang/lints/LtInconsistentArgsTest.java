@@ -1,5 +1,6 @@
 package org.eolang.lints;
 
+import com.jcabi.xml.XML;
 import java.io.IOException;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
@@ -54,6 +55,74 @@ final class LtInconsistentArgsTest {
                                 "[] > app",
                                 "  foo 42 > x",
                                 "  foo 52 > spb"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void catchesInconsistencyAcrossPrograms() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are not caught across multiple programs, but they should",
+            new LtInconsistentArgs().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "app",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# App",
+                                "[] > app",
+                                "  f 42 > x"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "main",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# Main",
+                                "[] > main",
+                                "  f 42 52 > x"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.hasSize(2)
+        );
+    }
+
+    @Test
+    void allowsConsistentArgumentsAcrossPrograms() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are not empty, but they should",
+            new LtInconsistentArgs().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "fizz",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# Fizz",
+                                "[] > fizz",
+                                "  f 42 > x"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "buzz",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# Buzz",
+                                "[a] > main",
+                                "  f a > x"
                             )
                         ).parsed()
                     )
