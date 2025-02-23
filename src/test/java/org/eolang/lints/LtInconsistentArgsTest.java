@@ -160,7 +160,7 @@ final class LtInconsistentArgsTest {
     @Test
     void catchesInconsistencyAcrossProgramsWithAlias() throws IOException {
         MatcherAssert.assertThat(
-            "Defects are not caught across multiple programs, but they should",
+            "Defects are not caught across multiple programs with alias, but they should",
             new LtInconsistentArgs().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>(

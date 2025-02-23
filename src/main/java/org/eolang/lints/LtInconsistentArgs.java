@@ -52,11 +52,11 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
     public Collection<Defect> defects(final Map<String, XML> pkg) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
         final Map<Xnav, Map<String, List<Integer>>> whole = LtInconsistentArgs.scanUsages(pkg);
-        final Map<String, List<Xnav>> inverted = LtInconsistentArgs.basesOccurrences(whole);
+        final Map<String, List<Xnav>> bases = LtInconsistentArgs.baseOccurrences(whole);
         LtInconsistentArgs.mergedPrograms(whole).forEach(
             (base, counts) -> {
                 if (counts.stream().distinct().count() != 1L) {
-                    final List<Xnav> programs = inverted.get(base);
+                    final List<Xnav> programs = bases.get(base);
                     programs.forEach(
                         program ->
                             program.path(
@@ -99,6 +99,11 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
         ).asString();
     }
 
+    /**
+     * Scan all usages across package.
+     * @param pkg Package with programs
+     * @return Map of all object usages: program is the key, object name, arguments is the value.
+     */
     private static Map<Xnav, Map<String, List<Integer>>> scanUsages(final Map<String, XML> pkg) {
         final Map<Xnav, Map<String, List<Integer>>> usages = new HashMap<>(0);
         pkg.values().forEach(
@@ -120,6 +125,11 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
         return usages;
     }
 
+    /**
+     * Merge all object usages into single map.
+     * @param whole All object usages across all programs
+     * @return Merged object usages as a map
+     */
     private static Map<String, List<Integer>> mergedPrograms(
         final Map<Xnav, Map<String, List<Integer>>> whole
     ) {
@@ -134,7 +144,12 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
         return merged;
     }
 
-    private static Map<String, List<Xnav>> basesOccurrences(
+    /**
+     * Object occurrences across all programs, grouped by object base attribute.
+     * @param whole All object usages across all programs.
+     * @return Grouped base occurrences in the programs.
+     */
+    private static Map<String, List<Xnav>> baseOccurrences(
         final Map<Xnav, Map<String, List<Integer>>> whole
     ) {
         final Map<String, List<Xnav>> result = new HashMap<>(0);
