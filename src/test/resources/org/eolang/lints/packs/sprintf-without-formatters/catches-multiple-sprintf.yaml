@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/misc/sprintf-without-formatters.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=2]
+  - /defects/defect[@line='4']
+  - /defects/defect[@line='7']
+input: |
+  # App.
+  [] > app
+    QQ.io.stdout > @
+      QQ.txt.sprintf
+        "Hello, Jeff Your account is $200"
+        *
+      QQ.txt.sprintf
+        "We are good"
+        * f
