@@ -156,4 +156,41 @@ final class LtInconsistentArgsTest {
             Matchers.emptyIterable()
         );
     }
+
+    @Test
+    void catchesInconsistencyAcrossProgramsWithAlias() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are not caught across multiple programs, but they should",
+            new LtInconsistentArgs().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "text-fqn",
+                        new EoSyntax(
+                            "text-fqn",
+                            String.join(
+                                "\n",
+                                "# App",
+                                "[] > app",
+                                "  Q.org.eolang.txt.text \"f\" \"y\" > x"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "text-alias",
+                        new EoSyntax(
+                            "text-alias",
+                            String.join(
+                                "\n",
+                                "+alias org.eolang.txt.text",
+                                "# Main",
+                                "[] > main",
+                                "  text \"f\" > y"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.hasSize(2)
+        );
+    }
 }
