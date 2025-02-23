@@ -4,14 +4,21 @@
 version = 1
 [[annotations]]
 path = [
+    "**/*.jpg",
+    "**/*.json",
+    "**/*.md",
+    "**/*.pdf",
+    "**/*.png",
+    "**/*.svg",
+    "**/.gitignore",
     ".gitattributes",
     ".gitignore",
     ".gitleaksignore",
     ".pdd",
-    "**/*.md",
-    "src/test/resources/META-INF/MANIFEST.MF",
+    ".xcop",
     "README.md",
-    "renovate.json"
+    "renovate.json",
+    "src/test/resources/META-INF/MANIFEST.MF",
 ]
 precedence = "override"
 SPDX-FileCopyrightText = "Copyright (c) 2025 Yegor Bugayenko"
