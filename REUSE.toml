@@ -8,7 +8,8 @@ path = [
     ".gitignore",
     ".gitleaksignore",
     ".pdd",
-    "Gemfile.lock",
+    "**/*.md",
+    "src/test/resources/META-INF/MANIFEST.MF",
     "README.md",
     "renovate.json"
 ]
