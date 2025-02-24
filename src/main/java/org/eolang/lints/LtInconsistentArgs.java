@@ -39,27 +39,24 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                 if (counts.stream().distinct().count() != 1L) {
                     final List<Xnav> programs = bases.get(base);
                     programs.forEach(
-                        program ->
-                            program.path(
-                                String.format("//o[@base='%s']", base)
-                                )
-                                .map(o -> Integer.parseInt(o.attribute("line").text().orElse("0")))
-                                .forEach(
-                                    line ->
-                                        defects.add(
-                                            new Defect.Default(
-                                                this.name(),
-                                                Severity.WARNING,
-                                                program.element("program").attribute("name")
-                                                    .text().orElse("unknown"),
-                                                line,
-                                                String.format(
-                                                    "Object '%s' has arguments inconsistency",
-                                                    base
-                                                )
+                        program -> program.path(String.format("//o[@base='%s']", base))
+                            .map(o -> Integer.parseInt(o.attribute("line").text().orElse("0")))
+                            .forEach(
+                                line ->
+                                    defects.add(
+                                        new Defect.Default(
+                                            this.name(),
+                                            Severity.WARNING,
+                                            program.element("program").attribute("name")
+                                                .text().orElse("unknown"),
+                                            line,
+                                            String.format(
+                                                "Object '%s' has arguments inconsistency",
+                                                base
                                             )
                                         )
-                                )
+                                    )
+                            )
                     );
                 }
             }
