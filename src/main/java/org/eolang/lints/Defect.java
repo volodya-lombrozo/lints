@@ -58,6 +58,12 @@ public interface Defect {
     String version();
 
     /**
+     * Defect context.
+     * @return Context of the defect
+     */
+    String context();
+
+    /**
      * Default.
      *
      * @since 0.0.1
@@ -148,6 +154,11 @@ public interface Defect {
         @Override
         public String version() {
             return Manifests.read("Lints-Version");
+        }
+
+        @Override
+        public String context() {
+            return "Context is empty";
         }
     }
 
