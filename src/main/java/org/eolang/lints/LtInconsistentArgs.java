@@ -21,6 +21,11 @@ import org.cactoos.text.UncheckedText;
  * Lint for checking arguments inconsistency provided to the objects.
  *
  * @since 0.0.41
+ * @todo #259:60min Optimize performance of inconsistent arguments finding.
+ *  Instead of re-collecting objects in nested loops, we should merge all objects
+ *  from all programs into single XMIR under '<objects/>' element. After objects
+ *  are merged, we can iterate over all the objects there only once, and find
+ *  inconsistencies.
  */
 final class LtInconsistentArgs implements Lint<Map<String, XML>> {
 
