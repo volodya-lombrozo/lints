@@ -17,7 +17,7 @@ import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
 
 /**
- * Lints.
+ * Lint for checking `+unlint` meta to suppress non-existing defects in single program scope.
  *
  * @since 0.0.40
  */
