@@ -20,6 +20,7 @@ import org.cactoos.text.TextOf;
 
 /**
  * Lint for checking `+unlint` meta to suppress non-existing defects in WPA scope.
+ *
  * @see LtUnlintNonExistingDefect
  * @since 0.0.42
  */
@@ -69,7 +70,7 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
                                     line ->
                                         defects.add(
                                             new Defect.Default(
-                                                name(),
+                                                this.name(),
                                                 Severity.WARNING,
                                                 xml.element("program")
                                                     .attribute("name")
@@ -102,6 +103,11 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
         ).asString();
     }
 
+    /**
+     * Find existing defects.
+     * @param pkg Package with programs to scan
+     * @return Map of existing defects
+     */
     private Map<XML, List<String>> existingDefects(final Map<String, XML> pkg) {
         final Map<XML, List<String>> aggregated = new HashMap<>(0);
         this.lints.forEach(
@@ -109,13 +115,19 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
                 try {
                     final Collection<Defect> defects = wpl.defects(pkg);
                     pkg.values().forEach(
-                        program -> aggregated.put(program, new ListOf<>())
-                    );
-                    defects.forEach(
-                        defect -> aggregated.computeIfAbsent(
-                            pkg.get(defect.program()),
-                            d -> new ListOf<>()
-                        ).add(defect.rule())
+                        program ->
+                            aggregated.merge(
+                                program,
+                                new ListOf<>(
+                                    defects.stream()
+                                        .map(Defect::rule)
+                                        .collect(Collectors.toList())
+                                ),
+                                (existing, incoming) -> {
+                                    existing.addAll(incoming);
+                                    return existing;
+                                }
+                            )
                     );
                 } catch (final IOException exception) {
                     throw new IllegalStateException(

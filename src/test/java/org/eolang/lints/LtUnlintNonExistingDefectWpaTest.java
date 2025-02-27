@@ -88,4 +88,32 @@ final class LtUnlintNonExistingDefectWpaTest {
             Matchers.emptyIterable()
         );
     }
+
+    @Test
+    void reportsWithWpaSupplied() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are empty, but they should not",
+            new LtUnlintNonExistingDefectWpa(
+                new PkWpa()
+            ).defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "e-tests",
+                        new EoSyntax(
+                            "e-tests",
+                            String.join(
+                                "\n",
+                                "+unlint unit-test-without-live-file",
+                                "",
+                                "# E tests.",
+                                "[] > runs-e"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>("e", new XMLDocument("<program/>"))
+                )
+            ),
+            Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
 }

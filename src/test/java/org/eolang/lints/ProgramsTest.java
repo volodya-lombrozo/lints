@@ -61,6 +61,7 @@ final class ProgramsTest {
                     String.join(
                         "\n",
                         "+unlint unit-test-missing",
+                        "",
                         "# Test.",
                         "[] > foo"
                     )
