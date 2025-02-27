@@ -20,6 +20,9 @@ import org.cactoos.text.TextOf;
 
 /**
  * Lint for checking `+unlint` meta to suppress non-existing defects in WPA scope.
+ * This lint was not included in {@link LtUnlintNonExistingDefect}, because we need
+ * to aggregate the XMIR defects using supplied lints. In {@link LtUnlintNonExistingDefect}
+ * we work with single program scope, while this class works with WPA scope.
  *
  * @see LtUnlintNonExistingDefect
  * @since 0.0.42
