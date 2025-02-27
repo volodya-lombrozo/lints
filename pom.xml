@@ -339,6 +339,15 @@
     </profile>
   </profiles>
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>com.qulice</groupId>
+          <artifactId>qulice-maven-plugin</artifactId>
+          <version>0.24.0</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
     <plugins>
       <plugin>
         <groupId>com.github.spotbugs</groupId>
