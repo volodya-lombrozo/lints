@@ -61,32 +61,31 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
                     .stream()
                     .filter(unlint -> !present.contains(unlint))
                     .forEach(
-                        unlint ->
-                            xml.path(
-                                String.format(
-                                    "program/metas/meta[head='unlint' and tail='%s']/@line", unlint
-                                )
-                                )
-                                .map(xnav -> xnav.text().get())
-                                .collect(Collectors.toList())
-                                .forEach(
-                                    line ->
-                                        defects.add(
-                                            new Defect.Default(
-                                                this.name(),
-                                                Severity.WARNING,
-                                                xml.element("program")
-                                                    .attribute("name")
-                                                    .text()
-                                                    .orElse("unknown"),
-                                                Integer.parseInt(line),
-                                                String.format(
-                                                    "Unlinting rule '%s' doesn't make sense, since there are no defects with it",
-                                                    unlint
-                                                )
+                        unlint -> xml.path(
+                            String.format(
+                                "program/metas/meta[head='unlint' and tail='%s']/@line", unlint
+                            )
+                            )
+                            .map(xnav -> xnav.text().get())
+                            .collect(Collectors.toList())
+                            .forEach(
+                                line ->
+                                    defects.add(
+                                        new Defect.Default(
+                                            this.name(),
+                                            Severity.WARNING,
+                                            xml.element("program")
+                                                .attribute("name")
+                                                .text()
+                                                .orElse("unknown"),
+                                            Integer.parseInt(line),
+                                            String.format(
+                                                "Unlinting rule '%s' doesn't make sense, since there are no defects with it",
+                                                unlint
                                             )
                                         )
-                                )
+                                    )
+                            )
                     );
             }
         );
@@ -108,6 +107,7 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
 
     /**
      * Find existing defects.
+     *
      * @param pkg Package with programs to scan
      * @return Map of existing defects
      */
