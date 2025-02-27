@@ -36,6 +36,7 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
 
     /**
      * Ctor.
+     *
      * @param lnts Lints
      */
     LtUnlintNonExistingDefectWpa(final Iterable<Lint<Map<String, XML>>> lnts) {
@@ -69,22 +70,21 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
                             .map(xnav -> xnav.text().get())
                             .collect(Collectors.toList())
                             .forEach(
-                                line ->
-                                    defects.add(
-                                        new Defect.Default(
-                                            this.name(),
-                                            Severity.WARNING,
-                                            xml.element("program")
-                                                .attribute("name")
-                                                .text()
-                                                .orElse("unknown"),
-                                            Integer.parseInt(line),
-                                            String.format(
-                                                "Unlinting rule '%s' doesn't make sense, since there are no defects with it",
-                                                unlint
-                                            )
+                                line -> defects.add(
+                                    new Defect.Default(
+                                        this.name(),
+                                        Severity.WARNING,
+                                        xml.element("program")
+                                            .attribute("name")
+                                            .text()
+                                            .orElse("unknown"),
+                                        Integer.parseInt(line),
+                                        String.format(
+                                            "Unlinting rule '%s' doesn't make sense, since there are no defects with it",
+                                            unlint
                                         )
                                     )
+                                )
                             )
                     );
             }
