@@ -104,4 +104,24 @@ final class LtUnlintNonExistingDefectTest {
             Matchers.emptyIterable()
         );
     }
+
+    @Test
+    void allowsUnlintingExistingWpaDefects() throws IOException {
+        MatcherAssert.assertThat(
+            "Lint should not complain, since program has WPA defects",
+            new LtUnlintNonExistingDefect(
+                new ListOf<>()
+            ).defects(
+                new EoSyntax(
+                    String.join(
+                        "\n",
+                        "+unlint unit-test-missing",
+                        "# Foo",
+                        "[] > foo"
+                    )
+                ).parsed()
+            ),
+            Matchers.emptyIterable()
+        );
+    }
 }
