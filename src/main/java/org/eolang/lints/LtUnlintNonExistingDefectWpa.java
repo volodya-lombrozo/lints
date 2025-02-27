@@ -62,10 +62,11 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
                     .stream()
                     .filter(unlint -> !present.contains(unlint))
                     .forEach(
-                        unlint -> xml.path(
-                            String.format(
-                                "program/metas/meta[head='unlint' and tail='%s']/@line", unlint
-                            )
+                        unlint -> xml
+                            .path(
+                                String.format(
+                                    "program/metas/meta[head='unlint' and tail='%s']/@line", unlint
+                                )
                             )
                             .map(xnav -> xnav.text().get())
                             .collect(Collectors.toList())
