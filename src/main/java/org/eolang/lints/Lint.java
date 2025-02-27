@@ -13,6 +13,9 @@ import java.util.Collection;
  *
  * @param <T> The type of entity to analyze
  * @since 0.0.1
+ * @todo #368:90min Implement lint caching decorator.
+ *  We should cache `Lint.defects()` to cache found defects when calling
+ *  particular lint. Don't forget to add unit tests, and benchmark tests.
  */
 public interface Lint<T> {
 
