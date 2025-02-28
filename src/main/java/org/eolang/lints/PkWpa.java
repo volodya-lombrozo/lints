@@ -7,6 +7,7 @@ package org.eolang.lints;
 import com.jcabi.xml.XML;
 import java.util.Map;
 import org.cactoos.iterable.IterableEnvelope;
+import org.cactoos.iterable.Joined;
 import org.cactoos.iterable.Mapped;
 import org.cactoos.iterable.Shuffled;
 import org.cactoos.list.ListOf;
@@ -22,19 +23,29 @@ import org.cactoos.list.ListOf;
 final class PkWpa extends IterableEnvelope<Lint<Map<String, XML>>> {
 
     /**
+     * WPA lints.
+     */
+    private static final Iterable<Lint<Map<String, XML>>> WPA = new ListOf<>(
+        new LtUnitTestMissing(),
+        new LtUnitTestWithoutLiveFile(),
+        new LtIncorrectAlias(),
+        new LtObjectIsNotUnique(),
+        new LtAtomIsNotUnique()
+    );
+
+    /**
      * Ctor.
      */
     PkWpa() {
         super(
             new Shuffled<>(
-                new Mapped<>(
-                    lnt -> new LtWpaUnlint(lnt),
-                    new ListOf<>(
-                        new LtUnitTestMissing(),
-                        new LtUnitTestWithoutLiveFile(),
-                        new LtIncorrectAlias(),
-                        new LtObjectIsNotUnique(),
-                        new LtAtomIsNotUnique()
+                new Mapped<Lint<Map<String, XML>>>(
+                    LtWpaUnlint::new,
+                    new Joined<Lint<Map<String, XML>>>(
+                        PkWpa.WPA,
+                        new ListOf<>(
+                            new LtUnlintNonExistingDefectWpa(PkWpa.WPA)
+                        )
                     )
                 )
             )

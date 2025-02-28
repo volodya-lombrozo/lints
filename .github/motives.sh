@@ -21,7 +21,7 @@ while IFS= read -r f; do
   echo "${n} -> $(du -b "${html}" | cut -f1) bytes"
 done < <(find src/main/resources/org/eolang/motives -name '*.md')
 
-function list_them() {
+list_them() {
   printf "<ul>\n"
   while IFS= read -r f; do
     n=$(basename "${f}" ".html")
@@ -31,7 +31,7 @@ function list_them() {
   printf '</ul>\n'
 }
 
-function head() {
+head() {
   printf '<html>\n'
   printf '<head>\n'
   printf '<meta charset="UTF-8"/>\n'
@@ -41,7 +41,7 @@ function head() {
   printf '<body><section><article>\n'
 }
 
-function tail() {
+tail() {
   printf '<p>Published on %s.</p>\n' "$(date)"
   printf '</article></section></body></html>'
 }
