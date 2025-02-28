@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/mandatory-spdx.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=1]
+input: |
+  +architect jeff@google.com
+
+  # No comments.
+  [] > f

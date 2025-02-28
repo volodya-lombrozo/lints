@@ -62,9 +62,12 @@ final class ProgramTest {
                     "com.example.foo",
                     String.join(
                         "\n",
+                        "+spdx SPDX-FileCopyrightText Copyright (c) 2016-2025 Objectionary.com",
+                        "+spdx SPDX-License-Identifier: MIT",
                         "+home https://www.eolang.org",
                         "+package com.example",
                         "+version 0.0.0",
+                        "+unlint unsorted-metas",
                         "",
                         "# This is just a test object with no functionality.",
                         "[] > foo",
@@ -94,6 +97,7 @@ final class ProgramTest {
                             "+unlint mandatory-version",
                             "+unlint comment-too-short",
                             "+unlint unsorted-metas",
+                            "+unlint mandatory-spdx",
                             "# Test.",
                             "[] > foo"
                         )
@@ -246,7 +250,8 @@ final class ProgramTest {
                 "mandatory-home",
                 "mandatory-version",
                 "mandatory-package",
-                "comment-too-short"
+                "comment-too-short",
+                "mandatory-spdx"
             ).defects(),
             Matchers.emptyIterable()
         );
