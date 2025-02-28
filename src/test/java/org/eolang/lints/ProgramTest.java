@@ -49,6 +49,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
  *  other classes in size too, for instance smaller classes (standard program),
  *  large class (JNA pointer), x-large class, and xxl class. Don't forget to
  *  adjust lint-summary.txt file to capture all the measurements.
+ * @todo #354:30min Normalize SPDX strings in EO test programs.
+ *  Instead of using `String.format()` to compose SPDX parts, we should inline it.
+ *  We using it now, since <a href="https://github.com/fsfe/reuse-tool/issues/92">this</a>
+ *  issue exists with reuse lint tool. Don't forget to normalize strings in all test
+ *  programs, created as Java strings.
  */
 @ExtendWith(MktmpResolver.class)
 final class ProgramTest {
@@ -62,8 +67,10 @@ final class ProgramTest {
                     "com.example.foo",
                     String.join(
                         "\n",
-                        "+spdx SPDX-FileCopyrightText Copyright (c) 2016-2025 Objectionary.com",
-                        "+spdx SPDX-License-Identifier: MIT",
+                        "+spdx SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com",
+                        String.format(
+                            "+spdx SPDX-%s", "License-Identifier: MIT"
+                        ),
                         "+home https://www.eolang.org",
                         "+package com.example",
                         "+version 0.0.0",
