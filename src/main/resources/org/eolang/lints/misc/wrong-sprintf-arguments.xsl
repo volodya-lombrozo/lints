@@ -67,16 +67,18 @@
           <xsl:otherwise>
             <xsl:variable name="declared">
               <xsl:variable name="txt" select="translate($text, '-', '')"/>
+              <!-- First, replace %% with a unique placeholder to avoid counting it as a formatter -->
+              <xsl:variable name="escaped" select="replace($txt, '(25)(25)', 'ESCAPED_PERCENT')"/>
               <!-- %s -->
-              <xsl:variable name="strings" select="count(tokenize($txt, '2573'))"/>
+              <xsl:variable name="strings" select="count(tokenize($escaped, '2573'))"/>
               <!-- %d -->
-              <xsl:variable name="numbers" select="count(tokenize($txt, '2564'))"/>
+              <xsl:variable name="numbers" select="count(tokenize($escaped, '2564'))"/>
               <!-- %f -->
-              <xsl:variable name="floats" select="count(tokenize($txt, '2566'))"/>
+              <xsl:variable name="floats" select="count(tokenize($escaped, '2566'))"/>
               <!-- %x -->
-              <xsl:variable name="bytes" select="count(tokenize($txt, '2578'))"/>
+              <xsl:variable name="bytes" select="count(tokenize($escaped, '2578'))"/>
               <!-- %b -->
-              <xsl:variable name="bools" select="count(tokenize($txt, '2562'))"/>
+              <xsl:variable name="bools" select="count(tokenize($escaped, '2562'))"/>
               <xsl:value-of select="$strings + $numbers + $floats + $bytes + $bools - 5"/>
             </xsl:variable>
             <xsl:variable name="used">
