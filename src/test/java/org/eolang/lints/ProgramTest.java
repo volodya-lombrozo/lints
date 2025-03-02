@@ -49,6 +49,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
  *  other classes in size too, for instance smaller classes (standard program),
  *  large class (JNA pointer), x-large class, and xxl class. Don't forget to
  *  adjust lint-summary.txt file to capture all the measurements.
+ * @checkstyle MethodBodyCommentsCheck (50 lines)
  */
 @ExtendWith(MktmpResolver.class)
 final class ProgramTest {
@@ -65,6 +66,10 @@ final class ProgramTest {
                         "+home https://www.eolang.org",
                         "+package com.example",
                         "+version 0.0.0",
+                        // REUSE-IgnoreStart
+                        "+spdx SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com",
+                        "+spdx SPDX-License-Identifier: MIT",
+                        // REUSE-IgnoreEnd
                         "",
                         "# This is just a test object with no functionality.",
                         "[] > foo",
@@ -94,6 +99,7 @@ final class ProgramTest {
                             "+unlint mandatory-version",
                             "+unlint comment-too-short",
                             "+unlint unsorted-metas",
+                            "+unlint mandatory-spdx",
                             "# Test.",
                             "[] > foo"
                         )
@@ -246,7 +252,8 @@ final class ProgramTest {
                 "mandatory-home",
                 "mandatory-version",
                 "mandatory-package",
-                "comment-too-short"
+                "comment-too-short",
+                "mandatory-spdx"
             ).defects(),
             Matchers.emptyIterable()
         );
