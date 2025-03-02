@@ -149,8 +149,6 @@ final class ProgramTest {
                     new InputOf(
                         String.join(
                             "\n",
-                            "# This is the license",
-                            "",
                             "+version 8.8.8-beta",
                             "+alias org.eolang.txt.sprintf",
                             "+alias org . eolang . txt . broken",
@@ -180,7 +178,7 @@ final class ProgramTest {
                         Matchers.allOf(
                             Matchers.containsString("alias-too-long ERROR"),
                             Matchers.containsString("The alias has too many parts"),
-                            Matchers.containsString(":5")
+                            Matchers.containsString(":3")
                         )
                     )
                 )
