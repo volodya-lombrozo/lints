@@ -63,14 +63,13 @@ final class ProgramTest {
                     "com.example.foo",
                     String.join(
                         "\n",
+                        "+home https://www.eolang.org",
+                        "+package com.example",
+                        "+version 0.0.0",
                         // REUSE-IgnoreStart
                         "+spdx SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com",
                         "+spdx SPDX-License-Identifier: MIT",
                         // REUSE-IgnoreEnd
-                        "+home https://www.eolang.org",
-                        "+package com.example",
-                        "+version 0.0.0",
-                        "+unlint unsorted-metas",
                         "",
                         "# This is just a test object with no functionality.",
                         "[] > foo",
