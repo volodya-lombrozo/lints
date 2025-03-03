@@ -23,7 +23,7 @@ final class MonoLintsTest {
     @Test
     void staysPackagePrivate() {
         ArchRuleDefinition.classes()
-            .that().haveSimpleName(MonoLintNames.class.getSimpleName())
+            .that().haveSimpleName("MonoLints")
             .should().bePackagePrivate()
             .check(new ClassFileImporter()
                 .withImportOption(new ImportOption.DoNotIncludeTests())
