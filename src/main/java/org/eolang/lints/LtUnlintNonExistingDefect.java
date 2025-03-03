@@ -31,19 +31,17 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
     /**
      * Lints to exclude.
      */
-    private final Collection<String> exclude = new ListOf<>(new PkWpa().iterator())
-        .stream()
-        .map(Lint::name)
-        .filter(name -> !this.name().equals(name))
-        .collect(Collectors.toList());
+    private final Collection<String> excluded;
 
     /**
      * Ctor.
      *
      * @param lnts Lints
+     * @param exld Lints to exclude
      */
-    LtUnlintNonExistingDefect(final Iterable<Lint<XML>> lnts) {
+    LtUnlintNonExistingDefect(final Iterable<Lint<XML>> lnts, final Collection<String> exld) {
         this.lints = lnts;
+        this.excluded = exld;
     }
 
     @Override
@@ -60,7 +58,7 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
             .map(xnav -> xnav.text().get())
             .collect(Collectors.toSet());
         unlints.stream()
-            .filter(unlint -> !present.contains(unlint) && !this.exclude.contains(unlint))
+            .filter(unlint -> !present.contains(unlint) && !this.excluded.contains(unlint))
             .forEach(
                 unlint ->
                     xml.path(

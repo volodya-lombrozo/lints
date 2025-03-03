@@ -24,7 +24,8 @@ final class LtUnlintNonExistingDefectTest {
         MatcherAssert.assertThat(
             "Defects are empty, but they should not",
             new LtUnlintNonExistingDefect(
-                new ListOf<>(new LtAsciiOnly())
+                new ListOf<>(new LtAsciiOnly()),
+                new ListOf<String>()
             ).defects(
                 new EoSyntax(
                     String.join(
@@ -45,7 +46,8 @@ final class LtUnlintNonExistingDefectTest {
         MatcherAssert.assertThat(
             "Defects should be reported for each line with unlint, but it's not",
             new LtUnlintNonExistingDefect(
-                new ListOf<>(new LtAsciiOnly())
+                new ListOf<>(new LtAsciiOnly()),
+                new ListOf<String>()
             ).defects(
                 new EoSyntax(
                     String.join(
@@ -71,7 +73,8 @@ final class LtUnlintNonExistingDefectTest {
         MatcherAssert.assertThat(
             "Defects are not empty, but they should",
             new LtUnlintNonExistingDefect(
-                new ListOf<>(new LtAsciiOnly())
+                new ListOf<>(new LtAsciiOnly()),
+                new ListOf<String>()
             ).defects(
                 new EoSyntax(
                     String.join(
@@ -91,7 +94,8 @@ final class LtUnlintNonExistingDefectTest {
         MatcherAssert.assertThat(
             "Defects are not empty, but they should",
             new LtUnlintNonExistingDefect(
-                new ListOf<>(new LtAsciiOnly())
+                new ListOf<>(new LtAsciiOnly()),
+                new ListOf<String>()
             ).defects(
                 new EoSyntax(
                     String.join(
@@ -119,7 +123,8 @@ final class LtUnlintNonExistingDefectTest {
         MatcherAssert.assertThat(
             "WPA unlints should be ignored",
             new LtUnlintNonExistingDefect(
-                new ListOf<>(new LtAsciiOnly())
+                new ListOf<>(new LtAsciiOnly()),
+                new ListOf<>("unit-test-missing")
             ).defects(
                 new EoSyntax(
                     String.join(
