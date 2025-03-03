@@ -10,7 +10,6 @@ import org.cactoos.list.ListOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -115,7 +114,6 @@ final class LtUnlintNonExistingDefectTest {
      *  don't forget to enable
      *  {@link LtUnlintNonExistingDefectWpaTest#ignoresSingleProgramUnlint()}.
      */
-    @Disabled
     @Test
     void ignoresWpaUnlint() throws IOException {
         MatcherAssert.assertThat(
