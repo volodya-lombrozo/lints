@@ -15,7 +15,6 @@ import org.cactoos.list.ListOf;
 final class MonoLintNames extends IterableEnvelope<String> {
     /**
      * Ctor.
-     *
      */
     MonoLintNames() {
         super(

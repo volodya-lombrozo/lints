@@ -15,7 +15,6 @@ import org.cactoos.list.ListOf;
 final class WpaLintNames extends IterableEnvelope<String> {
     /**
      * Ctor.
-     *
      */
     WpaLintNames() {
         super(
