@@ -300,6 +300,7 @@
                     <class>org.eolang.lints.PkMonoTest</class>
                     <class>org.eolang.lints.LtByXslTest</class>
                     <class>org.eolang.lints.PkWpaTest</class>
+                    <class>org.eolang.lints.ProgramsTest</class>
                   </excludedTestClasses>
                 </configuration>
               </execution>
