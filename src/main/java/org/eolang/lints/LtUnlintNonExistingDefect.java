@@ -37,7 +37,7 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
      * Ctor.
      *
      * @param lnts Lints
-     * @param exld Lints to exclude
+     * @param exld Lint names to exclude
      */
     LtUnlintNonExistingDefect(final Iterable<Lint<XML>> lnts, final Collection<String> exld) {
         this.lints = lnts;

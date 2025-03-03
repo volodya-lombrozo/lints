@@ -109,22 +109,13 @@ final class LtUnlintNonExistingDefectTest {
         );
     }
 
-    /**
-     * Ignores WPA unlint.
-     * @throws IOException if something went wrong.
-     * @todo #368:45min Configure `unlint-non-existing-defect` lint to ignore unlints from other
-     *  scope (WPA/Single program). On WPA side of this lint
-     *  ({@link LtUnlintNonExistingDefectWpaTest}) we should ignore single program lints. Also,
-     *  don't forget to enable
-     *  {@link LtUnlintNonExistingDefectWpaTest#ignoresSingleProgramUnlint()}.
-     */
     @Test
     void ignoresWpaUnlint() throws IOException {
         MatcherAssert.assertThat(
             "WPA unlints should be ignored",
             new LtUnlintNonExistingDefect(
                 new ListOf<>(new LtAsciiOnly()),
-                new ListOf<>("unit-test-missing")
+                new ListOf<>(new WpaLintNames())
             ).defects(
                 new EoSyntax(
                     String.join(

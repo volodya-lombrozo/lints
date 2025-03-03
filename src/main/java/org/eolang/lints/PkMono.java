@@ -5,14 +5,11 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.annotation.concurrent.ThreadSafe;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Joined;
 import org.cactoos.iterable.Mapped;
-import org.cactoos.iterable.Shuffled;
 import org.cactoos.list.ListOf;
 
 /**
@@ -34,53 +31,21 @@ final class PkMono extends IterableEnvelope<Lint<XML>> {
     /**
      * All XML-based lints.
      */
-    private static final Iterable<Lint<XML>> LINTS = new Shuffled<>(
-        new Joined<Lint<XML>>(
-            new PkByXsl(),
-            List.of(
-                new LtAsciiOnly()
-            )
-        )
-    );
-
-    /**
-     * WPA lint names for exclusion.
-     */
-    private static final Collection<String> WPA_EXCLUDED = new ListOf<>(new PkWpa().iterator())
-        .stream()
-        .map(Lint::name)
-        .filter(name -> !"unlint-non-existing-defect".equals(name))
-        .collect(Collectors.toList());
+    private static final Iterable<Lint<XML>> LINTS = new MonoLints();
 
     /**
      * Default ctor.
      */
     PkMono() {
         super(
-            new Joined<Lint<XML>>(
+            new Joined<>(
                 new Mapped<Lint<XML>>(
                     LtUnlint::new,
                     new Joined<Lint<XML>>(
                         PkMono.LINTS,
                         List.of(
                             new LtUnlintNonExistingDefect(
-                                PkMono.LINTS, PkMono.WPA_EXCLUDED
-                            )
-                        )
-                    )
-                ),
-                List.of(
-                    new LtIncorrectUnlint(
-                        new Mapped<>(
-                            Lint::name,
-                            new Joined<>(
-                                new PkWpa(),
-                                PkMono.LINTS,
-                                List.of(
-                                    new LtUnlintNonExistingDefect(
-                                        PkMono.LINTS, PkMono.WPA_EXCLUDED
-                                    )
-                                )
+                                PkMono.LINTS, new ListOf<>(new WpaLintNames())
                             )
                         )
                     )
