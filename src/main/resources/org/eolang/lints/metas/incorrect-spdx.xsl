@@ -22,7 +22,7 @@
             </xsl:attribute>
             <xsl:text>The tail </xsl:text>
             <xsl:value-of select="eo:escape($header)"/>
-            <xsl:text> in the "spdx" meta is not SPDX-compliant header</xsl:text>
+            <xsl:text> of the "spdx" meta is not SPDX-compliant header</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>
