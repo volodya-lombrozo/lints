@@ -301,6 +301,7 @@
                     <class>org.eolang.lints.LtByXslTest</class>
                     <class>org.eolang.lints.PkWpaTest</class>
                     <class>org.eolang.lints.ProgramsTest</class>
+                    <class>org.eolang.lints.LtUnlintNonExistingDefectWpaTest</class>
                   </excludedTestClasses>
                 </configuration>
               </execution>
