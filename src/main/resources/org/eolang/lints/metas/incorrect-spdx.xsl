@@ -20,8 +20,9 @@
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>The format of the "spdx" meta is wrong: </xsl:text>
+            <xsl:text>The tail </xsl:text>
             <xsl:value-of select="eo:escape($header)"/>
+            <xsl:text> in the "spdx" meta is not SPDX-compliant header</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>
