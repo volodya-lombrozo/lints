@@ -7,7 +7,7 @@ asserts:
   - /defects[count(defect[@severity='warning'])=0]
 input: |
   +spdx SPDX-FileCopyrightText foo
-  +spdx SPDX-License-Identifier: f
+  +spdx SPDX-License-Identifier: MIT
 
   # Foo.
   [] > foo
