@@ -48,8 +48,8 @@ final class LtUnlint implements Lint<XML> {
         final Collection<Defect> defects = new ArrayList<>(0);
         final String lname = this.origin.name();
         final Collection<Defect> found = this.origin.defects(xmir);
-        final List<Integer> problematic = found.stream().
-            filter(defect -> defect.rule().equals(lname))
+        final List<Integer> problematic = found.stream()
+            .filter(defect -> defect.rule().equals(lname))
             .map(Defect::line)
             .collect(Collectors.toList());
         final List<String> granular = xmir.xpath(
