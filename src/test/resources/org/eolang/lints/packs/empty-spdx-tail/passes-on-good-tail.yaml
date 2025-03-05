@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/empty-spdx-tail.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=0]
+input: |
+  +spdx foo
+
+  # Foo.
+  [] > foo
