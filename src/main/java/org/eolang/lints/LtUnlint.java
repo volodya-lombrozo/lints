@@ -17,6 +17,11 @@ import org.cactoos.list.ListOf;
  * Lint that ignores linting if {@code +unlint} meta is present.
  *
  * @since 0.0.1
+ * @todo #386:30min Replace `XML.xpath()` with `Xnav.path()` usage in defects() method.
+ *  Currently, we cannot use `Xnav.path()` method due to
+ *  <a href="https://github.com/volodya-lombrozo/xnav/issues/74">this</a> bug.
+ *  Once it will be resolved, we should replace `XML.xpath()` with `Xnav.path()`
+ *  in order to improve the performance of the `LtUnlint.defects()` execution.
  */
 final class LtUnlint implements Lint<XML> {
 
