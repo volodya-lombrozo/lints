@@ -52,7 +52,7 @@ final class LtUnlintTest {
                 new EoSyntax(
                     String.join(
                         "\n",
-                        "+unlint comment-without-dot:2",
+                        "+unlint comment-without-dot:4",
                         "",
                         "# Foo",
                         "[] > foo",
@@ -68,11 +68,36 @@ final class LtUnlintTest {
                     Matchers.hasToString(
                         Matchers.allOf(
                             Matchers.containsString("comment-without-dot WARNING"),
-                            Matchers.containsString(":5")
+                            Matchers.containsString(":7")
                         )
                     )
                 )
             )
+        );
+    }
+
+    @Test
+    void unlintsMultipleDefectsWithGranularUnlint() throws IOException {
+        MatcherAssert.assertThat(
+            "All defects should be unlinted",
+            new LtUnlint(
+                new LtByXsl("comments/comment-without-dot")
+            ).defects(
+                new EoSyntax(
+                    String.join(
+                        "\n",
+                        "+unlint comment-without-dot:5",
+                        "+unlint comment-without-dot:8",
+                        "",
+                        "# Foo",
+                        "[] > foo",
+                        "",
+                        "# Bar",
+                        "[] > bar"
+                    )
+                ).parsed()
+            ),
+            Matchers.emptyIterable()
         );
     }
 }

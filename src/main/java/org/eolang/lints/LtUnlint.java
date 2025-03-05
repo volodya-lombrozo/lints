@@ -4,11 +4,14 @@
  */
 package org.eolang.lints;
 
-import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import org.cactoos.list.ListOf;
 
 /**
  * Lint that ignores linting if {@code +unlint} meta is present.
@@ -16,6 +19,11 @@ import java.util.Collection;
  * @since 0.0.1
  */
 final class LtUnlint implements Lint<XML> {
+
+    /**
+     * Line number to unlint.
+     */
+    private static final Pattern LINE_NUMBER = Pattern.compile(".*:\\d+$");
 
     /**
      * The original lint.
@@ -37,14 +45,41 @@ final class LtUnlint implements Lint<XML> {
 
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
-        final boolean suppress = new Xnav(xmir.inner()).path(
-            String.format(
-                "/program/metas/meta[head='unlint' and tail='%s']",
-                this.origin.name()
-            )
-        ).findAny().isPresent();
         final Collection<Defect> defects = new ArrayList<>(0);
-        if (!suppress) {
+        final String lname = this.origin.name();
+        final Collection<Defect> found = this.origin.defects(xmir);
+        final List<Integer> problematic = found.stream().
+            filter(defect -> defect.rule().equals(lname))
+            .map(Defect::line)
+            .collect(Collectors.toList());
+        final List<String> granular = xmir.xpath(
+            String.format(
+                "/program/metas/meta[head='unlint' and (tail='%s' or starts-with(tail, '%s:'))]/tail/text()",
+                lname, lname
+            )
+        );
+        final boolean global = !granular.isEmpty();
+        granular.forEach(
+            unlint -> {
+                if (LtUnlint.LINE_NUMBER.matcher(unlint).matches()) {
+                    final List<String> split = new ListOf<>(unlint.split(":"));
+                    final int lineno = Integer.parseInt(
+                        split.get(1)
+                    );
+                    problematic.removeIf(line -> line == lineno);
+                }
+            }
+        );
+        problematic.forEach(
+            line -> found.forEach(
+                defect -> {
+                    if (line != 0 && defect.line() == line) {
+                        defects.add(defect);
+                    }
+                }
+            )
+        );
+        if (!global) {
             defects.addAll(this.origin.defects(xmir));
         }
         return defects;
