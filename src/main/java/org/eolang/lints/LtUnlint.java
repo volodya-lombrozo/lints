@@ -67,6 +67,8 @@ final class LtUnlint implements Lint<XML> {
                         split.get(1)
                     );
                     problematic.removeIf(line -> line == lineno);
+                } else {
+                    problematic.clear();
                 }
             }
         );

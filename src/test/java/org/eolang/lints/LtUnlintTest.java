@@ -5,7 +5,6 @@
 package org.eolang.lints;
 
 import java.io.IOException;
-import java.util.Collection;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -88,6 +87,30 @@ final class LtUnlintTest {
                         "\n",
                         "+unlint comment-without-dot:5",
                         "+unlint comment-without-dot:8",
+                        "",
+                        "# Foo",
+                        "[] > foo",
+                        "",
+                        "# Bar",
+                        "[] > bar"
+                    )
+                ).parsed()
+            ),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void unlintsGlobally() throws IOException {
+        MatcherAssert.assertThat(
+            "All defects should be unlinted",
+            new LtUnlint(
+                new LtByXsl("comments/comment-without-dot")
+            ).defects(
+                new EoSyntax(
+                    String.join(
+                        "\n",
+                        "+unlint comment-without-dot",
                         "",
                         "# Foo",
                         "[] > foo",
