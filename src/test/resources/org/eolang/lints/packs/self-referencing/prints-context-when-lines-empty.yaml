@@ -2,12 +2,14 @@
 # SPDX-License-Identifier: MIT
 ---
 sheets:
-  - /org/eolang/lints/critical/pos-without-line.xsl
+  - /org/eolang/lints/critical/self-referencing.xsl
 asserts:
-  - /defects[count(defect[@context and @severity='critical'])=1]
+  - /defects[count(defect[@context and @severity='error'])=1]
 document: |
   <program>
     <objects>
-      <o pos="3" name="foo"/>
+      <o name="first">
+        <o base="$.a" name="a"/>
+      </o>
     </objects>
   </program>
