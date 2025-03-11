@@ -78,7 +78,7 @@ final class LtByXslTest {
     }
 
     @Test
-    void testLocationsOfYamlPacks() throws IOException {
+    void checksLocationsOfYamlPacks() throws IOException {
         final Set<String> groups = Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
             .filter(Files::isRegularFile)
             .filter(path -> path.toString().endsWith(".xsl"))
