@@ -53,6 +53,7 @@ final class LtByXslTest {
         );
     }
 
+    @SuppressWarnings("JTCOP.RuleNotContainsTestWord")
     @ParameterizedTest
     @ClasspathSource(value = "org/eolang/lints/packs/", glob = "**.yaml")
     void testsAllLintsByEo(final String yaml) {

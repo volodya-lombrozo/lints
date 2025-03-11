@@ -52,6 +52,7 @@ final class LtUnitTestMissingTest {
         );
     }
 
+    @SuppressWarnings("JTCOP.RuleNotContainsTestWord")
     @Test
     void issuesDetectsOnMissingTest(@Mktmp final Path dir) throws IOException {
         Files.write(dir.resolve("aaa.xmir"), "<program name='aaa'/>".getBytes());
