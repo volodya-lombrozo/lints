@@ -46,21 +46,18 @@ final class LtIncorrectUnlint implements Lint<XML> {
         xml.path("/program/metas/meta[head='unlint']")
             .filter(u -> !this.names.contains(u.element("tail").text().orElse("unknown")))
             .forEach(
-                u -> {
-                    final String name = u.element("tail").text().orElse("unknown");
-                    defects.add(
-                        new Defect.Default(
-                            this.name(),
-                            Severity.ERROR,
-                            xml.element("program").attribute("name").text().orElse("unknown"),
-                            Integer.parseInt(u.attribute("line").text().orElse("0")),
-                            String.format(
-                                "Unlinting \"%s\" does not make sense, because there is no lint with that name",
-                                name
-                            )
+                u -> defects.add(
+                    new Defect.Default(
+                        this.name(),
+                        Severity.ERROR,
+                        xml.element("program").attribute("name").text().orElse("unknown"),
+                        Integer.parseInt(u.attribute("line").text().orElse("0")),
+                        String.format(
+                            "Unlinting \"%s\" does not make sense, because there is no lint with that name",
+                            u.element("tail").text().orElse("unknown")
                         )
-                    );
-                }
+                    )
+                )
             );
         return defects;
     }
