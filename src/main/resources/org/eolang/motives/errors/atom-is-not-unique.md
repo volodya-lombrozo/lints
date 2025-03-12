@@ -1,7 +1,6 @@
 # Atom is not unique
 
-All object FQNs that have `@name='λ'` attribute across al `.eo` files must not be
-duplicated.
+All atom FQNs across all `.eo` files must not be duplicated.
 
 Incorrect:
 
