@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.io.UncheckedInput;
+import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 
@@ -128,7 +129,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             Severity.ERROR,
             xml.element("program").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
-                xml.path("//o[@name='λ']")
+                xml.path(String.format("//o[@name='%s']", LtAtomIsNotUnique.oname(fqn)))
                     .map(o -> o.attribute("line").text().get())
                     .collect(Collectors.toList()).get(pos)
             ),
@@ -142,7 +143,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             Severity.ERROR,
             xml.element("program").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
-                xml.path("//o[@name='λ']")
+                xml.path(String.format("//o[@name='%s']", LtAtomIsNotUnique.oname(fqn)))
                     .map(xnav -> xnav.attribute("line").text().orElse("0"))
                     .collect(Collectors.toList()).get(0)
             ),
@@ -186,5 +187,16 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             pair = String.format("%d:%d", second.hashCode(), first.hashCode());
         }
         return pair;
+    }
+
+    private static String oname(final String fqn) {
+        final String result;
+        final List<String> parts = new ListOf<>(fqn.split("\\."));
+        if (parts.size() > 1) {
+            result = parts.get(parts.size() - 1);
+        } else {
+            result = parts.get(0);
+        }
+        return result;
     }
 }
