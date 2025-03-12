@@ -5,6 +5,7 @@
 package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
+import com.jcabi.xml.ClasspathSources;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XSL;
 import com.jcabi.xml.XSLDocument;
@@ -45,7 +46,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
                 new UncheckedInput(
                     new ResourceOf("org/eolang/funcs/atom-fqns.xsl")
                 ).stream()
-            )
+            ).with(new ClasspathSources())
         );
     }
 
