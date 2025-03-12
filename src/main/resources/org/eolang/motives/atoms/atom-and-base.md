@@ -1,14 +1,14 @@
 # Atom and Base
 
-In [XMIR], inside `<o/>`, both, `@name='λ'` and `@base` cannot co-exist.
+In [XMIR], atom object can not have `@base` attribute.
 
 Incorrect:
 
 ```xml
 <program>
   <objects>
-    <o>
-      <o name="λ" base="bar"/>
+    <o name="obj" base="bar">
+      <o name="λ"/>
     </o>
   </objects>
 </program>
@@ -19,7 +19,7 @@ Correct:
 ```xml
 <program>
   <objects>
-    <o>
+    <o name="obj">
       <o name="λ"/>
     </o>
   </objects>
@@ -31,8 +31,8 @@ or:
 ```xml
 <program>
   <objects>
-    <o>
-      <o name="foo" base="bar"/>
+    <o name="obj" base="bar">
+      <o name="foo"/>
     </o>
   </objects>
 </program>

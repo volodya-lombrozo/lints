@@ -8,7 +8,7 @@ asserts:
 document: |
   <program>
     <objects>
-      <o name="obj">
+      <o name="obj" base="foo">
         <o name="λ"/>
       </o>
     </objects>

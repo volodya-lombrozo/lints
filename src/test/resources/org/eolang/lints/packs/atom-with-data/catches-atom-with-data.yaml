@@ -8,8 +8,9 @@ asserts:
 document: |
   <program>
     <objects>
-      <o name="λ">
-       A1-B2-C3-D4-E5
+      <o name="obj">
+        A1-B2-C3-D4-E5
+        <o name="λ"/>
       </o>
     </objects>
   </program>

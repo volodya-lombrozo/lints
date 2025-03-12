@@ -11,7 +11,7 @@ Incorrect:
     second line
     third line</listing>
   <objects>
-    <o line="500" name="λ"/>
+    <o line="500" name="f"/>
   </objects>
 </program>
 ```
@@ -24,7 +24,7 @@ Correct:
     second line
     third line</listing>
   <objects>
-    <o line="2" name="λ"/>
+    <o line="2" name="f"/>
   </objects>
 </program>
 ```
