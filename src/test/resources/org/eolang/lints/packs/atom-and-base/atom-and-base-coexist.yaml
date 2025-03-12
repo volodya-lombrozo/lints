@@ -8,8 +8,8 @@ asserts:
 document: |
   <program>
     <objects>
-      <o abstract="">
-        <o base="bar" name="λ"/>
+      <o name="obj">
+        <o name="λ"/>
       </o>
     </objects>
   </program>
