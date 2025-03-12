@@ -9,7 +9,7 @@
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@atom and o[@atom]]">
+      <xsl:for-each select="//o[@name='λ' and o[@name='λ']]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="eo:lineno(@line)"/>
@@ -20,7 +20,7 @@
           <xsl:text>Atom </xsl:text>
           <xsl:value-of select="eo:escape(@name)"/>
           <xsl:text> may not have any attributes, even if they are atoms, which however exist: </xsl:text>
-          <xsl:for-each select="o[@atom]">
+          <xsl:for-each select="o[@name='λ']">
             <xsl:if test="position() &gt; 1">
               <xsl:text>, </xsl:text>
             </xsl:if>

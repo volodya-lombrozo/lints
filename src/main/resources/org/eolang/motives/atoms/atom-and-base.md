@@ -1,6 +1,6 @@
 # Atom and Base
 
-In [XMIR], inside `<o/>`, both, `@atom` and `@base` cannot co-exist.
+In [XMIR], inside `<o/>`, both, `@name='λ'` and `@base` cannot co-exist.
 
 Incorrect:
 
@@ -8,7 +8,7 @@ Incorrect:
 <program>
   <objects>
     <o>
-      <o name="foo" base="bar" atom="org.eolang.number"/>
+      <o name="λ" base="bar"/>
     </o>
   </objects>
 </program>
@@ -20,7 +20,7 @@ Correct:
 <program>
   <objects>
     <o>
-      <o name="foo" atom="org.eolang.number"/>
+      <o name="λ"/>
     </o>
   </objects>
 </program>

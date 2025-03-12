@@ -8,7 +8,7 @@
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="not(//o[@atom])">
+      <xsl:if test="not(//o[@name='λ'])">
         <xsl:if test="/program/metas/meta[head='rt']">
           <xsl:element name="defect">
             <xsl:attribute name="line">

@@ -10,7 +10,7 @@
   <xsl:template match="/">
     <defects>
       <xsl:if test="not(/program/metas/meta[head='rt'])">
-        <xsl:for-each select="//o[@atom]">
+        <xsl:for-each select="//o[@name='λ']">
           <xsl:element name="defect">
             <xsl:attribute name="line">
               <xsl:value-of select="eo:lineno(@line)"/>

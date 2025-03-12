@@ -9,7 +9,7 @@
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="//o[@atom]" mode="atom"/>
+      <xsl:apply-templates select="//o[@name='λ']" mode="atom"/>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="atom">

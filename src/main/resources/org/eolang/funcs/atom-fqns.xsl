@@ -12,7 +12,7 @@
   <xsl:template match="o">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
-      <xsl:if test="@atom">
+      <xsl:if test="@name='λ'">
         <xsl:attribute name="fqn">
           <xsl:call-template name="generate-fqn"/>
         </xsl:attribute>

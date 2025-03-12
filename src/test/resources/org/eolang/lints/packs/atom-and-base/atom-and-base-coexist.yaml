@@ -9,7 +9,7 @@ document: |
   <program>
     <objects>
       <o abstract="">
-        <o name="foo" base="bar" atom="org.eolang.number"/>
+        <o base="bar" name="λ"/>
       </o>
     </objects>
   </program>

@@ -9,7 +9,7 @@
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@atom and @base]">
+      <xsl:for-each select="//o[@name='λ' and @base]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="eo:lineno(@line)"/>

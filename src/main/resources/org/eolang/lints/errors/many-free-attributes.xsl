@@ -10,7 +10,7 @@
   <xsl:variable name="max" select="5"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[count(o[@name and @base='∅' and not(@atom) and count(o)=0]) &gt; $max]">
+      <xsl:for-each select="//o[count(o[@name and @base='∅' and not(@name='λ') and count(o)=0]) &gt; $max]">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="eo:lineno(@line)"/>
