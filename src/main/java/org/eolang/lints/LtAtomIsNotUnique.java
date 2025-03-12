@@ -24,7 +24,7 @@ import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 
 /**
- * All FQNs that have `@name='λ'` in the entire scope must be unique.
+ * All atom FQNs in the entire scope of programs must be unique.
  * This lint firstly transforms the original XMIR into XMIR that contains `@fqn`
  * attributes for each atom `o`, and then lints it.
  *
