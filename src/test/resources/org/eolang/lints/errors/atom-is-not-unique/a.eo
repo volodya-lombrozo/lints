@@ -3,4 +3,4 @@
 
 # A.
 [attr] > a
-  [] > x /string
+  [] > x ?

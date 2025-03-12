@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.io.UncheckedInput;
-import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 
@@ -128,7 +127,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             Severity.ERROR,
             xml.element("program").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
-                xml.path(String.format("//o[@atom and @name='%s']", LtAtomIsNotUnique.oname(fqn)))
+                xml.path("//o[@name='λ']")
                     .map(o -> o.attribute("line").text().get())
                     .collect(Collectors.toList()).get(pos)
             ),
@@ -142,10 +141,8 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             Severity.ERROR,
             xml.element("program").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
-                xml.path(
-                    String.format("//o[@atom and @name='%s']/@line", LtAtomIsNotUnique.oname(fqn))
-                    )
-                    .map(o -> o.text().get())
+                xml.path("//o[@name='λ']")
+                    .map(xnav -> xnav.attribute("line").text().orElse("0"))
                     .collect(Collectors.toList()).get(0)
             ),
             String.format(
@@ -178,17 +175,6 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         return result.stream()
             .map(fqn -> String.format("Ф.%s", fqn))
             .collect(Collectors.toList());
-    }
-
-    private static String oname(final String fqn) {
-        final String result;
-        final List<String> parts = new ListOf<>(fqn.split("\\."));
-        if (parts.size() > 1) {
-            result = parts.get(parts.size() - 1);
-        } else {
-            result = parts.get(0);
-        }
-        return result;
     }
 
     private static String pairHash(final Xnav first, final Xnav second) {

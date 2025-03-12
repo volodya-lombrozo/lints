@@ -3,4 +3,4 @@
 
 # Foo.
 [] > foo
-  [] > test /int
+  [] > test ?
