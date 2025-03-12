@@ -53,7 +53,7 @@ final class LtIncorrectUnlint implements Lint<XML> {
                         xml.element("program").attribute("name").text().orElse("unknown"),
                         Integer.parseInt(u.attribute("line").text().orElse("0")),
                         String.format(
-                            "Unlinting \"%s\" does not make sense, because there is no lint with that name",
+                            "Suppressing \"%s\" does not make sense, because there is no lint with that name",
                             u.element("tail").text().orElse("unknown")
                         )
                     )

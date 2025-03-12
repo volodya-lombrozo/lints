@@ -59,7 +59,7 @@ final class LtIncorrectUnlintTest {
                     ).parsed()
                 )
             ).get(0).text(),
-            Matchers.containsString("Unlinting \"boom\" does not make sense")
+            Matchers.containsString("Suppressing \"boom\" does not make sense")
         );
     }
 }
