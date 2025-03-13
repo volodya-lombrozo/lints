@@ -60,13 +60,13 @@ final class LtObjectIsNotUniqueTest {
                         new EoSyntax(
                             String.join(
                                 "\n",
-                                "# test",
+                                "# foo",
                                 "[] > foo",
                                 "  52 > spb",
                                 "",
-                                "# test",
+                                "# bar",
                                 "[] > bar",
-                                "  52 > spb"
+                                "  0 > spb"
                             )
                         ).parsed()
                     ),
@@ -75,13 +75,13 @@ final class LtObjectIsNotUniqueTest {
                         new EoSyntax(
                             String.join(
                                 "\n",
-                                "# test",
+                                "# bar",
                                 "[] > bar",
                                 "  52 > spb",
                                 "",
-                                "# test",
+                                "# foo",
                                 "[] > foo",
-                                "  52 > spb"
+                                "  0 > spb"
                             )
                         ).parsed()
                     )
@@ -170,13 +170,13 @@ final class LtObjectIsNotUniqueTest {
                         new EoSyntax(
                             String.join(
                                 "\n",
-                                "# test",
+                                "# Some object",
                                 "[] > foo",
-                                "  52 > spb",
+                                "  52 > inn",
                                 "",
                                 "# test",
                                 "[] > bar",
-                                "  52 > spb"
+                                "  52 > inn"
                             )
                         ).parsed()
                     ),
@@ -189,11 +189,11 @@ final class LtObjectIsNotUniqueTest {
                                 "",
                                 "# test",
                                 "[] > foo",
-                                "  52 > spb",
+                                "  52 > inn",
                                 "",
                                 "# test",
                                 "[] > bar",
-                                "  52 > spb"
+                                "  52 > inn"
                             )
                         ).parsed()
                     )
