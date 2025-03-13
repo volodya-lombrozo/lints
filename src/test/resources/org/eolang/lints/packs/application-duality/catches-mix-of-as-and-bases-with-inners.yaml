@@ -6,6 +6,7 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='critical'])=1]
   - /defects/defect[@line='7']
+  - /defects/defect[1][contains(normalize-space(), '3 children, 1 with, 2 without')]
 document: |
   <program>
     <objects>
