@@ -45,7 +45,7 @@
                 <xsl:text>anonymous object</xsl:text>
               </xsl:otherwise>
             </xsl:choose>
-            <xsl:text> cannot have both @name and @as attributes as this is prohibited due to duality in the application, please use only one</xsl:text>
+            <xsl:text> cannot mix child elements with and without the @as attribute, please ensure that all child elements either have the @as attribute or none of them do</xsl:text>
           </defect>
         </xsl:if>
       </xsl:for-each>
