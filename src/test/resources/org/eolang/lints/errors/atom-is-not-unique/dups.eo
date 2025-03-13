@@ -3,6 +3,6 @@
 
 # Dups.
 [attr] > dups
-  [] > foo /int
+  [] > foo ?
   [] > @
-  [] > foo /int
+  [] > foo ?
