@@ -9,6 +9,7 @@ import com.yegor256.Together;
 import fixtures.ParsedEo;
 import matchers.DefectMatcher;
 import org.cactoos.set.SetOf;
+import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.RepeatedTest;
@@ -76,9 +77,16 @@ final class LtTestNotVerbTest {
             new SetOf<>(
                 new Together<>(
                     t -> new LtTestNotVerb().defects(
-                        new ParsedEo(
-                            "org/eolang/lints/misc/test-object-is-not-verb-in-singular/regex-tests.eo"
-                        ).value()
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "+tests",
+                                "",
+                                "# Unit test",
+                                "[] > matches-regex-against-the-pattern",
+                                "  (regex \"/[a-z]+/\").compiled.matches \"hello\" > @"
+                            )
+                        ).parsed()
                     ).size()
                 ).asList()
             ).size(),
