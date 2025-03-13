@@ -3,8 +3,8 @@
 
 # Top object with nested atoms inside.
 [] > top
-  [] > test /int
+  [] > test ?
   [] > f
     [] > a
       [] > bar
-        [] > abr /string
+        [] > abr ?

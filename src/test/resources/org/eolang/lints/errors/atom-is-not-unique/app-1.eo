@@ -4,4 +4,4 @@
 
 # Foo.
 [] > app
-  [] > foo /int
+  [] > foo ?

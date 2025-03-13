@@ -3,4 +3,4 @@
 
 # Bar, but its foo.
 [] > foo
-  [] > test /int
+  [] > test ?
