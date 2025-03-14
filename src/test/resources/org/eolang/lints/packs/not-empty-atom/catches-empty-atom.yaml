@@ -9,8 +9,8 @@ asserts:
 document: |
   <program>
     <objects>
-      <o line="1" atom="org.eolang.number">
-        <o line="2" base="foo"/>
+      <o line="1" name="number">
+        <o base="f" name="λ"/>
       </o>
     </objects>
   </program>

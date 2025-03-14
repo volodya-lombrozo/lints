@@ -8,8 +8,8 @@ asserts:
 document: |
   <program>
     <objects>
-      <o atom="org.eolang.number">
-        <o base="foo"/>
+      <o name="number">
+        <o base="foo" name="λ"/>
       </o>
     </objects>
   </program>
