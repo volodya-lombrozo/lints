@@ -4,4 +4,4 @@
 
 # Foo app duplicate.
 [] > app
-  [] > foo /int
+  [] > foo ?

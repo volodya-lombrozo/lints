@@ -3,5 +3,5 @@
 
 # Spb.
 [attr] > spb
-  [] > test /int
-  [] > sfo /int
+  [] > test ?
+  [] > sfo ?

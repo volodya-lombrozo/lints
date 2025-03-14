@@ -4,4 +4,4 @@
 
 # X packaged.
 [] > app
-  [] > x /string
+  [] > x ?

@@ -3,17 +3,18 @@
  * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
  * SPDX-License-Identifier: MIT
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="rt-without-atoms" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="lambda-with-inners" version="2.0">
   <xsl:import href="/org/eolang/parser/_funcs.xsl"/>
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:import href="/org/eolang/funcs/defect-context.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="not(//o[eo:atom(.)])">
-        <xsl:if test="/program/metas/meta[head='rt']">
+      <xsl:for-each select="//o[eo:atom(.)]">
+        <xsl:if test="o[@name='λ']/o">
           <xsl:element name="defect">
-            <xsl:variable name="line" select="eo:lineno(/program/metas/meta[head='rt'][1]/@line)"/>
+            <xsl:variable name="line" select="eo:lineno(@line)"/>
             <xsl:attribute name="line">
               <xsl:value-of select="$line"/>
             </xsl:attribute>
@@ -23,12 +24,14 @@
               </xsl:attribute>
             </xsl:if>
             <xsl:attribute name="severity">
-              <xsl:text>error</xsl:text>
+              <xsl:text>critical</xsl:text>
             </xsl:attribute>
-            <xsl:text>Using the +rt meta without any atoms in the program doesn't make sense</xsl:text>
+            <xsl:text>The </xsl:text>
+            <xsl:value-of select="eo:escape(@name)"/>
+            <xsl:text> atom has inner objects inside lambda ('λ'), which is prohibited</xsl:text>
           </xsl:element>
         </xsl:if>
-      </xsl:if>
+      </xsl:for-each>
     </defects>
   </xsl:template>
 </xsl:stylesheet>
