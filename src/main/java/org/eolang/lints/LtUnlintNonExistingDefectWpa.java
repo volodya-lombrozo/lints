@@ -41,6 +41,14 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
 
     /**
      * Ctor.
+     * @param lnts Lints
+     */
+    LtUnlintNonExistingDefectWpa(final Iterable<Lint<Map<String, XML>>> lnts) {
+        this(lnts, new ListOf<>());
+    }
+
+    /**
+     * Ctor.
      *
      * @param lnts Lints
      * @param exld Lint names to exclude
