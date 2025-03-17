@@ -67,7 +67,7 @@ final class ProgramTest {
                         "+package com.example",
                         "+version 0.0.0",
                         // REUSE-IgnoreStart
-                        "+spdx SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com",
+                        "+spdx SPDX-FileCopyrightText Copyright (c) 2016-2025 Objectionary.com",
                         "+spdx SPDX-License-Identifier: MIT",
                         // REUSE-IgnoreEnd
                         "",
@@ -112,7 +112,7 @@ final class ProgramTest {
 
     @Test
     @Timeout(60L)
-    void simpleTest(@Mktmp final Path dir) throws IOException {
+    void checksSimple(@Mktmp final Path dir) throws IOException {
         final Path path = dir.resolve("foo.xmir");
         Files.write(
             path,
@@ -147,7 +147,7 @@ final class ProgramTest {
     }
 
     @Test
-    void largerBrokenProgramTest() throws IOException {
+    void checksLargerBrokenProgram() throws IOException {
         MatcherAssert.assertThat(
             "checking passes",
             new Program(
