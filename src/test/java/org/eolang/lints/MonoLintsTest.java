@@ -21,6 +21,7 @@ import org.junit.jupiter.api.Test;
 final class MonoLintsTest {
 
     @Test
+    @SuppressWarnings("JTCOP.RuleAssertionMessage")
     void staysPackagePrivate() {
         ArchRuleDefinition.classes()
             .that().haveSimpleName("MonoLints")

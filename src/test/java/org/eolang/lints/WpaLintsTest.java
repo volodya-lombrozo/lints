@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Test;
 final class WpaLintsTest {
 
     @Test
+    @SuppressWarnings("JTCOP.RuleAssertionMessage")
     void staysPackagePrivate() {
         ArchRuleDefinition.classes()
             .that().haveSimpleName("WpaLints")
