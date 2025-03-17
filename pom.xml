@@ -119,7 +119,7 @@
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.52.0</version>
+      <version>0.53.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -188,7 +188,7 @@
     <dependency>
       <groupId>com.yegor256</groupId>
       <artifactId>farea</artifactId>
-      <version>0.14.2</version>
+      <version>0.15.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -235,7 +235,6 @@
             <artifactId>qulice-maven-plugin</artifactId>
             <version>0.24.0</version>
             <configuration>
-              <license>file:${basedir}/LICENSE.txt</license>
               <excludes>
                 <exclude>pmd:/src/it/.*</exclude>
                 <exclude>checkstyle:/src/it/.*</exclude>
@@ -243,6 +242,18 @@
                 <exclude>dependencies:.*</exclude>
               </excludes>
             </configuration>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>com.github.volodya-lombrozo</groupId>
+            <artifactId>jtcop-maven-plugin</artifactId>
+            <version>1.3.5</version>
             <executions>
               <execution>
                 <goals>
@@ -293,12 +304,16 @@
                   <goal>mutationCoverage</goal>
                 </goals>
                 <configuration>
-                  <threads>4</threads>
+                  <threads>6</threads>
                   <mutationThreshold>60</mutationThreshold>
                   <excludedTestClasses>
                     <class>org.eolang.lints.ProgramTest</class>
                     <class>org.eolang.lints.PkMonoTest</class>
                     <class>org.eolang.lints.LtByXslTest</class>
+                    <class>org.eolang.lints.PkWpaTest</class>
+                    <class>org.eolang.lints.ProgramsTest</class>
+                    <class>org.eolang.lints.LtUnlintNonExistingDefectWpaTest</class>
+                    <class>org.eolang.lints.LtTestNotVerbTest</class>
                   </excludedTestClasses>
                 </configuration>
               </execution>
@@ -357,7 +372,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.9.1.0</version>
+        <version>4.9.3.0</version>
         <executions>
           <execution>
             <goals>
