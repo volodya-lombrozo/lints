@@ -26,7 +26,8 @@ final class WpaLints extends IterableEnvelope<Lint<Map<String, XML>>> {
                 new LtUnitTestWithoutLiveFile(),
                 new LtIncorrectAlias(),
                 new LtObjectIsNotUnique(),
-                new LtAtomIsNotUnique()
+                new LtAtomIsNotUnique(),
+                new LtIncorrectNumberOfAttrs()
             )
         );
     }
