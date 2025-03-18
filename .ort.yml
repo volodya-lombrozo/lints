@@ -4,7 +4,7 @@
 excludes:
   paths:
     - comment: It's a test
-      pattern: "src/it/**"
+      pattern: "src/it/lints-it/**"
       reason: BUILD_TOOL_OF
   scopes:
     - pattern: "provided"
