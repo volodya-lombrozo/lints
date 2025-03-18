@@ -4,7 +4,7 @@
 excludes:
   paths:
     - comment: It's a test
-      pattern: "@project.version@"
+      pattern: "src/it/**"
       reason: BUILD_TOOL_OF
   scopes:
     - pattern: "provided"
