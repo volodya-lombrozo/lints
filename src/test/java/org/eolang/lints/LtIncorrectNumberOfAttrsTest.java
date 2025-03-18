@@ -51,4 +51,41 @@ final class LtIncorrectNumberOfAttrsTest {
             Matchers.hasSize(Matchers.greaterThan(0))
         );
     }
+
+    @Test
+    void catchesMultipleHighLevelObjectsInFile() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are empty, but they should not",
+            new LtIncorrectNumberOfAttrs().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "std",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# Std.",
+                                "[a] > std",
+                                "",
+                                "# Stf.",
+                                "[] > stf"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "usage",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# App uses std and stf.",
+                                "[args] > app",
+                                "  std 0",
+                                "  stf 1"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
 }
