@@ -88,4 +88,89 @@ final class LtIncorrectNumberOfAttrsTest {
             Matchers.hasSize(Matchers.greaterThan(0))
         );
     }
+
+    @Test
+    void allowsCorrectNumberOfAttributes() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are not empty, but they should",
+            new LtIncorrectNumberOfAttrs().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "a",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# A with one attribute.",
+                                "[pos] > a"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "app",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# App uses a with correct number of arguments.",
+                                "[] > app",
+                                "  a 0"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void allowsCorrectAttributesCountInSameFile() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are not empty, but they should",
+            new LtIncorrectNumberOfAttrs().defects(
+                new MapOf<>(
+                    new MapEntry<>(
+                        "single",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# A with one attribute.",
+                                "[pos] > a",
+                                "",
+                                "# B uses A with one attribute",
+                                "[] > b",
+                                "  a 52"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void catchesIncorrectPassedNumberOfAttributesInSameFile() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are empty, but they should not",
+            new LtIncorrectNumberOfAttrs().defects(
+                new MapOf<>(
+                    new MapEntry<>(
+                        "single-broken",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# F with one attribute.",
+                                "[pos] > f",
+                                "",
+                                "# Z uses F with two attributes",
+                                "[] > z",
+                                "  f 52 42"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
 }
