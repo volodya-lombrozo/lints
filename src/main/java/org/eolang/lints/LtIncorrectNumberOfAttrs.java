@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import org.cactoos.list.ListOf;
 
 /**
@@ -24,9 +27,40 @@ final class LtIncorrectNumberOfAttrs implements Lint<Map<String, XML>> {
     @Override
     public Collection<Defect> defects(final Map<String, XML> pkg) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
-        // step 1: build map of definitions
         final Map<String, Integer> definitions = LtIncorrectNumberOfAttrs.objectDefinitions(pkg);
-        System.out.println(definitions);
+        // step 2: scan usages
+        pkg.forEach(
+            new BiConsumer<String, XML>() {
+                @Override
+                public void accept(final String program, final XML xmir) {
+                    new Xnav(xmir.inner()).path("//o[@base and not(@base='∅')]").forEach(
+                        new Consumer<Xnav>() {
+                            @Override
+                            public void accept(final Xnav xnav) {
+                                final int provided = (int) xnav.elements(Filter.withName("o")).count();
+                                System.out.println(xnav);
+                                final String object = xnav.attribute("base").text().orElse("unknown");
+                                final Integer expected = definitions.get(object);
+                                if (expected != null && provided != expected) {
+                                    defects.add(
+                                        new Defect.Default(
+                                            LtIncorrectNumberOfAttrs.this.name(),
+                                            Severity.ERROR,
+                                            program,
+                                            Integer.parseInt(xnav.attribute("line").text().orElse("0")),
+                                            String.format(
+                                                "The object %s expects %d arguments, while %d provided",
+                                                object, expected, provided
+                                            )
+                                        )
+                                    );
+                                }
+                            }
+                        }
+                    );
+                }
+            }
+        );
         return defects;
     }
 
@@ -55,7 +89,7 @@ final class LtIncorrectNumberOfAttrs implements Lint<Map<String, XML>> {
                         final List<Xnav> attrs = new ListOf<>();
                         xob.path("o[@base='∅']").forEach(attrs::add);
                         final String name = xob.attribute("name").text().orElse("unknown");
-                        definitions.put(name, attrs.size());
+                        definitions.put(String.format("Q.org.eolang.%s", name), attrs.size());
                     }
                 )
         );
