@@ -14,7 +14,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
+import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 
 /**
  * Lint to check incorrect number of attributes passed to the object in scope.
@@ -61,7 +64,15 @@ final class LtIncorrectNumberOfAttrs implements Lint<Map<String, XML>> {
 
     @Override
     public String motive() throws IOException {
-        throw new UnsupportedOperationException("#motive()");
+        return new UncheckedText(
+            new TextOf(
+                new ResourceOf(
+                    String.format(
+                        "org/eolang/motives/errors/%s.md", this.name()
+                    )
+                )
+            )
+        ).asString();
     }
 
     /**
