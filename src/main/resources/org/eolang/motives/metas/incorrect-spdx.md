@@ -42,5 +42,8 @@ In [XMIR], spdx meta should look like this:
 </metas>
 ```
 
+Please note, that these two contain valid SPDX headers. Thus, you can use any
+number of SPDX-compliant headers.
+
 [SPDX]: https://en.wikipedia.org/wiki/Software_Package_Data_Exchange
 [XMIR]: https://news.eolang.org/2022-11-25-xmir-guide.html
