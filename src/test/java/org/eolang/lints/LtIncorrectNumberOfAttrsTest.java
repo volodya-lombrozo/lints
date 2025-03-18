@@ -291,7 +291,8 @@ final class LtIncorrectNumberOfAttrsTest {
                                 "\n",
                                 "# Usage of A and B objects with vertical application.",
                                 "[] > app",
-                                "  b 1",
+                                "  b",
+                                "    0",
                                 "    a 0"
                             )
                         ).parsed()
@@ -299,6 +300,52 @@ final class LtIncorrectNumberOfAttrsTest {
                 )
             ),
             Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void catchesInCorrectAttributesInVerticalApplication() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects should not be empty, since attributes are passed incorrectly",
+            new LtIncorrectNumberOfAttrs().defects(
+                new MapOf<>(
+                    new MapEntry<>(
+                        "x",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# X with one attribute.",
+                                "[pos sigma] > x",
+                                ""
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "y",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# Y with two attributes.",
+                                "[left right] > y"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "xy-app",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# Usage of X and Y objects with vertical application.",
+                                "[] > app",
+                                "  y",
+                                "    1",
+                                "    x 0"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.hasSize(Matchers.greaterThan(0))
         );
     }
 }

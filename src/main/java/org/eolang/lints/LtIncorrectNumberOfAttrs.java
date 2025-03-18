@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.cactoos.list.ListOf;
 
@@ -40,10 +39,7 @@ final class LtIncorrectNumberOfAttrs implements Lint<Map<String, XML>> {
                             public void accept(final Xnav xnav) {
                                 final int provided = (int) xnav.elements(Filter.withName("o")).count();
                                 final String object = xnav.attribute("base").text().orElse("unknown");
-                                System.out.println(object);
                                 final Integer expected = definitions.get(object);
-                                System.out.println(provided);
-                                System.out.println(expected);
                                 if (expected != null && provided != expected) {
                                     defects.add(
                                         new Defect.Default(
