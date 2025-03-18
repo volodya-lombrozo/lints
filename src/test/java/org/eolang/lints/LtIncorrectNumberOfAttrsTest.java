@@ -159,6 +159,8 @@ final class LtIncorrectNumberOfAttrsTest {
                         new EoSyntax(
                             String.join(
                                 "\n",
+                                "+package broken",
+                                "",
                                 "# F with one attribute.",
                                 "[pos] > f",
                                 "",
@@ -171,6 +173,132 @@ final class LtIncorrectNumberOfAttrsTest {
                 )
             ),
             Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
+
+    @Test
+    void ignoresUndefinedObjectInPackage() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects should empty, since object is not defined in provided package",
+            new LtIncorrectNumberOfAttrs().defects(
+                new MapOf<String, XML>(
+                    new MapEntry<>(
+                        "hello",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# Say hello.",
+                                "[content] > hello"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "app",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# App uses undeclared object.",
+                                "[] > app",
+                                "  hello \"f\"",
+                                "  bye 0x1"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void understandsPackages() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects should be empty, since object is expected to be packaged",
+            new LtIncorrectNumberOfAttrs().defects(
+                new MapOf<>(
+                    new MapEntry<>(
+                        "foo-unpackaged",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# An unpackaged foo.",
+                                "[] > foo"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "foo-packaged",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "+package f",
+                                "",
+                                "# Packaged foo in f.",
+                                "[bar] > foo"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "res",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "+alias f.foo",
+                                "",
+                                "# Resolver application that uses f.foo.",
+                                "[args] > app",
+                                "  foo args > @"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void allowsCorrectAttributesInVerticalApplication() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects should be empty, since attributes are correct in vertical application",
+            new LtIncorrectNumberOfAttrs().defects(
+                new MapOf<>(
+                    new MapEntry<>(
+                        "a",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# A with one attribute.",
+                                "[pos] > a",
+                                ""
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "b",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# B with two attributes.",
+                                "[left right] > b"
+                            )
+                        ).parsed()
+                    ),
+                    new MapEntry<>(
+                        "usage",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "# Usage of A and B objects with vertical application.",
+                                "[] > app",
+                                "  b 1",
+                                "    a 0"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
         );
     }
 }

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.cactoos.list.ListOf;
 
@@ -38,9 +39,11 @@ final class LtIncorrectNumberOfAttrs implements Lint<Map<String, XML>> {
                             @Override
                             public void accept(final Xnav xnav) {
                                 final int provided = (int) xnav.elements(Filter.withName("o")).count();
-                                System.out.println(xnav);
                                 final String object = xnav.attribute("base").text().orElse("unknown");
+                                System.out.println(object);
                                 final Integer expected = definitions.get(object);
+                                System.out.println(provided);
+                                System.out.println(expected);
                                 if (expected != null && provided != expected) {
                                     defects.add(
                                         new Defect.Default(
@@ -82,17 +85,39 @@ final class LtIncorrectNumberOfAttrs implements Lint<Map<String, XML>> {
     private static Map<String, Integer> objectDefinitions(final Map<String, XML> pkg) {
         final Map<String, Integer> definitions = new HashMap<>(0);
         pkg.forEach(
-            (program, xmir) -> new Xnav(xmir.inner()).element("program")
-                .element("objects")
-                .elements(Filter.withName("o")).forEach(
-                    xob -> {
-                        final List<Xnav> attrs = new ListOf<>();
-                        xob.path("o[@base='∅']").forEach(attrs::add);
-                        final String name = xob.attribute("name").text().orElse("unknown");
-                        definitions.put(String.format("Q.org.eolang.%s", name), attrs.size());
-                    }
-                )
+            (program, xmir) -> {
+                final Xnav xml = new Xnav(xmir.inner());
+                xml.element("program")
+                    .element("objects")
+                    .elements(Filter.withName("o")).forEach(
+                        xob -> {
+                            final List<Xnav> attrs = new ListOf<>();
+                            xob.path("o[@base='∅']").forEach(attrs::add);
+                            final String name = xob.attribute("name").text().orElse("unknown");
+                            definitions.put(
+                                LtIncorrectNumberOfAttrs.fqnPackaged(name, xml), attrs.size()
+                            );
+                        }
+                    );
+            }
         );
         return definitions;
+    }
+
+    private static String fqnPackaged(final String oname, final Xnav xml) {
+        final String pack;
+        final List<Xnav> packages = xml.element("program")
+            .element("metas")
+            .elements(Filter.withName("meta"))
+            .filter(
+                meta -> "package".equals(meta.element("head").text().get())
+            )
+            .collect(Collectors.toList());
+        if (packages.isEmpty()) {
+            pack = "org.eolang";
+        } else {
+            pack = packages.get(0).element("tail").text().get();
+        }
+        return String.format("Q.%s.%s", pack, oname);
     }
 }
