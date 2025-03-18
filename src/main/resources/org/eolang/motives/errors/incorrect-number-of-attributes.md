@@ -1,7 +1,7 @@
 # Incorrect Number Of Attributes
 
-The number of provided attributes to object should match with the number of its
-declared attributes.
+The number of provided attributes to the object should match with the number of
+its declared attributes.
 
 Incorrect:
 
