@@ -77,7 +77,6 @@ final class LtIncorrectNumberOfAttrs implements Lint<Map<String, XML>> {
 
     /**
      * Build object definitions.
-     *
      * @param pkg Package to scan
      * @return Map of object name and attributes count
      */
@@ -94,7 +93,7 @@ final class LtIncorrectNumberOfAttrs implements Lint<Map<String, XML>> {
                             xob.path("o[@base='∅']").forEach(attrs::add);
                             final String name = xob.attribute("name").text().orElse("unknown");
                             definitions.put(
-                                LtIncorrectNumberOfAttrs.fqnPackaged(name, xml), attrs.size()
+                                LtIncorrectNumberOfAttrs.packagedFqn(name, xml), attrs.size()
                             );
                         }
                     );
@@ -103,7 +102,13 @@ final class LtIncorrectNumberOfAttrs implements Lint<Map<String, XML>> {
         return definitions;
     }
 
-    private static String fqnPackaged(final String oname, final Xnav xml) {
+    /**
+     * Packaged FQN.
+     * @param oname Object name
+     * @param xml XML
+     * @return Packaged FQN of object name
+     */
+    private static String packagedFqn(final String oname, final Xnav xml) {
         final String pack;
         final List<Xnav> packages = xml.element("program")
             .element("metas")
