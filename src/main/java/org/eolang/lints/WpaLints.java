@@ -32,7 +32,3 @@ final class WpaLints extends IterableEnvelope<Lint<Map<String, XML>>> {
         );
     }
 }
-// wpa lints -> map by name
-// lint: f
-// asserts:
-// eo:

@@ -9,9 +9,11 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import matchers.WpaStoryMatcher;
+import org.cactoos.iterable.Mapped;
+import org.cactoos.map.MapEntry;
+import org.cactoos.map.MapOf;
 import org.eolang.jucs.ClasspathSource;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Test;
@@ -23,6 +25,16 @@ import org.junit.jupiter.params.ParameterizedTest;
  * @since 0.0.43
  */
 final class WpaLintsTest {
+
+    /**
+     * WPA lints mapped to their names.
+     */
+    private static final Map<String, Lint<Map<String, XML>>> WPA = new MapOf<String, Lint<Map<String, XML>>>(
+        new Mapped<>(
+            wpl -> new MapEntry<>(wpl.name(), wpl),
+            new WpaLints()
+        )
+    );
 
     @Test
     @SuppressWarnings("JTCOP.RuleAssertionMessage")
@@ -40,11 +52,9 @@ final class WpaLintsTest {
     @ParameterizedTest
     @ClasspathSource(value = "org/eolang/lints/packs/wpa/", glob = "**.yaml")
     void testsAllLintsByEo(final String yaml) throws IOException {
-        final Map<String, Lint<Map<String, XML>>> wpa = new HashMap<>(0);
-        new WpaLints().forEach(wpl -> wpa.put(wpl.name(), wpl));
         MatcherAssert.assertThat(
             "Story failures are not empty, but they should.",
-            new WpaStory(yaml, wpa).execute(),
+            new WpaStory(yaml, WpaLintsTest.WPA).execute(),
             new WpaStoryMatcher()
         );
     }
