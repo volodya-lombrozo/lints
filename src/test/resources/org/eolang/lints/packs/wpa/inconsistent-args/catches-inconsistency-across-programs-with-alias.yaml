@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+lints:
+  - inconsistent-args
+asserts:
+  - count()=2
+  - line()=3
+  - line()=5
+  - hasText()='Object 'Q.org.eolang.txt.text' has arguments inconsistency'
+app.eo: |
+  # App.
+  [] > app
+    Q.org.eolang.txt.text "f" "y" > x
+main.eo: |
+  +alias org.eolang.txt.text
+
+  # Main.
+  [] > main
+    text "f" > y

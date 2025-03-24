@@ -46,8 +46,14 @@ public final class WpaStoryMatcher extends BaseMatcher<Map<List<String>, Collect
             failures.forEach(
                 f -> message.append('\n').append(String.format("FAIL: %s", f))
             );
-            message.append("\n\n").append("Found defects:\n");
-            outcome.get(failures).forEach(defect -> message.append(defect).append('\n'));
+            message.append("\n\n");
+            final Collection<Defect> defects = outcome.get(failures);
+            if (defects.isEmpty()) {
+                message.append("No defects were found");
+            } else {
+                message.append("Found defects:\n");
+                defects.forEach(defect -> message.append(defect).append('\n'));
+            }
         }
         description.appendText(message.toString());
     }
