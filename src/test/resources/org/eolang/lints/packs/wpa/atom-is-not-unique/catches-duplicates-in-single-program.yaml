@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+lints:
+  - atom-is-not-unique
+asserts:
+  - count()=2
+  - line()=3
+  - line()=5
+  - hasText()='Atom "Ф.app.foo" is duplicated'
+  - hasText()='Atom "Ф.app.foo" is duplicated'
+single.eo: |
+  # Singe program with atom FQN duplicates.
+  [attrs] > app
+    [] > foo ?
+    [] > @
+    [] > foo ?

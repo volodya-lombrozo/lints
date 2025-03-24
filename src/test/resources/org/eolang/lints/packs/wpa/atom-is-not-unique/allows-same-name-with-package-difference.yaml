@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+lints:
+  - atom-is-not-unique
+asserts:
+  - count()=0
+abc.eo: |
+  +package a.b.c
+
+  # ABC.
+  [] > abc ?
+abd.eo: |
+  +package a.b.d
+
+  # ABC.
+  [] > abc ?
