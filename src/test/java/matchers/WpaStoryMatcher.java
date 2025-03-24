@@ -47,7 +47,7 @@ public final class WpaStoryMatcher extends BaseMatcher<Map<List<String>, Collect
                 f -> message.append('\n').append(String.format("FAIL: %s", f))
             );
             message.append("\n\n").append("Found defects:\n");
-            outcome.get(failures).forEach(message::append);
+            outcome.get(failures).forEach(defect -> message.append(defect).append('\n'));
         }
         description.appendText(message.toString());
     }

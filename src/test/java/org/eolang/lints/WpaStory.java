@@ -114,6 +114,7 @@ final class WpaStory {
                     failures.add(expression);
                 }
             }
+            // lines()=[$key.eo:$line, ...] format
             if (expression.startsWith("line()=")) {
                 final List<Integer> lines = found.stream()
                     .map(Defect::line)
