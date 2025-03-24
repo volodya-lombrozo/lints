@@ -12,9 +12,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -135,14 +132,22 @@ final class WpaStory {
                     failures.add(expression);
                 }
             }
-            // lines()=[$key.eo:$line, ...] format + puzzle
-            if (expression.startsWith("line()=")) {
-                final List<Integer> lines = found.stream()
-                    .map(Defect::line)
-                    .collect(Collectors.toList());
-                if (!lines.contains(Integer.parseInt(expression.substring("line()=".length())))) {
-                    failures.add(expression);
-                }
+            if (expression.startsWith("lines()=")) {
+                new ListOf<>(
+                    expression.substring("lines()=".length())
+                        .replace("[", "").replace("]", "").split(",")
+                ).forEach(
+                    ref -> {
+                        final String[] parts = ref.trim().split(":");
+                        final boolean matches = found.stream().anyMatch(
+                            defect -> defect.program().equals(parts[0])
+                                && defect.line() == Integer.parseInt(parts[1])
+                        );
+                        if (!matches) {
+                            failures.add(expression);
+                        }
+                    }
+                );
             }
         }
         final Map<List<String>, Collection<Defect>> outcome = new HashMap<>(0);

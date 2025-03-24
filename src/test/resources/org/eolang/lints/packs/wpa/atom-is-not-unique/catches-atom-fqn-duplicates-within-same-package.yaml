@@ -5,7 +5,7 @@ lints:
   - atom-is-not-unique
 asserts:
   - count(error)=2
-  - line()=5
+  - lines()=[foo-packaged:5, bar-packaged:5]
   - hasText()='Atom with FQN "Ф.xyz.app.foo" is duplicated, original was found in "foo-packaged"'
   - hasText()='Atom with FQN "Ф.xyz.app.foo" is duplicated, original was found in "bar-packaged"'
 foo-packaged.eo: |

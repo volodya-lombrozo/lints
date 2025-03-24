@@ -5,7 +5,7 @@ lints:
   - incorrect-number-of-attributes
 asserts:
   - count(error)=1
-  - line()=4
+  - lines()=[usage:4]
   - hasText()='The object "Q.org.eolang.stf" expects 0 arguments, while 1 provided'
 std.eo: |
   # Std.

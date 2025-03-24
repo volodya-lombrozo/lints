@@ -5,7 +5,7 @@ lints:
   - incorrect-alias
 asserts:
   - count(critical)=1
-  - line()=1
+  - lines()=[bar:1]
   - containsText()='Alias "foo Q.foo" points to "foo", but it's not in scope'
 bar.eo: |
   +alias foo

@@ -5,8 +5,7 @@ lints:
   - atom-is-not-unique
 asserts:
   - count(error)=2
-  - line()=6
-  - line()=7
+  - lines()=[nested:7, nested-dup:6]
   - hasText()='Atom with FQN "Ф.top.f.a.bar.abr" is duplicated, original was found in "nested"'
   - hasText()='Atom with FQN "Ф.top.f.a.bar.abr" is duplicated, original was found in "nested-dup"'
 nested.eo: |

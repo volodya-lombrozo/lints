@@ -5,7 +5,7 @@ lints:
   - incorrect-number-of-attributes
 asserts:
   - count(error)=1
-  - line()=5
+  - lines()=[usage:5]
   - hasText()='The object "Q.org.eolang.a" expects 2 arguments, while 1 provided'
 foo.eo: |
   # A.

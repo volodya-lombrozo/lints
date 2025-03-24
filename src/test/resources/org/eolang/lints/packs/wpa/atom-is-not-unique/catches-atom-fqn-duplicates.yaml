@@ -5,7 +5,7 @@ lints:
   - atom-is-not-unique
 asserts:
   - count(error)=2
-  - line()=3
+  - lines()=[foo:3, bar:3]
   - hasText()='Atom with FQN "Ф.foo.at" is duplicated, original was found in "foo"'
   - hasText()='Atom with FQN "Ф.foo.at" is duplicated, original was found in "bar"'
 foo.eo: |
