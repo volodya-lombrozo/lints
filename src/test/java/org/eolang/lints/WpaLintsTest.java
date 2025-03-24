@@ -9,13 +9,22 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import matchers.WpaStoryMatcher;
 import org.cactoos.iterable.Mapped;
+import org.cactoos.list.ListOf;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
 import org.eolang.jucs.ClasspathSource;
 import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
+import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 
@@ -57,5 +66,73 @@ final class WpaLintsTest {
             new WpaStory(yaml, WpaLintsTest.WPA).execute(),
             new WpaStoryMatcher()
         );
+    }
+
+    @Test
+    void checksLocationOfYamlPacks() throws IOException {
+        final List<String> groups = new ListOf<>(new WpaLints()).stream()
+            .map(Lint::name)
+            .collect(Collectors.toList());
+        Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs/wpa"))
+            .filter(Files::isRegularFile)
+            .forEach(
+                path -> {
+                    final String lint = path.getParent().getFileName().toString();
+                    MatcherAssert.assertThat(
+                        String.format(
+                            "Can't find lint for %s/%s, which must have name '%s'",
+                            lint, path.getFileName(), lint
+                        ),
+                        groups.contains(lint),
+                        new IsEqual<>(true)
+                    );
+                }
+            );
+    }
+
+    @Test
+    void checksMotivesForPresence() throws IOException {
+        new WpaLints().forEach(
+            wpl -> {
+                try {
+                    MatcherAssert.assertThat(
+                        String.format(
+                            "Motive is missing for lint '%s'",
+                            wpl.name()
+                        ),
+                        wpl.motive(),
+                        Matchers.not(Matchers.emptyString())
+                    );
+                } catch (final IOException exception) {
+                    throw new IllegalStateException(
+                        String.format(
+                            "Failed to read motive for '%s' lint", wpl.name()
+                        ),
+                        exception
+                    );
+                }
+            }
+        );
+
+        Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
+            .filter(Files::isRegularFile)
+            .filter(f -> f.getFileName().toString().endsWith(".xsl"))
+            .forEach(
+                path -> {
+                    final Path motive = Path.of(
+                        path.toString()
+                            .replace("lints", "motives")
+                            .replace(".xsl", ".md")
+                    );
+                    MatcherAssert.assertThat(
+                        String.format(
+                            "Motive file '%s' is missing for lint '%s'",
+                            motive, path
+                        ),
+                        Files.exists(motive),
+                        new IsEqual<>(true)
+                    );
+                }
+            );
     }
 }
