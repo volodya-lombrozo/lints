@@ -11,7 +11,7 @@
   <xsl:key name="as-key" match="o/@as" use="."/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o">
+      <xsl:for-each select="//o[o[@as]]">
         <xsl:variable name="oname" select="@name"/>
         <xsl:variable name="line" select="eo:lineno(@line)"/>
         <xsl:variable name="context" select="eo:defect-context(.)"/>
