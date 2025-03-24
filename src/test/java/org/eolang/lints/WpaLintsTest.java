@@ -10,7 +10,10 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import org.cactoos.list.ListOf;
 import org.eolang.jucs.ClasspathSource;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -42,9 +45,22 @@ final class WpaLintsTest {
     void testsAllLintsByEo(final String yaml) throws IOException {
         final Map<String, Lint<Map<String, XML>>> wpa = new HashMap<>(0);
         new WpaLints().forEach(wpl -> wpa.put(wpl.name(), wpl));
+        final Map<String, String> outcome = new WpaStory(yaml, wpa).execute();
+        final StringBuilder message = new StringBuilder(0);
+        outcome.forEach(
+            new BiConsumer<String, String>() {
+                @Override
+                public void accept(final String failure, final String explanation) {
+                    message.append(String.format("FAIL: %s, (explanation=%s)", failure, explanation));
+                }
+            }
+        );
         MatcherAssert.assertThat(
-            "Doesn't tell the story as it's expected",
-            new WpaStory(yaml, wpa).execute(),
+            String.format(
+                "Story failures are not empty, but they should.\n%s\n",
+                message
+            ),
+            outcome,
             Matchers.anEmptyMap()
         );
     }

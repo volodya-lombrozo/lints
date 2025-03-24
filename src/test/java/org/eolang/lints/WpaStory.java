@@ -20,7 +20,7 @@ import org.yaml.snakeyaml.Yaml;
 /**
  * Test story for WPA.
  *
- * @since 0.0.0
+ * @since 0.0.43
  */
 final class WpaStory {
 
