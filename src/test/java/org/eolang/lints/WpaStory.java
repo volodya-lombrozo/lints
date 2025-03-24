@@ -47,16 +47,15 @@ final class WpaStory {
 
     /**
      * Execute it.
-     * @return Map of failures
+     * @return Map of failures with defects context
      * @throws IOException if I/O fails
      */
-    public Map<String, String> execute() throws IOException {
+    public Map<List<String>, Collection<Defect>> execute() throws IOException {
         final Map<String, Object> loaded = new Yaml().load(String.class.cast(yaml));
-        final List<String> specials = new ListOf<>("lints", "asserts");
         final Map<String, XML> programs = new HashMap<>(0);
         loaded.forEach(
             (key, val) -> {
-                if (!specials.contains(key) && key.endsWith(".eo")) {
+                if (key.endsWith(".eo")) {
                     try {
                         final String name = key.substring(0, key.length() - 3);
                         programs.put(name, new EoSyntax(name, (String) val).parsed());
@@ -77,40 +76,30 @@ final class WpaStory {
             expected = Arrays.asList();
         }
         final Collection<Defect> found = new LinkedList<>();
-        final Map<String, String> failures = new HashMap<>(0);
+        final List<String> failures = new LinkedList<>();
         for (final String lint : (Iterable<String>) lints) {
             final Lint<Map<String, XML>> wpl = this.wpa.get(lint);
             found.addAll(wpl.defects(programs));
         }
         for (final String expression : (Iterable<String>) expected) {
             if (expression.startsWith("count()=")) {
-                final int ecount = Integer.parseInt(expression.substring("count()=".length()));
-                if (found.size() != ecount) {
-                    failures.put(
-                        expression,
-                        String.format(
-                            "Expected defects with size %d, actual size: %d", ecount, found.size()
-                        )
-                    );
+                if (found.size() != Integer.parseInt(expression.substring("count()=".length()))) {
+                    failures.add(expression);
                 }
             }
             if (expression.startsWith("hasText()=")) {
                 final List<String> texts = found.stream()
                     .map(Defect::text)
                     .collect(Collectors.toList());
-                final String etext = expression.substring("hasText()=".length()).replace("'", "");
-                if (!texts.contains(etext)) {
-                    failures.put(
-                        expression,
-                        String.format(
-                            "None of defects don't contain \"%s\" text inside, while it expected",
-                            etext
-                        )
-                    );
+                if (!texts.contains(expression.substring("hasText()=".length()).replace("'", ""))) {
+                    failures.add(expression);
                 }
             }
         }
-        System.out.println(found); // report them as well in map
-        return failures;
+        final Map<List<String>, Collection<Defect>> outcome = new HashMap<>(0);
+        if (!failures.isEmpty()) {
+            outcome.put(failures, found);
+        }
+        return outcome;
     }
 }
