@@ -30,9 +30,14 @@ public final class WpaStoryMatcher extends BaseMatcher<Map<String, String>> {
     public void describeMismatch(final Object input, final Description description) {
         final Map<String, String> failures = (Map<String, String>) input;
         final StringBuilder message = new StringBuilder(0);
+        message.append(String.format("found %d failure", failures.size()));
+        if (failures.size() > 1) {
+            message.append('s');
+        }
+        message.append(':');
         failures.forEach(
             (failure, explanation) ->
-                message.append(String.format("FAIL: %s, (%s)", failure, explanation))
+                message.append('\n').append(String.format("FAIL: %s, (%s)", failure, explanation))
         );
         description.appendText(message.toString());
     }

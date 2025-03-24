@@ -3,11 +3,11 @@
 ---
 lints:
   - unit-test-missing
-defects:
+asserts:
   - count()=0
-foo: |
+foo.eo: |
   # Foo.
   [] > foo
-foo-tests: |
+foo-tests.eo: |
   # Foo tests.
   [] > checks-foo

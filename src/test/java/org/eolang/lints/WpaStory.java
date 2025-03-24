@@ -52,13 +52,14 @@ final class WpaStory {
      */
     public Map<String, String> execute() throws IOException {
         final Map<String, Object> loaded = new Yaml().load(String.class.cast(yaml));
-        final List<String> specials = new ListOf<>("lints", "defects");
+        final List<String> specials = new ListOf<>("lints", "asserts");
         final Map<String, XML> programs = new HashMap<>(0);
         loaded.forEach(
             (key, val) -> {
-                if (!specials.contains(key)) {
+                if (!specials.contains(key) && key.endsWith(".eo")) {
                     try {
-                        programs.put(key, new EoSyntax(key, (String) val).parsed());
+                        final String name = key.substring(0, key.length() - 3);
+                        programs.put(name, new EoSyntax(name, (String) val).parsed());
                     } catch (final IOException exception) {
                         throw new IllegalStateException(
                             "Failed to parse EO syntax", exception
@@ -71,7 +72,7 @@ final class WpaStory {
         if (lints == null) {
             lints = Arrays.asList();
         }
-        Object expected = loaded.get("defects");
+        Object expected = loaded.get("asserts");
         if (expected == null) {
             expected = Arrays.asList();
         }
@@ -93,11 +94,11 @@ final class WpaStory {
                     );
                 }
             }
-            if (expression.startsWith("text()=")) {
+            if (expression.startsWith("hasText()=")) {
                 final List<String> texts = found.stream()
                     .map(Defect::text)
                     .collect(Collectors.toList());
-                final String etext = expression.substring("text()=".length());
+                final String etext = expression.substring("hasText()=".length()).replace("'", "");
                 if (!texts.contains(etext)) {
                     failures.put(
                         expression,
@@ -109,6 +110,7 @@ final class WpaStory {
                 }
             }
         }
+        System.out.println(found); // report them as well in map
         return failures;
     }
 }

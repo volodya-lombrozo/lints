@@ -2,10 +2,12 @@
 # SPDX-License-Identifier: MIT
 ---
 lints:
-  - unit-test-missing
+  - unit-test-without-live-file
 asserts:
-  - count()=1
-  - hasText()='Tests "foo-tests" not found for "foo"'
+  - count()=0
+foo-tests.eo: |
+  # Foo tests.
+  [] > checks-foo
 foo.eo: |
   # Foo.
   [] > foo
