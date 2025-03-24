@@ -92,7 +92,14 @@ final class WpaStory {
                 final List<String> texts = found.stream()
                     .map(Defect::text)
                     .collect(Collectors.toList());
-                if (!texts.contains(expression.substring("hasText()=".length()).replace("'", ""))) {
+                final String value = expression.substring("hasText()=".length());
+                final String sanitized;
+                if (value.startsWith("'") && value.endsWith("'")) {
+                    sanitized = value.substring(1, value.length() - 1);
+                } else {
+                    sanitized = value;
+                }
+                if (!texts.contains(sanitized)) {
                     failures.add(expression);
                 }
             }
