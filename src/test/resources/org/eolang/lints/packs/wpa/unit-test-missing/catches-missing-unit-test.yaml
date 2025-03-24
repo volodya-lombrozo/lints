@@ -3,8 +3,9 @@
 ---
 lints:
   - unit-test-missing
-asserts:
-  - /defects[count(defect[@severity='warning'])=1]
+defects:
+  - count()=1
+  - text()=Tests "foo-tests" not found for "foo"
 foo: |
   # Foo.
   [] > foo
