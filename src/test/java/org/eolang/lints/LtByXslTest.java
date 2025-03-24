@@ -55,7 +55,7 @@ final class LtByXslTest {
 
     @SuppressWarnings("JTCOP.RuleNotContainsTestWord")
     @ParameterizedTest
-    @ClasspathSource(value = "org/eolang/lints/packs/", glob = "**.yaml")
+    @ClasspathSource(value = "org/eolang/lints/packs/single/", glob = "**.yaml")
     void testsAllLintsByEo(final String yaml) {
         MatcherAssert.assertThat(
             "Doesn't tell the story as it's expected",
