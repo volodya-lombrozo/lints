@@ -4,7 +4,7 @@
 lints:
   - inconsistent-args
 asserts:
-  - count()=2
+  - count(warning)=2
   - line()=3
   - hasText()='Object 'Q.org.eolang.f' has arguments inconsistency'
 app.eo: |

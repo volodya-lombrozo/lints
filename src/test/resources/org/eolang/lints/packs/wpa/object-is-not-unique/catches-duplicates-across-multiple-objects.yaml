@@ -4,7 +4,7 @@
 lints:
   - object-is-not-unique
 asserts:
-  - count()=2
+  - count(error)=2
   - line()=6
   - hasText()='The object name "bar" is not unique, original object was found in "test-1"'
   - hasText()='The object name "bar" is not unique, original object was found in "test-1"'

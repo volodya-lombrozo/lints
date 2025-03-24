@@ -4,7 +4,7 @@
 lints:
   - atom-is-not-unique
 asserts:
-  - count()=2
+  - count(error)=2
   - line()=3
   - line()=5
   - hasText()='Atom "Ф.app.foo" is duplicated'

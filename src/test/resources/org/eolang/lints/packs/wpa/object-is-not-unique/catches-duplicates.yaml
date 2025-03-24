@@ -4,7 +4,7 @@
 lints:
   - object-is-not-unique
 asserts:
-  - count()=2
+  - count(error)=2
   - line()=2
   - hasText()='The object name "foo" is not unique, original object was found in "bar"'
 foo.eo: |

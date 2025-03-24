@@ -4,7 +4,7 @@
 lints:
   - unit-test-without-live-file
 asserts:
-  - count()=1
+  - count(warning)=1
   - hasText()='Live ".eo" file "foo" was not found for "foo-test"'
 foo-test.eo: |
   # Foo tests.

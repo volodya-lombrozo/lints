@@ -13,6 +13,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.cactoos.list.ListOf;
 import org.eolang.parser.EoSyntax;
@@ -83,8 +87,18 @@ final class WpaStory {
             found.addAll(wpl.defects(programs));
         }
         for (final String expression : (Iterable<String>) expected) {
-            if (expression.startsWith("count()=")) { // severity facility
+            if (expression.startsWith("count()=")) {
                 if (found.size() != Integer.parseInt(expression.substring("count()=".length()))) {
+                    failures.add(expression);
+                }
+            }
+            final Pattern pattern = Pattern.compile("^count\\((\\w+)\\)=(\\d+)$");
+            Matcher matcher = pattern.matcher(expression);
+            if (matcher.matches()) {
+                final List<Defect> severed = found.stream().filter(
+                    defect -> defect.severity() == Severity.parsed(matcher.group(1))
+                ).collect(Collectors.toList());
+                if (severed.size() != Integer.parseInt(matcher.group(2))) {
                     failures.add(expression);
                 }
             }

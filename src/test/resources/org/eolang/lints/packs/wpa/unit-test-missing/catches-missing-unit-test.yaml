@@ -4,7 +4,7 @@
 lints:
   - unit-test-missing
 asserts:
-  - count()=1
+  - count(warning)=1
   - hasText()='Tests "foo-tests" not found for "foo"'
 foo.eo: |
   # Foo.
