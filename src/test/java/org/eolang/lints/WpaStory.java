@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.cactoos.list.ListOf;
 import org.eolang.parser.EoSyntax;
@@ -82,7 +83,7 @@ final class WpaStory {
             found.addAll(wpl.defects(programs));
         }
         for (final String expression : (Iterable<String>) expected) {
-            if (expression.startsWith("count()=")) {
+            if (expression.startsWith("count()=")) { // severity facility
                 if (found.size() != Integer.parseInt(expression.substring("count()=".length()))) {
                     failures.add(expression);
                 }
@@ -92,6 +93,32 @@ final class WpaStory {
                     .map(Defect::text)
                     .collect(Collectors.toList());
                 if (!texts.contains(expression.substring("hasText()=".length()).replace("'", ""))) {
+                    failures.add(expression);
+                }
+            }
+            if (expression.startsWith("containsText()=")) {
+                final List<String> texts = found.stream()
+                    .map(Defect::text)
+                    .collect(Collectors.toList());
+                for (final String txt : texts) {
+                    final String value = expression.substring("containsText()=".length());
+                    final String sanitized;
+                    if (value.startsWith("'") && value.endsWith("'")) {
+                        sanitized = value.substring(1, value.length() - 1);
+                    } else {
+                        sanitized = value;
+                    }
+                    if (txt.contains(sanitized)) {
+                        break;
+                    }
+                    failures.add(expression);
+                }
+            }
+            if (expression.startsWith("line()=")) {
+                final List<Integer> lines = found.stream()
+                    .map(Defect::line)
+                    .collect(Collectors.toList());
+                if (!lines.contains(Integer.parseInt(expression.substring("line()=".length())))) {
                     failures.add(expression);
                 }
             }
