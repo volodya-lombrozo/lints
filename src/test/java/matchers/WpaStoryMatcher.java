@@ -7,7 +7,6 @@ package matchers;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import org.eolang.lints.Defect;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -21,9 +20,16 @@ public final class WpaStoryMatcher extends BaseMatcher<Map<List<String>, Collect
 
     @Override
     public boolean matches(final Object input) {
-        final Map<List<String>, Collection<Defect>> outcome =
-            (Map<List<String>, Collection<Defect>>) input;
-        return outcome.isEmpty() || outcome.keySet().iterator().next().isEmpty();
+        final boolean result;
+        if (input instanceof Map) {
+            @SuppressWarnings("unchecked")
+            final Map<List<String>, Collection<Defect>> outcome =
+                (Map<List<String>, Collection<Defect>>) input;
+            result = outcome.isEmpty() || outcome.keySet().iterator().next().isEmpty();
+        } else {
+            result = false;
+        }
+        return result;
     }
 
     @Override
@@ -31,6 +37,7 @@ public final class WpaStoryMatcher extends BaseMatcher<Map<List<String>, Collect
         description.appendText("an empty failures map");
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void describeMismatch(final Object input, final Description description) {
         final Map<List<String>, Collection<Defect>> outcome =

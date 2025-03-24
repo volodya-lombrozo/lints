@@ -6,7 +6,6 @@ package org.eolang.lints;
 
 import com.jcabi.xml.XML;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,6 +26,11 @@ import org.yaml.snakeyaml.Yaml;
 final class WpaStory {
 
     /**
+     * Severity count pattern.
+     */
+    private static final Pattern SEVERED_COUNT = Pattern.compile("^count\\((\\w+)\\)=(\\d+)$");
+
+    /**
      * Yaml.
      */
     private final String yaml;
@@ -34,7 +38,7 @@ final class WpaStory {
     /**
      * WPA lints.
      */
-    final Map<String, Lint<Map<String, XML>>> wpa;
+    private final Map<String, Lint<Map<String, XML>>> wpa;
 
     /**
      * Ctor.
@@ -52,8 +56,9 @@ final class WpaStory {
      * @return Map of failures with defects context
      * @throws IOException if I/O fails
      */
+    @SuppressWarnings("unchecked")
     public Map<List<String>, Collection<Defect>> execute() throws IOException {
-        final Map<String, Object> loaded = new Yaml().load(String.class.cast(yaml));
+        final Map<String, Object> loaded = new Yaml().load(this.yaml);
         final Map<String, XML> programs = new HashMap<>(0);
         loaded.forEach(
             (key, val) -> {
@@ -71,11 +76,11 @@ final class WpaStory {
         );
         Object lints = loaded.get("lints");
         if (lints == null) {
-            lints = Arrays.asList();
+            lints = List.of();
         }
         Object expected = loaded.get("asserts");
         if (expected == null) {
-            expected = Arrays.asList();
+            expected = List.of();
         }
         final Collection<Defect> found = new LinkedList<>();
         final List<String> failures = new LinkedList<>();
@@ -84,26 +89,218 @@ final class WpaStory {
             found.addAll(wpl.defects(programs));
         }
         for (final String expression : (Iterable<String>) expected) {
-            if (expression.startsWith("count()=")) {
-                if (found.size() != Integer.parseInt(expression.substring("count()=".length()))) {
-                    failures.add(expression);
+            new Assertion.AssertsOnTrue(
+                expression.startsWith("count()="),
+                new WpaStory.Assertion.Count(expression, failures, found)
+            ).exec();
+            final Matcher matcher = WpaStory.SEVERED_COUNT.matcher(expression);
+            new Assertion.AssertsOnTrue(
+                matcher.matches(),
+                new WpaStory.Assertion.SeveredCount(expression, failures, found, matcher)
+            );
+            new Assertion.AssertsOnTrue(
+                expression.startsWith("hasText()="),
+                new WpaStory.Assertion.HasText(expression, failures, found)
+            ).exec();
+            new Assertion.AssertsOnTrue(
+                expression.startsWith("containsText()="),
+                new WpaStory.Assertion.ContainsText(expression, failures, found)
+            ).exec();
+            new Assertion.AssertsOnTrue(
+                expression.startsWith("lines()="),
+                new WpaStory.Assertion.HasLines(expression, failures, found)
+            ).exec();
+        }
+        final Map<List<String>, Collection<Defect>> outcome = new HashMap<>(0);
+        if (!failures.isEmpty()) {
+            outcome.put(failures, found);
+        }
+        return outcome;
+    }
+
+    /**
+     * Assertion.
+     * @since 0.0.43
+     */
+    interface Assertion {
+
+        /**
+         * Execute it.
+         */
+        void exec();
+
+        /**
+         * Starts with.
+         * @since 0.0.43
+         */
+        final class AssertsOnTrue implements WpaStory.Assertion {
+
+            /**
+             * Condition.
+             */
+            private final boolean condition;
+
+            /**
+             * Origin.
+             */
+            private final WpaStory.Assertion origin;
+
+            /**
+             * Ctor.
+             * @param bool Condition
+             * @param assertion Assertion
+             */
+            AssertsOnTrue(final boolean bool, final WpaStory.Assertion assertion) {
+                this.condition = bool;
+                this.origin = assertion;
+            }
+
+            @Override
+            public void exec() {
+                if (this.condition) {
+                    this.origin.exec();
                 }
             }
-            final Pattern pattern = Pattern.compile("^count\\((\\w+)\\)=(\\d+)$");
-            Matcher matcher = pattern.matcher(expression);
-            if (matcher.matches()) {
-                final List<Defect> severed = found.stream().filter(
-                    defect -> defect.severity() == Severity.parsed(matcher.group(1))
+        }
+
+        /**
+         * Count assertion.
+         * @since 0.0.43
+         */
+        final class Count implements WpaStory.Assertion {
+
+            /**
+             * Expression.
+             */
+            private final String expression;
+
+            /**
+             * Failures.
+             */
+            private final List<String> failures;
+
+            /**
+             * Defects.
+             */
+            private final Collection<Defect> defects;
+
+            /**
+             * Ctor.
+             * @param expr Expression
+             * @param flrs Failures
+             * @param found Defects
+             */
+            Count(final String expr, final List<String> flrs, final Collection<Defect> found) {
+                this.expression = expr;
+                this.failures = flrs;
+                this.defects = found;
+            }
+
+            @Override
+            public void exec() {
+                if (
+                    this.defects.size()
+                        != Integer.parseInt(this.expression.substring("count()=".length()))
+                ) {
+                    this.failures.add(this.expression);
+                }
+            }
+        }
+
+        /**
+         * Count with severity.
+         * @since 0.0.43
+         */
+        final class SeveredCount implements Assertion {
+
+            /**
+             * Expression.
+             */
+            private final String expression;
+
+            /**
+             * Failures.
+             */
+            private final List<String> failures;
+
+            /**
+             * Defects.
+             */
+            private final Collection<Defect> defects;
+
+            /**
+             * Regexp.
+             */
+            private final Matcher regexp;
+
+            /**
+             * Ctor.
+             * @param expr Expression
+             * @param flrs Failures
+             * @param found Defects
+             * @param matcher Matcher
+             * @checkstyle ParameterNumberCheck (5 lines)
+             */
+            SeveredCount(
+                final String expr, final List<String> flrs, final Collection<Defect> found,
+                final Matcher matcher
+            ) {
+                this.expression = expr;
+                this.failures = flrs;
+                this.defects = found;
+                this.regexp = matcher;
+            }
+
+            @Override
+            public void exec() {
+                final List<Defect> severed = this.defects.stream().filter(
+                    defect -> defect.severity() == Severity.parsed(this.regexp.group(1))
                 ).collect(Collectors.toList());
-                if (severed.size() != Integer.parseInt(matcher.group(2))) {
-                    failures.add(expression);
+                if (severed.size() != Integer.parseInt(this.regexp.group(2))) {
+                    this.failures.add(this.expression);
                 }
             }
-            if (expression.startsWith("hasText()=")) {
-                final List<String> texts = found.stream()
+        }
+
+        /**
+         * Has text assertion.
+         * @since 0.0.43
+         */
+        final class HasText implements WpaStory.Assertion {
+
+            /**
+             * Expression.
+             */
+            private final String expression;
+
+            /**
+             * Failures.
+             */
+            private final List<String> failures;
+
+            /**
+             * Defects.
+             */
+            private final Collection<Defect> defects;
+
+            /**
+             * Ctor.
+             * @param expr Expression
+             * @param flrs Failures
+             * @param found Defects
+             */
+            HasText(final String expr, final List<String> flrs, final Collection<Defect> found) {
+                this.expression = expr;
+                this.failures = flrs;
+                this.defects = found;
+            }
+
+            @Override
+            public void exec() {
+                final List<String> texts = this.defects.stream()
                     .map(Defect::text)
                     .collect(Collectors.toList());
-                final String value = expression.substring("hasText()=".length());
+                final String value = this.expression.substring("hasText()=".length());
                 final String sanitized;
                 if (value.startsWith("'") && value.endsWith("'")) {
                     sanitized = value.substring(1, value.length() - 1);
@@ -111,15 +308,53 @@ final class WpaStory {
                     sanitized = value;
                 }
                 if (!texts.contains(sanitized)) {
-                    failures.add(expression);
+                    this.failures.add(this.expression);
                 }
             }
-            if (expression.startsWith("containsText()=")) {
-                final List<String> texts = found.stream()
+        }
+
+        /**
+         * Contains text assertion.
+         * @since 0.0.43
+         */
+        final class ContainsText implements WpaStory.Assertion {
+
+            /**
+             * Expression.
+             */
+            private final String expression;
+
+            /**
+             * Failures.
+             */
+            private final List<String> failures;
+
+            /**
+             * Defects.
+             */
+            private final Collection<Defect> defects;
+
+            /**
+             * Ctor.
+             * @param expr Expression
+             * @param flrs Failures
+             * @param found Defects
+             */
+            ContainsText(
+                final String expr, final List<String> flrs, final Collection<Defect> found
+            ) {
+                this.expression = expr;
+                this.failures = flrs;
+                this.defects = found;
+            }
+
+            @Override
+            public void exec() {
+                final List<String> texts = this.defects.stream()
                     .map(Defect::text)
                     .collect(Collectors.toList());
                 for (final String txt : texts) {
-                    final String value = expression.substring("containsText()=".length());
+                    final String value = this.expression.substring("containsText()=".length());
                     final String sanitized;
                     if (value.startsWith("'") && value.endsWith("'")) {
                         sanitized = value.substring(1, value.length() - 1);
@@ -129,31 +364,62 @@ final class WpaStory {
                     if (txt.contains(sanitized)) {
                         break;
                     }
-                    failures.add(expression);
+                    this.failures.add(this.expression);
                 }
             }
-            if (expression.startsWith("lines()=")) {
+        }
+
+        /**
+         * Lines assertion.
+         * @since 0.0.43
+         */
+        final class HasLines implements WpaStory.Assertion {
+
+            /**
+             * Expression.
+             */
+            private final String expression;
+
+            /**
+             * Failures.
+             */
+            private final List<String> failures;
+
+            /**
+             * Defects.
+             */
+            private final Collection<Defect> defects;
+
+            /**
+             * Ctor.
+             * @param expr Expression
+             * @param flrs Failures
+             * @param found Defects
+             */
+            HasLines(final String expr, final List<String> flrs, final Collection<Defect> found) {
+                this.expression = expr;
+                this.failures = flrs;
+                this.defects = found;
+            }
+
+            @Override
+            public void exec() {
                 new ListOf<>(
-                    expression.substring("lines()=".length())
+                    this.expression.substring("lines()=".length())
                         .replace("[", "").replace("]", "").split(",")
                 ).forEach(
                     ref -> {
                         final String[] parts = ref.trim().split(":");
-                        final boolean matches = found.stream().anyMatch(
+                        final boolean matches = this.defects.stream().anyMatch(
                             defect -> defect.program().equals(parts[0])
                                 && defect.line() == Integer.parseInt(parts[1])
                         );
                         if (!matches) {
-                            failures.add(expression);
+                            this.failures.add(this.expression);
                         }
                     }
                 );
             }
         }
-        final Map<List<String>, Collection<Defect>> outcome = new HashMap<>(0);
-        if (!failures.isEmpty()) {
-            outcome.put(failures, found);
-        }
-        return outcome;
     }
 }

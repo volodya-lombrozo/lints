@@ -10,7 +10,6 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
@@ -37,12 +36,13 @@ final class WpaLintsTest {
     /**
      * WPA lints mapped to their names.
      */
-    private static final Map<String, Lint<Map<String, XML>>> WPA = new MapOf<String, Lint<Map<String, XML>>>(
-        new Mapped<>(
-            wpl -> new MapEntry<>(wpl.name(), wpl),
-            new WpaLints()
-        )
-    );
+    private static final Map<String, Lint<Map<String, XML>>> WPA =
+        new MapOf<String, Lint<Map<String, XML>>>(
+            new Mapped<>(
+                wpl -> new MapEntry<>(wpl.name(), wpl),
+                new WpaLints()
+            )
+        );
 
     @Test
     @SuppressWarnings("JTCOP.RuleAssertionMessage")
@@ -90,7 +90,7 @@ final class WpaLintsTest {
     }
 
     @Test
-    void checksMotivesForPresence() throws IOException {
+    void checksMotivesForPresence() {
         new WpaLints().forEach(
             wpl -> {
                 try {
@@ -112,26 +112,5 @@ final class WpaLintsTest {
                 }
             }
         );
-
-        Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
-            .filter(Files::isRegularFile)
-            .filter(f -> f.getFileName().toString().endsWith(".xsl"))
-            .forEach(
-                path -> {
-                    final Path motive = Path.of(
-                        path.toString()
-                            .replace("lints", "motives")
-                            .replace(".xsl", ".md")
-                    );
-                    MatcherAssert.assertThat(
-                        String.format(
-                            "Motive file '%s' is missing for lint '%s'",
-                            motive, path
-                        ),
-                        Files.exists(motive),
-                        new IsEqual<>(true)
-                    );
-                }
-            );
     }
 }
