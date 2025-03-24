@@ -10,8 +10,8 @@ abc.eo: |
 
   # ABC.
   [] > abc ?
-abd.eo: |
-  +package a.b.d
+bac.eo: |
+  +package b.a.c
 
   # ABC.
   [] > abc ?
