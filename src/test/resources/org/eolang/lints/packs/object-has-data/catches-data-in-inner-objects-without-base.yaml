@@ -9,7 +9,9 @@ document: |
   <program>
     <objects>
       <o name="foo">
-        <o name="inner">12-23-FF</o>
+        <o name="inner">
+          <o>12-23-FF</o>
+        </o>
       </o>
     </objects>
   </program>
