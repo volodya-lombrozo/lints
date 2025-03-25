@@ -10,6 +10,7 @@
 # @todo #432:60min Upgrade EO parser to 0.55.0.
 #  Currently, we cannot upgrade it due to new bytes format, introduced in the
 #  latest version. We should update lints that working with bytes object, and then upgrade parser.
+#  Don't forget to remove all "+unlint object-has-data" from EO programs.
 [args] > canonical
   malloc.for > @
     0
