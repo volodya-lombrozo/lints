@@ -21,3 +21,14 @@ Correct:
   x > bar
   z > hey
 ```
+
+The position of `@` after void attributes is also allowed:
+
+```eo
+# Foo.
+[] > foo
+  [i] >>
+    boom > @
+      *
+        "f"
+```

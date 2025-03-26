@@ -25,7 +25,7 @@
         </xsl:attribute>
       </xsl:if>
       <xsl:attribute name="severity">warning</xsl:attribute>
-      <xsl:text>The "@" object must go first</xsl:text>
+      <xsl:text>The "@" object must go first (except void attributes ordering)</xsl:text>
     </defect>
   </xsl:template>
 </xsl:stylesheet>
