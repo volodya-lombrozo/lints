@@ -1,9 +1,0 @@
-<objects>
-  <o line="2" name="app" pos="0">
-    <o base="Q.org.eolang.seq" line="3" name="@" pos="4">
-      <o base="Q.org.eolang.tuple.empty.with" line="4" pos="4">
-        <o base="Q.org.eolang.true" line="5" pos="6"/>
-      </o>
-    </o>
-  </o>
-</objects>
