@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+lints:
+  - atom-is-not-unique
+asserts:
+  - count(error)=2
+  - lines()=[nested:7, nested-dup:6]
+  - hasText()='Atom with FQN "Ф.top.f.a.bar.abr" is duplicated, original was found in "nested"'
+  - hasText()='Atom with FQN "Ф.top.f.a.bar.abr" is duplicated, original was found in "nested-dup"'
+nested.eo: |
+  # Top object with nested atoms inside.
+  [] > top
+    [] > test ?
+    [] > f
+      [] > a
+        [] > bar
+          [] > abr ?
+nested-dup.eo: |
+  # Top object with nested atoms inside.
+  [] > top
+    [] > f
+      [] > a
+        [] > bar
+          [] > abr ?

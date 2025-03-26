@@ -314,6 +314,7 @@
                     <class>org.eolang.lints.ProgramsTest</class>
                     <class>org.eolang.lints.LtUnlintNonExistingDefectWpaTest</class>
                     <class>org.eolang.lints.LtTestNotVerbTest</class>
+                    <class>org.eolang.lints.WpaLintsTest</class>
                   </excludedTestClasses>
                 </configuration>
               </execution>
