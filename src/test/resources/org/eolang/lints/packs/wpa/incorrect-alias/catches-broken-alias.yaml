@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+lints:
+  - incorrect-alias
+asserts:
+  - count(critical)=1
+  - lines()=[bar:1]
+  - containsText()='Alias "foo Q.foo" points to "foo", but it's not in scope'
+bar.eo: |
+  +alias foo
+  +package ttt
+
+  # Bar.
+  [] > foo
+    foo > @

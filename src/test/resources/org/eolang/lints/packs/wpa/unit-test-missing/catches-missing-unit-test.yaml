@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+lints:
+  - unit-test-missing
+asserts:
+  - count(warning)=1
+  - hasText()='Tests "foo-tests" not found for "foo"'
+foo.eo: |
+  # Foo.
+  [] > foo
