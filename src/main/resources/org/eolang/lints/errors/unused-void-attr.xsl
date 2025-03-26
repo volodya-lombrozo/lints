@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: MIT
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="unused-void-attr" version="2.0">
+  <xsl:import href="/org/eolang/parser/_funcs.xsl"/>
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:import href="/org/eolang/funcs/defect-context.xsl"/>
@@ -13,7 +14,7 @@
       <xsl:for-each select="//o[@base='∅']">
         <xsl:variable name="attr" select="@name"/>
         <xsl:variable name="formation" select=".."/>
-        <xsl:if test="not($formation//o[contains(@base, concat('$.', $attr))])">
+        <xsl:if test="not($formation//o[contains(@base, concat('$.', $attr))]) and not($formation//o[eo:atom(.)])">
           <xsl:element name="defect">
             <xsl:variable name="line" select="eo:lineno(@line)"/>
             <xsl:attribute name="line">
