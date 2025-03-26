@@ -8,26 +8,49 @@
   <xsl:import href="/org/eolang/funcs/defect-context.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <!-- Find arguments in tuple -->
+<!--  <xsl:template match="o" mode="arguments" as="xs:integer">-->
+<!--    <xsl:choose>-->
+<!--      <xsl:when test="@base='.with' and count(o)=2">-->
+<!--        <xsl:variable name="nested">-->
+<!--          <xsl:apply-templates select="o[1]" mode="arguments"/>-->
+<!--        </xsl:variable>-->
+<!--        <xsl:choose>-->
+<!--          <xsl:when test="$nested!=-1">-->
+<!--            <xsl:value-of select="$nested + 1"/>-->
+<!--          </xsl:when>-->
+<!--          <xsl:otherwise>-->
+<!--            <xsl:value-of select="-1"/>-->
+<!--          </xsl:otherwise>-->
+<!--        </xsl:choose>-->
+<!--      </xsl:when>-->
+<!--      <xsl:when test="@base='Q.org.eolang.tuple.empty'">-->
+<!--        <xsl:value-of select="0"/>-->
+<!--      </xsl:when>-->
+<!--      <xsl:when test="@base='Q.org.eolang.tuple.empty.with' and count(o)=1">-->
+<!--        <xsl:value-of select="1"/>-->
+<!--      </xsl:when>-->
+<!--      <xsl:otherwise>-->
+<!--        <xsl:value-of select="-1"/>-->
+<!--      </xsl:otherwise>-->
+<!--    </xsl:choose>-->
+<!--  </xsl:template>-->
   <xsl:template match="o" mode="arguments" as="xs:integer">
     <xsl:choose>
-      <xsl:when test="@base='.with' and count(o)=2">
+      <xsl:when test="@base='Q.org.eolang.tuple.empty'">
+        <xsl:value-of select="0"/>
+      </xsl:when>
+      <xsl:when test="@base='Q.org.eolang.tuple'">
         <xsl:variable name="nested">
           <xsl:apply-templates select="o[1]" mode="arguments"/>
         </xsl:variable>
         <xsl:choose>
-          <xsl:when test="$nested!=-1">
+          <xsl:when test="count(o) &gt;= 2">
             <xsl:value-of select="$nested + 1"/>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:value-of select="-1"/>
+            <xsl:value-of select="$nested"/>
           </xsl:otherwise>
         </xsl:choose>
-      </xsl:when>
-      <xsl:when test="@base='Q.org.eolang.tuple.empty'">
-        <xsl:value-of select="0"/>
-      </xsl:when>
-      <xsl:when test="@base='Q.org.eolang.tuple.empty.with' and count(o)=1">
-        <xsl:value-of select="1"/>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="-1"/>
