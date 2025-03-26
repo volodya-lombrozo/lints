@@ -16,12 +16,17 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.cactoos.list.ListOf;
 import org.eolang.parser.EoSyntax;
+import org.eolang.xax.XtYaml;
 import org.yaml.snakeyaml.Yaml;
 
 /**
  * Test story for WPA.
  *
  * @since 0.0.43
+ * @todo #429:60min Convert all found {@link Defect}-s into XML and then assert using XPath.
+ *  For now we are using custom asserts outlined in implementations of {@link Assertion}
+ *  interface. Convertion to XML can eliminate the need to custom asserts, since we will
+ *  be able to utilize XPath expressions similarly as in {@link XtYaml#asserts()}.
  */
 final class WpaStory {
 
