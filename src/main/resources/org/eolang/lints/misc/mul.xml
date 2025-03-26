@@ -1,0 +1,43 @@
+<objects>
+  <o line="2" name="app" pos="0">
+    <o base="Q.org.eolang.seq" line="3" name="@" pos="4">
+      <o base="Q.org.eolang.tuple" line="4" pos="4">
+        <o base="Q.org.eolang.tuple">
+          <o base="Q.org.eolang.tuple">
+            <o base="Q.org.eolang.tuple">
+              <o base="Q.org.eolang.tuple.empty"/>
+              <o base="Q.org.eolang.number" line="5" pos="6">
+                <o base="Q.org.eolang.bytes">
+                  <o>40-4A-00-00-00-00-00-00</o>
+                </o>
+              </o>
+              <o base="Q.org.eolang.number">
+                <o base="Q.org.eolang.bytes">3F-F0-00-00-00-00-00-00</o>
+              </o>
+            </o>
+            <o base="Q.org.eolang.number" line="6" pos="6">
+              <o base="Q.org.eolang.bytes">
+                <o>40-45-00-00-00-00-00-00</o>
+              </o>
+            </o>
+            <o base="Q.org.eolang.number">
+              <o base="Q.org.eolang.bytes">40-00-00-00-00-00-00-00</o>
+            </o>
+          </o>
+          <o base="Q.org.eolang.number" line="7" pos="6">
+            <o base="Q.org.eolang.bytes">
+              <o>40-3C-00-00-00-00-00-00</o>
+            </o>
+          </o>
+          <o base="Q.org.eolang.number">
+            <o base="Q.org.eolang.bytes">40-08-00-00-00-00-00-00</o>
+          </o>
+        </o>
+        <o base="Q.org.eolang.true" line="8" pos="6"/>
+        <o base="Q.org.eolang.number">
+          <o base="Q.org.eolang.bytes">40-10-00-00-00-00-00-00</o>
+        </o>
+      </o>
+    </o>
+  </o>
+</objects>
