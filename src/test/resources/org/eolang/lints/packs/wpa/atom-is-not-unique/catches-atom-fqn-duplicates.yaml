@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+lints:
+  - atom-is-not-unique
+asserts:
+  - count(error)=2
+  - lines()=[foo:3, bar:3]
+  - hasText()='Atom with FQN "Ф.foo.at" is duplicated, original was found in "foo"'
+  - hasText()='Atom with FQN "Ф.foo.at" is duplicated, original was found in "bar"'
+foo.eo: |
+  # Foo.
+  [] > foo
+    [] > at ?
+bar.eo: |
+  # Bar, but its foo.
+  [] > foo
+    [] > at ?
