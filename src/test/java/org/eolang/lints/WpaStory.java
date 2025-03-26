@@ -25,7 +25,7 @@ import org.yaml.snakeyaml.Yaml;
  * @since 0.0.43
  * @todo #429:60min Convert all found {@link Defect}-s into XML and then assert using XPath.
  *  For now we are using custom asserts outlined in implementations of {@link Assertion}
- *  interface. Convertion to XML can eliminate the need to custom asserts, since we will
+ *  interface. Conversion to XML document can eliminate the need to custom asserts, since we will
  *  be able to utilize XPath expressions similarly as in {@link XtYaml#asserts()}.
  */
 final class WpaStory {
