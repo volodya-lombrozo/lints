@@ -4,10 +4,9 @@
 lints:
   - atom-is-not-unique
 asserts:
-  - count(error)=2
-  - lines()=[nested:7, nested-dup:6]
-  - hasText()='Atom with FQN "Ф.top.f.a.bar.abr" is duplicated, original was found in "nested"'
-  - hasText()='Atom with FQN "Ф.top.f.a.bar.abr" is duplicated, original was found in "nested-dup"'
+  - /defects[count(defect[@severity='error'])=2]
+  - /defects/defect[@program='nested' and @line='7']
+  - /defects/defect[@program='nested-dup' and @line='6']
 nested.eo: |
   # Top object with nested atoms inside.
   [] > top

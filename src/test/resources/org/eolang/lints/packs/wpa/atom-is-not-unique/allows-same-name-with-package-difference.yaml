@@ -4,7 +4,7 @@
 lints:
   - atom-is-not-unique
 asserts:
-  - count()=0
+  - /defects[count(defect)=0]
 abc.eo: |
   +package a.b.c
 

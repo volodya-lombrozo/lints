@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.regex.Matcher;
@@ -118,7 +119,7 @@ final class WpaStory {
             d -> directives.add("defect")
                 .attr("program", d.program())
                 .attr("line", d.line())
-                .attr("severity", d.severity())
+                .attr("severity", d.severity().toString().toLowerCase(Locale.ROOT))
                 .attr("context", d.context())
                 .set(d.text())
                 .up()
