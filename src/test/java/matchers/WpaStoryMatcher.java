@@ -34,8 +34,7 @@ public final class WpaStoryMatcher extends BaseMatcher<Map<List<String>, XML>> {
             final List<String> failures = new LinkedList<>();
             xpaths.forEach(
                 xpath -> {
-                    final boolean success = !defects.nodes(xpath).isEmpty();
-                    if (!success) {
+                    if (defects.nodes(xpath).isEmpty()) {
                         failures.add(xpath);
                     }
                 }
