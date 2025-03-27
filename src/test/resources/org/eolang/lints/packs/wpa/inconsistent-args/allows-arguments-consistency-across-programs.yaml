@@ -4,7 +4,7 @@
 lints:
   - inconsistent-args
 asserts:
-  - count()=0
+  - /defects[count(defect)=0]
 fizz.eo: |
   # Fizz.
   [] > fizz

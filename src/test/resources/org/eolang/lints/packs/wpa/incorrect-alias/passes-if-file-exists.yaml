@@ -4,7 +4,7 @@
 lints:
   - incorrect-alias
 asserts:
-  - count()=0
+  - /defects[count(defect)=0]
 bar.eo: |
   +alias foo
   +package ttt

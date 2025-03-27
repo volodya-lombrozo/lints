@@ -4,7 +4,7 @@
 lints:
   - object-is-not-unique
 asserts:
-  - count()=0
+  - /defects[count(defect)=0]
 baz.eo: |
   # Baz.
   [] > baz

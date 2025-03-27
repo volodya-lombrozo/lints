@@ -4,9 +4,9 @@
 lints:
   - incorrect-number-of-attributes
 asserts:
-  - count(error)=1
-  - lines()=[app:3]
-  - hasText()='The object "Q.org.eolang.foo" expects 1 arguments, while 2 provided'
+  - /defects[count(defect[@severity='error'])=1]
+  - /defects/defect[@program='app' and @line='3']
+  - /defects/defect[1][normalize-space()='The object "Q.org.eolang.foo" expects 1 arguments, while 2 provided']
 foo.eo: |
   # Foo with one attribute.
   [a] > foo
