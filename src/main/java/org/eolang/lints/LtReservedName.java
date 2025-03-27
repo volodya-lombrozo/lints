@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import org.cactoos.list.ListOf;
+import org.eolang.parser.EoSyntax;
 
 /**
  * Lint for reserved names.
@@ -53,6 +54,7 @@ final class LtReservedName implements Lint<XML> {
             .forEach(
                 object -> {
                     final String oname = object.attribute("name").text().get();
+                    System.out.println(oname);
                     if (this.reserved.contains(oname)) {
                         defects.add(
                             new Defect.Default(
@@ -75,10 +77,30 @@ final class LtReservedName implements Lint<XML> {
 
     private static List<String> reservedInHome() {
         // fetch objects from home with tag: https://github.com/objectionary/home/tree/master/objects/org/eolang
-        // put into resources
-        // parse them into .xmir
-        // find each name -> remove `org.eolang.<package>.` part
-        return new ListOf<>();
+        final List<String> sources = new ListOf<>(
+            String.join(
+                "\n",
+                "# Foo.",
+                "[] > foo",
+                "# Bar.",
+                "[] > bar"
+            )
+        );
+        final List<String> names = new ListOf<>();
+        sources.stream().map(
+            src -> {
+                try {
+                    return new EoSyntax("reserved", src).parsed();
+                } catch (final IOException exception) {
+                    throw new IllegalStateException("Failed to parse EO sources", exception);
+                }
+            }
+        ).forEach(
+            xmir -> new Xnav(xmir.inner()).path("/program/objects/o/@name")
+                .map(oname -> oname.text().get())
+                .forEach(names::add)
+        );
+        return names;
     }
 
     @Override

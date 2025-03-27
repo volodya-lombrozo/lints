@@ -120,6 +120,47 @@ final class LtReservedNameTest {
         );
     }
 
+    @Test
+    void reportsAll() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are empty, but they should not",
+            new LtReservedName(new ListOf<>("ja", "jp", "spb")).defects(
+                new EoSyntax(
+                    "tops",
+                    String.join(
+                        "\n",
+                        "# JA.",
+                        "[] > ja",
+                        "  52 > spb",
+                        "",
+                        "# JP.",
+                        "[] > jp"
+                    )
+                ).parsed()
+            ),
+            Matchers.hasSize(2)
+        );
+    }
+
+    @Test
+    void reportsReservedNameInTopObject() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects should be caught",
+            new LtReservedName(new ListOf<>("foo")).defects(
+                new EoSyntax(
+                    "foo",
+                    String.join(
+                        "\n",
+                        "# Foo.",
+                        "[] > foo",
+                        "  52 > spb"
+                    )
+                ).parsed()
+            ),
+            Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
+
     @Tag("deep")
     @Test
     void scansReservedFromHome() throws IOException {
@@ -129,6 +170,7 @@ final class LtReservedNameTest {
                 new EoSyntax(
                     "foo",
                     String.join(
+                        "\n",
                         "# Foo",
                         "[] > foo",
                         "  52 > stdout"
