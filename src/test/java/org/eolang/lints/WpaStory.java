@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import org.cactoos.map.MapEntry;
+import org.cactoos.map.MapOf;
 import org.eolang.parser.EoSyntax;
 import org.xembly.Directives;
 import org.xembly.ImpossibleModificationException;
@@ -49,7 +51,7 @@ final class WpaStory {
 
     /**
      * Execute it.
-     * @return Map of failures with defects context
+     * @return Map of XPaths and found Defects as XML
      * @throws IOException if I/O fails
      */
     @SuppressWarnings("unchecked")
@@ -74,28 +76,20 @@ final class WpaStory {
         if (lints == null) {
             lints = List.of();
         }
-        Object expected = loaded.get("asserts");
-        if (expected == null) {
-            expected = List.of();
+        Object xpaths = loaded.get("asserts");
+        if (xpaths == null) {
+            xpaths = List.of();
         }
         final Collection<Defect> found = new LinkedList<>();
-        final List<String> failures = new LinkedList<>();
         for (final String lint : (Iterable<String>) lints) {
             final Lint<Map<String, XML>> wpl = this.wpa.get(lint);
             found.addAll(wpl.defects(programs));
         }
-        final XML defects = WpaStory.defectsAsXml(found);
-        for (final String xpath : (Iterable<String>) expected) {
-            final boolean success = !defects.nodes(xpath).isEmpty();
-            if (!success) {
-                failures.add(xpath);
-            }
-        }
-        final Map<List<String>, XML> outcome = new HashMap<>(0);
-        if (!failures.isEmpty()) {
-            outcome.put(failures, defects);
-        }
-        return outcome;
+        return new MapOf<>(
+            new MapEntry<>(
+                (List<String>) xpaths, WpaStory.defectsAsXml(found)
+            )
+        );
     }
 
     private static XML defectsAsXml(final Collection<Defect> defects) {

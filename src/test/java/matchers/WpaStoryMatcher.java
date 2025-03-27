@@ -5,57 +5,67 @@
 package matchers;
 
 import com.jcabi.xml.XML;
-import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.eolang.lints.Defect;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
 /**
- * Hamcrest matcher to check outcome of {@link org.eolang.lints.WpaStory}.
+ * Hamcrest matcher to check story of {@link org.eolang.lints.WpaStory}.
  *
  * @since 0.0.43
  */
 public final class WpaStoryMatcher extends BaseMatcher<Map<List<String>, XML>> {
 
+    /**
+     * Summary.
+     */
+    private String summary;
+
     @Override
     public boolean matches(final Object input) {
-        final boolean result;
+        final boolean match;
         if (input instanceof Map) {
             @SuppressWarnings("unchecked")
-            final Map<List<String>, XML> outcome = (Map<List<String>, XML>) input;
-            result = outcome.isEmpty() || outcome.keySet().iterator().next().isEmpty();
+            final Map<List<String>, XML> story = (Map<List<String>, XML>) input;
+            final List<String> xpaths = story.keySet().iterator().next();
+            final XML defects = story.get(xpaths);
+            final List<String> failures = new LinkedList<>();
+            xpaths.forEach(
+                xpath -> {
+                    final boolean success = !defects.nodes(xpath).isEmpty();
+                    if (!success) {
+                        failures.add(xpath);
+                    }
+                }
+            );
+            if (failures.isEmpty()) {
+                match = true;
+            } else {
+                match = false;
+                final StringBuilder sum = new StringBuilder(1024)
+                    .append(String.format("%d XPath expression(s) failed:\n", failures.size()));
+                failures.forEach(
+                    f -> sum.append('\n').append(String.format("FAIL: %s", f))
+                );
+                sum.append("\n\nFound defects:\n").append(defects);
+                this.summary = sum.toString();
+            }
         } else {
-            result = false;
+            match = false;
         }
-        return result;
+        return match;
     }
 
     @Override
     public void describeTo(final Description description) {
-        description.appendText("an empty failures map");
+        description.appendText("story without failed asserts");
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void describeMismatch(final Object input, final Description description) {
-        final Map<List<String>, XML> outcome = (Map<List<String>, XML>) input;
-        final StringBuilder message = new StringBuilder(0);
-        final List<String> failures = outcome.keySet().iterator().next();
-        if (!failures.isEmpty()) {
-            message.append(String.format("found %d failure", failures.size()));
-            if (failures.size() > 1) {
-                message.append('s');
-            }
-            message.append(':');
-            failures.forEach(
-                f -> message.append('\n').append(String.format("FAIL: %s", f))
-            );
-            message.append("\n\n");
-            message.append("Found defects:\n");
-            message.append(outcome.get(failures));
-        }
-        description.appendText(message.toString());
+        description.appendText("\n").appendText(this.summary);
     }
 }
