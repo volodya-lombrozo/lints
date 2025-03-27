@@ -48,6 +48,7 @@ final class LtReservedName implements Lint<XML> {
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
         final Xnav program = new Xnav(xmir.inner());
+        // move to the xpath @name = ...values
         program.path("//o[@name]")
             .forEach(
                 object -> {
