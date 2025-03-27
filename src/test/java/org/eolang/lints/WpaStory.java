@@ -5,18 +5,23 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.cactoos.list.ListOf;
 import org.eolang.parser.EoSyntax;
 import org.eolang.xax.XtYaml;
+import org.xembly.Directives;
+import org.xembly.ImpossibleModificationException;
+import org.xembly.Xembler;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -62,7 +67,7 @@ final class WpaStory {
      * @throws IOException if I/O fails
      */
     @SuppressWarnings("unchecked")
-    public Map<List<String>, Collection<Defect>> execute() throws IOException {
+    public Map<List<String>, XML> execute() throws IOException {
         final Map<String, Object> loaded = new Yaml().load(this.yaml);
         final Map<String, XML> programs = new HashMap<>(0);
         loaded.forEach(
@@ -93,34 +98,38 @@ final class WpaStory {
             final Lint<Map<String, XML>> wpl = this.wpa.get(lint);
             found.addAll(wpl.defects(programs));
         }
-        for (final String expression : (Iterable<String>) expected) {
-            new Assertion.AssertsOnTrue(
-                expression.startsWith("count()="),
-                new WpaStory.Assertion.Count(expression, failures, found)
-            ).exec();
-            final Matcher matcher = WpaStory.SEVERED_COUNT.matcher(expression);
-            new Assertion.AssertsOnTrue(
-                matcher.matches(),
-                new WpaStory.Assertion.SeveredCount(expression, failures, found, matcher)
-            );
-            new Assertion.AssertsOnTrue(
-                expression.startsWith("hasText()="),
-                new WpaStory.Assertion.HasText(expression, failures, found)
-            ).exec();
-            new Assertion.AssertsOnTrue(
-                expression.startsWith("containsText()="),
-                new WpaStory.Assertion.ContainsText(expression, failures, found)
-            ).exec();
-            new Assertion.AssertsOnTrue(
-                expression.startsWith("lines()="),
-                new WpaStory.Assertion.HasLines(expression, failures, found)
-            ).exec();
+        final XML defects = WpaStory.defectsAsXml(found);
+        for (final String xpath : (Iterable<String>) expected) {
+            final boolean success = !defects.nodes(xpath).isEmpty();
+            if (!success) {
+                failures.add(xpath);
+            }
         }
-        final Map<List<String>, Collection<Defect>> outcome = new HashMap<>(0);
+        final Map<List<String>, XML> outcome = new HashMap<>(0);
         if (!failures.isEmpty()) {
-            outcome.put(failures, found);
+            outcome.put(failures, defects);
         }
         return outcome;
+    }
+
+    private static XML defectsAsXml(final Collection<Defect> defects) {
+        final Directives directives = new Directives().add("defects");
+        defects.forEach(
+            d -> directives.add("defect")
+                .attr("program", d.program())
+                .attr("line", d.line())
+                .attr("severity", d.severity())
+                .attr("context", d.context())
+                .set(d.text())
+                .up()
+        );
+        try {
+            return new XMLDocument(new Xembler(directives).xml());
+        } catch (final ImpossibleModificationException exception) {
+            throw new IllegalStateException(
+                "Failed to create XML document from defects", exception
+            );
+        }
     }
 
     /**

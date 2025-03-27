@@ -4,6 +4,7 @@
  */
 package matchers;
 
+import com.jcabi.xml.XML;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -16,15 +17,14 @@ import org.hamcrest.Description;
  *
  * @since 0.0.43
  */
-public final class WpaStoryMatcher extends BaseMatcher<Map<List<String>, Collection<Defect>>> {
+public final class WpaStoryMatcher extends BaseMatcher<Map<List<String>, XML>> {
 
     @Override
     public boolean matches(final Object input) {
         final boolean result;
         if (input instanceof Map) {
             @SuppressWarnings("unchecked")
-            final Map<List<String>, Collection<Defect>> outcome =
-                (Map<List<String>, Collection<Defect>>) input;
+            final Map<List<String>, XML> outcome = (Map<List<String>, XML>) input;
             result = outcome.isEmpty() || outcome.keySet().iterator().next().isEmpty();
         } else {
             result = false;
@@ -40,8 +40,7 @@ public final class WpaStoryMatcher extends BaseMatcher<Map<List<String>, Collect
     @SuppressWarnings("unchecked")
     @Override
     public void describeMismatch(final Object input, final Description description) {
-        final Map<List<String>, Collection<Defect>> outcome =
-            (Map<List<String>, Collection<Defect>>) input;
+        final Map<List<String>, XML> outcome = (Map<List<String>, XML>) input;
         final StringBuilder message = new StringBuilder(0);
         final List<String> failures = outcome.keySet().iterator().next();
         if (!failures.isEmpty()) {
@@ -54,13 +53,8 @@ public final class WpaStoryMatcher extends BaseMatcher<Map<List<String>, Collect
                 f -> message.append('\n').append(String.format("FAIL: %s", f))
             );
             message.append("\n\n");
-            final Collection<Defect> defects = outcome.get(failures);
-            if (defects.isEmpty()) {
-                message.append("No defects were found");
-            } else {
-                message.append("Found defects:\n");
-                defects.forEach(defect -> message.append(defect).append('\n'));
-            }
+            message.append("Found defects:\n");
+            message.append(outcome.get(failures));
         }
         description.appendText(message.toString());
     }
