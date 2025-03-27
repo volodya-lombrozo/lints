@@ -37,4 +37,63 @@ final class LtReservedNameTest {
             Matchers.hasSize(Matchers.greaterThan(0))
         );
     }
+
+    @Test
+    void allowsNonReservedName() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are not empty, but they should",
+            new LtReservedName(new ListOf<>("org.eolang.true"))
+                .defects(
+                    new EoSyntax(
+                        "x",
+                        String.join(
+                            "# X object.",
+                            "[] > x",
+                            "  42 > y"
+                        )
+                    ).parsed()
+                ),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void allowsUniqueNameInTopProgramObject() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are not empty, but they should",
+            new LtReservedName(new ListOf<>("org.eolang.f"))
+                .defects(
+                    new EoSyntax(
+                        "top",
+                        String.join(
+                            "# top.",
+                            "[] > top",
+                            "  52 > x"
+                        )
+                    ).parsed()
+                ),
+            Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void catchesReservedNameWithPackage() throws IOException {
+        MatcherAssert.assertThat(
+            "There was no defects, though object name is already reserved",
+            new LtReservedName(new ListOf<>("org.eolang.stdout"))
+                .defects(
+                    new EoSyntax(
+                        "t-packaged",
+                        String.join(
+                            "+package org.foo",
+                            "",
+                            "# Tee packaged.",
+                            "[] > tee",
+                            "  52 > stdout"
+                        )
+                    ).parsed()
+                ),
+            Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
 }
