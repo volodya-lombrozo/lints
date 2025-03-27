@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import org.cactoos.list.ListOf;
 
 /**
  * Lint for reserved names.
@@ -21,6 +22,13 @@ final class LtReservedName implements Lint<XML> {
      * Reserved names.
      */
     private final List<String> reserved;
+
+    /**
+     * Ctor.
+     */
+    LtReservedName() {
+        this(LtReservedName.reservedInHome());
+    }
 
     /**
      * Ctor.
@@ -38,16 +46,13 @@ final class LtReservedName implements Lint<XML> {
 
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
-        // fetch objects from home: https://github.com/objectionary/home/tree/master/objects/org/eolang
-        // put into resources
-        // parse them into .xmir
         final Collection<Defect> defects = new LinkedList<>();
         final Xnav program = new Xnav(xmir.inner());
         program.path("//o[@name]")
             .forEach(
                 object -> {
                     final String oname = object.attribute("name").text().get();
-                    if (this.reserved.contains(String.format("org.eolang.%s", oname))) {
+                    if (this.reserved.contains(oname)) {
                         defects.add(
                             new Defect.Default(
                                 this.name(),
@@ -56,7 +61,7 @@ final class LtReservedName implements Lint<XML> {
                                     .text().orElse("unknown"),
                                 Integer.parseInt(object.attribute("line").text().orElse("0")),
                                 String.format(
-                                    "Object name %s is already reserved by object in the org.eolang package",
+                                    "Object name \"%s\" is already reserved by object in the org.eolang package",
                                     oname
                                 )
                             )
@@ -65,6 +70,14 @@ final class LtReservedName implements Lint<XML> {
                 }
             );
         return defects;
+    }
+
+    private static List<String> reservedInHome() {
+        // fetch objects from home with tag: https://github.com/objectionary/home/tree/master/objects/org/eolang
+        // put into resources
+        // parse them into .xmir
+        // find each name -> remove `org.eolang.<package>.` part
+        return new ListOf<>();
     }
 
     @Override

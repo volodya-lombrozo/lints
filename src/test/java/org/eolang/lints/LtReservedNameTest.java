@@ -9,6 +9,7 @@ import org.cactoos.list.ListOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -22,7 +23,7 @@ final class LtReservedNameTest {
     void catchesReservedName() throws IOException {
         MatcherAssert.assertThat(
             "Defects are empty, but they should not",
-            new LtReservedName(new ListOf<>("org.eolang.true"))
+            new LtReservedName(new ListOf<>("true"))
                 .defects(
                     new EoSyntax(
                         "foo",
@@ -42,7 +43,7 @@ final class LtReservedNameTest {
     void allowsNonReservedName() throws IOException {
         MatcherAssert.assertThat(
             "Defects are not empty, but they should",
-            new LtReservedName(new ListOf<>("org.eolang.true"))
+            new LtReservedName(new ListOf<>("true"))
                 .defects(
                     new EoSyntax(
                         "x",
@@ -61,7 +62,7 @@ final class LtReservedNameTest {
     void allowsUniqueNameInTopProgramObject() throws IOException {
         MatcherAssert.assertThat(
             "Defects are not empty, but they should",
-            new LtReservedName(new ListOf<>("org.eolang.f"))
+            new LtReservedName(new ListOf<>("f"))
                 .defects(
                     new EoSyntax(
                         "top",
@@ -80,7 +81,7 @@ final class LtReservedNameTest {
     void catchesReservedNameWithPackage() throws IOException {
         MatcherAssert.assertThat(
             "There was no defects, though object name is already reserved",
-            new LtReservedName(new ListOf<>("org.eolang.stdout"))
+            new LtReservedName(new ListOf<>("stdout"))
                 .defects(
                     new EoSyntax(
                         "t-packaged",
@@ -93,6 +94,47 @@ final class LtReservedNameTest {
                         )
                     ).parsed()
                 ),
+            Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
+
+    @Test
+    void catchesMultipleNames() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects should be caught",
+            new LtReservedName(new ListOf<>("left", "right"))
+                .defects(
+                    new EoSyntax(
+                        "two-defects",
+                        String.join(
+                            "\n",
+                            "# Left.",
+                            "[] > left",
+                            "",
+                            "# Right.",
+                            "[] > right"
+                        )
+                    ).parsed()
+                ),
+            Matchers.hasSize(2)
+        );
+    }
+
+    @Tag("deep")
+    @Test
+    void scansReservedFromHome() throws IOException {
+        MatcherAssert.assertThat(
+            "Defects are empty, but they should not",
+            new LtReservedName().defects(
+                new EoSyntax(
+                    "foo",
+                    String.join(
+                        "# Foo",
+                        "[] > foo",
+                        "  52 > stdout"
+                    )
+                ).parsed()
+            ),
             Matchers.hasSize(Matchers.greaterThan(0))
         );
     }
