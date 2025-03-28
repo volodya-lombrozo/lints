@@ -5,16 +5,26 @@
 package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
+import com.jcabi.http.Request;
+import com.jcabi.http.request.JdkRequest;
+import com.jcabi.http.response.RestResponse;
 import com.jcabi.xml.XML;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.function.Consumer;
 import org.cactoos.list.ListOf;
 import org.eolang.parser.EoSyntax;
 
 /**
  * Lint for reserved names.
+ *
  * @since 0.0.43
  */
 final class LtReservedName implements Lint<XML> {
@@ -76,17 +86,17 @@ final class LtReservedName implements Lint<XML> {
     }
 
     private static List<String> reservedInHome() {
-        // fetch objects from home with tag: https://github.com/objectionary/home/tree/master/objects/org/eolang
-        final List<String> sources = new ListOf<>(
-            String.join(
-                "\n",
-                "# Foo.",
-                "[] > foo",
-                "  42 > boom",
-                "# Bar.",
-                "[] > bar"
-            )
+        final List<String> sources = new ListOf<>();
+        final List<String> parse = new ListOf<>();
+        final Queue<String> directories = new LinkedList<>();
+        directories.add(
+            "https://api.github.com/repos/objectionary/home/contents/objects/org/eolang"
         );
+        while (!directories.isEmpty()) {
+            final String current = directories.poll();
+            LtReservedName.find(current, parse, directories);
+        }
+        parse.forEach(source -> sources.add(LtReservedName.source(source)));
         final List<String> names = new ListOf<>();
         sources.stream().map(
             src -> {
@@ -102,6 +112,54 @@ final class LtReservedName implements Lint<XML> {
                 .forEach(names::add)
         );
         return names;
+    }
+
+    private static void find(final String dir, final List<String> parse, final Queue<String> dirs) {
+        try {
+            final JsonArray refs = Json.createReader(
+                new StringReader(
+                    new JdkRequest(dir)
+                        .header("Accept", "application/vnd.github.v3+json")
+                        .method(Request.GET)
+                        .fetch()
+                        .as(RestResponse.class)
+                        .body()
+                )
+            ).readArray();
+            for (int pos = 0; pos < refs.size(); pos += 1) {
+                final JsonObject ref = refs.getJsonObject(pos);
+                final String name = ref.getString("name");
+                final String type = ref.getString("type");
+                if ("file".equals(type) && name.endsWith(".eo")) {
+                    parse.add(ref.getString("path"));
+                } else if ("dir".equals(type)) {
+                    dirs.add(ref.getString("url"));
+                }
+            }
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                "Failed to fetch EO source from home", exception
+            );
+        }
+    }
+
+    private static String source(final String path) {
+        try {
+            return new JdkRequest(
+                String.format(
+                    "https://raw.githubusercontent.com/objectionary/home/refs/heads/master/%s", path
+                )
+            )
+                .method(Request.GET)
+                .fetch()
+                .as(RestResponse.class)
+                .body();
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format("Failed to find source EO file from %s", path),
+                exception
+            );
+        }
     }
 
     @Override
