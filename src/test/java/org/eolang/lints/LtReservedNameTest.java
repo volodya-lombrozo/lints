@@ -138,7 +138,7 @@ final class LtReservedNameTest {
                     )
                 ).parsed()
             ),
-            Matchers.hasSize(2)
+            Matchers.hasSize(3)
         );
     }
 

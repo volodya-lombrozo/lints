@@ -18,8 +18,10 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.function.Consumer;
+import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
+import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 import org.eolang.parser.EoSyntax;
 
 /**
@@ -59,12 +61,10 @@ final class LtReservedName implements Lint<XML> {
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
         final Xnav program = new Xnav(xmir.inner());
-        // move to the xpath @name = ...values
         program.path("//o[@name]")
             .forEach(
                 object -> {
                     final String oname = object.attribute("name").text().get();
-                    System.out.println(this.reserved);
                     if (this.reserved.contains(oname)) {
                         defects.add(
                             new Defect.Default(
@@ -85,6 +85,19 @@ final class LtReservedName implements Lint<XML> {
         return defects;
     }
 
+    @Override
+    public String motive() throws IOException {
+        return new UncheckedText(
+            new TextOf(
+                new ResourceOf(
+                    String.format(
+                        "org/eolang/motives/names/%s.md", this.name()
+                    )
+                )
+            )
+        ).asString();
+    }
+
     private static List<String> reservedInHome() {
         final List<String> sources = new ListOf<>();
         final List<String> parse = new ListOf<>();
@@ -93,8 +106,7 @@ final class LtReservedName implements Lint<XML> {
             "https://api.github.com/repos/objectionary/home/contents/objects/org/eolang"
         );
         while (!directories.isEmpty()) {
-            final String current = directories.poll();
-            LtReservedName.find(current, parse, directories);
+            LtReservedName.unpack(directories.poll(), parse, directories);
         }
         parse.forEach(source -> sources.add(LtReservedName.source(source)));
         final List<String> names = new ListOf<>();
@@ -114,7 +126,9 @@ final class LtReservedName implements Lint<XML> {
         return names;
     }
 
-    private static void find(final String dir, final List<String> parse, final Queue<String> dirs) {
+    private static void unpack(
+        final String dir, final List<String> parse, final Queue<String> dirs
+    ) {
         try {
             final JsonArray refs = Json.createReader(
                 new StringReader(
@@ -149,21 +163,12 @@ final class LtReservedName implements Lint<XML> {
                 String.format(
                     "https://raw.githubusercontent.com/objectionary/home/refs/heads/master/%s", path
                 )
-            )
-                .method(Request.GET)
-                .fetch()
-                .as(RestResponse.class)
-                .body();
+            ).method(Request.GET).fetch().as(RestResponse.class).body();
         } catch (final IOException exception) {
             throw new IllegalStateException(
                 String.format("Failed to find source EO file from %s", path),
                 exception
             );
         }
-    }
-
-    @Override
-    public String motive() throws IOException {
-        throw new UnsupportedOperationException("#motive()");
     }
 }
