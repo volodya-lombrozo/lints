@@ -3,41 +3,15 @@
  * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
  * SPDX-License-Identifier: MIT
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eo="https://www.eolang.org" id="sparse-seq" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="sparse-seq" version="2.0">
   <xsl:import href="/org/eolang/parser/_funcs.xsl"/>
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
   <xsl:import href="/org/eolang/funcs/defect-context.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:template match="o" mode="arguments" as="xs:integer">
-    <xsl:choose>
-      <xsl:when test="@base='Q.org.eolang.tuple.empty'">
-        <xsl:value-of select="0"/>
-      </xsl:when>
-      <xsl:when test="@base='Q.org.eolang.tuple'">
-        <xsl:variable name="nested">
-          <xsl:apply-templates select="o[1]" mode="arguments"/>
-        </xsl:variable>
-        <xsl:choose>
-          <xsl:when test="count(o) &gt;= 2">
-            <xsl:value-of select="$nested + 1"/>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$nested"/>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="-1"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="//o[@base='Q.org.eolang.seq']">
-        <xsl:variable name="objects">
-          <xsl:apply-templates select="o[1]" mode="arguments"/>
-        </xsl:variable>
-        <xsl:if test="$objects = 1">
+        <xsl:if test="o[1]/o[3]/o[1]/text() = '3F-F0-00-00-00-00-00-00'">
           <xsl:element name="defect">
             <xsl:variable name="line" select="eo:lineno(@line)"/>
             <xsl:attribute name="line">
