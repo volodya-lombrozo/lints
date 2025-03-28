@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+lints:
+  - object-is-not-unique
+asserts:
+  - count(error)=2
+  - lines()=[bar:2]
+  - hasText()='The object name "foo" is not unique, original object was found in "bar"'
+foo.eo: |
+  # Foo.
+  [] > foo
+bar.eo: |
+  # Bar.
+  [] > foo
