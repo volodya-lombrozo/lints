@@ -5,7 +5,8 @@
 package org.eolang.lints;
 
 import java.io.IOException;
-import org.cactoos.list.ListOf;
+import org.cactoos.map.MapEntry;
+import org.cactoos.map.MapOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -23,7 +24,7 @@ final class LtReservedNameTest {
     void catchesReservedName() throws IOException {
         MatcherAssert.assertThat(
             "Defects are empty, but they should not",
-            new LtReservedName(new ListOf<>("true"))
+            new LtReservedName(new MapOf<>("true", "org.eolang.true.eo"))
                 .defects(
                     new EoSyntax(
                         "foo",
@@ -43,7 +44,7 @@ final class LtReservedNameTest {
     void allowsNonReservedName() throws IOException {
         MatcherAssert.assertThat(
             "Defects are not empty, but they should",
-            new LtReservedName(new ListOf<>("true"))
+            new LtReservedName(new MapOf<>("true", "org.eolang.true.eo"))
                 .defects(
                     new EoSyntax(
                         "x",
@@ -62,7 +63,7 @@ final class LtReservedNameTest {
     void allowsUniqueNameInTopProgramObject() throws IOException {
         MatcherAssert.assertThat(
             "Defects are not empty, but they should",
-            new LtReservedName(new ListOf<>("f"))
+            new LtReservedName(new MapOf<>("f", "org.eolang.f.eo"))
                 .defects(
                     new EoSyntax(
                         "top",
@@ -81,7 +82,7 @@ final class LtReservedNameTest {
     void catchesReservedNameWithPackage() throws IOException {
         MatcherAssert.assertThat(
             "There was no defects, though object name is already reserved",
-            new LtReservedName(new ListOf<>("stdout"))
+            new LtReservedName(new MapOf<>("stdout", "org.eolang.stdout.eo"))
                 .defects(
                     new EoSyntax(
                         "t-packaged",
@@ -102,20 +103,24 @@ final class LtReservedNameTest {
     void catchesMultipleNames() throws IOException {
         MatcherAssert.assertThat(
             "Defects should be caught",
-            new LtReservedName(new ListOf<>("left", "right"))
-                .defects(
-                    new EoSyntax(
-                        "two-defects",
-                        String.join(
-                            "\n",
-                            "# Left.",
-                            "[] > left",
-                            "",
-                            "# Right.",
-                            "[] > right"
-                        )
-                    ).parsed()
-                ),
+            new LtReservedName(
+                new MapOf<String, String>(
+                    new MapEntry<>("left", "org.eolang.left.eo"),
+                    new MapEntry<>("right", "org.eolang.right.eo")
+                )
+            ).defects(
+                new EoSyntax(
+                    "two-defects",
+                    String.join(
+                        "\n",
+                        "# Left.",
+                        "[] > left",
+                        "",
+                        "# Right.",
+                        "[] > right"
+                    )
+                ).parsed()
+            ),
             Matchers.hasSize(2)
         );
     }
@@ -124,7 +129,13 @@ final class LtReservedNameTest {
     void reportsAll() throws IOException {
         MatcherAssert.assertThat(
             "Defects are empty, but they should not",
-            new LtReservedName(new ListOf<>("ja", "jp", "spb")).defects(
+            new LtReservedName(
+                new MapOf<>(
+                    new MapEntry<>("ja", "org.eolang.ja.eo"),
+                    new MapEntry<>("jp", "org.eolang.jp.eo"),
+                    new MapEntry<>("spb", "org.eolang.spb.eo")
+                )
+            ).defects(
                 new EoSyntax(
                     "tops",
                     String.join(
@@ -146,7 +157,7 @@ final class LtReservedNameTest {
     void reportsReservedNameInTopObject() throws IOException {
         MatcherAssert.assertThat(
             "Defects should be caught",
-            new LtReservedName(new ListOf<>("foo")).defects(
+            new LtReservedName(new MapOf<>("foo", "org.eolang.foo.eo")).defects(
                 new EoSyntax(
                     "foo",
                     String.join(

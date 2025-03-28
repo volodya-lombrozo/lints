@@ -15,11 +15,11 @@ import jakarta.json.JsonObject;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import org.cactoos.io.ResourceOf;
-import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.parser.EoSyntax;
@@ -32,9 +32,15 @@ import org.eolang.parser.EoSyntax;
 final class LtReservedName implements Lint<XML> {
 
     /**
+     * Objects URL.
+     */
+    private static final String OBJECTS_CATALOG =
+        "https://api.github.com/repos/objectionary/home/contents/objects/org/eolang";
+
+    /**
      * Reserved names.
      */
-    private final List<String> reserved;
+    private final Map<String, String> reserved;
 
     /**
      * Ctor.
@@ -48,7 +54,7 @@ final class LtReservedName implements Lint<XML> {
      *
      * @param names Reserved names
      */
-    LtReservedName(final List<String> names) {
+    LtReservedName(final Map<String, String> names) {
         this.reserved = names;
     }
 
@@ -65,7 +71,7 @@ final class LtReservedName implements Lint<XML> {
             .forEach(
                 object -> {
                     final String oname = object.attribute("name").text().get();
-                    if (this.reserved.contains(oname)) {
+                    if (this.reserved.keySet().contains(oname)) {
                         defects.add(
                             new Defect.Default(
                                 this.name(),
@@ -74,8 +80,8 @@ final class LtReservedName implements Lint<XML> {
                                     .text().orElse("unknown"),
                                 Integer.parseInt(object.attribute("line").text().orElse("0")),
                                 String.format(
-                                    "Object name \"%s\" is already reserved by object in the org.eolang package",
-                                    oname
+                                    "Object name \"%s\" is already reserved by object in the \"%s\"",
+                                    oname, this.reserved.get(oname)
                                 )
                             )
                         );
@@ -98,36 +104,44 @@ final class LtReservedName implements Lint<XML> {
         ).asString();
     }
 
-    private static List<String> reservedInHome() {
-        final List<String> sources = new ListOf<>();
-        final List<String> parse = new ListOf<>();
+    private static Map<String, String> reservedInHome() {
+        final Map<String, String> sources = new HashMap<>(64);
+        final Map<String, String> parse = new HashMap<>(64);
         final Queue<String> directories = new LinkedList<>();
-        directories.add(
-            "https://api.github.com/repos/objectionary/home/contents/objects/org/eolang"
-        );
+        directories.add(LtReservedName.OBJECTS_CATALOG);
         while (!directories.isEmpty()) {
             LtReservedName.unpack(directories.poll(), parse, directories);
         }
-        parse.forEach(source -> sources.add(LtReservedName.source(source)));
-        final List<String> names = new ListOf<>();
-        sources.stream().map(
-            src -> {
+        parse.forEach(
+            (source, path) -> sources.put(
+                LtReservedName.source(source),
+                String.format(
+                    "%s%s",
+                    "org.eolang",
+                    path.replace(LtReservedName.OBJECTS_CATALOG, "")
+                        .replace("?ref=master", "").replace("/", ".")
+                )
+            )
+        );
+        final Map<String, String> names = new HashMap<>(64);
+        sources.forEach(
+            (src, path) -> {
+                final XML parsed;
                 try {
-                    return new EoSyntax("reserved", src).parsed();
+                    parsed = new EoSyntax("reserved", src).parsed();
+                    new Xnav(parsed.inner()).path("/program/objects/o/@name")
+                        .map(oname -> oname.text().get())
+                        .forEach(oname -> names.put(oname, path));
                 } catch (final IOException exception) {
                     throw new IllegalStateException("Failed to parse EO sources", exception);
                 }
             }
-        ).forEach(
-            xmir -> new Xnav(xmir.inner()).path("/program/objects/o/@name")
-                .map(oname -> oname.text().get())
-                .forEach(names::add)
         );
         return names;
     }
 
     private static void unpack(
-        final String dir, final List<String> parse, final Queue<String> dirs
+        final String dir, final Map<String, String> parse, final Queue<String> dirs
     ) {
         try {
             final JsonArray refs = Json.createReader(
@@ -145,7 +159,7 @@ final class LtReservedName implements Lint<XML> {
                 final String name = ref.getString("name");
                 final String type = ref.getString("type");
                 if ("file".equals(type) && name.endsWith(".eo")) {
-                    parse.add(ref.getString("path"));
+                    parse.put(ref.getString("path"), ref.getString("url"));
                 } else if ("dir".equals(type)) {
                     dirs.add(ref.getString("url"));
                 }
