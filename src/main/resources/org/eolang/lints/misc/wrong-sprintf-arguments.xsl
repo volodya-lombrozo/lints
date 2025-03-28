@@ -109,7 +109,7 @@
                   <xsl:attribute name="severity">
                     <xsl:text>warning</xsl:text>
                   </xsl:attribute>
-                  <xsl:text>The second argument "Q.org.eolang.txt.sprintf" object must be a right structured "Q.org.eolang.tuple" object built via ".with" method</xsl:text>
+                  <xsl:text>The second argument "Q.org.eolang.txt.sprintf" object must be a right structured "Q.org.eolang.tuple" object</xsl:text>
                 </defect>
               </xsl:when>
               <xsl:otherwise>
