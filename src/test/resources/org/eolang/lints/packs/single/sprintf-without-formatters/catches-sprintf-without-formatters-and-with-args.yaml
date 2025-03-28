@@ -12,4 +12,4 @@ input: |
     QQ.io.stdout > @
       QQ.txt.sprintf
         "Boom! We are here"
-        * name, "x"
+        * name "x"

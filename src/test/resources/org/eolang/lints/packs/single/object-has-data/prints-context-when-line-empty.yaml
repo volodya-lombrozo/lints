@@ -9,7 +9,9 @@ document: |
   <program>
     <objects>
       <o base="foo" name="o">
-        <o name="bar">BAR</o>
+        <o name="bar">
+          <o>BAR</o>
+        </o>
       </o>
     </objects>
   </program>
