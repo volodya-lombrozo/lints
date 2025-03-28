@@ -54,7 +54,7 @@ final class LtReservedName implements Lint<XML> {
             .forEach(
                 object -> {
                     final String oname = object.attribute("name").text().get();
-                    System.out.println(oname);
+                    System.out.println(this.reserved);
                     if (this.reserved.contains(oname)) {
                         defects.add(
                             new Defect.Default(
@@ -82,6 +82,7 @@ final class LtReservedName implements Lint<XML> {
                 "\n",
                 "# Foo.",
                 "[] > foo",
+                "  42 > boom",
                 "# Bar.",
                 "[] > bar"
             )
