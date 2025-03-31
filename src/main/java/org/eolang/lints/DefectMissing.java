@@ -12,10 +12,10 @@ import org.cactoos.Func;
 import org.cactoos.set.SetOf;
 
 /**
- * Matches lined unlint.
+ * Does defect missing.
  * @since 0.0.44
  */
-final class MatchesLinedUnlint implements Func<String, Boolean> {
+final class DefectMissing implements Func<String, Boolean> {
 
     /**
      * Mapped defects.
@@ -32,7 +32,7 @@ final class MatchesLinedUnlint implements Func<String, Boolean> {
      * @param present Present defects
      * @param exld Excluded lints
      */
-    MatchesLinedUnlint(final Map<String, List<Integer>> present, final Collection<String> exld) {
+    DefectMissing(final Map<String, List<Integer>> present, final Collection<String> exld) {
         this.defects = present;
         this.excluded = exld;
     }

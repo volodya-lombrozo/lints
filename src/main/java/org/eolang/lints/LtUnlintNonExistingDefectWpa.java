@@ -78,7 +78,7 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
                     .map(xnav -> xnav.text().get())
                     .collect(Collectors.toSet())
                     .stream()
-                    .filter(unlint -> new MatchesLinedUnlint(present, this.excluded).apply(unlint))
+                    .filter(unlint -> new DefectMissing(present, this.excluded).apply(unlint))
                     .forEach(
                         unlint -> xml
                             .path(
