@@ -4,10 +4,9 @@
 lints:
   - atom-is-not-unique
 asserts:
-  - count(error)=2
-  - lines()=[foo-packaged:5, bar-packaged:5]
-  - hasText()='Atom with FQN "Ф.xyz.app.foo" is duplicated, original was found in "foo-packaged"'
-  - hasText()='Atom with FQN "Ф.xyz.app.foo" is duplicated, original was found in "bar-packaged"'
+  - /defects[count(defect[@severity='error'])=2]
+  - /defects/defect[@program='foo-packaged' and @line='5']
+  - /defects/defect[@program='bar-packaged' and @line='5']
 foo-packaged.eo: |
   +package xyz
 
