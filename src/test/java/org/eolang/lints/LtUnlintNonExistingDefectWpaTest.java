@@ -147,4 +147,33 @@ final class LtUnlintNonExistingDefectWpaTest {
             Matchers.emptyIterable()
         );
     }
+
+    @Test
+    void allowsExistingUnlintWithLineNumber() throws IOException {
+        MatcherAssert.assertThat(
+            "An existing defect should be able to be unlinted with line number",
+            new LtUnlintNonExistingDefectWpa(
+                new ListOf<>(new LtInconsistentArgs()),
+                new ListOf<>()
+            ).defects(
+                new MapOf<>(
+                    new MapEntry<>(
+                        "foo",
+                        new EoSyntax(
+                            String.join(
+                                "\n",
+                                "+unlint inconsistent-args:6",
+                                "",
+                                "# Foo.",
+                                "[] > foo",
+                                "  bar 42 > x",
+                                "  bar 42 52 > y"
+                            )
+                        ).parsed()
+                    )
+                )
+            ),
+            Matchers.emptyIterable()
+        );
+    }
 }

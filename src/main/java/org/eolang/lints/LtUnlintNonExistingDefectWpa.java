@@ -12,7 +12,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
+import jdk.jshell.spi.SPIResolutionException;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
 import org.cactoos.text.IoCheckedText;
@@ -68,16 +70,30 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
     @Override
     public Collection<Defect> defects(final Map<String, XML> pkg) {
         final Collection<Defect> defects = new LinkedList<>();
-        final Map<XML, List<String>> existing = this.existingDefects(pkg);
+        final Map<XML, Map<String, List<Integer>>> existing = this.existingDefects(pkg);
         pkg.values().forEach(
             xmir -> {
                 final Xnav xml = new Xnav(xmir.inner());
-                final List<String> present = existing.get(xmir);
+                final Map<String, List<Integer>> present = existing.get(xmir);
+                final Set<String> names = present.keySet();
                 xml.path("/program/metas/meta[head='unlint']/tail")
                     .map(xnav -> xnav.text().get())
                     .collect(Collectors.toSet())
                     .stream()
-                    .filter(unlint -> !present.contains(unlint) && !this.excluded.contains(unlint))
+                    .filter(
+                        unlint -> {
+                            final boolean matches;
+                            final String[] split = unlint.split(":");
+                            final String name = split[0];
+                            if (split.length > 1) {
+                                final List<Integer> lines = present.get(name);
+                                matches = (!names.contains(name) || !lines.contains(Integer.parseInt(split[1]))) && !this.excluded.contains(name);
+                            } else {
+                                matches = !names.contains(name) && !this.excluded.contains(name);
+                            }
+                            return matches;
+                        }
+                    )
                     .forEach(
                         unlint -> xml
                             .path(
@@ -129,27 +145,36 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
      * @param pkg Package with programs to scan
      * @return Map of existing defects
      */
-    private Map<XML, List<String>> existingDefects(final Map<String, XML> pkg) {
-        final Map<XML, List<String>> aggregated = new HashMap<>(0);
+    private Map<XML, Map<String, List<Integer>>> existingDefects(final Map<String, XML> pkg) {
+        final Map<XML, Map<String, List<Integer>>> aggregated = new HashMap<>(0);
         this.lints.forEach(
             wpl -> {
                 try {
                     final Collection<Defect> defects = wpl.defects(pkg);
-                    pkg.values().forEach(
-                        program ->
-                            aggregated.merge(
-                                program,
-                                new ListOf<>(
-                                    defects.stream()
-                                        .map(Defect::rule)
-                                        .collect(Collectors.toList())
-                                ),
-                                (existing, incoming) -> {
-                                    existing.addAll(incoming);
-                                    return existing;
-                                }
-                            )
-                    );
+                    defects.forEach(defect -> {
+                        pkg.values().forEach(program ->
+                            aggregated
+                                .computeIfAbsent(program, k -> new HashMap<>())
+                                .computeIfAbsent(defect.rule(), k -> new ListOf<>())
+                                .add(defect.line())
+                        );
+                    });
+
+//                    pkg.values().forEach(
+//                        program ->
+//                            aggregated.merge(
+//                                program,
+//                                new ListOf<>(
+//                                    defects.stream()
+//                                        .map(Defect::rule)
+//                                        .collect(Collectors.toList())
+//                                ),
+//                                (existing, incoming) -> {
+//                                    existing.addAll(incoming);
+//                                    return existing;
+//                                }
+//                            )
+//                    );
                 } catch (final IOException exception) {
                     throw new IllegalStateException(
                         String.format(
