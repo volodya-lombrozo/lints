@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import jdk.jshell.spi.SPIResolutionException;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
+import org.cactoos.set.SetOf;
 import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
 
@@ -75,7 +76,12 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
             xmir -> {
                 final Xnav xml = new Xnav(xmir.inner());
                 final Map<String, List<Integer>> present = existing.get(xmir);
-                final Set<String> names = present.keySet();
+                final Set<String> names;
+                if (present != null) {
+                     names = present.keySet();
+                } else {
+                    names = new SetOf<>();
+                }
                 xml.path("/program/metas/meta[head='unlint']/tail")
                     .map(xnav -> xnav.text().get())
                     .collect(Collectors.toSet())

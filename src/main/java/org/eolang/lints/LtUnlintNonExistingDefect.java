@@ -64,7 +64,6 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
         final Map<String, List<Integer>> present = this.existingDefects(xmir);
-        System.out.println(present);
         final Xnav xml = new Xnav(xmir.inner());
         final Set<String> unlints = xml.path("/program/metas/meta[head='unlint']/tail")
             .map(xnav -> xnav.text().get())
