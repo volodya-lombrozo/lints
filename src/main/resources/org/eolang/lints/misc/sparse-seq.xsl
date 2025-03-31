@@ -11,7 +11,7 @@
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="//o[@base='Q.org.eolang.seq']">
-        <xsl:if test="o[1]/o[3]/o[1]/text() = '3F-F0-00-00-00-00-00-00'">
+        <xsl:if test="o[1]/o[3]/o[1]/o[1]/text() = '3F-F0-00-00-00-00-00-00'">
           <xsl:element name="defect">
             <xsl:variable name="line" select="eo:lineno(@line)"/>
             <xsl:attribute name="line">
