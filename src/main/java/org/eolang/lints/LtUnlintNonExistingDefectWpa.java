@@ -12,12 +12,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
-import jdk.jshell.spi.SPIResolutionException;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
-import org.cactoos.set.SetOf;
 import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
 
@@ -44,6 +41,7 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
 
     /**
      * Ctor.
+     *
      * @param lnts Lints
      */
     LtUnlintNonExistingDefectWpa(final Iterable<Lint<Map<String, XML>>> lnts) {
@@ -76,30 +74,11 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
             xmir -> {
                 final Xnav xml = new Xnav(xmir.inner());
                 final Map<String, List<Integer>> present = existing.get(xmir);
-                final Set<String> names;
-                if (present != null) {
-                     names = present.keySet();
-                } else {
-                    names = new SetOf<>();
-                }
                 xml.path("/program/metas/meta[head='unlint']/tail")
                     .map(xnav -> xnav.text().get())
                     .collect(Collectors.toSet())
                     .stream()
-                    .filter(
-                        unlint -> {
-                            final boolean matches;
-                            final String[] split = unlint.split(":");
-                            final String name = split[0];
-                            if (split.length > 1) {
-                                final List<Integer> lines = present.get(name);
-                                matches = (!names.contains(name) || !lines.contains(Integer.parseInt(split[1]))) && !this.excluded.contains(name);
-                            } else {
-                                matches = !names.contains(name) && !this.excluded.contains(name);
-                            }
-                            return matches;
-                        }
-                    )
+                    .filter(unlint -> new MatchesLinedUnlint(present, this.excluded).apply(unlint))
                     .forEach(
                         unlint -> xml
                             .path(
@@ -157,30 +136,15 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
             wpl -> {
                 try {
                     final Collection<Defect> defects = wpl.defects(pkg);
-                    defects.forEach(defect -> {
-                        pkg.values().forEach(program ->
-                            aggregated
-                                .computeIfAbsent(program, k -> new HashMap<>())
-                                .computeIfAbsent(defect.rule(), k -> new ListOf<>())
-                                .add(defect.line())
-                        );
-                    });
-
-//                    pkg.values().forEach(
-//                        program ->
-//                            aggregated.merge(
-//                                program,
-//                                new ListOf<>(
-//                                    defects.stream()
-//                                        .map(Defect::rule)
-//                                        .collect(Collectors.toList())
-//                                ),
-//                                (existing, incoming) -> {
-//                                    existing.addAll(incoming);
-//                                    return existing;
-//                                }
-//                            )
-//                    );
+                    defects.forEach(
+                        defect -> pkg.values().forEach(
+                            program ->
+                                aggregated
+                                    .computeIfAbsent(program, k -> new HashMap<>())
+                                    .computeIfAbsent(defect.rule(), k -> new ListOf<>())
+                                    .add(defect.line())
+                        )
+                    );
                 } catch (final IOException exception) {
                     throw new IllegalStateException(
                         String.format(

@@ -38,6 +38,7 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
 
     /**
      * Ctor.
+     *
      * @param lnts Lints
      */
     LtUnlintNonExistingDefect(final Iterable<Lint<XML>> lnts) {
@@ -69,21 +70,7 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
             .map(xnav -> xnav.text().get())
             .collect(Collectors.toSet());
         unlints.stream()
-            .filter(
-                unlint -> {
-                    final boolean matches;
-                    final String[] split = unlint.split(":");
-                    final String name = split[0];
-                    if (split.length > 1) {
-                        final Integer line = Integer.parseInt(split[1]);
-                        final List<Integer> lines = present.get(name);
-                        matches = (present.get(name) == null || !lines.contains(line)) && !this.excluded.contains(name);
-                    } else {
-                        matches = present.get(name) == null && !this.excluded.contains(name);
-                    }
-                    return matches;
-                }
-            )
+            .filter(unlint -> new MatchesLinedUnlint(present, this.excluded).apply(unlint))
             .forEach(
                 unlint ->
                     xml.path(
@@ -133,16 +120,11 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
         this.lints.forEach(
             lint -> {
                 try {
-//                    existing.addAll(
-//                        lint.defects(xmir).stream()
-//                            .map(Defect::rule)
-//                            .collect(Collectors.toList())
-//                    );
-                    lint.defects(xmir).forEach(defect ->
-                        existing.computeIfAbsent(defect.rule(), key -> new ListOf<>())
-                            .add(defect.line())
+                    lint.defects(xmir).forEach(
+                        defect ->
+                            existing.computeIfAbsent(defect.rule(), key -> new ListOf<>())
+                                .add(defect.line())
                     );
-
                 } catch (final IOException exception) {
                     throw new IllegalStateException(exception);
                 }
