@@ -25,7 +25,7 @@
             <xsl:attribute name="severity">
               <xsl:text>warning</xsl:text>
             </xsl:attribute>
-            <xsl:text>The "Q.org.eolang.seq" object has only one object inside</xsl:text>
+            <xsl:text>The "Q.org.eolang.seq" object accepts only one step</xsl:text>
           </xsl:element>
         </xsl:if>
       </xsl:for-each>
