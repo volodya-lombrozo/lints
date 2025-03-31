@@ -8,7 +8,10 @@ import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.cactoos.io.ResourceOf;
@@ -60,13 +63,28 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
-        final Collection<String> present = this.existingDefects(xmir);
+        final Map<String, List<Integer>> present = this.existingDefects(xmir);
+        System.out.println(present);
         final Xnav xml = new Xnav(xmir.inner());
         final Set<String> unlints = xml.path("/program/metas/meta[head='unlint']/tail")
             .map(xnav -> xnav.text().get())
             .collect(Collectors.toSet());
         unlints.stream()
-            .filter(unlint -> !present.contains(unlint) && !this.excluded.contains(unlint))
+            .filter(
+                unlint -> {
+                    final boolean matches;
+                    final String[] split = unlint.split(":");
+                    final String name = split[0];
+                    if (split.length > 1) {
+                        final Integer line = Integer.parseInt(split[1]);
+                        final List<Integer> lines = present.get(name);
+                        matches = (present.get(name) == null || !lines.contains(line)) && !this.excluded.contains(name);
+                    } else {
+                        matches = present.get(name) == null && !this.excluded.contains(name);
+                    }
+                    return matches;
+                }
+            )
             .forEach(
                 unlint ->
                     xml.path(
@@ -111,16 +129,21 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
         ).asString();
     }
 
-    private Collection<String> existingDefects(final XML xmir) {
-        final Collection<String> existing = new ListOf<>();
+    private Map<String, List<Integer>> existingDefects(final XML xmir) {
+        final Map<String, List<Integer>> existing = new HashMap<>(0);
         this.lints.forEach(
             lint -> {
                 try {
-                    existing.addAll(
-                        lint.defects(xmir).stream()
-                            .map(Defect::rule)
-                            .collect(Collectors.toList())
+//                    existing.addAll(
+//                        lint.defects(xmir).stream()
+//                            .map(Defect::rule)
+//                            .collect(Collectors.toList())
+//                    );
+                    lint.defects(xmir).forEach(defect ->
+                        existing.computeIfAbsent(defect.rule(), key -> new ListOf<>())
+                            .add(defect.line())
                     );
+
                 } catch (final IOException exception) {
                     throw new IllegalStateException(exception);
                 }

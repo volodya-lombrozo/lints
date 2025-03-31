@@ -142,7 +142,7 @@ final class LtUnlintNonExistingDefectTest {
                 new EoSyntax(
                     String.join(
                         "\n",
-                        "+unlint ascii-only:3",
+                        "+unlint ascii-only:4",
                         "",
                         "# привет мы тут.",
                         "[] > hello"
