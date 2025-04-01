@@ -196,6 +196,6 @@ final class LtReservedName implements Lint<XML> {
 
     private static String prettyEoPath(final Path path, final String location) {
         return path.toString().replace(String.format("%s/objects", location), "")
-            .substring(1).replace(File.separator, ".");
+            .substring(1).replace("/", ".").replace("\"", ".");
     }
 }
