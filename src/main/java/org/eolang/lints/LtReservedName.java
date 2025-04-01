@@ -6,6 +6,7 @@ package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -129,7 +130,7 @@ final class LtReservedName implements Lint<XML> {
             }
         } else {
             try {
-                Files.walk(Paths.get(resource.getPath()))
+                Files.walk(new File(resource.getFile()).toPath())
                     .filter(sources)
                     .forEach(LtReservedName.file(location, names));
             } catch (final IOException exception) {
