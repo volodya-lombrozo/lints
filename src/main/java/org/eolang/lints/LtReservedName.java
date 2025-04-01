@@ -46,7 +46,7 @@ final class LtReservedName implements Lint<XML> {
      * Ctor.
      */
     LtReservedName() {
-        this(LtReservedName.home("cloned/home"));
+        this(LtReservedName.home(String.format("cloned%shome", File.separator)));
     }
 
     /**
