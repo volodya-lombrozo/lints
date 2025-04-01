@@ -4,10 +4,11 @@
 lints:
   - atom-is-not-unique
 asserts:
-  - count(error)=2
-  - lines()=[foo:3, bar:3]
-  - hasText()='Atom with FQN "Ф.foo.at" is duplicated, original was found in "foo"'
-  - hasText()='Atom with FQN "Ф.foo.at" is duplicated, original was found in "bar"'
+  - /defects[count(defect[@severity='error'])=2]
+  - /defects/defect[@program='foo' and @line='3']
+  - /defects/defect[@program='bar' and @line='3']
+  - /defects/defect[normalize-space()='Atom with FQN "Ф.foo.at" is duplicated, original was found in "foo"']
+  - /defects/defect[normalize-space()='Atom with FQN "Ф.foo.at" is duplicated, original was found in "bar"']
 foo.eo: |
   # Foo.
   [] > foo

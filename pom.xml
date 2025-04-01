@@ -119,7 +119,7 @@
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.53.0</version>
+      <version>0.55.1</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
@@ -340,7 +340,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.5.2</version>
+            <version>3.5.3</version>
             <configuration>
               <excludedGroups>benchmark</excludedGroups>
               <excludes>

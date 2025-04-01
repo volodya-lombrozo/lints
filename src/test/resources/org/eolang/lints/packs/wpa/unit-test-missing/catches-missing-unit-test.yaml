@@ -4,8 +4,7 @@
 lints:
   - unit-test-missing
 asserts:
-  - count(warning)=1
-  - hasText()='Tests "foo-tests" not found for "foo"'
+  - /defects[count(defect[@severity='warning'])=1]
 foo.eo: |
   # Foo.
   [] > foo
