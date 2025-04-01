@@ -138,11 +138,6 @@
       <version>3.0.2</version>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jgit</groupId>
-      <artifactId>org.eclipse.jgit</artifactId>
-      <version>5.13.3.202401111512-r</version>
-    </dependency>
-    <dependency>
       <groupId>com.yegor256</groupId>
       <artifactId>tojos</artifactId>
       <version>0.18.5</version>
@@ -450,6 +445,49 @@
               <url>https://opennlp.sourceforge.net/models-1.5/en-pos-perceptron.bin</url>
               <outputFileName>en-pos-perceptron.bin</outputFileName>
               <outputDirectory>${project.build.directory}/classes</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>git</executable>
+              <arguments>
+                <argument>clone</argument>
+                <argument>https://github.com/objectionary/home.git</argument>
+                <argument>${project.build.directory}/cloned/home</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <!-- version from the parent pom -->
+        <executions>
+          <execution>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/classes/cloned/home</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${project.build.directory}/cloned/home</directory>
+                  <filtering>false</filtering>
+                </resource>
+              </resources>
             </configuration>
           </execution>
         </executions>

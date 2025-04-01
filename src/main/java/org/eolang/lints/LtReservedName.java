@@ -6,23 +6,27 @@ package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.io.UncheckedInput;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eolang.parser.EoSyntax;
 
 /**
@@ -101,52 +105,93 @@ final class LtReservedName implements Lint<XML> {
 
     private static Map<String, String> reservedInHome() {
         final String cloned = "cloned/home";
-        final Path path = Paths.get(cloned);
-        if (!Files.exists(path)) {
-            try {
-                Git.cloneRepository()
-                    .setURI("https://github.com/objectionary/home.git")
-                    .setDirectory(new File(cloned))
-                    .call();
-            } catch (final GitAPIException exception) {
-                throw new IllegalStateException("Failed to clone home objects", exception);
-            }
-        }
+        return LtReservedName.home(cloned);
+    }
+
+    private static Map<String, String> home(final String location) {
         final Map<String, String> names = new HashMap<>(64);
-        try (Stream<Path> paths = Files.walk(path)) {
-            paths.filter(
-                p -> {
-                    final String file = p.toString();
-                    return file.endsWith(".eo")
-                        && file.startsWith(String.format("%s/objects", cloned));
-                }
-            ).forEach(
-                eo -> {
-                    final XML parsed;
-                    try {
-                        parsed = new EoSyntax(
-                            "reserved", new UncheckedInput(new InputOf(eo.toFile()))
-                        ).parsed();
-                    } catch (final IOException exception) {
-                        throw new IllegalStateException(
-                            String.format("Failed to parse EO source in \"%s\"", eo),
-                            exception
-                        );
+        final List<Path> result;
+        final URL resource = LtReservedName.class.getClassLoader().getResource(location);
+        if ("jar".equals(resource.getProtocol())) {
+            final String jar = resource.getFile().substring(5, resource.getFile().indexOf('!'));
+            final URI uri = URI.create(String.format("jar:file:%s", jar));
+            try (FileSystem fs = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
+                result = Files.walk(fs.getPath(location)).collect(Collectors.toList());
+                result.stream().filter(
+                    p -> {
+                        final String file = p.toString();
+                        return file.endsWith(".eo")
+                            && file.contains(String.format("%s/objects", location));
                     }
-                    new Xnav(parsed.inner()).path("/program/objects/o/@name")
-                        .map(oname -> oname.text().get())
-                        .forEach(
-                            oname ->
-                                names.put(
-                                    oname,
-                                    eo.toString().replace(String.format("%s/objects", cloned), "")
-                                        .substring(1).replace("/", ".")
-                                )
-                        );
-                }
-            );
-        } catch (final IOException exception) {
-            throw new IllegalStateException("Failed to walk through the files", exception);
+                ).forEach(
+                    eo -> {
+                        final XML parsed;
+                        try {
+                            try (InputStream input = Files.newInputStream(eo)) {
+                                parsed = new EoSyntax(
+                                    "reserved", new TextOf(input).asString()
+                                ).parsed();
+                            }
+                        } catch (final Exception exception) {
+                            throw new IllegalStateException(
+                                String.format("Failed to parse EO source in \"%s\"", eo),
+                                exception
+                            );
+                        }
+                        new Xnav(parsed.inner()).path("/program/objects/o/@name")
+                            .map(oname -> oname.text().get())
+                            .forEach(
+                                oname ->
+                                    names.put(
+                                        oname,
+                                        eo.toString().replace(String.format("%s/objects", location), "")
+                                            .substring(1).replace("/", ".")
+                                    )
+                            );
+                    }
+                );
+            } catch (final IOException exception) {
+                throw new IllegalStateException(
+                    "Failed to read home objects from JAR", exception
+                );
+            }
+        } else {
+            try {
+                result = Files.walk(Paths.get(resource.getPath())).collect(Collectors.toList());
+                result.stream().filter(
+                    p -> {
+                        final String file = p.toString();
+                        return file.endsWith(".eo")
+                            && file.contains(String.format("%s/objects", location));
+                    }
+                ).forEach(
+                    eo -> {
+                        final XML parsed;
+                        try {
+                            parsed = new EoSyntax(
+                                "reserved", new UncheckedInput(new InputOf(eo.toFile()))
+                            ).parsed();
+                        } catch (final IOException exception) {
+                            throw new IllegalStateException(
+                                String.format("Failed to parse EO source in \"%s\"", eo),
+                                exception
+                            );
+                        }
+                        new Xnav(parsed.inner()).path("/program/objects/o/@name")
+                            .map(oname -> oname.text().get())
+                            .forEach(
+                                oname ->
+                                    names.put(
+                                        oname,
+                                        eo.toString().replace(String.format("%s/objects", location), "")
+                                            .substring(1).replace("/", ".")
+                                    )
+                            );
+                    }
+                );
+            } catch (final IOException exception) {
+                throw new IllegalStateException("Failed to walk through files", exception);
+            }
         }
         return names;
     }
