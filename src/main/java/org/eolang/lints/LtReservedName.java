@@ -6,6 +6,7 @@ package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -154,12 +155,7 @@ final class LtReservedName implements Lint<XML> {
             }
             LtReservedName.processXmir(
                 parsed,
-                oname ->
-                    names.put(
-                        oname,
-                        eo.toString().replace(String.format("%s/objects", location), "")
-                            .substring(1).replace("/", ".")
-                    )
+                oname -> names.put(oname, LtReservedName.prettyEoPath(eo, location))
             );
         };
     }
@@ -187,12 +183,7 @@ final class LtReservedName implements Lint<XML> {
             }
             LtReservedName.processXmir(
                 parsed,
-                oname ->
-                    names.put(
-                        oname,
-                        eo.toString().replace(String.format("%s/objects", location), "")
-                            .substring(1).replace("/", ".")
-                    )
+                oname -> names.put(oname, LtReservedName.prettyEoPath(eo, location))
             );
         };
     }
@@ -201,5 +192,10 @@ final class LtReservedName implements Lint<XML> {
         new Xnav(xmir.inner()).path("/program/objects/o/@name")
             .map(oname -> oname.text().get())
             .forEach(each);
+    }
+
+    private static String prettyEoPath(final Path path, final String location) {
+        return path.toString().replace(String.format("%s/objects", location), "")
+            .substring(1).replace(File.separator, ".");
     }
 }
