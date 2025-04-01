@@ -5,23 +5,24 @@
 package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
-import com.jcabi.http.Request;
-import com.jcabi.http.request.JdkRequest;
-import com.jcabi.http.response.RestResponse;
 import com.jcabi.xml.XML;
-import jakarta.json.Json;
-import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
+import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Queue;
+import java.util.stream.Stream;
+import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.io.UncheckedInput;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eolang.parser.EoSyntax;
 
 /**
@@ -30,12 +31,6 @@ import org.eolang.parser.EoSyntax;
  * @since 0.0.43
  */
 final class LtReservedName implements Lint<XML> {
-
-    /**
-     * Objects URL.
-     */
-    private static final String OBJECTS_CATALOG =
-        "https://api.github.com/repos/objectionary/home/contents/objects/org/eolang";
 
     /**
      * Reserved names.
@@ -105,84 +100,54 @@ final class LtReservedName implements Lint<XML> {
     }
 
     private static Map<String, String> reservedInHome() {
-        final Map<String, String> sources = new HashMap<>(64);
-        final Map<String, String> parse = new HashMap<>(64);
-        final Queue<String> directories = new LinkedList<>();
-        directories.add(LtReservedName.OBJECTS_CATALOG);
-        while (!directories.isEmpty()) {
-            LtReservedName.unpack(directories.poll(), parse, directories);
+        final String cloned = "cloned/home";
+        final Path path = Paths.get(cloned);
+        if (!Files.exists(path)) {
+            try {
+                Git.cloneRepository()
+                    .setURI("https://github.com/objectionary/home.git")
+                    .setDirectory(new File(cloned))
+                    .call();
+            } catch (final GitAPIException exception) {
+                throw new IllegalStateException("Failed to clone home objects", exception);
+            }
         }
-        parse.forEach(
-            (source, path) -> sources.put(
-                LtReservedName.source(source),
-                String.format(
-                    "%s%s",
-                    "org.eolang",
-                    path.replace(LtReservedName.OBJECTS_CATALOG, "")
-                        .replace("?ref=master", "").replace("/", ".")
-                )
-            )
-        );
         final Map<String, String> names = new HashMap<>(64);
-        sources.forEach(
-            (src, path) -> {
-                final XML parsed;
-                try {
-                    parsed = new EoSyntax("reserved", src).parsed();
+        try (Stream<Path> paths = Files.walk(path)) {
+            paths.filter(
+                p -> {
+                    final String file = p.toString();
+                    return file.endsWith(".eo")
+                        && file.startsWith(String.format("%s/objects", cloned));
+                }
+            ).forEach(
+                eo -> {
+                    final XML parsed;
+                    try {
+                        parsed = new EoSyntax(
+                            "reserved", new UncheckedInput(new InputOf(eo.toFile()))
+                        ).parsed();
+                    } catch (final IOException exception) {
+                        throw new IllegalStateException(
+                            String.format("Failed to parse EO source in \"%s\"", eo),
+                            exception
+                        );
+                    }
                     new Xnav(parsed.inner()).path("/program/objects/o/@name")
                         .map(oname -> oname.text().get())
-                        .forEach(oname -> names.put(oname, path));
-                } catch (final IOException exception) {
-                    throw new IllegalStateException("Failed to parse EO sources", exception);
+                        .forEach(
+                            oname ->
+                                names.put(
+                                    oname,
+                                    eo.toString().replace(String.format("%s/objects", cloned), "")
+                                        .substring(1).replace("/", ".")
+                                )
+                        );
                 }
-            }
-        );
+            );
+        } catch (final IOException exception) {
+            throw new IllegalStateException("Failed to walk through the files", exception);
+        }
         return names;
-    }
-
-    private static void unpack(
-        final String dir, final Map<String, String> parse, final Queue<String> dirs
-    ) {
-        try {
-            final JsonArray refs = Json.createReader(
-                new StringReader(
-                    new JdkRequest(dir)
-                        .header("Accept", "application/vnd.github.v3+json")
-                        .method(Request.GET)
-                        .fetch()
-                        .as(RestResponse.class)
-                        .body()
-                )
-            ).readArray();
-            for (int pos = 0; pos < refs.size(); pos += 1) {
-                final JsonObject ref = refs.getJsonObject(pos);
-                final String name = ref.getString("name");
-                final String type = ref.getString("type");
-                if ("file".equals(type) && name.endsWith(".eo")) {
-                    parse.put(ref.getString("path"), ref.getString("url"));
-                } else if ("dir".equals(type)) {
-                    dirs.add(ref.getString("url"));
-                }
-            }
-        } catch (final IOException exception) {
-            throw new IllegalStateException(
-                "Failed to fetch EO source from home", exception
-            );
-        }
-    }
-
-    private static String source(final String path) {
-        try {
-            return new JdkRequest(
-                String.format(
-                    "https://raw.githubusercontent.com/objectionary/home/refs/heads/master/%s", path
-                )
-            ).method(Request.GET).fetch().as(RestResponse.class).body();
-        } catch (final IOException exception) {
-            throw new IllegalStateException(
-                String.format("Failed to find source EO file from %s", path),
-                exception
-            );
-        }
     }
 }

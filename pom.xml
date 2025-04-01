@@ -138,24 +138,9 @@
       <version>3.0.2</version>
     </dependency>
     <dependency>
-      <groupId>com.jcabi</groupId>
-      <artifactId>jcabi-http</artifactId>
-      <!-- version from the parent pom -->
-    </dependency>
-    <dependency>
-      <groupId>org.glassfish.jersey.core</groupId>
-      <artifactId>jersey-common</artifactId>
-      <version>3.1.2</version>
-    </dependency>
-    <dependency>
-      <groupId>jakarta.json</groupId>
-      <artifactId>jakarta.json-api</artifactId>
-      <!-- version from the parent pom -->
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.parsson</groupId>
-      <artifactId>parsson</artifactId>
-      <version>1.1.6</version>
+      <groupId>org.eclipse.jgit</groupId>
+      <artifactId>org.eclipse.jgit</artifactId>
+      <version>5.13.3.202401111512-r</version>
     </dependency>
     <dependency>
       <groupId>com.yegor256</groupId>
