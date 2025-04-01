@@ -6,7 +6,6 @@ package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
