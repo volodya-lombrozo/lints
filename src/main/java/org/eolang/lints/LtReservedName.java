@@ -6,10 +6,10 @@ package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -130,11 +130,13 @@ final class LtReservedName implements Lint<XML> {
             }
         } else {
             try {
-                Files.walk(new File(resource.getFile()).toPath())
+                Files.walk(Paths.get(resource.toURI()))
                     .filter(sources)
                     .forEach(LtReservedName.file(location, names));
             } catch (final IOException exception) {
                 throw new IllegalStateException("Failed to walk through files", exception);
+            } catch (final URISyntaxException exception) {
+                throw new IllegalStateException("URI syntax is broken", exception);
             }
         }
         return names;
