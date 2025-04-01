@@ -108,9 +108,9 @@ final class LtReservedName implements Lint<XML> {
         final Map<String, String> names = new HashMap<>(64);
         final URL resource = Thread.currentThread().getContextClassLoader().getResource(location);
         final Predicate<Path> sources = p -> {
-            final String file = p.toString();
-            return file.endsWith(".eo")
-                && file.contains(String.format("%s/objects", location));
+            final String file = p.toString().replace("\\", "/");
+            return file.endsWith(".eo") &&
+                file.contains(Path.of(location).resolve("objects").toString().replace("\\", "/"));
         };
         if ("jar".equals(resource.getProtocol())) {
             final URI uri = URI.create(
