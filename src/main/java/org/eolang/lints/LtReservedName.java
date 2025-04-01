@@ -33,7 +33,7 @@ import org.eolang.parser.EoSyntax;
 /**
  * Lint for reserved names.
  *
- * @since 0.0.43
+ * @since 0.0.44
  */
 final class LtReservedName implements Lint<XML> {
 
