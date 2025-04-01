@@ -5,6 +5,7 @@
 package org.eolang.lints;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
 import org.eolang.parser.EoSyntax;
@@ -12,6 +13,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 
 /**
  * Tests for {@link LtReservedName}.
@@ -173,6 +175,7 @@ final class LtReservedNameTest {
     }
 
     @Tag("deep")
+    @Timeout(value = 90L, unit = TimeUnit.SECONDS)
     @Test
     void scansReservedFromHome() throws IOException {
         MatcherAssert.assertThat(
