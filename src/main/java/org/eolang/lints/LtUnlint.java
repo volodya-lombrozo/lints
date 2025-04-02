@@ -61,7 +61,7 @@ final class LtUnlint implements Lint<XML> {
             )
         ).map(xnav -> xnav.text().get()).collect(Collectors.toList());
         final boolean global = !granular.isEmpty();
-        final AtomicBoolean completed = new AtomicBoolean(false);
+        final AtomicBoolean added = new AtomicBoolean(false);
         granular.forEach(
             unlint -> {
                 if (LtUnlint.LINE_NUMBER.matcher(unlint).matches()) {
@@ -80,12 +80,12 @@ final class LtUnlint implements Lint<XML> {
                 defect -> {
                     if (line != 0 && defect.line() == line) {
                         defects.add(defect);
-                        completed.set(true);
+                        added.set(true);
                     }
                 }
             )
         );
-        if (!completed.get() && !global) {
+        if (!added.get() && !global) {
             defects.addAll(this.origin.defects(xmir));
         }
         return defects;
