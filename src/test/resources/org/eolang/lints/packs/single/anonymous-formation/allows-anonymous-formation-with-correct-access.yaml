@@ -4,8 +4,7 @@
 sheets:
   - /org/eolang/lints/names/anonymous-formation.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='4']
+  - /defects[count(defect[@severity='warning'])=0]
 input: |
   # Main.
   malloc.of
