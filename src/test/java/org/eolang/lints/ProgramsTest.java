@@ -29,7 +29,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
  *
  * @since 0.1.0
  */
-@SuppressWarnings("PMD.TooManyMethods")
 @ExtendWith(MktmpResolver.class)
 final class ProgramsTest {
 

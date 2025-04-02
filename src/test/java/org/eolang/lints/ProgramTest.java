@@ -51,6 +51,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
  *  adjust lint-summary.txt file to capture all the measurements.
  * @checkstyle MethodBodyCommentsCheck (50 lines)
  */
+@SuppressWarnings("PMD.TooManyMethods")
 @ExtendWith(MktmpResolver.class)
 final class ProgramTest {
 
