@@ -4,8 +4,11 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.XML;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
+import org.cactoos.list.ListOf;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapOf;
 import org.eolang.parser.EoSyntax;
@@ -18,14 +21,14 @@ import org.junit.jupiter.api.Timeout;
 /**
  * Tests for {@link LtReservedName}.
  *
- * @since 0.0.43
+ * @since 0.0.44
  */
 final class LtReservedNameTest {
 
     @Test
     void catchesReservedName() throws IOException {
         MatcherAssert.assertThat(
-            "Defects are empty, but they should not",
+            "It is expected to catch only one defect here",
             new LtReservedName(new MapOf<>("true", "org.eolang.true.eo"))
                 .defects(
                     new EoSyntax(
@@ -38,7 +41,7 @@ final class LtReservedNameTest {
                         )
                     ).parsed()
                 ),
-            Matchers.hasSize(Matchers.greaterThan(0))
+            Matchers.hasSize(1)
         );
     }
 
@@ -82,29 +85,35 @@ final class LtReservedNameTest {
 
     @Test
     void catchesReservedNameWithPackage() throws IOException {
+        final Collection<Defect> found = new LtReservedName(
+            new MapOf<>("stdout", "org.eolang.stdout.eo")
+        ).defects(
+            new EoSyntax(
+                "t-packaged",
+                String.join(
+                    "+package org.foo",
+                    "",
+                    "# Tee packaged.",
+                    "[] > tee",
+                    "  52 > stdout"
+                )
+            ).parsed()
+        );
+        final int expected = 1;
         MatcherAssert.assertThat(
-            "There was no defects, though object name is already reserved",
-            new LtReservedName(new MapOf<>("stdout", "org.eolang.stdout.eo"))
-                .defects(
-                    new EoSyntax(
-                        "t-packaged",
-                        String.join(
-                            "+package org.foo",
-                            "",
-                            "# Tee packaged.",
-                            "[] > tee",
-                            "  52 > stdout"
-                        )
-                    ).parsed()
-                ),
-            Matchers.hasSize(Matchers.greaterThan(0))
+            String.format(
+                "Defects size: %d does not match with expected: %d, (one object name is already reserved)",
+                found.size(), expected
+            ),
+            found,
+            Matchers.hasSize(expected)
         );
     }
 
     @Test
     void catchesMultipleNames() throws IOException {
         MatcherAssert.assertThat(
-            "Defects should be caught",
+            "Defects size does not match with expected",
             new LtReservedName(
                 new MapOf<String, String>(
                     new MapEntry<>("left", "org.eolang.left.eo"),
@@ -130,7 +139,7 @@ final class LtReservedNameTest {
     @Test
     void reportsAll() throws IOException {
         MatcherAssert.assertThat(
-            "Defects are empty, but they should not",
+            "Defects size does not match with expected",
             new LtReservedName(
                 new MapOf<>(
                     new MapEntry<>("ja", "org.eolang.ja.eo"),
@@ -157,20 +166,34 @@ final class LtReservedNameTest {
 
     @Test
     void reportsReservedNameInTopObject() throws IOException {
+        final String target = "foo";
+        final Collection<Defect> defects = new LtReservedName(
+            new MapOf<>("foo", "org.eolang.foo.eo")
+        ).defects(
+            new EoSyntax(
+                target,
+                String.join(
+                    "\n",
+                    "# Foo.",
+                    String.format("[] > %s", target),
+                    "  52 > spb"
+                )
+            ).parsed()
+        );
         MatcherAssert.assertThat(
-            "Defects should be caught",
-            new LtReservedName(new MapOf<>("foo", "org.eolang.foo.eo")).defects(
-                new EoSyntax(
-                    "foo",
-                    String.join(
-                        "\n",
-                        "# Foo.",
-                        "[] > foo",
-                        "  52 > spb"
-                    )
-                ).parsed()
+            "Defects size does not match with expected",
+            defects,
+            Matchers.hasSize(1)
+        );
+        MatcherAssert.assertThat(
+            String.format(
+                "The name of high-level object \"%s\" should be reported",
+                target
             ),
-            Matchers.hasSize(Matchers.greaterThan(0))
+            new ListOf<>(defects).get(0).text(),
+            Matchers.equalTo(
+                "Object name \"foo\" is already reserved by object in the \"org.eolang.foo.eo\""
+            )
         );
     }
 
@@ -178,20 +201,29 @@ final class LtReservedNameTest {
     @Timeout(value = 90L, unit = TimeUnit.SECONDS)
     @Test
     void scansReservedFromHome() throws IOException {
+        final Lint<XML> lint = new LtReservedName();
+        final Collection<Defect> defects = lint.defects(
+            new EoSyntax(
+                "foo",
+                String.join(
+                    "\n",
+                    "# Foo",
+                    "[] > foo",
+                    "  52 > stdout"
+                )
+            ).parsed()
+        );
         MatcherAssert.assertThat(
-            "Defects are empty, but they should not",
-            new LtReservedName().defects(
-                new EoSyntax(
-                    "foo",
-                    String.join(
-                        "\n",
-                        "# Foo",
-                        "[] > foo",
-                        "  52 > stdout"
-                    )
-                ).parsed()
-            ),
-            Matchers.hasSize(Matchers.greaterThan(0))
+            "Defects size does not match with expected",
+            defects,
+            Matchers.hasSize(1)
+        );
+        MatcherAssert.assertThat(
+            "Defect message does not match with expected",
+            new ListOf<>(defects).get(0).text(),
+            Matchers.equalTo(
+                "Object name \"stdout\" is already reserved by object in the \"org.eolang.io.stdout.eo\""
+            )
         );
     }
 }

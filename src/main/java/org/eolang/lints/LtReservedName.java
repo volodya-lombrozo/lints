@@ -23,6 +23,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.io.UncheckedInput;
@@ -36,6 +37,11 @@ import org.eolang.parser.EoSyntax;
  * @since 0.0.44
  */
 final class LtReservedName implements Lint<XML> {
+
+    /**
+     * Home objects regex.
+     */
+    private static final Pattern HOME_OBJECTS = Pattern.compile(".*/cloned/home/objects");
 
     /**
      * Reserved names.
@@ -104,6 +110,11 @@ final class LtReservedName implements Lint<XML> {
         ).asString();
     }
 
+    /**
+     * Locate reserved names from home EO objects.
+     * @param location Location of home repo.
+     * @return Map of reserved names
+     */
     private static Map<String, String> home(final String location) {
         final Map<String, String> names = new HashMap<>(64);
         final URL resource = Thread.currentThread().getContextClassLoader().getResource(location);
@@ -128,7 +139,7 @@ final class LtReservedName implements Lint<XML> {
             try (FileSystem mount = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
                 Files.walk(mount.getPath(location))
                     .filter(sources)
-                    .forEach(LtReservedName.jar(location, names));
+                    .forEach(LtReservedName.jar(names));
             } catch (final IOException exception) {
                 throw new IllegalStateException(
                     "Failed to read home objects from JAR", exception
@@ -138,7 +149,7 @@ final class LtReservedName implements Lint<XML> {
             try {
                 Files.walk(Paths.get(resource.toURI()))
                     .filter(sources)
-                    .forEach(LtReservedName.file(location, names));
+                    .forEach(LtReservedName.file(names));
             } catch (final IOException exception) {
                 throw new IllegalStateException("Failed to walk through files", exception);
             } catch (final URISyntaxException exception) {
@@ -148,7 +159,12 @@ final class LtReservedName implements Lint<XML> {
         return names;
     }
 
-    private static Consumer<Path> file(final String location, final Map<String, String> names) {
+    /**
+     * Process home EO objects from regular file.
+     * @param names Names
+     * @return File consumer from path
+     */
+    private static Consumer<Path> file(final Map<String, String> names) {
         return eo -> {
             final XML parsed;
             try {
@@ -161,22 +177,18 @@ final class LtReservedName implements Lint<XML> {
                     exception
                 );
             }
-            LtReservedName.processXmir(
-                parsed,
-                oname -> names.put(oname, LtReservedName.prettyEoPath(eo, location))
-            );
+            LtReservedName.processXmir(parsed, names, eo);
         };
     }
 
     /**
      * Process home EO objects from JAR.
-     * @param location Home location
      * @param names Names
-     * @return JAR consumer
+     * @return JAR consumer from path
      * @checkstyle IllegalCatchCheck (15 lines)
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    private static Consumer<Path> jar(final String location, final Map<String, String> names) {
+    private static Consumer<Path> jar(final Map<String, String> names) {
         return eo -> {
             final XML parsed;
             try (InputStream input = Files.newInputStream(eo)) {
@@ -189,21 +201,31 @@ final class LtReservedName implements Lint<XML> {
                     exception
                 );
             }
-            LtReservedName.processXmir(
-                parsed,
-                oname -> names.put(oname, LtReservedName.prettyEoPath(eo, location))
-            );
+            LtReservedName.processXmir(parsed, names, eo);
         };
     }
 
-    private static void processXmir(final XML xmir, final Consumer<String> each) {
+    /**
+     * Process names of high-level objects from XMIR.
+     * @param xmir XMIR
+     * @param names Aggregated names
+     * @param path EO source file path
+     */
+    private static void processXmir(
+        final XML xmir, final Map<String, String> names, final Path path
+    ) {
         new Xnav(xmir.inner()).path("/program/objects/o/@name")
             .map(oname -> oname.text().get())
-            .forEach(each);
-    }
-
-    private static String prettyEoPath(final Path path, final String location) {
-        return path.toString().replace(String.format("%s/objects", location), "")
-            .substring(1).replace("/", ".").replace("\"", ".");
+            .forEach(
+                oname ->
+                    names.put(
+                        oname,
+                        LtReservedName.HOME_OBJECTS.matcher(path.toString())
+                            .replaceFirst("")
+                            .substring(1)
+                            .replace("/", ".")
+                            .replace("\"", ".")
+                    )
+            );
     }
 }
