@@ -220,7 +220,9 @@ final class LtReservedName implements Lint<XML> {
                 oname ->
                     names.put(
                         oname,
-                        LtReservedName.HOME_OBJECTS.matcher(path.toString())
+                        LtReservedName.HOME_OBJECTS.matcher(
+                            path.toString().replaceAll("\\\\", "/")
+                            )
                             .replaceFirst("")
                             .substring(1)
                             .replace("/", ".")
