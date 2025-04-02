@@ -44,6 +44,11 @@ final class LtReservedName implements Lint<XML> {
     private static final Pattern HOME_OBJECTS = Pattern.compile(".*/cloned/home/objects");
 
     /**
+     * Non-unix file separators.
+     */
+    private static final Pattern NON_UNIX = Pattern.compile("\\\\");
+
+    /**
      * Reserved names.
      */
     private final Map<String, String> reserved;
@@ -221,7 +226,7 @@ final class LtReservedName implements Lint<XML> {
                     names.put(
                         oname,
                         LtReservedName.HOME_OBJECTS.matcher(
-                            path.toString().replaceAll("\\\\", "/")
+                            LtReservedName.NON_UNIX.matcher(path.toString()).replaceAll("/")
                             )
                             .replaceFirst("")
                             .substring(1)
