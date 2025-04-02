@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
@@ -73,12 +74,14 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
         pkg.values().forEach(
             xmir -> {
                 final Xnav xml = new Xnav(xmir.inner());
-                final Map<String, List<Integer>> present = existing.get(xmir);
+                final Function<String, Boolean> missing = new DefectMissing(
+                    existing.get(xmir), this.excluded
+                );
                 xml.path("/program/metas/meta[head='unlint']/tail")
                     .map(xnav -> xnav.text().get())
                     .collect(Collectors.toSet())
                     .stream()
-                    .filter(unlint -> new DefectMissing(present, this.excluded).apply(unlint))
+                    .filter(missing::apply)
                     .forEach(
                         unlint -> xml
                             .path(

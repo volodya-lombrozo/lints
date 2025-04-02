@@ -8,14 +8,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.cactoos.Func;
+import java.util.function.Function;
 import org.cactoos.set.SetOf;
 
 /**
  * Does defect missing.
  * @since 0.0.44
  */
-final class DefectMissing implements Func<String, Boolean> {
+final class DefectMissing implements Function<String, Boolean> {
 
     /**
      * Mapped defects.

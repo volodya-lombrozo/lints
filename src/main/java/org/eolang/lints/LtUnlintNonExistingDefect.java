@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
@@ -69,8 +70,9 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
         final Set<String> unlints = xml.path("/program/metas/meta[head='unlint']/tail")
             .map(xnav -> xnav.text().get())
             .collect(Collectors.toSet());
+        final Function<String, Boolean> missing = new DefectMissing(present, this.excluded);
         unlints.stream()
-            .filter(unlint -> new DefectMissing(present, this.excluded).apply(unlint))
+            .filter(missing::apply)
             .forEach(
                 unlint ->
                     xml.path(
