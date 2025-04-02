@@ -258,6 +258,28 @@ final class ProgramTest {
     }
 
     @Test
+    void returnsOnlyOneDefect() throws IOException {
+        MatcherAssert.assertThat(
+            "Only one defect should be found",
+            new Program(
+                new EoSyntax(
+                    "app",
+                    String.join(
+                        "\n",
+                        "+package f",
+                        "",
+                        "# No comments.",
+                        "[] > main",
+                        "  QQ.io.stdout",
+                        "    \"Hello world\""
+                    )
+                ).parsed()
+            ).defects(),
+            Matchers.hasSize(1)
+        );
+    }
+
+    @Test
     @Tag("benchmark")
     @ExtendWith(MktmpResolver.class)
     @ExtendWith(MayBeSlow.class)
