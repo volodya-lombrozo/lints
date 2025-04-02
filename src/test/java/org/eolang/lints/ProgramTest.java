@@ -266,7 +266,9 @@ final class ProgramTest {
                     "app",
                     String.join(
                         "\n",
+                        "+home https://github.com/objectionary/eo",
                         "+package f",
+                        "+version 0.0.0",
                         "",
                         "# No comments.",
                         "[] > main",
@@ -274,7 +276,7 @@ final class ProgramTest {
                         "    \"Hello world\""
                     )
                 ).parsed()
-            ).defects(),
+            ).without("mandatory-spdx", "comment-too-short").defects(),
             Matchers.hasSize(1)
         );
     }
