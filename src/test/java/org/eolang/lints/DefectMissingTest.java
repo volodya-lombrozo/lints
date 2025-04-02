@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 final class DefectMissingTest {
 
     @Test
-    void returnsTrueOnMatch() {
+    void returnsFalseOnMatch() {
         MatcherAssert.assertThat(
             "Input should not match, since defect is present",
             new DefectMissing(
@@ -30,7 +30,7 @@ final class DefectMissingTest {
     }
 
     @Test
-    void returnsFalseWhenDoesNotMatch() {
+    void returnsTrueWhenDoesNotMatch() {
         MatcherAssert.assertThat(
             "Input should match",
             new DefectMissing(
