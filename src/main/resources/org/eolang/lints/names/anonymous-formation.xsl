@@ -24,7 +24,7 @@
           <xsl:attribute name="severity">
             <xsl:text>warning</xsl:text>
           </xsl:attribute>
-          <xsl:text>Anonymous formation is prohibited</xsl:text>
+          <xsl:text>It is not recommended to have anonymous formation</xsl:text>
         </xsl:element>
       </xsl:for-each>
     </defects>
