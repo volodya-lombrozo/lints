@@ -73,6 +73,7 @@ final class MonoLintsTest {
                 }
             }
         );
+        // check no duplicates by name
         MatcherAssert.assertThat(
             "Found defects size does not match with expected",
             found,
