@@ -22,7 +22,7 @@ import org.cactoos.list.ListOf;
  * @since 0.0.43
  * @todo #165:60min Add {@link LtReservedName} to the LINTS Mono pipeline.
  *  Currently, it will cause timeout exceptions in several places in tests, due to
- *  the design of {@link LtReservedName}. Now, scans all the home EO objects, pulled
+ *  the design of {@link LtReservedName}. There, it scans all the home EO objects, pulled
  *  from Git by maven in the `generate-sources` phase, and process them. Will be great
  *  to process home objects only once - initially during the build, and then reuse it
  *  everywhere.

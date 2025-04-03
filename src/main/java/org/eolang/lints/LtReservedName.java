@@ -170,9 +170,9 @@ final class LtReservedName implements Lint<XML> {
     }
 
     /**
-     * Process home EO objects from regular file.
-     * @param names Names
-     * @return File consumer from path
+     * Names in EO file.
+     * @param path Path to EO file
+     * @return Map of names, the key is object name, the value us path
      */
     private static Map<String, String> namesInFile(final Path path) {
         final XML parsed;
@@ -189,9 +189,9 @@ final class LtReservedName implements Lint<XML> {
     }
 
     /**
-     * Process home EO objects from JAR.
-     * @param names Names
-     * @return JAR consumer from path
+     * Names in EO file from JAR.
+     * @param path Path to EO file in JAR
+     * @return Map of names, the key is object name, the value us path
      * @checkstyle IllegalCatchCheck (15 lines)
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
@@ -209,10 +209,10 @@ final class LtReservedName implements Lint<XML> {
     }
 
     /**
-     * Process names of high-level objects from XMIR.
+     * High-level object names in XMIR.
      * @param xmir XMIR
-     * @param names Aggregated names
      * @param path EO source file path
+     * @return Map of object names in XMIR
      */
     private static Map<String, String> namesInXmir(final XML xmir, final Path path) {
         final Map<String, String> names = new HashMap<>(64);
