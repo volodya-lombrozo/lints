@@ -35,7 +35,6 @@
     <defects>
       <xsl:for-each select="//o[@base='Q.org.eolang.txt.sprintf']">
         <xsl:variable name="text" select="o[1][@base='Q.org.eolang.string']/o[1][@base='Q.org.eolang.bytes']/o/text()"/>
-        <xsl:variable name="static" select="not(o[1][starts-with(@base, '$.')])"/>
         <xsl:choose>
           <xsl:when test="count(o)&gt;2">
             <defect>
@@ -53,25 +52,6 @@
               </xsl:attribute>
               <xsl:text>The "Q.org.eolang.txt.sprintf" object expects only 2 arguments, but </xsl:text>
               <xsl:value-of select="count(o)"/>
-              <xsl:text> provided</xsl:text>
-            </defect>
-          </xsl:when>
-          <xsl:when test="not($text) and $static">
-            <defect>
-              <xsl:variable name="line" select="eo:lineno(@line)"/>
-              <xsl:attribute name="line">
-                <xsl:value-of select="$line"/>
-              </xsl:attribute>
-              <xsl:if test="$line = '0'">
-                <xsl:attribute name="context">
-                  <xsl:value-of select="eo:defect-context(.)"/>
-                </xsl:attribute>
-              </xsl:if>
-              <xsl:attribute name="severity">
-                <xsl:text>warning</xsl:text>
-              </xsl:attribute>
-              <xsl:text>The first argument of "Q.org.eolang.txt.sprintf" object must be "Q.org.eolang.string" object, but </xsl:text>
-              <xsl:value-of select="o[1]/@base"/>
               <xsl:text> provided</xsl:text>
             </defect>
           </xsl:when>
@@ -114,7 +94,7 @@
                 </defect>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:if test="$declared!=$used and $static">
+                <xsl:if test="$declared!=$used and o[1]/@base = 'Q.org.eolang.string'">
                   <defect>
                     <xsl:variable name="line" select="eo:lineno(@line)"/>
                     <xsl:attribute name="line">
