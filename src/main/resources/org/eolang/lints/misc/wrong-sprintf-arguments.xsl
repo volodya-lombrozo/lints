@@ -130,7 +130,7 @@
                     </xsl:attribute>
                     <xsl:text>According to the formatting template of the "Q.org.eolang.txt.sprintf" object, a tuple of </xsl:text>
                     <xsl:value-of select="$declared"/>
-                    <xsl:text> elements is expected as the second argument of it, while a tuple of </xsl:text>
+                    <xsl:text> element(s) is expected as the second argument of it, while a tuple of </xsl:text>
                     <xsl:value-of select="$used"/>
                     <xsl:text> element(s) is provided</xsl:text>
                   </defect>
