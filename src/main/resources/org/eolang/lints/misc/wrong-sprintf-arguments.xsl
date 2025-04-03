@@ -35,6 +35,7 @@
     <defects>
       <xsl:for-each select="//o[@base='Q.org.eolang.txt.sprintf']">
         <xsl:variable name="text" select="o[1][@base='Q.org.eolang.string']/o[1][@base='Q.org.eolang.bytes']/o/text()"/>
+        <xsl:variable name="static" select="not(o[1][starts-with(@base, '$.')])"/>
         <xsl:choose>
           <xsl:when test="count(o)&gt;2">
             <defect>
@@ -55,7 +56,7 @@
               <xsl:text> provided</xsl:text>
             </defect>
           </xsl:when>
-          <xsl:when test="not($text)">
+          <xsl:when test="not($text) and $static">
             <defect>
               <xsl:variable name="line" select="eo:lineno(@line)"/>
               <xsl:attribute name="line">
@@ -113,7 +114,7 @@
                 </defect>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:if test="$declared!=$used">
+                <xsl:if test="$declared!=$used and $static">
                   <defect>
                     <xsl:variable name="line" select="eo:lineno(@line)"/>
                     <xsl:attribute name="line">
