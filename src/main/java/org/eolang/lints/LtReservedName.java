@@ -50,6 +50,7 @@ final class LtReservedName implements Lint<XML> {
 
     /**
      * Reserved names.
+     * The key is object name, the value is the path to EO file.
      */
     private final Map<String, String> reserved;
 
