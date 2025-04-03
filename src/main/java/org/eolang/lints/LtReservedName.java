@@ -20,13 +20,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.io.UncheckedInput;
+import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.parser.EoSyntax;
@@ -122,7 +124,7 @@ final class LtReservedName implements Lint<XML> {
      * @return Map of reserved names
      */
     private static Map<String, String> home(final String location) {
-        final Map<String, String> names = new HashMap<>(64);
+        final List<Map<String, String>> names = new ListOf<>();
         final URL resource = Thread.currentThread().getContextClassLoader().getResource(location);
         final Predicate<Path> sources = p -> {
             final String file = p.toString().replace("\\", "/");
@@ -145,7 +147,7 @@ final class LtReservedName implements Lint<XML> {
             try (FileSystem mount = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
                 Files.walk(mount.getPath(location))
                     .filter(sources)
-                    .forEach(LtReservedName.jar(names));
+                    .forEach(eo -> names.add(LtReservedName.namesInJar(eo)));
             } catch (final IOException exception) {
                 throw new IllegalStateException(
                     "Failed to read home objects from JAR", exception
@@ -155,14 +157,16 @@ final class LtReservedName implements Lint<XML> {
             try {
                 Files.walk(Paths.get(resource.toURI()))
                     .filter(sources)
-                    .forEach(LtReservedName.file(names));
+                    .forEach(eo -> names.add(LtReservedName.namesInFile(eo)));
             } catch (final IOException exception) {
                 throw new IllegalStateException("Failed to walk through files", exception);
             } catch (final URISyntaxException exception) {
                 throw new IllegalStateException("URI syntax is broken", exception);
             }
         }
-        return names;
+        return names.stream()
+            .flatMap(map -> map.entrySet().stream())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     /**
@@ -170,20 +174,18 @@ final class LtReservedName implements Lint<XML> {
      * @param names Names
      * @return File consumer from path
      */
-    private static Consumer<Path> file(final Map<String, String> names) {
-        return eo -> {
-            final XML parsed;
-            try {
-                parsed = new EoSyntax("reserved", new UncheckedInput(new InputOf(eo.toFile())))
-                    .parsed();
-            } catch (final IOException exception) {
-                throw new IllegalStateException(
-                    String.format("Failed to parse EO source in \"%s\"", eo),
-                    exception
-                );
-            }
-            LtReservedName.processXmir(parsed, names, eo);
-        };
+    private static Map<String, String> namesInFile(final Path path) {
+        final XML parsed;
+        try {
+            parsed = new EoSyntax("reserved", new UncheckedInput(new InputOf(path.toFile())))
+                .parsed();
+        } catch (final IOException exception) {
+            throw new IllegalStateException(
+                String.format("Failed to parse EO source in \"%s\"", path),
+                exception
+            );
+        }
+        return LtReservedName.namesInXmir(parsed, path);
     }
 
     /**
@@ -193,19 +195,17 @@ final class LtReservedName implements Lint<XML> {
      * @checkstyle IllegalCatchCheck (15 lines)
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    private static Consumer<Path> jar(final Map<String, String> names) {
-        return eo -> {
-            final XML parsed;
-            try (InputStream input = Files.newInputStream(eo)) {
-                parsed = new EoSyntax("reserved", new TextOf(input).asString()).parsed();
-            } catch (final Exception exception) {
-                throw new IllegalStateException(
-                    String.format("Failed to parse EO source in \"%s\"", eo),
-                    exception
-                );
-            }
-            LtReservedName.processXmir(parsed, names, eo);
-        };
+    private static Map<String, String> namesInJar(final Path path) {
+        final XML parsed;
+        try (InputStream input = Files.newInputStream(path)) {
+            parsed = new EoSyntax("reserved", new TextOf(input).asString()).parsed();
+        } catch (final Exception exception) {
+            throw new IllegalStateException(
+                String.format("Failed to parse EO source in \"%s\"", path),
+                exception
+            );
+        }
+        return LtReservedName.namesInXmir(parsed, path);
     }
 
     /**
@@ -214,9 +214,8 @@ final class LtReservedName implements Lint<XML> {
      * @param names Aggregated names
      * @param path EO source file path
      */
-    private static void processXmir(
-        final XML xmir, final Map<String, String> names, final Path path
-    ) {
+    private static Map<String, String> namesInXmir(final XML xmir, final Path path) {
+        final Map<String, String> names = new HashMap<>(64);
         new Xnav(xmir.inner()).path("/program/objects/o/@name")
             .map(oname -> oname.text().get())
             .forEach(
@@ -232,5 +231,6 @@ final class LtReservedName implements Lint<XML> {
                             .replace("\"", ".")
                     )
             );
+        return names;
     }
 }
