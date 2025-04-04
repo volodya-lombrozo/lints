@@ -9,10 +9,9 @@
   <xsl:import href="/org/eolang/funcs/defect-context.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
-    <xsl:variable name="test" select="/program[metas/meta[head='tests']]"/>
     <defects>
-      <xsl:for-each select="//o[eo:abstract(.) and count(o)=1 and o[1][@name='@']]">
-        <xsl:if test="not($test)">
+      <xsl:if test="not(/program[metas/meta[head='tests']])">
+        <xsl:for-each select="//o[eo:abstract(.) and count(o)=1 and o[1][@name='@']]">
           <xsl:element name="defect">
             <xsl:variable name="line" select="eo:lineno(@line)"/>
             <xsl:attribute name="line">
@@ -28,8 +27,8 @@
             </xsl:attribute>
             <xsl:text>Sparse decoration is prohibited</xsl:text>
           </xsl:element>
-        </xsl:if>
-      </xsl:for-each>
+        </xsl:for-each>
+      </xsl:if>
     </defects>
   </xsl:template>
 </xsl:stylesheet>
