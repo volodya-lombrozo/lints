@@ -349,6 +349,7 @@ final class ProgramTest {
         programs.put(ProgramTest.ProgramSize.M, "com/sun/jna/Memory.class");
         programs.put(ProgramTest.ProgramSize.L, "com/sun/jna/Pointer.class");
         programs.put(ProgramTest.ProgramSize.XL, "com/sun/jna/Structure.class");
+        programs.put(ProgramTest.ProgramSize.XXL, "org/apache/hadoop/hdfs/server/namenode/FSNamesystem.class");
         return programs;
     }
 
@@ -464,12 +465,12 @@ final class ProgramTest {
         /**
          * Extra-large program.
          */
-        XL("XL", 800, 1150),
+        XL("XL", 800, 1200),
 
         /**
          * XXL program.
          */
-        XXL("XXL", 1200, Integer.MAX_VALUE);
+        XXL("XXL", 1500, Integer.MAX_VALUE);
 
         /**
          * Size marker.
@@ -552,8 +553,7 @@ final class ProgramTest {
             return new MethodVisitor(Opcodes.ASM9) {
                 @Override
                 public void visitLineNumber(final int line, final Label start) {
-                    ProgramTest.LineCountVisitor.this.count +=
-                        ProgramTest.LineCountVisitor.this.count;
+                    ProgramTest.LineCountVisitor.this.count += 1;
                 }
             };
         }
