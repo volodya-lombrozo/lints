@@ -262,6 +262,31 @@ final class ProgramTest {
         );
     }
 
+
+    @Test
+    void returnsOnlyOneDefect() throws IOException {
+        MatcherAssert.assertThat(
+            "Only one defect should be found",
+            new Program(
+                new EoSyntax(
+                    "app",
+                    String.join(
+                        "\n",
+                        "+home https://github.com/objectionary/eo",
+                        "+package f",
+                        "+version 0.0.0",
+                        "",
+                        "# No comments.",
+                        "[] > main",
+                        "  QQ.io.stdout",
+                        "    \"Hello world\""
+                    )
+                ).parsed()
+            ).without("mandatory-spdx", "comment-too-short").defects(),
+            Matchers.hasSize(1)
+        );
+    }
+
     @Test
     @Tag("benchmark")
     @ExtendWith(MktmpResolver.class)
