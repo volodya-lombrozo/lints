@@ -18,5 +18,4 @@ jobs:
           base-ref: "master"
           benchmark-command: |
             mvn jmh:benchmark -Djmh.rf=json -Djmh.rff=benchmark.json
-            cp benchmark.json .
           benchmark-file: "benchmark.json"
