@@ -38,7 +38,9 @@ public class ProgramBench {
     /**
      * Large XMIR document.
      */
-    private static final XML LARGE = new Unchecked<>(new JavaToXmir("com/sun/jna/Pointer.class")).value();
+    private static final XML LARGE = new Unchecked<>(
+        new JavaToXmir("com/sun/jna/Pointer.class")
+    ).value();
 
     /**
      * Small XMIR document.

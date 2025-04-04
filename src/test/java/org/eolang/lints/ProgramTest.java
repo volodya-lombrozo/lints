@@ -55,6 +55,7 @@ import org.objectweb.asm.Opcodes;
  * @since 0.0.1
  * @checkstyle MethodBodyCommentsCheck (50 lines)
  */
+@SuppressWarnings("PMD.TooManyMethods")
 @ExtendWith(MktmpResolver.class)
 final class ProgramTest {
 
@@ -273,13 +274,13 @@ final class ProgramTest {
                 final XML xmir = new Unchecked<>(new JavaToXmir(program)).value();
                 final long start = System.currentTimeMillis();
                 final Collection<Defect> defects = new ProgramTest.BcProgram(
-                    xmir, size.marker()
+                    xmir, size.size()
                 ).defects();
                 final long msec = System.currentTimeMillis() - start;
                 sum.append(
                     String.join(
                         "\n",
-                        String.format("Input: %s (%s program)", program, size.marker()),
+                        String.format("Input: %s (%s program)", program, size.size()),
                         Logger.format(
                             "Lint time: %s[ms]s (%d ms)",
                             msec, msec
@@ -314,14 +315,14 @@ final class ProgramTest {
                     ).asBytes()
                 ).accept(visitor, 0);
                 final int lines = visitor.total();
-                final int min = size.min();
-                final int max = size.max();
+                final int min = size.minAllowed();
+                final int max = size.maxAllowed();
                 MatcherAssert.assertThat(
                     String.join(
                         ", ",
                         String.format(
                             "Java program \"%s\" was supplied with incorrect size marker (\"%s\")",
-                            program, size.marker()
+                            program, size.size()
                         ),
                         String.format(
                             "since it has %d executable lines inside",
@@ -380,6 +381,7 @@ final class ProgramTest {
         /**
          * Ctor.
          * @param program XMIR program to lint
+         * @param size Program size
          */
         BcProgram(final XML program, final String size) {
             this(
@@ -399,6 +401,8 @@ final class ProgramTest {
          * @param program XMIR program to lint
          * @param lnts Lints to apply
          * @param tmngs Timings
+         * @param size Program size
+         * @checkstyle ParameterNumberCheck (5 lines)
          */
         BcProgram(
             final XML program, final Iterable<Lint<XML>> lnts, final Tojos tmngs, final String size
@@ -495,26 +499,26 @@ final class ProgramTest {
         }
 
         /**
-         * Marker.
+         * Marker size.
          * @return Marker
          */
-        public String marker() {
+        public String size() {
             return this.marker;
         }
 
         /**
-         * Min range of executable lines.
+         * Min allowed count of executable lines.
          * @return Lines count
          */
-        public int min() {
+        public int minAllowed() {
             return this.min;
         }
 
         /**
-         * Min range of executable lines.
+         * Max allowed count of executable lines.
          * @return Lines count
          */
-        public int max() {
+        public int maxAllowed() {
             return this.max;
         }
     }
@@ -548,7 +552,8 @@ final class ProgramTest {
             return new MethodVisitor(Opcodes.ASM9) {
                 @Override
                 public void visitLineNumber(final int line, final Label start) {
-                    ProgramTest.LineCountVisitor.this.count++;
+                    ProgramTest.LineCountVisitor.this.count +=
+                        ProgramTest.LineCountVisitor.this.count;
                 }
             };
         }
