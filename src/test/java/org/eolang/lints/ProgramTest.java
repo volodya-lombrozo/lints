@@ -266,33 +266,19 @@ final class ProgramTest {
     @ExtendWith(MayBeSlow.class)
     @Timeout(600L)
     void lintsBenchmarkProgramsFromJava() throws Exception {
-        final Map<String, Map<String, XML>> programs = new LinkedHashMap<>(4);
-        programs.put(
-            "small",
-            new MapOf<>(
-                "com/sun/jna/FunctionParameterContext.class",
-                new Unchecked<>(new JavaToXmir("com/sun/jna/FunctionParameterContext.class")).value()
-            )
-        );
-        programs.put(
-            "large",
-            new MapOf<>(
-                "com/sun/jna/Pointer.class",
-                new Unchecked<>(new JavaToXmir("com/sun/jna/Pointer.class")).value()
-            )
-        );
         final StringBuilder sum = new StringBuilder(256);
-        programs.forEach(
+        ProgramTest.javaPrograms().forEach(
             (size, program) -> {
                 final long start = System.currentTimeMillis();
                 final String path = program.keySet().iterator().next();
-                final Collection<Defect> defects = new ProgramTest.BcProgram(program.get(path))
-                    .defects();
+                final Collection<Defect> defects = new ProgramTest.BcProgram(
+                    program.get(path), size.marker()
+                ).defects();
                 final long msec = System.currentTimeMillis() - start;
                 sum.append(
                     String.join(
                         "\n",
-                        String.format("Input: %s (%s program)", path, size),
+                        String.format("Input: %s (%s program)", path, size.marker()),
                         Logger.format(
                             "Lint time: %s[ms]s (%d ms)",
                             msec, msec
@@ -310,6 +296,39 @@ final class ProgramTest {
             Paths.get("target").resolve("lint-summary.txt"),
             sum.toString().getBytes(StandardCharsets.UTF_8)
         );
+    }
+
+    private static Map<ProgramTest.ProgramSize, Map<String, XML>> javaPrograms() {
+        final Map<ProgramTest.ProgramSize, Map<String, XML>> programs = new LinkedHashMap<>(4);
+        programs.put(
+            ProgramTest.ProgramSize.S,
+            new MapOf<>(
+                "com/sun/jna/PointerType.class",
+                new Unchecked<>(new JavaToXmir("com/sun/jna/PointerType.class")).value()
+            )
+        );
+        programs.put(
+            ProgramTest.ProgramSize.M,
+            new MapOf<>(
+                "com/sun/jna/Memory.class",
+                new Unchecked<>(new JavaToXmir("com/sun/jna/Memory.class")).value()
+            )
+        );
+        programs.put(
+            ProgramTest.ProgramSize.L,
+            new MapOf<>(
+                "com/sun/jna/Pointer.class",
+                new Unchecked<>(new JavaToXmir("com/sun/jna/Pointer.class")).value()
+            )
+        );
+        programs.put(
+            ProgramTest.ProgramSize.XL,
+            new MapOf<>(
+                "com/sun/jna/Structure.class",
+                new Unchecked<>(new JavaToXmir("com/sun/jna/Structure.class")).value()
+            )
+        );
+        return programs;
     }
 
     /**
@@ -334,10 +353,15 @@ final class ProgramTest {
         private final Tojos timings;
 
         /**
+         * Size marker of the program.
+         */
+        private final String marker;
+
+        /**
          * Ctor.
          * @param program XMIR program to lint
          */
-        BcProgram(final XML program) {
+        BcProgram(final XML program, final String size) {
             this(
                 program,
                 new Synced<>(new Sticky<>(new PkMono())),
@@ -345,7 +369,8 @@ final class ProgramTest {
                     new TjDefault(
                         new MnCsv("target/timings.csv")
                     )
-                )
+                ),
+                size
             );
         }
 
@@ -355,10 +380,13 @@ final class ProgramTest {
          * @param lnts Lints to apply
          * @param tmngs Timings
          */
-        BcProgram(final XML program, final Iterable<Lint<XML>> lnts, final Tojos tmngs) {
+        BcProgram(
+            final XML program, final Iterable<Lint<XML>> lnts, final Tojos tmngs, final String size
+        ) {
             this.xmir = program;
             this.lints = lnts;
             this.timings = tmngs;
+            this.marker = size;
         }
 
         /**
@@ -376,7 +404,8 @@ final class ProgramTest {
                     final long start = System.currentTimeMillis();
                     final Collection<Defect> defects = lint.defects(this.xmir);
                     final long done = System.currentTimeMillis() - start;
-                    this.timings.add(lint.name()).set("ms", done);
+                    this.timings.add(String.format("%s (%s)", lint.name(), this.marker))
+                        .set("ms", done);
                     messages.addAll(defects);
                 }
                 return messages;
@@ -386,6 +415,59 @@ final class ProgramTest {
                     ex
                 );
             }
+        }
+    }
+
+    /**
+     * Program size.
+     *
+     * @since 0.0.45
+     */
+    private enum ProgramSize {
+
+        /**
+         * Standard program.
+         */
+        S("S", 20L, 100L),
+        /**
+         * Medium-sized program.
+         */
+        M("M", 150L, 350L),
+        /**
+         * Large-size program.
+         */
+        L("L", 700L, 1000L),
+
+        /**
+         * Extra-large program.
+         */
+        XL("XL", 1500L, 2500L),
+
+        XXL("XXL", 3000L, Long.MAX_VALUE);
+
+        /**
+         * Size marker.
+         */
+        private final String marker;
+
+        /**
+         * Min size, in lines.
+         */
+        private final long min;
+
+        /**
+         * Max size, in lines.
+         */
+        private final long max;
+
+        ProgramSize(final String txt, final long start, final long end) {
+            this.marker = txt;
+            this.min = start;
+            this.max = end;
+        }
+
+        public String marker() {
+            return this.marker;
         }
     }
 }
