@@ -120,6 +120,14 @@ final class LtReservedName implements Lint<XML> {
 
     /**
      * Locate reserved names from home EO objects.
+     * During the `generate-sources` maven phase we are cloning <a href="https://github.com/objectionary/home">home repo</a>
+     * as the source of object names. After repo cloning, during `process-resources` phase,
+     * we copy cloned repo to classes in lints JAR: `${project.build.directory}/classes/`.
+     * This is mandatory step in order to provide access to the home repo files, when the programs
+     * are linted from the outside the lints project, using lints as dependency. While, in local
+     * tests, cloned home repo is accessed as normal file.
+     * Both methods depend on the same directory, which we pass in the ctor, the only difference
+     * in the term of access - for JAR we need to "mount" the file system using {@link FileSystem}.
      * @param location Location of home repo.
      * @return Map of reserved names
      */
