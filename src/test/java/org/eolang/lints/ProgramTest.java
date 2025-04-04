@@ -26,6 +26,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.cactoos.bytes.BytesOf;
+import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.iterable.Sticky;
@@ -42,6 +44,12 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.Label;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
 
 /**
  * Test for {@link Program}.
@@ -298,6 +306,51 @@ final class ProgramTest {
         );
     }
 
+    @Test
+    void checksJavaProgramsSetupForBenchmarking() {
+        ProgramTest.javaPrograms().forEach(
+            (size, program) -> {
+                final String path = program.keySet().iterator().next();
+                final ProgramTest.LineCountVisitor visitor = new ProgramTest.LineCountVisitor();
+                new ClassReader(
+                    new UncheckedBytes(
+                        new BytesOf(
+                            new ResourceOf(
+                                path
+                            )
+                        )
+                    ).asBytes()
+                ).accept(visitor, 0);
+                final int lines = visitor.total();
+                final int min = size.min();
+                final int max = size.max();
+                MatcherAssert.assertThat(
+                    String.join(
+                        ", ",
+                        String.format(
+                            "Program \"%s\" was supplied with incorrect size marker (\"%s\")",
+                            path, size.marker()
+                        ),
+                        String.format(
+                            "since it has %d lines inside",
+                            lines
+                        ),
+                        String.format(
+                            "while it is expected to have between %d and %d line numbers",
+                            min, max
+                        )
+                    ),
+                    lines,
+                    Matchers.allOf(
+                        Matchers.greaterThanOrEqualTo(min),
+                        Matchers.lessThanOrEqualTo(max)
+                    )
+                );
+            }
+        );
+    }
+
+    // remove parsed program from here, only size:jpath
     private static Map<ProgramTest.ProgramSize, Map<String, XML>> javaPrograms() {
         final Map<ProgramTest.ProgramSize, Map<String, XML>> programs = new LinkedHashMap<>(4);
         programs.put(
@@ -420,7 +473,6 @@ final class ProgramTest {
 
     /**
      * Program size.
-     *
      * @since 0.0.45
      */
     private enum ProgramSize {
@@ -428,22 +480,22 @@ final class ProgramTest {
         /**
          * Standard program.
          */
-        S("S", 20L, 100L),
+        S("S", 20, 100),
         /**
          * Medium-sized program.
          */
-        M("M", 150L, 350L),
+        M("M", 150, 350),
         /**
          * Large-size program.
          */
-        L("L", 700L, 1000L),
+        L("L", 700, 1000),
 
         /**
          * Extra-large program.
          */
-        XL("XL", 1500L, 2500L),
+        XL("XL", 1500, 2500),
 
-        XXL("XXL", 3000L, Long.MAX_VALUE);
+        XXL("XXL", 3000, Integer.MAX_VALUE);
 
         /**
          * Size marker.
@@ -453,14 +505,14 @@ final class ProgramTest {
         /**
          * Min size, in lines.
          */
-        private final long min;
+        private final int min;
 
         /**
          * Max size, in lines.
          */
-        private final long max;
+        private final int max;
 
-        ProgramSize(final String txt, final long start, final long end) {
+        ProgramSize(final String txt, final int start, final int end) {
             this.marker = txt;
             this.min = start;
             this.max = end;
@@ -468,6 +520,59 @@ final class ProgramTest {
 
         public String marker() {
             return this.marker;
+        }
+
+        public int min() {
+            return this.min;
+        }
+
+        public int max() {
+            return this.max;
+        }
+    }
+
+    /**
+     * Line number visitor.
+     * @since 0.0.45
+     */
+    private static final class LineCountVisitor extends ClassVisitor {
+
+        private int count;
+
+        public LineCountVisitor() {
+            super(Opcodes.ASM9);
+        }
+
+        @Override
+        public MethodVisitor visitMethod(
+            final int access,
+            final String name,
+            final String descriptor,
+            final String signature,
+            final String[] exceptions
+        ) {
+            return new MethodVisitor(Opcodes.ASM9) {
+                @Override
+                public void visitLineNumber(final int line, final Label start) {
+                    ProgramTest.LineCountVisitor.this.count++;
+                }
+            };
+        }
+
+        @Override
+        public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
+            this.count++;
+            return super.visitField(access, name, descriptor, signature, value);
+        }
+
+        @Override
+        public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+            this.count++;
+            super.visit(version, access, name, signature, superName, interfaces);
+        }
+
+        public int total() {
+            return this.count;
         }
     }
 }
