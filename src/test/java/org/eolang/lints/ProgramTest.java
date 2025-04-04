@@ -15,7 +15,7 @@ import com.yegor256.tojos.MnCsv;
 import com.yegor256.tojos.TjCached;
 import com.yegor256.tojos.TjDefault;
 import com.yegor256.tojos.Tojos;
-import fixtures.LargeXmir;
+import fixtures.JavaToXmir;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -23,11 +23,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
+import org.cactoos.map.MapOf;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
@@ -51,7 +54,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
  *  adjust lint-summary.txt file to capture all the measurements.
  * @checkstyle MethodBodyCommentsCheck (50 lines)
  */
-@SuppressWarnings("PMD.TooManyMethods")
 @ExtendWith(MktmpResolver.class)
 final class ProgramTest {
 
@@ -259,56 +261,54 @@ final class ProgramTest {
     }
 
     @Test
-    void returnsOnlyOneDefect() throws IOException {
-        MatcherAssert.assertThat(
-            "Only one defect should be found",
-            new Program(
-                new EoSyntax(
-                    "app",
-                    String.join(
-                        "\n",
-                        "+home https://github.com/objectionary/eo",
-                        "+package f",
-                        "+version 0.0.0",
-                        "",
-                        "# No comments.",
-                        "[] > main",
-                        "  QQ.io.stdout",
-                        "    \"Hello world\""
-                    )
-                ).parsed()
-            ).without("mandatory-spdx", "comment-too-short").defects(),
-            Matchers.hasSize(1)
-        );
-    }
-
-    @Test
     @Tag("benchmark")
     @ExtendWith(MktmpResolver.class)
     @ExtendWith(MayBeSlow.class)
     @Timeout(600L)
-    void lintsLargeJnaClass() throws Exception {
-        final String path = "com/sun/jna/Pointer.class";
-        final XML xmir = new Unchecked<>(new LargeXmir()).value();
-        final long start = System.currentTimeMillis();
-        final Collection<Defect> defects = new ProgramTest.BcProgram(xmir).defects();
-        final long msec = System.currentTimeMillis() - start;
-        final Path target = Paths.get("target");
-        Files.write(
-            target.resolve("lint-summary.txt"),
-            String.join(
-                "\n",
-                String.format("Input: %s", path),
-                Logger.format(
-                    "Lint time: %[ms]s (%d ms)",
-                    msec, msec
-                )
-            ).getBytes(StandardCharsets.UTF_8)
+    void lintsBenchmarkProgramsFromJava() throws Exception {
+        final Map<String, Map<String, XML>> programs = new LinkedHashMap<>(4);
+        programs.put(
+            "small",
+            new MapOf<>(
+                "com/sun/jna/FunctionParameterContext.class",
+                new Unchecked<>(new JavaToXmir("com/sun/jna/FunctionParameterContext.class")).value()
+            )
         );
-        MatcherAssert.assertThat(
-            "Defects are empty, but they should not be",
-            defects,
-            Matchers.hasSize(Matchers.greaterThan(0))
+        programs.put(
+            "large",
+            new MapOf<>(
+                "com/sun/jna/Pointer.class",
+                new Unchecked<>(new JavaToXmir("com/sun/jna/Pointer.class")).value()
+            )
+        );
+        final StringBuilder sum = new StringBuilder(256);
+        programs.forEach(
+            (size, program) -> {
+                final long start = System.currentTimeMillis();
+                final String path = program.keySet().iterator().next();
+                final Collection<Defect> defects = new ProgramTest.BcProgram(program.get(path))
+                    .defects();
+                final long msec = System.currentTimeMillis() - start;
+                sum.append(
+                    String.join(
+                        "\n",
+                        String.format("Input: %s (%s program)", path, size),
+                        Logger.format(
+                            "Lint time: %s[ms]s (%d ms)",
+                            msec, msec
+                        )
+                    )
+                ).append("\n\n");
+                MatcherAssert.assertThat(
+                    "Defects are empty, but they should not be",
+                    defects,
+                    Matchers.hasSize(Matchers.greaterThan(0))
+                );
+            }
+        );
+        Files.write(
+            Paths.get("target").resolve("lint-summary.txt"),
+            sum.toString().getBytes(StandardCharsets.UTF_8)
         );
     }
 

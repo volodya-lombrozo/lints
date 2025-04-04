@@ -6,7 +6,7 @@ package benchmarks;
 
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
-import fixtures.LargeXmir;
+import fixtures.JavaToXmir;
 import java.util.concurrent.TimeUnit;
 import org.cactoos.scalar.Unchecked;
 import org.eolang.lints.Program;
@@ -38,7 +38,7 @@ public class ProgramBench {
     /**
      * Large XMIR document.
      */
-    private static final XML LARGE = new Unchecked<>(new LargeXmir()).value();
+    private static final XML LARGE = new Unchecked<>(new JavaToXmir("com/sun/jna/Pointer.class")).value();
 
     /**
      * Small XMIR document.
