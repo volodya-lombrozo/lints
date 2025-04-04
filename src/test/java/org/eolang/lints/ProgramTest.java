@@ -349,7 +349,10 @@ final class ProgramTest {
         programs.put(ProgramTest.ProgramSize.M, "com/sun/jna/Memory.class");
         programs.put(ProgramTest.ProgramSize.L, "com/sun/jna/Pointer.class");
         programs.put(ProgramTest.ProgramSize.XL, "com/sun/jna/Structure.class");
-        programs.put(ProgramTest.ProgramSize.XXL, "org/apache/hadoop/hdfs/server/namenode/FSNamesystem.class");
+        programs.put(
+            ProgramTest.ProgramSize.XXL,
+            "org/apache/hadoop/hdfs/server/namenode/FSNamesystem.class"
+        );
         return programs;
     }
 
