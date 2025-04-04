@@ -262,7 +262,6 @@ final class ProgramTest {
         );
     }
 
-
     @Test
     void returnsOnlyOneDefect() throws IOException {
         MatcherAssert.assertThat(
