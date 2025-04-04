@@ -32,7 +32,6 @@ import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
-import org.cactoos.map.MapOf;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
@@ -46,7 +45,6 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
@@ -326,7 +324,7 @@ final class ProgramTest {
                             program, size.marker()
                         ),
                         String.format(
-                            "since it has %d lines inside",
+                            "since it has %d executable lines inside",
                             lines
                         ),
                         String.format(
@@ -449,22 +447,25 @@ final class ProgramTest {
         /**
          * Standard program.
          */
-        S("S", 20, 100),
+        S("S", 5, 50),
         /**
          * Medium-sized program.
          */
-        M("M", 150, 350),
+        M("M", 90, 200),
         /**
          * Large-size program.
          */
-        L("L", 700, 1000),
+        L("L", 400, 700),
 
         /**
          * Extra-large program.
          */
-        XL("XL", 1500, 2500),
+        XL("XL", 800, 1150),
 
-        XXL("XXL", 3000, Integer.MAX_VALUE);
+        /**
+         * XXL program.
+         */
+        XXL("XXL", 1200, Integer.MAX_VALUE);
 
         /**
          * Size marker.
@@ -472,29 +473,47 @@ final class ProgramTest {
         private final String marker;
 
         /**
-         * Min size, in lines.
+         * Min size, in executable lines.
          */
         private final int min;
 
         /**
-         * Max size, in lines.
+         * Max size, in executable lines.
          */
         private final int max;
 
+        /**
+         * Ctor.
+         * @param txt Txt marker
+         * @param start Minimum size in executable lines
+         * @param end Maximum size in executable lines
+         */
         ProgramSize(final String txt, final int start, final int end) {
             this.marker = txt;
             this.min = start;
             this.max = end;
         }
 
+        /**
+         * Marker.
+         * @return Marker
+         */
         public String marker() {
             return this.marker;
         }
 
+        /**
+         * Min range of executable lines.
+         * @return Lines count
+         */
         public int min() {
             return this.min;
         }
 
+        /**
+         * Min range of executable lines.
+         * @return Lines count
+         */
         public int max() {
             return this.max;
         }
@@ -506,9 +525,15 @@ final class ProgramTest {
      */
     private static final class LineCountVisitor extends ClassVisitor {
 
+        /**
+         * Count.
+         */
         private int count;
 
-        public LineCountVisitor() {
+        /**
+         * Ctor.
+         */
+        LineCountVisitor() {
             super(Opcodes.ASM9);
         }
 
@@ -528,18 +553,10 @@ final class ProgramTest {
             };
         }
 
-        @Override
-        public FieldVisitor visitField(int access, String name, String descriptor, String signature, Object value) {
-            this.count++;
-            return super.visitField(access, name, descriptor, signature, value);
-        }
-
-        @Override
-        public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-            this.count++;
-            super.visit(version, access, name, signature, superName, interfaces);
-        }
-
+        /**
+         * Total found.
+         * @return Lines count
+         */
         public int total() {
             return this.count;
         }
