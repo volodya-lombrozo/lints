@@ -4,7 +4,6 @@
  */
 package org.eolang.lints;
 
-import fixtures.ProgramBenches;
 import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
@@ -17,6 +16,7 @@ import com.yegor256.tojos.TjCached;
 import com.yegor256.tojos.TjDefault;
 import com.yegor256.tojos.Tojos;
 import fixtures.JavaToXmir;
+import fixtures.ProgramBenches;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
