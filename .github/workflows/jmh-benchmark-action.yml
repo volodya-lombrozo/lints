@@ -20,3 +20,4 @@ jobs:
             mvn jmh:benchmark -Djmh.rf=json -Djmh.rff=benchmark.json
             cp benchmark.json .
           benchmark-file: "benchmark.json"
+
