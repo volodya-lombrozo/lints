@@ -55,11 +55,6 @@ import org.objectweb.asm.Opcodes;
  * Test for {@link Program}.
  *
  * @since 0.0.1
- * @todo #134:45min Measure lint time for smaller/larger classes, similar way to JNA Pointer.
- *  Currently, we measure linting of just one big class. Would be good to measure
- *  other classes in size too, for instance smaller classes (standard program),
- *  large class (JNA pointer), x-large class, and xxl class. Don't forget to
- *  adjust lint-summary.txt file to capture all the measurements.
  * @checkstyle MethodBodyCommentsCheck (50 lines)
  */
 @ExtendWith(MktmpResolver.class)
@@ -277,16 +272,16 @@ final class ProgramTest {
         final StringBuilder sum = new StringBuilder(256);
         ProgramTest.javaPrograms().forEach(
             (size, program) -> {
+                final XML xmir = new Unchecked<>(new JavaToXmir(program)).value();
                 final long start = System.currentTimeMillis();
-                final String path = program.keySet().iterator().next();
                 final Collection<Defect> defects = new ProgramTest.BcProgram(
-                    program.get(path), size.marker()
+                    xmir, size.marker()
                 ).defects();
                 final long msec = System.currentTimeMillis() - start;
                 sum.append(
                     String.join(
                         "\n",
-                        String.format("Input: %s (%s program)", path, size.marker()),
+                        String.format("Input: %s (%s program)", program, size.marker()),
                         Logger.format(
                             "Lint time: %s[ms]s (%d ms)",
                             msec, msec
@@ -307,16 +302,15 @@ final class ProgramTest {
     }
 
     @Test
-    void checksJavaProgramsSetupForBenchmarking() {
+    void checksJavaProgramsForBenchmarking() {
         ProgramTest.javaPrograms().forEach(
             (size, program) -> {
-                final String path = program.keySet().iterator().next();
                 final ProgramTest.LineCountVisitor visitor = new ProgramTest.LineCountVisitor();
                 new ClassReader(
                     new UncheckedBytes(
                         new BytesOf(
                             new ResourceOf(
-                                path
+                                program
                             )
                         )
                     ).asBytes()
@@ -328,8 +322,8 @@ final class ProgramTest {
                     String.join(
                         ", ",
                         String.format(
-                            "Program \"%s\" was supplied with incorrect size marker (\"%s\")",
-                            path, size.marker()
+                            "Java program \"%s\" was supplied with incorrect size marker (\"%s\")",
+                            program, size.marker()
                         ),
                         String.format(
                             "since it has %d lines inside",
@@ -350,37 +344,12 @@ final class ProgramTest {
         );
     }
 
-    // remove parsed program from here, only size:jpath
-    private static Map<ProgramTest.ProgramSize, Map<String, XML>> javaPrograms() {
-        final Map<ProgramTest.ProgramSize, Map<String, XML>> programs = new LinkedHashMap<>(4);
-        programs.put(
-            ProgramTest.ProgramSize.S,
-            new MapOf<>(
-                "com/sun/jna/PointerType.class",
-                new Unchecked<>(new JavaToXmir("com/sun/jna/PointerType.class")).value()
-            )
-        );
-        programs.put(
-            ProgramTest.ProgramSize.M,
-            new MapOf<>(
-                "com/sun/jna/Memory.class",
-                new Unchecked<>(new JavaToXmir("com/sun/jna/Memory.class")).value()
-            )
-        );
-        programs.put(
-            ProgramTest.ProgramSize.L,
-            new MapOf<>(
-                "com/sun/jna/Pointer.class",
-                new Unchecked<>(new JavaToXmir("com/sun/jna/Pointer.class")).value()
-            )
-        );
-        programs.put(
-            ProgramTest.ProgramSize.XL,
-            new MapOf<>(
-                "com/sun/jna/Structure.class",
-                new Unchecked<>(new JavaToXmir("com/sun/jna/Structure.class")).value()
-            )
-        );
+    private static Map<ProgramTest.ProgramSize, String> javaPrograms() {
+        final Map<ProgramTest.ProgramSize, String> programs = new LinkedHashMap<>(4);
+        programs.put(ProgramTest.ProgramSize.S, "com/sun/jna/PointerType.class");
+        programs.put(ProgramTest.ProgramSize.M, "com/sun/jna/Memory.class");
+        programs.put(ProgramTest.ProgramSize.L, "com/sun/jna/Pointer.class");
+        programs.put(ProgramTest.ProgramSize.XL, "com/sun/jna/Structure.class");
         return programs;
     }
 
