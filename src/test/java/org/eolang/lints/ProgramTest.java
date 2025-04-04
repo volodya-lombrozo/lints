@@ -4,6 +4,7 @@
  */
 package org.eolang.lints;
 
+import fixtures.ProgramBenches;
 import com.jcabi.log.Logger;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
@@ -23,8 +24,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
@@ -293,7 +292,7 @@ final class ProgramTest {
     @Timeout(600L)
     void lintsBenchmarkProgramsFromJava() throws Exception {
         final StringBuilder sum = new StringBuilder(256);
-        ProgramTest.javaPrograms().forEach(
+        new ProgramBenches().value().forEach(
             (size, program) -> {
                 final XML xmir = new Unchecked<>(new JavaToXmir(program)).value();
                 final long start = System.currentTimeMillis();
@@ -326,7 +325,7 @@ final class ProgramTest {
 
     @Test
     void checksJavaProgramsForBenchmarking() {
-        ProgramTest.javaPrograms().forEach(
+        new ProgramBenches().value().forEach(
             (size, program) -> {
                 final ProgramTest.LineCountVisitor visitor = new ProgramTest.LineCountVisitor();
                 new ClassReader(
@@ -365,19 +364,6 @@ final class ProgramTest {
                 );
             }
         );
-    }
-
-    private static Map<ProgramTest.ProgramSize, String> javaPrograms() {
-        final Map<ProgramTest.ProgramSize, String> programs = new LinkedHashMap<>(4);
-        programs.put(ProgramTest.ProgramSize.S, "com/sun/jna/PointerType.class");
-        programs.put(ProgramTest.ProgramSize.M, "com/sun/jna/Memory.class");
-        programs.put(ProgramTest.ProgramSize.L, "com/sun/jna/Pointer.class");
-        programs.put(ProgramTest.ProgramSize.XL, "com/sun/jna/Structure.class");
-        programs.put(
-            ProgramTest.ProgramSize.XXL,
-            "org/apache/hadoop/hdfs/server/namenode/FSNamesystem.class"
-        );
-        return programs;
     }
 
     /**
@@ -467,87 +453,6 @@ final class ProgramTest {
                     ex
                 );
             }
-        }
-    }
-
-    /**
-     * Program size.
-     * @since 0.0.45
-     */
-    private enum ProgramSize {
-
-        /**
-         * Standard program.
-         */
-        S("S", 5, 50),
-        /**
-         * Medium-sized program.
-         */
-        M("M", 90, 200),
-        /**
-         * Large-size program.
-         */
-        L("L", 400, 700),
-
-        /**
-         * Extra-large program.
-         */
-        XL("XL", 800, 1200),
-
-        /**
-         * XXL program.
-         */
-        XXL("XXL", 1500, Integer.MAX_VALUE);
-
-        /**
-         * Size marker.
-         */
-        private final String marker;
-
-        /**
-         * Min size, in executable lines.
-         */
-        private final int min;
-
-        /**
-         * Max size, in executable lines.
-         */
-        private final int max;
-
-        /**
-         * Ctor.
-         * @param txt Txt marker
-         * @param start Minimum size in executable lines
-         * @param end Maximum size in executable lines
-         */
-        ProgramSize(final String txt, final int start, final int end) {
-            this.marker = txt;
-            this.min = start;
-            this.max = end;
-        }
-
-        /**
-         * Marker size.
-         * @return Marker
-         */
-        public String size() {
-            return this.marker;
-        }
-
-        /**
-         * Min allowed count of executable lines.
-         * @return Lines count
-         */
-        public int minAllowed() {
-            return this.min;
-        }
-
-        /**
-         * Max allowed count of executable lines.
-         * @return Lines count
-         */
-        public int maxAllowed() {
-            return this.max;
         }
     }
 
