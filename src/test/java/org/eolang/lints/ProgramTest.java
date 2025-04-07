@@ -292,7 +292,7 @@ final class ProgramTest {
     @ExtendWith(MayBeSlow.class)
     @Timeout(600L)
     void lintsBenchmarkProgramsFromJava() throws Exception {
-        final StringBuilder sum = new StringBuilder(64);
+        final StringBuilder sum = new StringBuilder();
         new ListOf<>(ProgramSize.values()).forEach(
             program -> {
                 final XML xmir = new Unchecked<>(new BytecodeClass(program)).value();
