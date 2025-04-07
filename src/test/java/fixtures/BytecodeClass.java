@@ -36,6 +36,14 @@ public final class BytecodeClass implements Scalar<XML> {
 
     /**
      * Constructor.
+     * @param psize Program size
+     */
+    public BytecodeClass(final ProgramSize psize) {
+        this(psize.name(), psize.java());
+    }
+
+    /**
+     * Constructor.
      * @param jclass Java class to transform
      */
     public BytecodeClass(final String jclass) {

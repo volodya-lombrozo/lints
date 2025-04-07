@@ -16,7 +16,7 @@ import com.yegor256.tojos.TjCached;
 import com.yegor256.tojos.TjDefault;
 import com.yegor256.tojos.Tojos;
 import fixtures.BytecodeClass;
-import fixtures.ProgramBenches;
+import fixtures.ProgramSize;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -31,6 +31,7 @@ import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
+import org.cactoos.list.ListOf;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
@@ -291,19 +292,19 @@ final class ProgramTest {
     @ExtendWith(MayBeSlow.class)
     @Timeout(600L)
     void lintsBenchmarkProgramsFromJava() throws Exception {
-        final StringBuilder sum = new StringBuilder(256);
-        new ProgramBenches().value().forEach(
-            (size, program) -> {
-                final XML xmir = new Unchecked<>(new BytecodeClass(program)).value();
+        final StringBuilder sum = new StringBuilder(1024);
+        new ListOf<>(ProgramSize.values()).forEach(
+            size -> {
+                final XML xmir = new Unchecked<>(new BytecodeClass(size)).value();
                 final long start = System.currentTimeMillis();
-                final Collection<Defect> defects = new ProgramTest.BcProgram(
+                final Collection<Defect> defects = new BcProgram(
                     xmir, size.size()
                 ).defects();
                 final long msec = System.currentTimeMillis() - start;
                 sum.append(
                     String.join(
                         "\n",
-                        String.format("Input: %s (%s program)", program, size.size()),
+                        String.format("Input: %s (%s program)", size.java(), size.size()),
                         Logger.format(
                             "Lint time: %s[ms]s (%d ms)",
                             msec, msec
@@ -325,27 +326,27 @@ final class ProgramTest {
 
     @Test
     void checksJavaProgramsForBenchmarking() {
-        new ProgramBenches().value().forEach(
-            (size, program) -> {
-                final ProgramTest.LineCountVisitor visitor = new ProgramTest.LineCountVisitor();
+        new ListOf<>(ProgramSize.values()).forEach(
+            program -> {
+                final LineCountVisitor visitor = new LineCountVisitor();
                 new ClassReader(
                     new UncheckedBytes(
                         new BytesOf(
                             new ResourceOf(
-                                program
+                                program.java()
                             )
                         )
                     ).asBytes()
                 ).accept(visitor, 0);
                 final int lines = visitor.total();
-                final int min = size.minAllowed();
-                final int max = size.maxAllowed();
+                final int min = program.minAllowed();
+                final int max = program.maxAllowed();
                 MatcherAssert.assertThat(
                     String.join(
                         ", ",
                         String.format(
                             "Java program \"%s\" was supplied with incorrect size marker (\"%s\")",
-                            program, size.size()
+                            program, program.size()
                         ),
                         String.format(
                             "since it has %d executable lines inside",
