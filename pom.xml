@@ -210,12 +210,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-hdfs</artifactId>
-      <version>3.4.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>org.openjdk.jmh</groupId>
       <artifactId>jmh-core</artifactId>
       <version>1.37</version>
@@ -517,5 +511,11 @@
         </executions>
       </plugin>
     </plugins>
+    <testResources>
+      <testResource>
+        <directory>src/test/resources</directory>
+        <filtering>false</filtering>
+      </testResource>
+    </testResources>
   </build>
 </project>

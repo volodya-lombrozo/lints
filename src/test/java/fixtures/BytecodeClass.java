@@ -83,7 +83,8 @@ public final class BytecodeClass implements Scalar<XML> {
                     .append("org.eolang", "jeo-maven-plugin", "0.7.2")
                     .execution("default")
                     .phase("process-classes")
-                    .goals("disassemble");
+                    .goals("disassemble")
+                    .configuration().set("skipVerification", true);
                 f.exec("process-classes");
                 ref.set(
                     new XMLDocument(

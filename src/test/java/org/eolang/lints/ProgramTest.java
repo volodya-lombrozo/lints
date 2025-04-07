@@ -294,17 +294,19 @@ final class ProgramTest {
     void lintsBenchmarkProgramsFromJava() throws Exception {
         final StringBuilder sum = new StringBuilder(64);
         new ListOf<>(ProgramSize.values()).forEach(
-            size -> {
-                final XML xmir = new Unchecked<>(new BytecodeClass(size)).value();
+            program -> {
+                final XML xmir = new Unchecked<>(new BytecodeClass(program)).value();
                 final long start = System.currentTimeMillis();
                 final Collection<Defect> defects = new BcProgram(
-                    xmir, size.size()
+                    xmir, program.largeness()
                 ).defects();
                 final long msec = System.currentTimeMillis() - start;
                 sum.append(
                     String.join(
                         "\n",
-                        String.format("Input: %s (%s program)", size.java(), size.size()),
+                        String.format(
+                            "Input: %s (%s program)", program.java(), program.largeness()
+                        ),
                         Logger.format(
                             "Lint time: %s[ms]s (%d ms)",
                             msec, msec
@@ -346,7 +348,7 @@ final class ProgramTest {
                         ", ",
                         String.format(
                             "Java program \"%s\" was supplied with incorrect size marker (\"%s\")",
-                            program, program.size()
+                            program, program.largeness()
                         ),
                         String.format(
                             "since it has %d executable lines inside",
