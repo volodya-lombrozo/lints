@@ -76,10 +76,10 @@ public enum ProgramSize {
     }
 
     /**
-     * Program largeness.
-     * @return largeness as string
+     * Program type.
+     * @return Program type as string
      */
-    public String largeness() {
+    public String type() {
         return this.largeness;
     }
 

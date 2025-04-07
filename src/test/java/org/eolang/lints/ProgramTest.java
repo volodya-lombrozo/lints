@@ -298,14 +298,14 @@ final class ProgramTest {
                 final XML xmir = new Unchecked<>(new BytecodeClass(program)).value();
                 final long start = System.currentTimeMillis();
                 final Collection<Defect> defects = new BcProgram(
-                    xmir, program.largeness()
+                    xmir, program.type()
                 ).defects();
                 final long msec = System.currentTimeMillis() - start;
                 sum.append(
                     String.join(
                         "\n",
                         String.format(
-                            "Input: %s (%s program)", program.java(), program.largeness()
+                            "Input: %s (%s program)", program.java(), program.type()
                         ),
                         Logger.format(
                             "Lint time: %s[ms]s (%d ms)",
@@ -348,7 +348,7 @@ final class ProgramTest {
                         ", ",
                         String.format(
                             "Java program \"%s\" was supplied with incorrect size marker (\"%s\")",
-                            program, program.largeness()
+                            program, program.type()
                         ),
                         String.format(
                             "since it has %d executable lines inside",
