@@ -510,22 +510,30 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <!-- version from the parent pom -->
+        <executions>
+          <execution>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.apache.hadoop</groupId>
+                  <artifactId>hadoop-hdfs</artifactId>
+                  <version>3.3.0</version>
+                  <type>jar</type>
+                  <includes>org/apache/hadoop/hdfs/server/namenode/FSNamesystem.class</includes>
+                  <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
-    <testResources>
-      <testResource>
-        <directory>src/test/resources</directory>
-        <excludes>
-          <exclude>org/apache/hadoop/hdfs/server/namenode/FSNamesystem.class</exclude>
-        </excludes>
-        <filtering>true</filtering>
-      </testResource>
-      <testResource>
-        <directory>src/test/resources</directory>
-        <includes>
-          <include>org/apache/hadoop/hdfs/server/namenode/FSNamesystem.class</include>
-        </includes>
-        <filtering>false</filtering>
-      </testResource>
-    </testResources>
   </build>
 </project>
