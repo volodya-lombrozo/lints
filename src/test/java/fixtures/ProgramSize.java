@@ -66,6 +66,7 @@ public enum ProgramSize {
      * @param start Minimum size in executable lines
      * @param end Maximum size in executable lines
      * @param java Java bytecode class path
+     * @checkstyle ParameterNumberCheck (3 lines)
      */
     ProgramSize(final String txt, final int start, final int end, final String java) {
         this.type = txt;
