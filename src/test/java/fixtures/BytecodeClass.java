@@ -18,11 +18,11 @@ import org.xembly.Directives;
 import org.xembly.Xembler;
 
 /**
- * Java `.class` to XMIR document.
+ * XMIR document from Java bytecode.
  *
  * @since 0.0.31
  */
-public final class JavaToXmir implements Scalar<XML> {
+public final class BytecodeClass implements Scalar<XML> {
 
     /**
      * Name of the program.
@@ -38,7 +38,7 @@ public final class JavaToXmir implements Scalar<XML> {
      * Constructor.
      * @param jclass Java class to transform
      */
-    public JavaToXmir(final String jclass) {
+    public BytecodeClass(final String jclass) {
         this("unknown", jclass);
     }
 
@@ -47,7 +47,7 @@ public final class JavaToXmir implements Scalar<XML> {
      * @param nme Program name.
      * @param jclass Java class to transform
      */
-    public JavaToXmir(final String nme, final String jclass) {
+    public BytecodeClass(final String nme, final String jclass) {
         this.name = nme;
         this.java = jclass;
     }

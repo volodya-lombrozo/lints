@@ -15,7 +15,7 @@ import com.yegor256.tojos.MnCsv;
 import com.yegor256.tojos.TjCached;
 import com.yegor256.tojos.TjDefault;
 import com.yegor256.tojos.Tojos;
-import fixtures.JavaToXmir;
+import fixtures.BytecodeClass;
 import fixtures.ProgramBenches;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -294,7 +294,7 @@ final class ProgramTest {
         final StringBuilder sum = new StringBuilder(256);
         new ProgramBenches().value().forEach(
             (size, program) -> {
-                final XML xmir = new Unchecked<>(new JavaToXmir(program)).value();
+                final XML xmir = new Unchecked<>(new BytecodeClass(program)).value();
                 final long start = System.currentTimeMillis();
                 final Collection<Defect> defects = new ProgramTest.BcProgram(
                     xmir, size.size()

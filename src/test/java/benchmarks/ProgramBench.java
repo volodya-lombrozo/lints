@@ -5,7 +5,7 @@
 package benchmarks;
 
 import com.jcabi.xml.XML;
-import fixtures.JavaToXmir;
+import fixtures.BytecodeClass;
 import fixtures.ProgramBenches;
 import java.util.concurrent.TimeUnit;
 import org.cactoos.scalar.Unchecked;
@@ -43,35 +43,35 @@ public class ProgramBench {
      * Small XMIR document.
      */
     private static final XML SMALL = new Unchecked<>(
-        new JavaToXmir(new ProgramBenches().value().get(ProgramBenches.ProgramSize.S))
+        new BytecodeClass(new ProgramBenches().value().get(ProgramBenches.ProgramSize.S))
     ).value();
 
     /**
      * Medium XMIR document.
      */
     private static final XML MEDIUM = new Unchecked<>(
-        new JavaToXmir(new ProgramBenches().value().get(ProgramBenches.ProgramSize.M))
+        new BytecodeClass(new ProgramBenches().value().get(ProgramBenches.ProgramSize.M))
     ).value();
 
     /**
      * Large XMIR document.
      */
     private static final XML LARGE = new Unchecked<>(
-        new JavaToXmir(new ProgramBenches().value().get(ProgramBenches.ProgramSize.L))
+        new BytecodeClass(new ProgramBenches().value().get(ProgramBenches.ProgramSize.L))
     ).value();
 
     /**
      * X-Large XMIR document.
      */
     private static final XML X_LARGE = new Unchecked<>(
-        new JavaToXmir(new ProgramBenches().value().get(ProgramBenches.ProgramSize.XL))
+        new BytecodeClass(new ProgramBenches().value().get(ProgramBenches.ProgramSize.XL))
     ).value();
 
     /**
      * XXL XMIR document.
      */
     private static final XML XXL = new Unchecked<>(
-        new JavaToXmir(new ProgramBenches().value().get(ProgramBenches.ProgramSize.XXL))
+        new BytecodeClass(new ProgramBenches().value().get(ProgramBenches.ProgramSize.XXL))
     ).value();
 
     @Benchmark

@@ -6,7 +6,7 @@ package org.eolang.lints;
 
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
-import fixtures.JavaToXmir;
+import fixtures.BytecodeClass;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -215,7 +215,7 @@ final class LtByXslTest {
     void checksEmptyObjectOnLargeXmirInReasonableTime() {
         Assertions.assertDoesNotThrow(
             () -> new LtByXsl("errors/empty-object").defects(
-                new JavaToXmir("com/sun/jna/Pointer.class").value()
+                new BytecodeClass("com/sun/jna/Pointer.class").value()
             ),
             "Huge XMIR must pass in reasonable time. See the timeout value."
         );
