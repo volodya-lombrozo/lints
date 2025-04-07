@@ -26,6 +26,10 @@ import org.openjdk.jmh.annotations.Warmup;
  * @since 0.0.34
  * @checkstyle DesignForExtensionCheck (10 lines)
  * @checkstyle NonStaticMethodCheck (100 lines)
+ * @todo #143:35min Add JMH benchmarks result reporting.
+ *  Currently, there is no reporting of benchmark results. Let's add
+ *  <a href="https://github.com/volodya-lombrozo/jmh-benchmark-action">this</a> GitHub Actions
+ *  plugin and configure it to run on each PR.
  */
 @Fork(1)
 @BenchmarkMode(Mode.AverageTime)
