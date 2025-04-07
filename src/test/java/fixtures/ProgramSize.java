@@ -41,9 +41,9 @@ public enum ProgramSize {
     );
 
     /**
-     * Size marker.
+     * Size type.
      */
-    private final String marker;
+    private final String type;
 
     /**
      * Min size, in executable lines.
@@ -62,23 +62,24 @@ public enum ProgramSize {
 
     /**
      * Ctor.
-     * @param txt Txt marker
+     * @param txt Txt type
      * @param start Minimum size in executable lines
      * @param end Maximum size in executable lines
+     * @param java Java bytecode class path
      */
     ProgramSize(final String txt, final int start, final int end, final String java) {
-        this.marker = txt;
+        this.type = txt;
         this.min = start;
         this.max = end;
         this.jclass = java;
     }
 
     /**
-     * Marker size.
-     * @return Marker
+     * Size type.
+     * @return Type
      */
     public String size() {
-        return this.marker;
+        return this.type;
     }
 
     /**
@@ -97,6 +98,10 @@ public enum ProgramSize {
         return this.max;
     }
 
+    /**
+     * Java path.
+     * @return Path to Java bytecode class
+     */
     public String java() {
         return this.jclass;
     }

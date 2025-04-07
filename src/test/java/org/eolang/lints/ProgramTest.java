@@ -292,7 +292,7 @@ final class ProgramTest {
     @ExtendWith(MayBeSlow.class)
     @Timeout(600L)
     void lintsBenchmarkProgramsFromJava() throws Exception {
-        final StringBuilder sum = new StringBuilder(1024);
+        final StringBuilder sum = new StringBuilder(64);
         new ListOf<>(ProgramSize.values()).forEach(
             size -> {
                 final XML xmir = new Unchecked<>(new BytecodeClass(size)).value();
@@ -459,6 +459,9 @@ final class ProgramTest {
 
     /**
      * Line number visitor.
+     * Here, we count executable lines from Java bytecode class. However, if compiler
+     * decides to skip them, we will get 0 here. Thus, all classes must be compiled with
+     * lines.
      * @since 0.0.45
      */
     private static final class LineCountVisitor extends ClassVisitor {
