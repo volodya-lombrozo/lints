@@ -13,10 +13,13 @@ import org.eolang.lints.Program;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
@@ -39,53 +42,35 @@ import org.openjdk.jmh.annotations.Warmup;
 @State(Scope.Benchmark)
 public class ProgramBench {
 
-    /**
-     * Small XMIR document.
-     */
-    private static final XML SMALL = new Unchecked<>(new BytecodeClass(ProgramSize.S)).value();
-
-    /**
-     * Medium XMIR document.
-     */
-    private static final XML MEDIUM = new Unchecked<>(new BytecodeClass(ProgramSize.M)).value();
-
-    /**
-     * Large XMIR document.
-     */
-    private static final XML LARGE = new Unchecked<>(new BytecodeClass(ProgramSize.L)).value();
-
-    /**
-     * X-Large XMIR document.
-     */
-    private static final XML X_LARGE = new Unchecked<>(new BytecodeClass(ProgramSize.XL)).value();
-
-    /**
-     * XXL XMIR document.
-     */
-    private static final XML XXL = new Unchecked<>(new BytecodeClass(ProgramSize.XXL)).value();
-
     @Benchmark
-    public final void scansSmallXmir() {
-        new Program(ProgramBench.SMALL).defects();
+    public final void scansXmir(final BenchmarkState state) {
+        new Program(state.xmir).defects();
     }
 
-    @Benchmark
-    public final void scansMediumXmir() {
-        new Program(ProgramBench.MEDIUM).defects();
-    }
+    /**
+     * Benchmark state.
+     * @since 0.0.45
+     */
+    @State(Scope.Benchmark)
+    public static class BenchmarkState {
 
-    @Benchmark
-    public final void scansLargeXmir() {
-        new Program(ProgramBench.LARGE).defects();
-    }
+        /**
+         * Program size.
+         */
+        @Param({"S", "M", "L", "XL", "XXL"})
+        private String size;
 
-    @Benchmark
-    public final void scansXlargeXmir() {
-        new Program(ProgramBench.X_LARGE).defects();
-    }
+        /**
+         * XMIR.
+         */
+        private XML xmir;
 
-    @Benchmark
-    public final void scansXxlXmir() {
-        new Program(ProgramBench.XXL).defects();
+        /**
+         * Initialize the state.
+         */
+        @Setup(Level.Trial)
+        public void init() {
+            this.xmir = new Unchecked<>(new BytecodeClass(ProgramSize.valueOf(this.size))).value();
+        }
     }
 }
