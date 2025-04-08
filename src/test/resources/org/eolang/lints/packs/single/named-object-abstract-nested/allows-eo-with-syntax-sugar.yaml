@@ -5,13 +5,9 @@ sheets:
   - /org/eolang/lints/critical/named-object-abstract-nested.xsl
 asserts:
   - /defects[count(defect[@severity='critical'])=0]
-document: |
-  <program>
-    <objects>
-      <o name="foo">
-        <o name="bar">
-          <o base="num"/>
-        </o>
-      </o>
-    </objects>
-  </program>
+input: |
+  # Foo.
+  [] > foo
+    x > @
+      y > a
+        z > b
