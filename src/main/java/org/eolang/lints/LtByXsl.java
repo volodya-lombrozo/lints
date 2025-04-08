@@ -105,7 +105,7 @@ final class LtByXsl implements Lint<XML> {
                         LtByXsl.findName(xmir),
                         this.lineno(xml),
                         xml.text().get(),
-                        this.experimental(xml)
+                        LtByXsl.experimental(xml)
                     ),
                     xml.attribute("context").text().orElse("")
                 )
@@ -119,7 +119,7 @@ final class LtByXsl implements Lint<XML> {
         return new IoCheckedText(new TextOf(this.doc)).asString();
     }
 
-    private boolean experimental(final Xnav defect) {
+    private static boolean experimental(final Xnav defect) {
         final boolean result;
         final Optional<String> attr = defect.attribute("experimental").text();
         if (attr.isEmpty()) {

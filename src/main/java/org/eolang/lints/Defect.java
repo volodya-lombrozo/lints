@@ -110,6 +110,7 @@ public interface Defect {
      *
      * @since 0.0.1
      */
+    @SuppressWarnings("PMD.TooManyMethods")
     final class Default implements Defect {
         /**
          * Rule.
@@ -168,6 +169,7 @@ public interface Defect {
          * @param program Name of the program
          * @param line Line number
          * @param text Description of the defect
+         * @param exprmnt Experimental?
          * @checkstyle ParameterNumberCheck (5 lines)
          */
         public Default(
