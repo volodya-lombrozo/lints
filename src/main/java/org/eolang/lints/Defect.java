@@ -97,6 +97,12 @@ public interface Defect {
     String context();
 
     /**
+     * Experimental?
+     * @return Experimental
+     */
+    boolean experimental();
+
+    /**
      * Default implementation of {@link Defect}.
      * <p>
      * Provides a standard implementation with basic functionality.
@@ -131,6 +137,27 @@ public interface Defect {
         private final String txt;
 
         /**
+         * Experiment?
+         */
+        private final boolean experiment;
+
+        /**
+         * Ctor.
+         * @param rule Rule name
+         * @param severity Severity level
+         * @param program Name of the program
+         * @param line Line number
+         * @param text Description of the defect
+         * @checkstyle ParameterNumberCheck (5 lines)
+         */
+        public Default(
+            final String rule, final Severity severity,
+            final String program, final int line, final String text
+        ) {
+            this(rule, severity, program, line, text, false);
+        }
+
+        /**
          * Ctor.
          * <p>
          * Constructs a defect with all required information.
@@ -145,13 +172,15 @@ public interface Defect {
          */
         public Default(
             final String rule, final Severity severity,
-            final String program, final int line, final String text
+            final String program, final int line, final String text,
+            final boolean exprmnt
         ) {
             this.rle = rule;
             this.sev = severity;
             this.prg = program;
             this.lineno = line;
             this.txt = text;
+            this.experiment = exprmnt;
         }
 
         @Override
@@ -199,6 +228,11 @@ public interface Defect {
         @Override
         public String context() {
             return "Context is empty";
+        }
+
+        @Override
+        public boolean experimental() {
+            return this.experiment;
         }
 
         @Override

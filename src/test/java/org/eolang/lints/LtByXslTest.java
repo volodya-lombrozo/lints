@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import matchers.DefectsMatcher;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.jucs.ClasspathSource;
@@ -218,6 +219,25 @@ final class LtByXslTest {
                 new BytecodeClass("com/sun/jna/Pointer.class").value()
             ),
             "Huge XMIR must pass in reasonable time. See the timeout value."
+        );
+    }
+
+    @Test
+    void returnsNonExperimentalWhenXslStaysQuiet() throws IOException {
+        MatcherAssert.assertThat(
+            "Experimental flag should be set to false",
+            new ListOf<>(
+                new LtByXsl("comments/comment-without-dot").defects(
+                    new EoSyntax(
+                        String.join(
+                            "\n",
+                            "# Foo",
+                            "[] > foo"
+                        )
+                    ).parsed()
+                )
+            ).get(0).experimental(),
+            Matchers.equalTo(false)
         );
     }
 
