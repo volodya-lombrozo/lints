@@ -119,6 +119,11 @@ final class LtByXsl implements Lint<XML> {
         return new IoCheckedText(new TextOf(this.doc)).asString();
     }
 
+    /**
+     * Defect is experimental?
+     * @param defect Defect
+     * @return Experimental or not
+     */
     private static boolean experimental(final Xnav defect) {
         final boolean result;
         final Optional<String> attr = defect.attribute("experimental").text();
