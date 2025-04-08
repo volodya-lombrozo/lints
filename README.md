@@ -104,29 +104,43 @@ Here is the result of linting XMIRs:
 
 <!-- benchmark_begin -->
 ```text
-Input: com/sun/jna/Pointer.class
-Lint time: 15s (15280 ms)
+Input: com/sun/jna/PointerType.class (S program)
+Lint time: 10791[ms]s (10791 ms)
 
-unlint-non-existing-defect (5332 ms)
-application-duality (1153 ms)
-object-has-data (911 ms)
-name-outside-of-abstract-object (621 ms)
-incorrect-bytes-format (309 ms)
-line-is-absent (243 ms)
-duplicate-names (187 ms)
-wrong-sprintf-arguments (181 ms)
-atom-without-rt (165 ms)
-mandatory-version (158 ms)
-empty-object (120 ms)
-rt-without-atoms (109 ms)
-void-attributes-not-higher-than-other (108 ms)
-atom-in-atom (104 ms)
-atom-with-data (103 ms)
-many-free-attributes (93 ms)
+Input: com/sun/jna/Memory.class (M program)
+Lint time: 8123[ms]s (8123 ms)
+
+Input: com/sun/jna/Pointer.class (L program)
+Lint time: 9397[ms]s (9397 ms)
+
+Input: com/sun/jna/Structure.class (XL program)
+Lint time: 11499[ms]s (11499 ms)
+
+Input: org/apache/hadoop/hdfs/server/namenode/FSNamesystem.class (XXL program)
+Lint time: 40257[ms]s (40257 ms)
+
+
+
+unlint-non-existing-defect (XXL) (15561 ms)
+object-has-data (XXL) (12170 ms)
+unlint-non-existing-defect (XL) (5925 ms)
+unlint-non-existing-defect (L) (4827 ms)
+unlint-non-existing-defect (S) (4241 ms)
+unlint-non-existing-defect (M) (4067 ms)
+application-duality (XXL) (2803 ms)
+name-outside-of-abstract-object (XXL) (1599 ms)
+object-has-data (XL) (1027 ms)
+incorrect-bytes-format (XXL) (831 ms)
+line-is-absent (XXL) (675 ms)
+object-has-data (L) (650 ms)
+application-duality (XL) (620 ms)
+duplicate-names (XXL) (434 ms)
+object-has-data (S) (370 ms)
+object-has-data (M) (370 ms)
 ```
 
 The results were calculated in [this GHA job][benchmark-gha]
-on 2025-03-27 at 02:08,
+on 2025-04-08 at 01:38,
 on Linux with 4 CPUs.
 <!-- benchmark_end -->
 
@@ -152,4 +166,4 @@ You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
 
 [XMIR]: https://news.eolang.org/2022-11-25-xmir-guide.html
 [EO]: https://www.eolang.org
-[benchmark-gha]: https://github.com/objectionary/lints/actions/runs/14097302261
+[benchmark-gha]: https://github.com/objectionary/lints/actions/runs/14323132768
