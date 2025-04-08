@@ -5,6 +5,7 @@
 package benchmarks;
 
 import fixtures.BytecodeClass;
+import fixtures.ProgramSize;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -51,7 +52,7 @@ public class ProgramsBench {
                 final String name = String.format("program-%d.xmir", idx);
                 Files.write(
                     this.home.resolve(String.format("%s.xmir", name)),
-                    new IoChecked<>(new BytecodeClass(name))
+                    new IoChecked<>(new BytecodeClass(name, ProgramSize.L.java()))
                         .value().toString().getBytes(StandardCharsets.UTF_8)
                 );
             }
