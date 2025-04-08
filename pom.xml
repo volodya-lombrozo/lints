@@ -324,6 +324,7 @@
                     <class>org.eolang.lints.LtReservedNameTest</class>
                   </excludedTestClasses>
                   <excludedClasses>
+                    <!-- Used as benchmark resource. -->
                     <class>org.apache.hadoop.hdfs.server.namenode.FSNamesystem</class>
                   </excludedClasses>
                 </configuration>
