@@ -24,6 +24,7 @@
               </xsl:attribute>
             </xsl:if>
             <xsl:attribute name="severity">warning</xsl:attribute>
+            <xsl:attribute name="experimental">true</xsl:attribute>
             <xsl:text>The formation </xsl:text>
             <xsl:value-of select="eo:escape(@name)"/>
             <xsl:text> does not have any void attributes</xsl:text>
