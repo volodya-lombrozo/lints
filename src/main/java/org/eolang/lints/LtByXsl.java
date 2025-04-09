@@ -104,7 +104,8 @@ final class LtByXsl implements Lint<XML> {
                         Severity.parsed(sever.get()),
                         LtByXsl.findName(xmir),
                         this.lineno(xml),
-                        xml.text().get()
+                        xml.text().get(),
+                        LtByXsl.experimental(xml)
                     ),
                     xml.attribute("context").text().orElse("")
                 )
@@ -116,6 +117,22 @@ final class LtByXsl implements Lint<XML> {
     @Override
     public String motive() throws IOException {
         return new IoCheckedText(new TextOf(this.doc)).asString();
+    }
+
+    /**
+     * Defect is experimental?
+     * @param defect Defect
+     * @return Experimental or not
+     */
+    private static boolean experimental(final Xnav defect) {
+        final boolean result;
+        final Optional<String> attr = defect.attribute("experimental").text();
+        if (attr.isEmpty()) {
+            result = false;
+        } else {
+            result = Boolean.parseBoolean(attr.get());
+        }
+        return result;
     }
 
     /**
