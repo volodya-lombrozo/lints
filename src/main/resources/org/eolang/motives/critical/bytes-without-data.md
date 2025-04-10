@@ -1,7 +1,7 @@
 # Bytes Without Data
 
-Each object `<o/>` in [XMIR], with its base containing `org.eolang.bytes` must
-have text data inside.
+Each object `<o/>` in [XMIR], with its parent base containing
+`Q.org.eolang.bytes` must have text data inside.
 
 Incorrect:
 

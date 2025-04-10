@@ -35,13 +35,20 @@ SOFTWARE.
   </xsl:template>
   <xsl:template match="o" mode="with-data">
     <defect>
+      <xsl:variable name="parent" select="parent::o"/>
+      <xsl:variable name="line" select="eo:lineno($parent/@line)"/>
       <xsl:attribute name="line">
-        <xsl:value-of select="if (@line) then @line else '0'"/>
+        <xsl:value-of select="$line"/>
       </xsl:attribute>
+      <xsl:if test="$line = '0'">
+        <xsl:attribute name="context">
+          <xsl:value-of select="eo:defect-context($parent)"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:attribute name="severity">critical</xsl:attribute>
-      <xsl:text>Objects with parent @base equal to 'org.eolang.bytes' must contain data, while "</xsl:text>
-      <xsl:value-of select="@name"/>
-      <xsl:text>" object does not</xsl:text>
+      <xsl:text>Objects with parent @base equal to "Q.org.eolang.bytes" must contain data, while </xsl:text>
+      <xsl:value-of select="eo:escape($parent/@name)"/>
+      <xsl:text> object does not</xsl:text>
     </defect>
   </xsl:template>
 </xsl:stylesheet>
