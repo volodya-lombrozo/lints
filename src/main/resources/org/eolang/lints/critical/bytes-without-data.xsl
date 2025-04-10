@@ -22,25 +22,26 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" id="bytes-without-data" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="bytes-without-data" version="2.0">
+  <xsl:import href="/org/eolang/parser/_funcs.xsl"/>
+  <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/escape.xsl"/>
+  <xsl:import href="/org/eolang/funcs/defect-context.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="//o" mode="with-data"/>
+      <xsl:apply-templates select="//o[not(eo:has-data(.)) and parent::o[@base='Q.org.eolang.bytes']]" mode="with-data"/>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="with-data">
-    <xsl:variable name="data" select="normalize-space(string-join(text(), ''))"/>
-    <xsl:if test="($data eq '') and (@base = 'bytes' or @base = 'org.eolang.bytes')">
-      <defect>
-        <xsl:attribute name="line">
-          <xsl:value-of select="if (@line) then @line else '0'"/>
-        </xsl:attribute>
-        <xsl:attribute name="severity">critical</xsl:attribute>
-        <xsl:text>Objects with their @base attributes containing 'org.eolang.bytes' must contain data, while "</xsl:text>
-        <xsl:value-of select="@name"/>
-        <xsl:text>" object does not</xsl:text>
-      </defect>
-    </xsl:if>
+    <defect>
+      <xsl:attribute name="line">
+        <xsl:value-of select="if (@line) then @line else '0'"/>
+      </xsl:attribute>
+      <xsl:attribute name="severity">critical</xsl:attribute>
+      <xsl:text>Objects with parent @base equal to 'org.eolang.bytes' must contain data, while "</xsl:text>
+      <xsl:value-of select="@name"/>
+      <xsl:text>" object does not</xsl:text>
+    </defect>
   </xsl:template>
 </xsl:stylesheet>

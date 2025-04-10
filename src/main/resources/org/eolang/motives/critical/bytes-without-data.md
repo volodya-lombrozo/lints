@@ -8,7 +8,9 @@ Incorrect:
 ```xml
 <program>
   <objects>
-    <o name="bar" base="foo"/>
+    <o name="bar" base="org.eolang.bytes">
+      <o/>
+    </o>
   </objects>
 </program>
 ```
@@ -18,8 +20,8 @@ Correct:
 ```xml
 <program>
   <objects>
-    <o name="bar" base="foo">
-      A1-B2-C3-D4-E5
+    <o name="bar" base="org.eolang.bytes">
+      <o>A1-B2-C3-D4-E5</o>
     </o>
   </objects>
 </program>
