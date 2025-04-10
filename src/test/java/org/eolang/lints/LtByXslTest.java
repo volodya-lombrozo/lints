@@ -1,35 +1,23 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package org.eolang.lints;
 
+import com.jcabi.matchers.XhtmlMatchers;
+import com.jcabi.xml.XMLDocument;
+import fixtures.BytecodeClass;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.cactoos.io.InputOf;
+import matchers.DefectsMatcher;
+import org.cactoos.io.ResourceOf;
+import org.cactoos.list.ListOf;
+import org.cactoos.text.TextOf;
+import org.cactoos.text.UncheckedText;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.EoSyntax;
 import org.eolang.xax.XtSticky;
@@ -38,7 +26,9 @@ import org.eolang.xax.XtoryMatcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -48,33 +38,35 @@ import org.junit.jupiter.params.ParameterizedTest;
  *
  * @since 0.0.1
  */
+@SuppressWarnings("PMD.TooManyMethods")
 final class LtByXslTest {
 
     @Test
     void lintsOneFile() throws IOException {
         MatcherAssert.assertThat(
-            "the objects is found",
+            "No defects found, while a few of them expected",
             new LtByXsl("critical/duplicate-names").defects(
                 new EoSyntax(
-                    new InputOf("# first\n[] > foo\n# first\n[] > foo\n")
+                    "# first\n[] > foo\n# first\n[] > foo\n"
                 ).parsed()
             ),
             Matchers.hasSize(Matchers.greaterThan(0))
         );
     }
 
+    @SuppressWarnings("JTCOP.RuleNotContainsTestWord")
     @ParameterizedTest
-    @ClasspathSource(value = "org/eolang/lints/packs/", glob = "**.yaml")
+    @ClasspathSource(value = "org/eolang/lints/packs/single/", glob = "**.yaml")
     void testsAllLintsByEo(final String yaml) {
         MatcherAssert.assertThat(
-            "must pass without errors",
+            "Doesn't tell the story as it's expected",
             new XtSticky(
                 new XtYaml(
                     yaml,
-                    eo -> new EoSyntax("pack", new InputOf(eo)).parsed()
+                    eo -> new EoSyntax("pack", eo).parsed()
                 )
             ),
-            new XtoryMatcher()
+            new XtoryMatcher(new DefectsMatcher())
         );
     }
 
@@ -88,13 +80,13 @@ final class LtByXslTest {
     }
 
     @Test
-    void testLocationsOfYamlPacks() throws IOException {
+    void checksLocationsOfYamlPacks() throws IOException {
         final Set<String> groups = Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
             .filter(Files::isRegularFile)
             .filter(path -> path.toString().endsWith(".xsl"))
             .map(path -> path.getParent().getFileName().toString())
             .collect(Collectors.toSet());
-        Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs"))
+        Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs/single"))
             .filter(Files::isRegularFile)
             .forEach(
                 path -> {
@@ -137,7 +129,10 @@ final class LtByXslTest {
                         path
                     ),
                     path,
-                    Matchers.endsWith("org/eolang/lints/packs")
+                    Matchers.anyOf(
+                        Matchers.endsWith("org/eolang/lints/packs/single"),
+                        Matchers.endsWith("org/eolang/lints/packs/wpa")
+                    )
                 )
             );
     }
@@ -171,4 +166,96 @@ final class LtByXslTest {
             );
     }
 
+    @Test
+    void checksIdsInXslStylesheets() throws IOException {
+        Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
+            .filter(Files::isRegularFile)
+            .filter(file -> file.getFileName().toString().endsWith(".xsl"))
+            .forEach(
+                path -> MatcherAssert.assertThat(
+                    String.format("@id is wrong in: %s", path),
+                    XhtmlMatchers.xhtml(
+                        new UncheckedText(new TextOf(path)).asString()
+                    ),
+                    XhtmlMatchers.hasXPath(
+                        String.format(
+                            "/xsl:stylesheet[@id='%s']",
+                            path.getFileName().toString().replaceAll("\\.xsl$", "")
+                        )
+                    )
+                )
+            );
+    }
+
+    @Test
+    void checksMotivesForPresence() throws IOException {
+        Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
+            .filter(Files::isRegularFile)
+            .filter(f -> f.getFileName().toString().endsWith(".xsl"))
+            .forEach(
+                path -> {
+                    final Path motive = Path.of(
+                        path.toString()
+                            .replace("lints", "motives")
+                            .replace(".xsl", ".md")
+                    );
+                    MatcherAssert.assertThat(
+                        String.format(
+                            "Motive file '%s' is missing for lint '%s'",
+                            motive, path
+                        ),
+                        Files.exists(motive),
+                        new IsEqual<>(true)
+                    );
+                }
+            );
+    }
+
+    @Test
+    @Timeout(60L)
+    void checksEmptyObjectOnLargeXmirInReasonableTime() {
+        Assertions.assertDoesNotThrow(
+            () -> new LtByXsl("errors/empty-object").defects(
+                new BytecodeClass("com/sun/jna/Pointer.class").value()
+            ),
+            "Huge XMIR must pass in reasonable time. See the timeout value."
+        );
+    }
+
+    @Test
+    void returnsNonExperimentalWhenXslStaysQuiet() throws IOException {
+        MatcherAssert.assertThat(
+            "Experimental flag should be set to false",
+            new ListOf<>(
+                new LtByXsl("comments/comment-without-dot").defects(
+                    new EoSyntax(
+                        String.join(
+                            "\n",
+                            "# Foo",
+                            "[] > foo"
+                        )
+                    ).parsed()
+                )
+            ).get(0).experimental(),
+            Matchers.equalTo(false)
+        );
+    }
+
+    @Test
+    void cutsLargeContext() throws Exception {
+        new LtByXsl("critical/application-duality").defects(
+            new XMLDocument(
+                new ResourceOf(
+                    "org/eolang/lints/xmir-with-application-duality.xml"
+                ).stream()
+            )
+        ).forEach(
+            defect ->
+                MatcherAssert.assertThat(
+                    "Defect context size is too big",
+                    defect.context().length(),
+                    Matchers.lessThanOrEqualTo(300)
+                )
+        );
+    }
 }

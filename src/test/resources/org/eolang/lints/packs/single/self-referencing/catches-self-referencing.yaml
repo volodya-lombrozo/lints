@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/critical/self-referencing.xsl
+asserts:
+  - /defects[count(defect[@severity='error'])=4]
+  - /defects/defect[@line='3']
+  - /defects/defect[@line='4']
+  - /defects/defect[@line='5']
+  - /defects/defect[@line='6']
+input: |
+  # No comments.
+  [] > first
+    a > a
+    b.c > b
+    $.c > c
+    $.d.e > d

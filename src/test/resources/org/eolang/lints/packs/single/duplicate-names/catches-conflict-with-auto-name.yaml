@@ -1,0 +1,21 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+# @todo #3147:30min Make duplicate names catcher more powerful. This test pack is disabled now
+#  because names duplication is not caught here. It happens because of "duplicate-names.xsl" thinks
+#  that abstract objects in the tests are on the different levels. Syntactically they are, but
+#  semantically they're not. So we need to make this duplicate catcher more powerful, enable the
+#  test by removing "skip: true" line and make sure it works.
+skip: true
+sheets:
+  - /org/eolang/lints/critical/duplicate-names.xsl
+asserts:
+  - /defects[count(defect)=1]
+  - /defects/defect[@line='3']
+input: |
+  # No comments.
+  [] > main
+    x > f
+      [] >>
+    # No comments.
+    [] > auto-named-attr-at-4-6

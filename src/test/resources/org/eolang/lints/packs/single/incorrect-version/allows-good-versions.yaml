@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/incorrect-version.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=0]
+input: |
+  +version 0.0.0
+  +version 0.2.1
+  +version 42.0.555555
+  +version 0.0.1-alpha
+  +version 0.0.1-beta-1
+
+  # No comments.
+  [x] > foo
+    x.div in.nextInt > @

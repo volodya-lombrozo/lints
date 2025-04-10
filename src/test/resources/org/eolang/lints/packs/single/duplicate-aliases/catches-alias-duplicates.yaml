@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/aliases/duplicate-aliases.xsl
+asserts:
+  - /defects[count(defect[@severity='error'])=1]
+  - /defects/defect[@line='3']
+input: |
+  +alias stdin org.eolang.io.stdin
+  +alias stdout org.eolang.io.stdout
+  +alias stdout org.eolang.io.stdout
+
+  # No comments.
+  [] > main
+    (stdout "Hello, world!").print

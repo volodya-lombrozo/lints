@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/misc/wrong-sprintf-arguments.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=0]
+input: |
+  # App.
+  [] > app
+    org.eolang.txt.sprintf
+      "Water constitutes 0.023%% of Earth mass, which is %d tons"
+      * 1.4e18

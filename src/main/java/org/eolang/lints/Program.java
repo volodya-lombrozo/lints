@@ -1,25 +1,6 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package org.eolang.lints;
 
@@ -30,8 +11,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
+import org.cactoos.list.ListOf;
 
 /**
  * A single XMIR program to analyze.
@@ -92,10 +75,28 @@ public final class Program {
     }
 
     /**
-     * Find defects possible defects in the XM§IR file.
-     * @return All defects found
+     * Program with disabled lints.
+     * @param names Lint names
+     * @return Program analysis without specific name
      */
-    public Collection<Defect> defects() throws IOException {
+    public Program without(final String... names) {
+        final Collection<String> listed = new ListOf<>(names);
+        return new Program(
+            this.xmir,
+            new Filtered<>(
+                this.lints, lint -> () -> !listed.contains(lint.name())
+            )
+        );
+    }
+
+    /**
+     * Find defects possible defects in the XMIR file.
+     * @return All defects found
+     * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR guide</a>
+     * @see <a href="https://www.eolang.org/XMIR.html">XMIR specification</a>
+     * @see <a href="https://www.eolang.org/XMIR.xsd">XMIR schema</a>
+     */
+    public Collection<Defect> defects() {
         try {
             final Collection<Defect> messages = new ArrayList<>(0);
             for (final Lint<XML> lint : this.lints) {

@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/unsorted-metas.xsl
+asserts:
+  - /defects[count(defect[@severity='warning']) > 1]
+input: |
+  +z
+  +hello
+  +alias org.eolang.io.stdin
+  +alias org.eolang.io.stdout
+  +boo
+  +alias org.eolang.io.stdin
+  +alias org.eolang.io.stdout
+  +boo
+  +z
+  +alias org.eolang.io.stdin
+  +foo
+  +z
+
+  # No comments.
+  [] > foo
+    42 > @

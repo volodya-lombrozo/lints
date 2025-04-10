@@ -1,0 +1,24 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/unknown-metas.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=3]
+  - /defects/defect[@line='1']
+  - /defects/defect[@line='2']
+  - /defects/defect[@line='3']
+input: |
+  +foo
+  +bar
+  +bad
+  +package test
+  +alias foo
+  +version 0.0.0
+  +architect yegor256@gmail.com
+  +rt node
+  +home https://earth.com
+  +unlint test
+  +probe
+
+  [] > foo

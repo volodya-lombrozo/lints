@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/refs/line-is-absent.xsl
+asserts:
+  - /defects[count(defect[@severity='error'])=1]
+document: |
+  <program>
+    <objects>
+      <o abstract="">
+        <o name="foo"/>
+        <o name="bar" base="foo"/>
+      </o>
+    </objects>
+  </program>

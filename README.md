@@ -4,9 +4,9 @@
 [![We recommend IntelliJ IDEA](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
 
 [![mvn](https://github.com/objectionary/lints/actions/workflows/mvn.yml/badge.svg)](https://github.com/objectionary/lints/actions/workflows/mvn.yml)
-[![PDD status](http://www.0pdd.com/svg?name=objectionary/lints)](http://www.0pdd.com/p?name=objectionary/lints)
+[![PDD status](https://www.0pdd.com/svg?name=objectionary/lints)](https://www.0pdd.com/p?name=objectionary/lints)
 [![Maven Central](https://img.shields.io/maven-central/v/org.eolang/lints.svg)](https://maven-badges.herokuapp.com/maven-central/org.eolang/lints)
-[![Javadoc](http://www.javadoc.io/badge/org.eolang/lints.svg)](http://www.javadoc.io/doc/org.eolang/lints)
+[![Javadoc](https://www.javadoc.io/badge/org.eolang/lints.svg)](https://www.javadoc.io/doc/org.eolang/lints)
 [![Hits-of-Code](https://hitsofcode.com/github/objectionary/lints)](https://hitsofcode.com/view/github/objectionary/lints)
 [![codecov](https://codecov.io/gh/objectionary/lints/graph/badge.svg?token=EdyMcrEuxc)](https://codecov.io/gh/objectionary/lints)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/objectionary/lints/blob/master/LICENSE.txt)
@@ -24,7 +24,7 @@ We use this package as a dependency in the
 <dependency>
   <groupId>org.eolang</groupId>
   <artifactId>lints</artifactId>
-  <version>0.0.26</version>
+  <version>0.0.45</version>
 </dependency>
 ```
 
@@ -79,7 +79,7 @@ with the help of the `+unlint` meta.
 The library is designed as a set of lints, each of which
 is a separate class implementing the `Lint` interface.
 Each lint is responsible for checking one particular aspect
-of the [XMIR] document. The `Program` class is responsible for  
+of the [XMIR] document. The `Program` class is responsible for
 running all lints and collecting defects for a single XMIR file.
 The `Programs` class is responsible for running all lints and
 collecting defects for a set of XMIR files. All in all,
@@ -104,15 +104,43 @@ Here is the result of linting XMIRs:
 
 <!-- benchmark_begin -->
 ```text
-Input: com/sun/jna/Pointer.class
-Size of .class: 22Kb (22Kb bytes)
-Size of .xmir after disassemble: 1Mb (1Mb bytes, 29630 lines)
-Lint time: 6s (5807 ms)
+Input: com/sun/jna/PointerType.class (S program)
+Lint time: 10791[ms]s (10791 ms)
 
+Input: com/sun/jna/Memory.class (M program)
+Lint time: 8123[ms]s (8123 ms)
+
+Input: com/sun/jna/Pointer.class (L program)
+Lint time: 9397[ms]s (9397 ms)
+
+Input: com/sun/jna/Structure.class (XL program)
+Lint time: 11499[ms]s (11499 ms)
+
+Input: org/apache/hadoop/hdfs/server/namenode/FSNamesystem.class (XXL program)
+Lint time: 40257[ms]s (40257 ms)
+
+
+
+unlint-non-existing-defect (XXL) (15561 ms)
+object-has-data (XXL) (12170 ms)
+unlint-non-existing-defect (XL) (5925 ms)
+unlint-non-existing-defect (L) (4827 ms)
+unlint-non-existing-defect (S) (4241 ms)
+unlint-non-existing-defect (M) (4067 ms)
+application-duality (XXL) (2803 ms)
+name-outside-of-abstract-object (XXL) (1599 ms)
+object-has-data (XL) (1027 ms)
+incorrect-bytes-format (XXL) (831 ms)
+line-is-absent (XXL) (675 ms)
+object-has-data (L) (650 ms)
+application-duality (XL) (620 ms)
+duplicate-names (XXL) (434 ms)
+object-has-data (S) (370 ms)
+object-has-data (M) (370 ms)
 ```
 
 The results were calculated in [this GHA job][benchmark-gha]
-on 2024-12-16 at 08:39,
+on 2025-04-08 at 01:38,
 on Linux with 4 CPUs.
 <!-- benchmark_end -->
 
@@ -128,8 +156,14 @@ before sending us your pull request please run full Maven build:
 mvn clean install -Pqulice
 ```
 
+Also, run this and make sure your changes don't slow us down:
+
+```bash
+mvn jmh:benchmark
+```
+
 You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
 
 [XMIR]: https://news.eolang.org/2022-11-25-xmir-guide.html
 [EO]: https://www.eolang.org
-[benchmark-gha]: https://github.com
+[benchmark-gha]: https://github.com/objectionary/lints/actions/runs/14323132768

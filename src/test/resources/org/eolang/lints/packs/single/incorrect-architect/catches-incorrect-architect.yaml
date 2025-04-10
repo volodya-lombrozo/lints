@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/incorrect-architect.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=5]
+  - /defects/defect[@line='1']
+  - /defects/defect[@line='2']
+  - /defects/defect[@line='3']
+  - /defects/defect[@line='4']
+  - /defects/defect[@line='6']
+input: |
+  +architect hello
+  +architect hello@mail
+  +architect someone@@
+  +architect @gmail.com
+  +architect hello@gmail.com
+  +architect someone24@.com
+  +architect hello@mail.ru
+  +alias org.eolang.io.stdout
+
+  # No comments.
+  [x] > foo
+    x.div in.nextInt > @

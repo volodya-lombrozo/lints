@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/aliases/broken-alias-second.xsl
+asserts:
+  - /defects[count(defect)=0]
+input: |
+  +alias one
+  +alias one-two
+  +alias one-two-three-four
+  +alias i文件
+  +alias i文件 this.is.legal2
+  +alias org.eolang.io.stdout
+  +alias org.eolang.with-dash
+  +alias with-dash
+  +alias with-dash org.eolang.with-dash
+
+  # foo.
+  [] > foo

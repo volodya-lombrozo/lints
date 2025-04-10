@@ -1,28 +1,10 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.XML;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -31,12 +13,21 @@ import java.util.Collection;
  *
  * @param <T> The type of entity to analyze
  * @since 0.0.1
+ * @todo #368:90min Implement lint caching decorator.
+ *  We should cache `Lint.defects()` to cache found defects when calling
+ *  particular lint. Don't forget to add unit tests, and benchmark tests.
  */
 public interface Lint<T> {
 
     /**
+     * Name of the lint.
+     * @return Lint name
+     */
+    String name();
+
+    /**
      * Find and return defects.
-     * @param entity The entity to analyze (could be {@link com.jcabi.xml.XML}
+     * @param entity The entity to analyze (could be {@link XML}
      *  or {@link java.nio.file.Path})
      * @return Defects
      */
@@ -45,7 +36,8 @@ public interface Lint<T> {
     /**
      * Returns motive for a lint, explaining why this lint exists.
      * @return Motive text about lint
-     * @throws Exception if something went wrong
+     * @throws IOException if something went wrong
      */
-    String motive() throws Exception;
+    String motive() throws IOException;
+
 }

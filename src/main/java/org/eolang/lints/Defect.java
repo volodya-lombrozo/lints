@@ -1,79 +1,116 @@
 /*
- * The MIT License (MIT)
- *
- * Copyright (c) 2016-2024 Objectionary.com
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included
- * in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+ * SPDX-License-Identifier: MIT
  */
 package org.eolang.lints;
 
 import com.jcabi.manifests.Manifests;
+import java.util.Objects;
 
 /**
  * A single defect found.
+ * <p>
+ * Defect is a node in the XMIR under `/program/defects`, that describes the
+ * issue with EO/XMIR source code. Defect contains the message that addresses
+ * source code and points to the problem in it. Some defects report the problems
+ * on XMIR format itself, consider checking resources on XMIR in order to get
+ * understanding how intermediate representation of EO is structured in XML format.
+ * </p>
  *
+ * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR guide</a>
+ * @see <a href="https://www.eolang.org/XMIR.html">XMIR specification</a>
+ * @see <a href="https://www.eolang.org/XMIR.xsd">XMIR schema</a>
  * @since 0.0.1
  */
 public interface Defect {
 
     /**
-     * Rule.
+     * Rule name.
+     * <p>
+     * Returns the unique identifier of the rule that detected this defect.
+     * </p>
+     *
      * @return Unique name of the rule
      */
     String rule();
 
     /**
-     * Severity.
-     * @return Severity
+     * Severity level.
+     * <p>
+     * Returns the severity level of this defect.
+     * </p>
+     *
+     * @return Severity of the defect
      */
     Severity severity();
 
     /**
      * Name of the program with defect.
+     * <p>
+     * Returns the name of the program where the defect was found.
+     * </p>
+     *
      * @return Name of it, taken from the {@code @name} attribute of
      *  the {@code program} element in XMIR
      */
     String program();
 
     /**
-     * Line where it was found.
-     * @return Line number
+     * Line where the defect was found.
+     * <p>
+     * Returns the line number in the source code where the defect was detected.
+     * </p>
+     *
+     * @return Line number in the source code
      */
     int line();
 
     /**
      * Error message.
-     * @return Text
+     * <p>
+     * Returns the descriptive message explaining the defect.
+     * </p>
+     *
+     * @return Text of the error message
      */
     String text();
 
     /**
      * The linter's current version.
-     * @return Linter's current version
+     * <p>
+     * Returns the version of the linting tool that detected this defect.
+     * </p>
+     *
+     * @return Linter's current version string
      */
     String version();
 
     /**
-     * Default.
+     * Defect context.
+     * <p>
+     * Returns additional contextual information about the defect,
+     * which may help understand and fix the issue.
+     * </p>
+     *
+     * @return Context of the defect as a string
+     */
+    String context();
+
+    /**
+     * Experimental?
+     * @return Experimental
+     */
+    boolean experimental();
+
+    /**
+     * Default implementation of {@link Defect}.
+     * <p>
+     * Provides a standard implementation with basic functionality.
+     * </p>
      *
      * @since 0.0.1
      */
+    @SuppressWarnings("PMD.TooManyMethods")
     final class Default implements Defect {
         /**
          * Rule.
@@ -101,10 +138,15 @@ public interface Defect {
         private final String txt;
 
         /**
+         * Experiment?
+         */
+        private final boolean experiment;
+
+        /**
          * Ctor.
-         * @param rule Rule
-         * @param severity Severity
-         * @param program Name or the program
+         * @param rule Rule name
+         * @param severity Severity level
+         * @param program Name of the program
          * @param line Line number
          * @param text Description of the defect
          * @checkstyle ParameterNumberCheck (5 lines)
@@ -113,18 +155,46 @@ public interface Defect {
             final String rule, final Severity severity,
             final String program, final int line, final String text
         ) {
+            this(rule, severity, program, line, text, false);
+        }
+
+        /**
+         * Ctor.
+         * <p>
+         * Constructs a defect with all required information.
+         * </p>
+         *
+         * @param rule Rule name
+         * @param severity Severity level
+         * @param program Name of the program
+         * @param line Line number
+         * @param text Description of the defect
+         * @param exprmnt Experimental?
+         * @checkstyle ParameterNumberCheck (5 lines)
+         */
+        public Default(
+            final String rule, final Severity severity,
+            final String program, final int line, final String text,
+            final boolean exprmnt
+        ) {
             this.rle = rule;
             this.sev = severity;
             this.prg = program;
             this.lineno = line;
             this.txt = text;
+            this.experiment = exprmnt;
         }
 
         @Override
         public String toString() {
-            return String.format(
-                "[%s %s]:%d %s", this.rle, this.sev, this.lineno, this.txt
-            );
+            final StringBuilder text = new StringBuilder(0)
+                .append('[').append(this.prg).append(' ')
+                .append(this.rle).append(' ')
+                .append(this.sev).append(']');
+            if (this.lineno > 0) {
+                text.append(':').append(this.lineno);
+            }
+            return text.append(' ').append(this.txt).toString();
         }
 
         @Override
@@ -155,6 +225,37 @@ public interface Defect {
         @Override
         public String version() {
             return Manifests.read("Lints-Version");
+        }
+
+        @Override
+        public String context() {
+            return "Context is empty";
+        }
+
+        @Override
+        public boolean experimental() {
+            return this.experiment;
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            final boolean result;
+            if (obj == null || this.getClass() != obj.getClass()) {
+                result = false;
+            } else {
+                final Defect.Default defect = (Defect.Default) obj;
+                result = this.lineno == defect.lineno
+                    && Objects.equals(this.rle, defect.rle)
+                    && this.sev == defect.sev
+                    && Objects.equals(this.prg, defect.prg)
+                    && Objects.equals(this.txt, defect.txt);
+            }
+            return result;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(this.rle, this.sev, this.prg, this.lineno, this.txt);
         }
     }
 

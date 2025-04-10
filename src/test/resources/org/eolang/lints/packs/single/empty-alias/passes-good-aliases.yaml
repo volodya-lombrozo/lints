@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/aliases/empty-alias.xsl
+asserts:
+  - /defects[count(defect[@severity='error'])=0]
+input: |
+  +alias a
+  +alias a b
+  +alias a b c
+  +alias a b c d
+
+  # Foo.
+  [] > foo

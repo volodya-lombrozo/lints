@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/lines/error-line-out-of-listing.xsl
+asserts:
+  - /defects[count(defect[@severity='error'])=1]
+document: |
+  <program>
+    <listing>first line
+      second line
+      third line</listing>
+    <errors>
+      <error check="abc" line="500" severity="warning">hello</error>
+    </errors>
+  </program>

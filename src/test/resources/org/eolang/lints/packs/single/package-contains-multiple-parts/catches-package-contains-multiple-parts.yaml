@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/package-contains-multiple-parts.xsl
+asserts:
+  - /defects[count(defect[@severity='critical'])=3]
+  - /defects/defect[@line='8']
+  - /defects/defect[@line='9']
+  - /defects/defect[@line='10']
+input: |
+  +package test
+  +package test.
+  +package test.x
+  +package привет.foo
+  +package org.eolang
+  +package my.awesome.package
+  +package test.xy
+  +package hello world
+  +package привет, как дела?
+  +package
+
+  [] > foo

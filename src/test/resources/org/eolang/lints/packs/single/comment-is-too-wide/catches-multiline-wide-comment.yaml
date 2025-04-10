@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/comments/comment-is-too-wide.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=1]
+  - /defects/defect[@line='3']
+input: |
+  # This is good line.
+  # This is a very long line that contains more than eighty characters and should be flagged by the lint as too wide.
+  [] > foo
+    42 > @

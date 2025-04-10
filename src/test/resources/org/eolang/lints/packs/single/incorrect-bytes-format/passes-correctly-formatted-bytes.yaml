@@ -1,0 +1,40 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/critical/incorrect-bytes-format.xsl
+asserts:
+  - /defects[count(defect[@severity='critical'])=0]
+document: |
+  <program>
+    <objects>
+      <o name="foo">
+       --
+      </o>
+      <o name="tuple">
+        12-34
+      </o>
+      <o name="mixed">
+        AB-12
+      </o>
+      <o name="xyz">
+        AB-CD
+      </o>
+      <o name="hex">
+        AB-CD-EF
+      </o>
+      <o name="nums">
+        01-23-45
+      </o>
+      <o name="f">
+        FF-FF-FF
+      </o>
+      <o name="long">
+        A1-B2-C3-D4-E5
+      </o>
+      <o name="chain">
+        10-20-30-40-50
+      </o>
+      <o name="xyz"/>
+    </objects>
+  </program>

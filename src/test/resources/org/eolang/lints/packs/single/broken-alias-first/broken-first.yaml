@@ -1,0 +1,28 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/aliases/broken-alias-first.xsl
+asserts:
+  - /defects[count(defect[@severity='error'])=17]
+input: |
+  +alias FirstLetter Capital.Letters.Prohibited.Here
+  +alias the! symbol.is.not.allowed
+  +alias the" symbol.is.not.allowed
+  +alias the# symbol.is.not.allowed
+  +alias the$ symbol.is.not.allowed
+  +alias the& symbol.is.not.allowed
+  +alias the( symbol.is.not.allowed
+  +alias the) symbol.is.not.allowed
+  +alias the. symbol.is.not.allowed
+  +alias the/ symbol.is.not.allowed
+  +alias the: symbol.is.not.allowed
+  +alias the< symbol.is.not.allowed
+  +alias the> symbol.is.not.allowed
+  +alias the@ symbol.is.not.allowed
+  +alias the[ symbol.is.not.allowed
+  +alias the] symbol.is.not.allowed
+  +alias the^ symbol.is.not.allowed
+
+  # Test.
+  [] > foo

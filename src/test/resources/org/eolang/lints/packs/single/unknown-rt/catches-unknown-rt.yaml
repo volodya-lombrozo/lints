@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/critical/unknown-rt.xsl
+asserts:
+  - /defects[count(defect[@severity='critical'])=3]
+  - /defects/defect[@line='1']
+  - /defects/defect[@line='2']
+  - /defects/defect[@line='3']
+input: |
+  +rt test test
+  +rt привет, как дела?
+  +rt foo
+  [] > foo

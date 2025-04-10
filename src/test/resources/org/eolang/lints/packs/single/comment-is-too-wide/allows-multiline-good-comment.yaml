@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/comments/comment-is-too-wide.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=0]
+input: |
+  # This is good line.
+  # This is good line too.
+  # This is good line as well.
+  # We are here!
+  [] > foo
+    52 > @

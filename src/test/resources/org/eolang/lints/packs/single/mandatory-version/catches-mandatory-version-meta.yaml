@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/mandatory-version.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=1]
+input: |
+  +home https://github.com/objectionary/eo
+  +package test
+  +alias stdin org.eolang.io.stdin
+
+  # No comments.
+  [] > main
+    (stdout "Hello, world!").print > @

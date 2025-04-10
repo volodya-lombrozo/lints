@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/unique-metas.xsl
+asserts:
+  - /defects[count(defect[@severity='error'])=1]
+  - /defects/defect[@line='2']
+input: |
+  +home https://github.com/objectionary/eo
+  +home https://github.com/objectionary/eo-strings
+
+  # No comments.
+  [] > main
+    (stdout "Hello, world!").print

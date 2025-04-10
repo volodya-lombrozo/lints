@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/critical/pos-without-line.xsl
+asserts:
+  - /defects[count(defect[@severity='critical'])=0]
+document: |
+  <program>
+    <objects>
+      <o line="123" name="foo"/>
+    </objects>
+  </program>

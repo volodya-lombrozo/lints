@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/lines/object-line-out-of-listing.xsl
+asserts:
+  - /defects[count(defect)=0]
+document: |
+  <program>
+    <listing>first line
+      second line
+      third line</listing>
+    <objects>
+      <o line="5.5.5.a" name="f">
+        <o name="λ"/>
+      </o>
+    </objects>
+  </program>

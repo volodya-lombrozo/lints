@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/incorrect-node-rt-location.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=0]
+input: |
+  +rt node eo2js-runtime:0.0.0
+  +rt node bar-test:1.1.3
+  +rt node foo:1.2.3
+
+  # No comments.
+  [] > foo

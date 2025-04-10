@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/incorrect-version.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=2]
+  - /defects/defect[@line='1']
+  - /defects/defect[@line='2']
+input: |
+  +version x.z-SNAPSHOT
+  +version 1.1-hello
+
+  # No comments.
+  [x] > foo
+    41 > @

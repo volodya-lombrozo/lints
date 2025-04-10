@@ -1,0 +1,11 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2025 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/critical/duplicate-names.xsl
+asserts:
+  - /defects[count(defect)=0]
+input: |
+  *
+    [x] (x.zz > xzz)
+    [x] (x.tt > xtt)
