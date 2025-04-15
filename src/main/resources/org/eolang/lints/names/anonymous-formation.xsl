@@ -12,7 +12,7 @@
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="//o[not(@name) and not(@base) and not(eo:has-data(.) and parent::o[@base='Q.org.eolang.bytes'])]">
-        <xsl:for-each select="//o[starts-with(@base, '$.^.')]">
+        <xsl:for-each select=".//o[starts-with(@base, '$.^.')]">
           <defect>
             <xsl:variable name="line" select="eo:lineno(@line)"/>
             <xsl:attribute name="line">
