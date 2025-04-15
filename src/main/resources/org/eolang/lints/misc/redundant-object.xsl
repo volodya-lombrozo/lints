@@ -11,7 +11,7 @@
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="//o[@name and @base]">
-        <xsl:if test="count(//o[starts-with(@base, concat('$.', @name))]) = 1">
+        <xsl:if test="count(//o[starts-with(@base, concat('$.', @name))]) &lt;= 1">
           <xsl:element name="defect">
             <xsl:variable name="line" select="eo:lineno(@line)"/>
             <xsl:attribute name="line">
