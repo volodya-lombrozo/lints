@@ -4,13 +4,13 @@
 sheets:
   - /org/eolang/lints/misc/redundant-object.xsl
 asserts:
-  - /defects[count(defect)=11]
+  - /defects[count(defect)=0]
 input: |
   # Foo.
   [] > foo
-    list > created
+    QQ.structs.list > created
       * 1 2 3
-    list
+    QQ.structs.list
       * 1 2 3
     .eachi > @
       [item index] >>
