@@ -15,7 +15,8 @@
         <!--  This should work with `.each` as well -->
         <xsl:variable name="lauto" select="substring(//o[@base='.eachi']/o[starts-with(@base, '$.a🌵')]/@base, 3)"/>
         <xsl:variable name="auto" select="//o[@name=$lauto]"/>
-        <xsl:variable name="looped" select="boolean($auto/o[matches(@base, $usage)]) and @base = 'Q.org.eolang.structs.list'"/>
+        <!-- auto looped or not auto looped -->
+        <xsl:variable name="looped" select="boolean($auto/o[matches(@base, $usage)])"/>
         <xsl:if test="count(//o[matches(@base, $usage)])=1">
           <xsl:if test="not($looped)">
             <xsl:element name="defect">

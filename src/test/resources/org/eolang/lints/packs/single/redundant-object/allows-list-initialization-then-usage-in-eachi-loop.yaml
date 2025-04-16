@@ -8,13 +8,12 @@ asserts:
 input: |
   # Foo.
   [] > foo
-    QQ.structs.list > created
-      * 1 2 3
+    f > created
     QQ.structs.list
       * 1 2 3
     .eachi > @
       [item index] >>
-        withi.
+        xi.
           created
           index
           item
