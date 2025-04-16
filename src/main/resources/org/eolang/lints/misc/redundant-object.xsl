@@ -10,13 +10,13 @@
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@name and @base and @base != '∅']">
+      <xsl:for-each select="//o[@name and @name != '@' and @base and @base != '∅']">
         <xsl:variable name="usage" select="concat('^\$(?:\.\^)*\.', @name, '(?:\.\w+)?$')"/>
         <xsl:variable name="lauto" select="substring(//o[@base = '.eachi' or @base = '.each']/o[starts-with(@base, '$.a🌵')]/@base, 3)"/>
         <xsl:variable name="auto" select="//o[@name=$lauto]"/>
         <xsl:variable name="looped" select="boolean(//o[@base = '.eachi' or @base = '.each']/o[matches(@base, $usage)])"/>
         <xsl:variable name="looped-auto" select="boolean($auto/o[matches(@base, $usage)])"/>
-        <xsl:if test="count(//o[matches(@base, $usage)])=1">
+        <xsl:if test="count(//o[matches(@base, $usage)])&lt;=1">
           <xsl:if test="not($looped) and not($looped-auto)">
             <xsl:element name="defect">
               <xsl:variable name="line" select="eo:lineno(@line)"/>
