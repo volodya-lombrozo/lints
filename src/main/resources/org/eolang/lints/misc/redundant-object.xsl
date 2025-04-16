@@ -12,30 +12,26 @@
     <defects>
       <xsl:for-each select="//o[@name and @name != '@' and @base and @base != '∅']">
         <xsl:variable name="usage" select="concat('^\$(?:\.\^)*\.', @name, '(?:\.\w+)?$')"/>
-        <xsl:variable name="lauto" select="substring(//o[@base = '.eachi' or @base = '.each']/o[starts-with(@base, '$.a🌵')]/@base, 3)"/>
-        <xsl:variable name="auto" select="//o[@name=$lauto]"/>
         <xsl:variable name="looped" select="boolean(//o[@base = '.eachi' or @base = '.each']/o[matches(@base, $usage)])"/>
-        <xsl:variable name="looped-auto" select="boolean($auto/o[matches(@base, $usage)])"/>
-        <xsl:if test="count(//o[matches(@base, $usage)])&lt;=1">
-          <xsl:if test="not($looped) and not($looped-auto)">
-            <xsl:element name="defect">
-              <xsl:variable name="line" select="eo:lineno(@line)"/>
-              <xsl:attribute name="line">
-                <xsl:value-of select="$line"/>
+        <xsl:variable name="looped-auto" select="boolean(//o[@name=substring(//o[@base = '.eachi' or @base = '.each']/o[starts-with(@base, '$.a🌵')]/@base, 3)]/o[matches(@base, $usage)])"/>
+        <xsl:if test="count(//o[matches(@base, $usage)])&lt;=1 and not($looped) and not($looped-auto)">
+          <xsl:element name="defect">
+            <xsl:variable name="line" select="eo:lineno(@line)"/>
+            <xsl:attribute name="line">
+              <xsl:value-of select="$line"/>
+            </xsl:attribute>
+            <xsl:if test="$line = '0'">
+              <xsl:attribute name="context">
+                <xsl:value-of select="eo:defect-context(.)"/>
               </xsl:attribute>
-              <xsl:if test="$line = '0'">
-                <xsl:attribute name="context">
-                  <xsl:value-of select="eo:defect-context(.)"/>
-                </xsl:attribute>
-              </xsl:if>
-              <xsl:attribute name="severity">
-                <xsl:text>warning</xsl:text>
-              </xsl:attribute>
-              <xsl:text>The object </xsl:text>
-              <xsl:value-of select="eo:escape(@name)"/>
-              <xsl:text> is redundant, consider inline it instead</xsl:text>
-            </xsl:element>
-          </xsl:if>
+            </xsl:if>
+            <xsl:attribute name="severity">
+              <xsl:text>warning</xsl:text>
+            </xsl:attribute>
+            <xsl:text>The object </xsl:text>
+            <xsl:value-of select="eo:escape(@name)"/>
+            <xsl:text> is redundant, consider inline it instead</xsl:text>
+          </xsl:element>
         </xsl:if>
       </xsl:for-each>
     </defects>
