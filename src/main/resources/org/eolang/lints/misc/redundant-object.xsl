@@ -10,8 +10,12 @@
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o[@name and @base]">
-        <xsl:if test="count(//o[starts-with(@base, concat('$.', @name))]) &lt;= 1">
+      <xsl:for-each select="//o[@name and @base and @base != '∅']">
+        <xsl:variable name="usage" select="concat('^\$(?:\.\^)*\.', @name, '(?:\.\w+)?$')"/>
+        <xsl:if test="count(//o[matches(@base, $usage)])=1">
+          <!-- if Q.org.eolang.structs.list is used in each|eachi -->
+          <!-- more generic approach? -->
+<!--          <xsl:variable name="looped" select=""/>-->
           <xsl:element name="defect">
             <xsl:variable name="line" select="eo:lineno(@line)"/>
             <xsl:attribute name="line">
