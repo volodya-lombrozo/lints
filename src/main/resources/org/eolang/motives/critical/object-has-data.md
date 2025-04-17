@@ -20,7 +20,7 @@ Correct:
   <o name="bar" base="org.eolang.bytes">
     <o>A1-B2-C3-D4-E5</o>
   </o>
-</obect>
+</object>
 ```
 
 [XMIR]: https://news.eolang.org/2022-11-25-xmir-guide.html
