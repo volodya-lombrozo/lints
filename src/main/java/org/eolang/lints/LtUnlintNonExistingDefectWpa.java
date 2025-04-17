@@ -77,7 +77,7 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
                 final Function<String, Boolean> missing = new DefectMissing(
                     existing.get(xmir), this.excluded
                 );
-                xml.path("/program/metas/meta[head='unlint']/tail")
+                xml.path("/object/metas/meta[head='unlint']/tail")
                     .map(xnav -> xnav.text().get())
                     .collect(Collectors.toSet())
                     .stream()
@@ -86,7 +86,7 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
                         unlint -> xml
                             .path(
                                 String.format(
-                                    "program/metas/meta[head='unlint' and tail='%s']/@line", unlint
+                                    "object/metas/meta[head='unlint' and tail='%s']/@line", unlint
                                 )
                             )
                             .map(xnav -> xnav.text().get())
@@ -96,7 +96,8 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
                                     new Defect.Default(
                                         this.name(),
                                         Severity.WARNING,
-                                        xml.element("program")
+                                        xml.element("object")
+                                            .element("o")
                                             .attribute("name")
                                             .text()
                                             .orElse("unknown"),

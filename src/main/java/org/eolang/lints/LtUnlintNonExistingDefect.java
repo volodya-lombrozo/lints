@@ -67,7 +67,7 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
         final Collection<Defect> defects = new LinkedList<>();
         final Map<String, List<Integer>> present = this.existingDefects(xmir);
         final Xnav xml = new Xnav(xmir.inner());
-        final Set<String> unlints = xml.path("/program/metas/meta[head='unlint']/tail")
+        final Set<String> unlints = xml.path("/object/metas/meta[head='unlint']/tail")
             .map(xnav -> xnav.text().get())
             .collect(Collectors.toSet());
         final Function<String, Boolean> missing = new DefectMissing(present, this.excluded);
@@ -77,7 +77,7 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
                 unlint ->
                     xml.path(
                         String.format(
-                            "program/metas/meta[head='unlint' and tail='%s']/@line", unlint
+                            "object/metas/meta[head='unlint' and tail='%s']/@line", unlint
                         )
                         )
                         .map(xnav -> xnav.text().get())
@@ -88,7 +88,8 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
                                     new Defect.Default(
                                         this.name(),
                                         Severity.WARNING,
-                                        xml.element("program")
+                                        xml.element("object")
+                                            .element("o")
                                             .attribute("name")
                                             .text()
                                             .orElse("unknown"),
