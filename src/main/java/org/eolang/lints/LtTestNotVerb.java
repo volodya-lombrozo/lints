@@ -70,7 +70,7 @@ final class LtTestNotVerb implements Lint<XML> {
         final Collection<Defect> defects = new LinkedList<>();
         final Xnav xml = new Xnav(xmir.inner());
         final List<Xnav> objects = xml
-            .path("/program[metas/meta[head='tests']]/objects/o[@name]")
+            .path("/object[metas/meta[head='tests']]/o[@name]")
             .collect(Collectors.toList());
         for (final Xnav object : objects) {
             final String name = object.attribute("name").text().get();
@@ -90,7 +90,7 @@ final class LtTestNotVerb implements Lint<XML> {
                     new Defect.Default(
                         "unit-test-is-not-verb",
                         Severity.WARNING,
-                        xml.element("program")
+                        xml.element("object")
                             .attribute("name")
                             .text().orElse("unknown"),
                         Integer.parseInt(object.attribute("line").text().orElse("0")),
