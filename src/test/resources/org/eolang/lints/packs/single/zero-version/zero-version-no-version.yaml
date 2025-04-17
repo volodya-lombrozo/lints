@@ -3,15 +3,13 @@
 ---
 sheets:
   - /org/eolang/lints/metas/zero-version.xsl
+asserts:
+  - /defects[count(defect)=0]
 document:
   <?xml version="1.0" encoding="UTF-8"?>
   <object source="user/src/main/ttt.eo">
     <errors/>
-    <objects>
-      <o name="a" line="4">
-        <o base="a"/>
-      </o>
-    </objects>
+    <o name="a" line="4">
+      <o base="a"/>
+    </o>
   </object>
-asserts:
-  - /defects[count(defect)=0]

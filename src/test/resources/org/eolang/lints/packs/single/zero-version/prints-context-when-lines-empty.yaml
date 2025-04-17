@@ -13,7 +13,5 @@ document: |
         <tail>1.2.3</tail>
       </meta>
     </metas>
-    <objects>
-      <o name="foo"/>
-    </objects>
+    <o name="foo"/>
   </object>

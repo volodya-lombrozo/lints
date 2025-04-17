@@ -8,7 +8,5 @@ asserts:
   - /defects/defect[@line='0']
 document: |
   <object>
-    <objects>
-      <o line="60.50.301"/>
-    </objects>
+    <o line="60.50.301"/>
   </object>
