@@ -7,11 +7,9 @@ asserts:
   - /defects[count(defect[@severity='critical'])=0]
 document: |
   <object>
-    <objects>
-      <o name="foo">
-        <o name="inner" base="Q.org.eolang.bytes">
-          <o>12-23-FF</o>
-        </o>
+    <o name="foo">
+      <o name="inner" base="Q.org.eolang.bytes">
+        <o>12-23-FF</o>
       </o>
-    </objects>
+    </o>
   </object>

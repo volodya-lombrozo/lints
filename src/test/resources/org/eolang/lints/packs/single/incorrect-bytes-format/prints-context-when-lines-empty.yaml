@@ -7,9 +7,7 @@ asserts:
   - /defects[count(defect[@context and @severity='critical'])=1]
 document: |
   <object>
-    <objects>
-      <o name="f">
-        哈囉世界
-      </o>
-    </objects>
+    <o name="f">
+      哈囉世界
+    </o>
   </object>

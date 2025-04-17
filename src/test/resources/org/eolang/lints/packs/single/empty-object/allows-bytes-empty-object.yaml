@@ -7,11 +7,9 @@ asserts:
   - /defects[count(defect[@severity='warning'])=0]
 document: |
   <object>
-    <objects>
-      <o line="2" name="main" pos="0">
-        <o name="f" base="Q.org.eolang.bytes">
-          <o>F1-01</o>
-        </o>
+    <o line="2" name="main" pos="0">
+      <o name="f" base="Q.org.eolang.bytes">
+        <o>F1-01</o>
       </o>
-     </objects>
+    </o>
   </object>

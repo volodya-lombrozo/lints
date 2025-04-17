@@ -13,7 +13,5 @@ document: |
         <tail/>
       </meta>
     </metas>
-    <objects>
-      <o name="foo" pos="0"/>
-    </objects>
+    <o name="foo" pos="0"/>
   </object>

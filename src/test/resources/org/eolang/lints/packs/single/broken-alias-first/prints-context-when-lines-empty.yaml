@@ -15,7 +15,5 @@ document: |
          <part>Q.Capital.Letters.Prohibited.Here</part>
       </meta>
     </metas>
-     <objects>
-        <o name="foo"/>
-     </objects>
+    <o name="foo"/>
   </object>

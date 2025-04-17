@@ -7,10 +7,8 @@ asserts:
   - /defects[count(defect[@severity='error'])=1]
 document: |
   <object>
-    <objects>
-      <o abstract="">
-        <o name="foo"/>
-        <o name="bar" base="foo"/>
-      </o>
-    </objects>
+    <o abstract="">
+      <o name="foo"/>
+      <o name="bar" base="foo"/>
+    </o>
   </object>

@@ -8,11 +8,9 @@ asserts:
   - /defects[count(defect[@context])]
 document: |
   <object>
-    <objects>
-      <o name="obj">
-        <o name="λ">
-          <o name="foo"/>
-        </o>
+    <o name="obj">
+      <o name="λ">
+        <o name="foo"/>
       </o>
-    </objects>
+    </o>
   </object>

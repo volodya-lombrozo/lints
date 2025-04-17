@@ -8,9 +8,7 @@ asserts:
   - /defects/defect[@line='1']
 document: |
   <object>
-    <objects>
-      <o line="1" name="number">
-        <o base="f" name="λ"/>
-      </o>
-    </objects>
+    <o line="1" name="number">
+      <o base="f" name="λ"/>
+    </o>
   </object>

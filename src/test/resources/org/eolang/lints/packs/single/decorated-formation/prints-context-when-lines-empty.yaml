@@ -7,11 +7,9 @@ asserts:
   - /defects[count(defect[@context and @severity='warning'])=1]
 document: |
   <object>
-     <objects>
-      <o name="main">
-        <o name="@">
-          <o base="Q.org.eolang.foo" name="test"/>
-        </o>
+    <o name="main">
+      <o name="@">
+        <o base="Q.org.eolang.foo" name="test"/>
       </o>
-    </objects>
+    </o>
   </object>

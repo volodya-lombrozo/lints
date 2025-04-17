@@ -13,8 +13,6 @@ document: |
          <tail/>
          <part/>
       </meta>
-   </metas>
-   <objects>
-      <o name="foo"/>
-   </objects>
+    </metas>
+    <o name="foo"/>
   </object>

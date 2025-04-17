@@ -8,5 +8,5 @@ asserts:
 document: |
   <object xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://www.eolang.org/xsd/XMIR-anything.xsd">
-    <objects/>
+    <o/>
   </object>

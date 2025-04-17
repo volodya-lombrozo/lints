@@ -7,7 +7,5 @@ asserts:
   - /defects[count(defect[@context and @severity='warning'])=1]
 document: |
   <object>
-    <objects>
-      <o/>
-    </objects>
+    <o/>
   </object>

@@ -32,7 +32,7 @@
     <a>tuple</a>
     <a>while</a>
   </xsl:variable>
-  <xsl:variable name="name" select="//objects/o[1]/@name"/>
+  <xsl:variable name="name" select="/object/o[1]/@name"/>
   <xsl:template match="/">
     <defects>
       <xsl:variable name="tested" select="/object/metas/meta[head='tests']"/>
