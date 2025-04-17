@@ -37,7 +37,8 @@ final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
         final Collection<Defect> defects = new LinkedList<>();
         for (final XML xmir : pkg.values()) {
             final Xnav xml = new Xnav(xmir.inner());
-            final String src = xml.element("object").attribute("name").text().orElse("unknown");
+            final String src = xml.element("object").element("o")
+                .attribute("name").text().orElse("unknown");
             if (LtObjectIsNotUnique.hasObjects(xml)) {
                 continue;
             }
@@ -60,6 +61,7 @@ final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                                 this.name(),
                                 Severity.ERROR,
                                 second.element("object")
+                                    .element("o")
                                     .attribute("name")
                                     .text()
                                     .orElse("unknown"),

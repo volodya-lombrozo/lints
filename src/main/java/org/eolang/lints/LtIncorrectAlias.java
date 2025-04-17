@@ -48,7 +48,8 @@ final class LtIncorrectAlias implements Lint<Map<String, XML>> {
                             new Defect.Default(
                                 "incorrect-alias",
                                 Severity.CRITICAL,
-                                xml.element("object").attribute("name").text().orElse("unknown"),
+                                xml.element("object").element("o")
+                                    .attribute("name").text().orElse("unknown"),
                                 Integer.parseInt(
                                     alias.attribute("line").text().orElse("0")
                                 ),

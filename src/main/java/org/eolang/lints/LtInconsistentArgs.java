@@ -23,7 +23,7 @@ import org.cactoos.text.UncheckedText;
  * @since 0.0.41
  * @todo #259:60min Optimize performance of inconsistent arguments finding.
  *  Instead of re-collecting objects in nested loops, we should merge all objects
- *  from all programs into single XMIR under '<objects/>' element. After objects
+ *  from all programs into single XMIR under '<o/>' element. After objects
  *  are merged, we can iterate over all the objects there only once, and find
  *  inconsistencies.
  */
@@ -52,8 +52,8 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                                         new Defect.Default(
                                             this.name(),
                                             Severity.WARNING,
-                                            program.element("program").attribute("name")
-                                                .text().orElse("unknown"),
+                                            program.element("object").element("o")
+                                                .attribute("name").text().orElse("unknown"),
                                             line,
                                             String.format(
                                                 "Object '%s' has arguments inconsistency",
