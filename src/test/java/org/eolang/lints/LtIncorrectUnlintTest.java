@@ -25,7 +25,7 @@ final class LtIncorrectUnlintTest {
             "unlint must point to existing lint",
             new LtIncorrectUnlint(List.of("hello")).defects(
                 new EoSyntax(
-                    "+unlint foo\n+unlint bar"
+                    "+unlint foo\n+unlint bar\n\n# Foo.\n[] > foo"
                 ).parsed()
             ),
             Matchers.allOf(
