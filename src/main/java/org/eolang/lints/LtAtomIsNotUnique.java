@@ -127,7 +127,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         return new Defect.Default(
             this.name(),
             Severity.ERROR,
-            xml.element("program").attribute("name").text().orElse("unknown"),
+            xml.element("object").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
                 xml.path(
                     String.format("//o[@name='%s' and o[@name='λ']]", LtAtomIsNotUnique.oname(fqn))
@@ -143,7 +143,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         return new Defect.Default(
             this.name(),
             Severity.ERROR,
-            xml.element("program").attribute("name").text().orElse("unknown"),
+            xml.element("object").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
                 xml.path(
                     String.format("//o[@name='%s' and o[@name='λ']]", LtAtomIsNotUnique.oname(fqn))
@@ -154,7 +154,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             String.format(
                 "Atom with FQN \"%s\" is duplicated, original was found in \"%s\"",
                 fqn,
-                original.element("program")
+                original.element("object")
                     .attribute("name")
                     .text()
                     .orElse("unknown")
@@ -168,9 +168,9 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
             .map(o -> o.attribute("fqn").text().get())
             .collect(Collectors.toList());
         if (
-            xml.path("/program/metas/meta[head='package']").count() == 1L
+            xml.path("/object/metas/meta[head='package']").count() == 1L
         ) {
-            final String pack = xml.path("/program/metas/meta[head='package']/tail")
+            final String pack = xml.path("/object/metas/meta[head='package']/tail")
                 .map(o -> o.text().get())
                 .findFirst().get();
             result = fqns.stream().map(fqn -> String.format("%s.%s", pack, fqn))
