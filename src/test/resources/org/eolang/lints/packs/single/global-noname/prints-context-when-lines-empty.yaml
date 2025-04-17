@@ -7,7 +7,5 @@ asserts:
   - /defects[count(defect[@context and @severity='error'])=1]
 document: |
   <object>
-    <objects>
-      <o base="Q.org.eolang.fake"/>
-    </objects>
+    <o base="Q.org.eolang.fake"/>
   </object>
