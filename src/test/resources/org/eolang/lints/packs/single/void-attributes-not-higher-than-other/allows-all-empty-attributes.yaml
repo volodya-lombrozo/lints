@@ -7,7 +7,5 @@ asserts:
   - /defects[count(defect[@severity='critical'])=0]
 document: |
   <object>
-    <objects>
-      <o name="foo"/>
-    </objects>
+    <o name="foo"/>
   </object>

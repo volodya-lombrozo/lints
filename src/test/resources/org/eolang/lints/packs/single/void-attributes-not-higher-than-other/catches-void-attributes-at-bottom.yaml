@@ -9,11 +9,9 @@ asserts:
   - /defects/defect[@line='3']
 document: |
   <object>
-    <objects>
-      <o name="foo">
-        <o line="1" base="Q.foo" name="z"/>
-        <o line="2" base="∅" name="x"/>
-        <o line="3" base="∅" name="y"/>
-      </o>
-    </objects>
+    <o name="foo">
+      <o line="1" base="Q.foo" name="z"/>
+      <o line="2" base="∅" name="x"/>
+      <o line="3" base="∅" name="y"/>
+    </o>
   </object>
