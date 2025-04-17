@@ -8,7 +8,7 @@ on:
       - master
 jobs:
   jmh:
-    timeout-minutes: 30
+    timeout-minutes: 25
     runs-on: ubuntu-24.04
     steps:
       - name: Run JMH Benchmark Action
