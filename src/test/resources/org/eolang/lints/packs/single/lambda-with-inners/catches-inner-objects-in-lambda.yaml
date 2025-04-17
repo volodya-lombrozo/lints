@@ -7,7 +7,7 @@ asserts:
   - /defects[count(defect[@severity='critical'])=1]
   - /defects[count(defect[@context])]
 document: |
-  <program>
+  <object>
     <objects>
       <o name="obj">
         <o name="λ">
@@ -15,4 +15,4 @@ document: |
         </o>
       </o>
     </objects>
-  </program>
+  </object>

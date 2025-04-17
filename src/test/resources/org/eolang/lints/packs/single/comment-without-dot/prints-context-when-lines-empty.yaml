@@ -6,7 +6,7 @@ sheets:
 asserts:
   - /defects[count(defect[@context and @severity='warning'])=1]
 document: |
-  <program>
+  <object>
     <objects>
       <o name="foo" pos="0">
         <o base="Q.org.eolang.number" name="@">
@@ -17,4 +17,4 @@ document: |
     <comments>
       <comment>This comment does not ends with a dot</comment>
     </comments>
-  </program>
+  </object>

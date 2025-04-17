@@ -6,11 +6,11 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='critical'])=0]
 document: |
-  <program>
+  <object>
     <objects>
       <o line="2" name="man">
         <o base="string" as="name"/>
         <o base="number"/>
       </o>
     </objects>
-  </program>
+  </object>

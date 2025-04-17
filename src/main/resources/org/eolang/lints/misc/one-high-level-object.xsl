@@ -8,9 +8,9 @@
   <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:import href="/org/eolang/funcs/defect-context.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:variable name="program" select="/program/@name"/>
-  <xsl:variable name="tested" select="/program/metas/meta[head='tests']"/>
-  <xsl:variable name="objects" select="count(/program/objects/o)"/>
+  <xsl:variable name="program" select="/object/@name"/>
+  <xsl:variable name="tested" select="/object/metas/meta[head='tests']"/>
+  <xsl:variable name="objects" select="count(/object/objects/o)"/>
   <xsl:template match="/">
     <defects>
       <xsl:if test="$objects&gt;1 and not($tested)">

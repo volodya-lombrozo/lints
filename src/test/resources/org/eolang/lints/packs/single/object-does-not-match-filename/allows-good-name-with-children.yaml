@@ -6,7 +6,7 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='warning'])=0]
 document: |
-  <program source="top.eo">
+  <object source="top.eo">
     <objects>
       <o line="2" name="top" pos="0">
         <o base="a" line="3" name="x" pos="2">
@@ -24,4 +24,4 @@ document: |
         </o>
       </o>
     </objects>
-  </program>
+  </object>

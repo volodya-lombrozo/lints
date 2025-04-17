@@ -6,8 +6,8 @@ sheets:
 asserts:
   - /defects[count(defect[@context and @severity='error'])=1]
 document: |
-  <program>
+  <object>
     <objects>
       <o base="Q.org.eolang.fake"/>
     </objects>
-  </program>
+  </object>

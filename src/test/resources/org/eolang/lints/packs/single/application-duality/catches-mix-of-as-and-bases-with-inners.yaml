@@ -8,7 +8,7 @@ asserts:
   - /defects/defect[@line='7']
   - /defects/defect[1][contains(normalize-space(), '3 children, 1 with, 2 without')]
 document: |
-  <program>
+  <object>
     <objects>
       <o base="Q.org.eolang.tuple" line="7">
         <o base="Q.org.eolang.tuple.empty"/>
@@ -20,4 +20,4 @@ document: |
         </o>
       </o>
     </objects>
-  </program>
+  </object>

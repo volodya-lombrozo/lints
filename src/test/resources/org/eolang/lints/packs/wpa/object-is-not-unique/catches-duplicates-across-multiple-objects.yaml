@@ -5,8 +5,8 @@ lints:
   - object-is-not-unique
 asserts:
   - /defects[count(defect[@severity='error'])=2]
-  - /defects/defect[@program='test-1' and @line='6']
-  - /defects/defect[@program='test-2' and @line='6']
+  - /defects/defect[@object='test-1' and @line='6']
+  - /defects/defect[@object='test-2' and @line='6']
   - /defects/defect[1][normalize-space()='The object name "bar" is not unique, original object was found in "test-2"']
   - /defects/defect[2][normalize-space()='The object name "bar" is not unique, original object was found in "test-1"']
 test-1.eo: |

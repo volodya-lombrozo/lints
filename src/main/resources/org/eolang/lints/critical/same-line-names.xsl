@@ -9,14 +9,14 @@
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="/program/objects//o[@line and @name]">
+      <xsl:for-each select="/object/objects//o[@line and @name]">
         <xsl:apply-templates select="." mode="check"/>
       </xsl:for-each>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="check">
     <xsl:variable name="x" select="."/>
-    <xsl:for-each select="/program/objects//o[not(. is $x) and @name=$x/@name and @line=$x/@line]">
+    <xsl:for-each select="/object/objects//o[not(. is $x) and @name=$x/@name and @line=$x/@line]">
       <xsl:element name="defect">
         <xsl:attribute name="line">
           <xsl:value-of select="eo:lineno(@line)"/>

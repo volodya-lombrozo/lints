@@ -6,7 +6,7 @@ sheets:
 asserts:
   - /defects[count(defect[@context and @severity='warning'])=1]
 document: |
-  <program>
+  <object>
     <objects>
       <o name="with-many">
          <o base="∅" name="a"/>
@@ -18,4 +18,4 @@ document: |
          <o base="Q.org.eolang.boom" name="@"/>
       </o>
     </objects>
-  </program>
+  </object>

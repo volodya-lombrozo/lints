@@ -7,7 +7,7 @@ asserts:
   - /defects[count(defect[@severity='warning'])=1]
   - /defects/defect[@line='2']
 document: |
-  <program source="foo/bar/foo.seq.bar.baz.xyz.eo">
+  <object source="foo/bar/foo.seq.bar.baz.xyz.eo">
     <metas>
       <meta>
         <head>package</head>
@@ -18,4 +18,4 @@ document: |
     <objects>
       <o line="2" name="foo" pos="0"/>
     </objects>
-  </program>
+  </object>

@@ -5,7 +5,7 @@ lints:
   - incorrect-number-of-attributes
 asserts:
   - /defects[count(defect[@severity='error'])=1]
-  - /defects/defect[@program='single' and @line='8']
+  - /defects/defect[@object='single' and @line='8']
   - /defects/defect[1][normalize-space()='The object "Q.broken.f" expects 1 arguments, while 2 provided']
 single.eo: |
   +package broken

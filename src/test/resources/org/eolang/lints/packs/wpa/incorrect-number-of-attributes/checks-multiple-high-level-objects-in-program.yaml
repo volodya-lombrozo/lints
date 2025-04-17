@@ -5,7 +5,7 @@ lints:
   - incorrect-number-of-attributes
 asserts:
   - /defects[count(defect[@severity='error'])=1]
-  - /defects/defect[@program='usage' and @line='4']
+  - /defects/defect[@object='usage' and @line='4']
   - /defects/defect[1][normalize-space()='The object "Q.org.eolang.stf" expects 0 arguments, while 1 provided']
 std.eo: |
   # Std.

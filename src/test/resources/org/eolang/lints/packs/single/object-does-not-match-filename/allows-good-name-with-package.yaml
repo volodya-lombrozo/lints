@@ -6,7 +6,7 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='warning'])=0]
 document: |
-  <program source="foo/bar/app.phi">
+  <object source="foo/bar/app.phi">
     <metas>
       <meta>
         <head>package</head>
@@ -17,4 +17,4 @@ document: |
     <objects>
       <o line="2" name="app" pos="0"/>
     </objects>
-  </program>
+  </object>

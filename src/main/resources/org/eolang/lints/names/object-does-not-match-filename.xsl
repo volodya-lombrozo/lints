@@ -8,11 +8,11 @@
   <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:import href="/org/eolang/funcs/defect-context.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
-  <xsl:variable name="package" select="/program/metas/meta[head='package'][1]"/>
+  <xsl:variable name="package" select="/object/metas/meta[head='package'][1]"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="not(/program/metas/meta[head='tests']) and /program/@source">
-        <xsl:apply-templates select="/program/objects/o" mode="live"/>
+      <xsl:if test="not(/object/metas/meta[head='tests']) and /object/@source">
+        <xsl:apply-templates select="/object/objects/o" mode="live"/>
       </xsl:if>
     </defects>
   </xsl:template>
@@ -28,7 +28,7 @@
       </xsl:choose>
     </xsl:variable>
     <xsl:variable name="source" as="xs:string" select="replace($opath, '\.', '/')"/>
-    <xsl:if test="not(contains(/program/@source, concat($source, concat('.', substring-after(substring-after(/program/@source, '.'), '.')))))">
+    <xsl:if test="not(contains(/object/@source, concat($source, concat('.', substring-after(substring-after(/object/@source, '.'), '.')))))">
       <defect>
         <xsl:variable name="line" select="eo:lineno(@line)"/>
         <xsl:attribute name="line">
@@ -46,8 +46,8 @@
         <xsl:value-of select="eo:escape(concat($source, '.eo'))"/>
         <xsl:text> or </xsl:text>
         <xsl:value-of select="eo:escape(concat($source, '.phi'))"/>
-        <xsl:text> file, however its "program/@source" points to </xsl:text>
-        <xsl:value-of select="eo:escape(/program/@source)"/>
+        <xsl:text> file, however its "object/@source" points to </xsl:text>
+        <xsl:value-of select="eo:escape(/object/@source)"/>
       </defect>
     </xsl:if>
   </xsl:template>

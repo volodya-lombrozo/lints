@@ -6,11 +6,11 @@ sheets:
 asserts:
   - /defects[count(defect[@context and @severity='error'])=1]
 document: |
-  <program>
+  <object>
     <objects>
       <o name="test">
         <o base="$.@.b.c"/>
         <o base="Q.org.eolang.a" name="@"/>
       </o>
     </objects>
-  </program>
+  </object>

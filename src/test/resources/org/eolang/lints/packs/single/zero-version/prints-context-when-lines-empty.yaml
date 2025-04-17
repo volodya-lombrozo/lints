@@ -6,7 +6,7 @@ sheets:
 asserts:
   - /defects[count(defect[@context and @severity='error'])=1]
 document: |
-  <program source="user/src/main/ttt.eo">
+  <object source="user/src/main/ttt.eo">
     <metas>
       <meta>
         <head>version</head>
@@ -16,4 +16,4 @@ document: |
     <objects>
       <o name="foo"/>
     </objects>
-  </program>
+  </object>

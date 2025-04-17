@@ -10,8 +10,8 @@
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="/program/metas/meta[head='version']">
-        <xsl:variable name="src" select="/program/@source"/>
+      <xsl:for-each select="/object/metas/meta[head='version']">
+        <xsl:variable name="src" select="/object/@source"/>
         <xsl:if test="matches($src, 'src/(?:main|test)') and not(./tail/text() = '0.0.0')">
           <xsl:element name="defect">
             <xsl:variable name="line" select="eo:lineno(@line)"/>

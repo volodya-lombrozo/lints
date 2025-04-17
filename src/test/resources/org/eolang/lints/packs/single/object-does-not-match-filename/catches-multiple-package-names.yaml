@@ -8,7 +8,7 @@ asserts:
   - /defects/defect[@line='4']
   - /defects/defect[@line='5']
 document: |
-  <program source="foo/x/main.eo">
+  <object source="foo/x/main.eo">
     <metas>
       <meta line="1">
         <head>package</head>
@@ -20,4 +20,4 @@ document: |
       <o line="4" name="main" pos="0"/>
       <o line="5" name="foo" pos="0"/>
     </objects>
-  </program>
+  </object>

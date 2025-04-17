@@ -10,7 +10,7 @@
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="//o|/program/objects">
+      <xsl:for-each select="//o|/object/objects">
         <xsl:apply-templates select="." mode="dups"/>
       </xsl:for-each>
     </defects>

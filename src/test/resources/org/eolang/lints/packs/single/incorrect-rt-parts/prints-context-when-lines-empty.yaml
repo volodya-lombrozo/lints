@@ -6,7 +6,7 @@ sheets:
 asserts:
   - /defects[count(defect[@context and @severity='critical'])=1]
 document: |
-  <program>
+  <object>
     <metas>
       <meta>
         <head>rt</head>
@@ -17,4 +17,4 @@ document: |
     <objects>
       <o base="Q.org.eolang.foo" pos="5"/>
     </objects>
-  </program>
+  </object>
