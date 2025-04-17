@@ -63,7 +63,7 @@ final class LtByXslTest {
             new XtSticky(
                 new XtYaml(
                     yaml,
-                    eo -> new EoSyntax("pack", eo).parsed()
+                    eo -> new EoSyntax(eo).parsed()
                 )
             ),
             new XtoryMatcher(new DefectsMatcher())

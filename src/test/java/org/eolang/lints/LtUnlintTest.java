@@ -132,7 +132,6 @@ final class LtUnlintTest {
                 new LtByXsl("errors/noname-attribute")
             ).defects(
                 new EoSyntax(
-                    "app",
                     String.join(
                         "\n",
                         "+home https://github.com/objectionary/eo",
@@ -158,7 +157,6 @@ final class LtUnlintTest {
                 new LtByXsl("errors/noname-attribute")
             ).defects(
                 new EoSyntax(
-                    "boom",
                     String.join(
                         "\n",
                         "+home https://github.com/objectionary/eo",

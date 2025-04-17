@@ -185,7 +185,7 @@ final class LtReservedName implements Lint<XML> {
     private static Map<String, String> namesInFile(final Path path) {
         final XML parsed;
         try {
-            parsed = new EoSyntax("reserved", new UncheckedInput(new InputOf(path.toFile())))
+            parsed = new EoSyntax(new UncheckedInput(new InputOf(path.toFile())))
                 .parsed();
         } catch (final IOException exception) {
             throw new IllegalStateException(
@@ -206,7 +206,7 @@ final class LtReservedName implements Lint<XML> {
     private static Map<String, String> namesInJar(final Path path) {
         final XML parsed;
         try (InputStream input = Files.newInputStream(path)) {
-            parsed = new EoSyntax("reserved", new TextOf(input).asString()).parsed();
+            parsed = new EoSyntax(new TextOf(input).asString()).parsed();
         } catch (final Exception exception) {
             throw new IllegalStateException(
                 String.format("Failed to parse EO source in \"%s\"", path),

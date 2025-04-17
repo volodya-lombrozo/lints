@@ -104,7 +104,6 @@ final class LtUnlintNonExistingDefectWpaTest {
                     new MapEntry<>(
                         "e-tests",
                         new EoSyntax(
-                            "e-tests",
                             String.join(
                                 "\n",
                                 "+unlint unit-test-without-live-file",

@@ -32,7 +32,6 @@ final class LtReservedNameTest {
             new LtReservedName(new MapOf<>("true", "org.eolang.true.eo"))
                 .defects(
                     new EoSyntax(
-                        "foo",
                         String.join(
                             "\n",
                             "# Foo.",
@@ -52,7 +51,6 @@ final class LtReservedNameTest {
             new LtReservedName(new MapOf<>("true", "org.eolang.true.eo"))
                 .defects(
                     new EoSyntax(
-                        "x",
                         String.join(
                             "# X object.",
                             "[] > x",
@@ -71,7 +69,6 @@ final class LtReservedNameTest {
             new LtReservedName(new MapOf<>("f", "org.eolang.f.eo"))
                 .defects(
                     new EoSyntax(
-                        "top",
                         String.join(
                             "# top.",
                             "[] > top",
@@ -89,7 +86,6 @@ final class LtReservedNameTest {
             new MapOf<>("stdout", "org.eolang.stdout.eo")
         ).defects(
             new EoSyntax(
-                "t-packaged",
                 String.join(
                     "+package org.foo",
                     "",
@@ -121,7 +117,6 @@ final class LtReservedNameTest {
                 )
             ).defects(
                 new EoSyntax(
-                    "two-defects",
                     String.join(
                         "\n",
                         "# Left.",
@@ -148,7 +143,6 @@ final class LtReservedNameTest {
                 )
             ).defects(
                 new EoSyntax(
-                    "tops",
                     String.join(
                         "\n",
                         "# JA.",
@@ -171,7 +165,6 @@ final class LtReservedNameTest {
             new MapOf<>("foo", "org.eolang.foo.eo")
         ).defects(
             new EoSyntax(
-                target,
                 String.join(
                     "\n",
                     "# Foo.",
@@ -204,7 +197,6 @@ final class LtReservedNameTest {
         final Lint<XML> lint = new LtReservedName();
         final Collection<Defect> defects = lint.defects(
             new EoSyntax(
-                "foo",
                 String.join(
                     "\n",
                     "# Foo",

@@ -65,7 +65,6 @@ final class ProgramTest {
             "defects found even though the code is clean",
             new Program(
                 new EoSyntax(
-                    "com.example.foo",
                     String.join(
                         "\n",
                         "+home https://www.eolang.org",
@@ -92,7 +91,6 @@ final class ProgramTest {
             "defect found even though lint is suppressed",
             new Program(
                 new EoSyntax(
-                    "foo-11",
                     new InputOf(
                         String.join(
                             "\n",
@@ -270,7 +268,6 @@ final class ProgramTest {
             "Only one defect should be found",
             new Program(
                 new EoSyntax(
-                    "app",
                     String.join(
                         "\n",
                         "+home https://github.com/objectionary/eo",

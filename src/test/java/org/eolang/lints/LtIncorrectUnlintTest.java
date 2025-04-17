@@ -70,7 +70,6 @@ final class LtIncorrectUnlintTest {
             new LtIncorrectUnlint(new ListOf<>("comment-not-capitalized"))
                 .defects(
                     new EoSyntax(
-                        "foo",
                         String.join(
                             "\n",
                             "+unlint comment-not-capitalized:3",
@@ -90,7 +89,6 @@ final class LtIncorrectUnlintTest {
             "Non existing unlint with line number should be caught",
             new LtIncorrectUnlint(new ListOf<>("a")).defects(
                 new EoSyntax(
-                    "app",
                     String.join(
                         "\n",
                         "+unlint b:1",
