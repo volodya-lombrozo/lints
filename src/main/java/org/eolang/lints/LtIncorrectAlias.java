@@ -36,7 +36,7 @@ final class LtIncorrectAlias implements Lint<Map<String, XML>> {
         pkg.values().forEach(
             xmir -> {
                 final Xnav xml = new Xnav(xmir.inner());
-                final List<Xnav> aliased = xml.path("/program/metas/meta[head='alias']")
+                final List<Xnav> aliased = xml.path("/object/metas/meta[head='alias']")
                     .collect(Collectors.toList());
                 for (final Xnav alias : aliased) {
                     final String pointer = alias.element("tail").text().get();
@@ -48,7 +48,7 @@ final class LtIncorrectAlias implements Lint<Map<String, XML>> {
                             new Defect.Default(
                                 "incorrect-alias",
                                 Severity.CRITICAL,
-                                xml.element("program").attribute("name").text().orElse("unknown"),
+                                xml.element("object").attribute("name").text().orElse("unknown"),
                                 Integer.parseInt(
                                     alias.attribute("line").text().orElse("0")
                                 ),

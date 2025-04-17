@@ -41,7 +41,7 @@ final class LtIncorrectAliasTest {
                         new EoSyntax(
                             String.join(
                                 "\n",
-                                "+alias foo ",
+                                "+alias foo",
                                 "+package ttt\n",
                                 "# Bar",
                                 "[] > bar",
