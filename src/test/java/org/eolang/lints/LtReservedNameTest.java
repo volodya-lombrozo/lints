@@ -176,6 +176,7 @@ final class LtReservedNameTest {
                 )
             ).parsed()
         );
+        
         MatcherAssert.assertThat(
             "Defects size does not match with expected",
             defects,
