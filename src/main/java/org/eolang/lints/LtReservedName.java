@@ -90,7 +90,7 @@ final class LtReservedName implements Lint<XML> {
                             new Defect.Default(
                                 this.name(),
                                 Severity.WARNING,
-                                program.element("program").attribute("name")
+                                program.element("object").element("o").attribute("name")
                                     .text().orElse("unknown"),
                                 Integer.parseInt(object.attribute("line").text().orElse("0")),
                                 String.format(
@@ -224,7 +224,7 @@ final class LtReservedName implements Lint<XML> {
      */
     private static Map<String, String> namesInXmir(final XML xmir, final Path path) {
         final Map<String, String> names = new HashMap<>(64);
-        new Xnav(xmir.inner()).path("/program/objects/o/@name")
+        new Xnav(xmir.inner()).path("/object/o/@name")
             .map(oname -> oname.text().get())
             .forEach(
                 oname ->
