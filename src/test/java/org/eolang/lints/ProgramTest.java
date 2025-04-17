@@ -276,13 +276,13 @@ final class ProgramTest {
                         "",
                         "# No comments.",
                         "[c] > main",
-                        "  QQ.io.stdout",
+                        "  QQ.io.stdout > @",
                         "    QQ.txt.sprintf",
                         "      \"Hello %s\"",
                         "      * c"
                     )
                 ).parsed()
-            ).without("mandatory-spdx", "comment-too-short").defects(),
+            ).without("mandatory-spdx").defects(),
             Matchers.hasSize(1)
         );
     }
