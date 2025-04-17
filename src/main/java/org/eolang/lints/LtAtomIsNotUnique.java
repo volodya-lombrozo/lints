@@ -127,7 +127,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         return new Defect.Default(
             this.name(),
             Severity.ERROR,
-            xml.element("object").attribute("name").text().orElse("unknown"),
+            xml.element("object").element("o").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
                 xml.path(
                     String.format("//o[@name='%s' and o[@name='λ']]", LtAtomIsNotUnique.oname(fqn))
@@ -143,7 +143,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         return new Defect.Default(
             this.name(),
             Severity.ERROR,
-            xml.element("object").attribute("name").text().orElse("unknown"),
+            xml.element("object").element("o").attribute("name").text().orElse("unknown"),
             Integer.parseInt(
                 xml.path(
                     String.format("//o[@name='%s' and o[@name='λ']]", LtAtomIsNotUnique.oname(fqn))
@@ -155,6 +155,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
                 "Atom with FQN \"%s\" is duplicated, original was found in \"%s\"",
                 fqn,
                 original.element("object")
+                    .element("o")
                     .attribute("name")
                     .text()
                     .orElse("unknown")
