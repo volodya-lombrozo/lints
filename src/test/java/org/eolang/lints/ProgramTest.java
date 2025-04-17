@@ -95,7 +95,6 @@ final class ProgramTest {
                         String.join(
                             "\n",
                             "+unlint unlint-non-existing-defect",
-                            "+unlint object-does-not-match-filename",
                             "+unlint empty-object",
                             "+unlint mandatory-home",
                             "+unlint mandatory-package",

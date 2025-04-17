@@ -4,7 +4,6 @@
  */
 package org.eolang.lints;
 
-import com.jcabi.xml.XML;
 import com.yegor256.MayBeSlow;
 import com.yegor256.Together;
 import matchers.DefectMatcher;
