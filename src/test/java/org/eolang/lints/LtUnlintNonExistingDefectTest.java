@@ -180,7 +180,7 @@ final class LtUnlintNonExistingDefectTest {
     @Test
     void catchesNonExistingDefectForRemovedLintFromProgram() throws IOException {
         MatcherAssert.assertThat(
-            "Found defects does not match with expected",
+            "Found defect does not match with expected",
             new ListOf<>(
                 new Program(
                     new EoSyntax(
