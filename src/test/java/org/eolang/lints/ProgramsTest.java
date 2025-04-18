@@ -144,7 +144,7 @@ final class ProgramsTest {
     @ValueSource(
         strings = {"unit-test-missing", "unit-test-missing:0"}
     )
-    void catchesNonExistingDefectForRemovedLintFromPrograms(final String lid) throws IOException {
+    void catchesNonExistingDefectAfterLintWasRemoved(final String lid) throws IOException {
         final Collection<Defect> found = new Programs(
             new MapOf<>(
                 "f",
@@ -167,9 +167,7 @@ final class ProgramsTest {
         );
         MatcherAssert.assertThat(
             "Found defect does not match with expected",
-            new ListOf<>(
-                found
-            ).get(0).text(),
+            new ListOf<>(found).get(0).text(),
             Matchers.containsString(
                 String.format(
                     "Unlinting rule '%s' doesn't make sense",

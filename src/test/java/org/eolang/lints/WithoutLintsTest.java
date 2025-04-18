@@ -35,9 +35,9 @@ final class WithoutLintsTest {
                     new LtUnitTestMissing(),
                     new LtUnitTestWithoutLiveFile()
                 ),
-                new ListOf<>(lid)
-            ),
-            Matchers.iterableWithSize(1)
+                lid
+            ).iterator().next().name(),
+            Matchers.not(Matchers.equalTo(lid))
         );
     }
 

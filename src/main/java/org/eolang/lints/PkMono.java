@@ -67,6 +67,6 @@ final class PkMono extends IterableEnvelope<Lint<XML>> {
      * @return Filtered lints
      */
     static PkMono without(final String... names) {
-        return new PkMono(new WithoutLints<>(PkMono.LINTS, new ListOf<>(names)));
+        return new PkMono(new WithoutLints<>(PkMono.LINTS, names));
     }
 }

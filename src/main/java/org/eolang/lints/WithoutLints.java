@@ -7,6 +7,7 @@ package org.eolang.lints;
 import java.util.Collection;
 import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.IterableEnvelope;
+import org.cactoos.list.ListOf;
 
 /**
  * Lints without some lints.
@@ -14,6 +15,16 @@ import org.cactoos.iterable.IterableEnvelope;
  * @since 0.0.46
  */
 final class WithoutLints<X extends Lint<?>> extends IterableEnvelope<X> {
+
+    /**
+     * Ctor.
+     * @param origin Origin
+     * @param names Lint names to exclude
+     */
+    WithoutLints(final Iterable<X> origin, final String... names) {
+        this(origin, new ListOf<>(names));
+    }
+
     /**
      * Ctor.
      *

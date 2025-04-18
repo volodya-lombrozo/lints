@@ -296,7 +296,7 @@ final class ProgramTest {
     @ValueSource(
         strings = {"mandatory-home", "mandatory-home:0"}
     )
-    void catchesNonExistingDefectForRemovedLintFromProgram(final String lid) throws IOException {
+    void catchesNonExistingDefectAfterLintWasRemoved(final String lid) throws IOException {
         MatcherAssert.assertThat(
             "Found defect does not match with expected",
             new ListOf<>(
