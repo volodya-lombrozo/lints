@@ -4,9 +4,13 @@
  */
 package org.eolang.lints;
 
+import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.core.importer.ImportOption;
+import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.cactoos.list.ListOf;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -35,5 +39,17 @@ final class WithoutLintsTest {
             ),
             Matchers.iterableWithSize(1)
         );
+    }
+
+    @Test
+    @SuppressWarnings("JTCOP.RuleAssertionMessage")
+    void staysPackagePrivate() {
+        ArchRuleDefinition.classes()
+            .that().haveSimpleName("WithoutLints")
+            .should().bePackagePrivate()
+            .check(new ClassFileImporter()
+                .withImportOption(new ImportOption.DoNotIncludeTests())
+                .importPackages("org.eolang.lints")
+            );
     }
 }
