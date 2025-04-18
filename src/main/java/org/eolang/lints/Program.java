@@ -83,9 +83,12 @@ public final class Program {
         final Collection<String> listed = new ListOf<>(names);
         return new Program(
             this.xmir,
-            new Filtered<>(
-                this.lints, lint -> () -> !listed.contains(lint.name())
-            )
+            new PkMono(
+                new Filtered<>(
+                    this.lints,
+                    lint -> () -> !listed.contains(lint.name())
+                )
+            ).without(names)
         );
     }
 

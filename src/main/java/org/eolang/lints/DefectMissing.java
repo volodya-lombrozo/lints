@@ -39,7 +39,7 @@ final class DefectMissing implements Function<String, Boolean> {
 
     @Override
     public Boolean apply(final String unlint) {
-        final boolean matches;
+        final boolean missing;
         final String[] split = unlint.split(":");
         final String name = split[0];
         final Set<String> names;
@@ -49,12 +49,16 @@ final class DefectMissing implements Function<String, Boolean> {
             names = new SetOf<>();
         }
         if (split.length > 1) {
-            final List<Integer> lines = this.defects.get(name);
-            matches = (!names.contains(name) || !lines.contains(Integer.parseInt(split[1])))
-                && !this.excluded.contains(name);
+            if (this.defects != null) {
+                final List<Integer> lines = this.defects.get(name);
+                missing = (!names.contains(name) || !lines.contains(Integer.parseInt(split[1])))
+                    && !this.excluded.contains(name);
+            } else {
+                missing = true;
+            }
         } else {
-            matches = !names.contains(name) && !this.excluded.contains(name);
+            missing = !names.contains(name) && !this.excluded.contains(name);
         }
-        return matches;
+        return missing;
     }
 }

@@ -5,7 +5,9 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
+import java.util.Collection;
 import java.util.Map;
+import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Joined;
 import org.cactoos.iterable.Mapped;
@@ -28,22 +30,40 @@ final class PkWpa extends IterableEnvelope<Lint<Map<String, XML>>> {
     private static final Iterable<Lint<Map<String, XML>>> WPA = new WpaLints();
 
     /**
-     * Ctor.
+     * Default ctor.
      */
     PkWpa() {
+        this(PkWpa.WPA);
+    }
+
+    /**
+     * Ctor.
+     * @param lints Lints
+     */
+    PkWpa(final Iterable<Lint<Map<String, XML>>> lints) {
         super(
             new Shuffled<>(
                 new Mapped<Lint<Map<String, XML>>>(
                     LtWpaUnlint::new,
                     new Joined<Lint<Map<String, XML>>>(
-                        PkWpa.WPA,
+                        lints,
                         new ListOf<>(
                             new LtUnlintNonExistingDefectWpa(
-                                PkWpa.WPA, new ListOf<>(new MonoLintNames())
+                                lints, new ListOf<>(new MonoLintNames())
                             )
                         )
                     )
                 )
+            )
+        );
+    }
+
+    PkWpa without(final String... names) {
+        final Collection<String> listed = new ListOf<>(names);
+        return new PkWpa(
+            new Filtered<>(
+                PkWpa.WPA,
+                lint -> () -> !listed.contains(lint.name())
             )
         );
     }

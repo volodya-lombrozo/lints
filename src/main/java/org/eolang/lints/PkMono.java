@@ -5,8 +5,9 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
-import java.util.List;
+import java.util.Collection;
 import javax.annotation.concurrent.ThreadSafe;
+import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.IterableEnvelope;
 import org.cactoos.iterable.Joined;
 import org.cactoos.iterable.Mapped;
@@ -37,19 +38,37 @@ final class PkMono extends IterableEnvelope<Lint<XML>> {
      * Default ctor.
      */
     PkMono() {
+        this(PkMono.LINTS);
+    }
+
+    /**
+     * Ctor.
+     * @param lints Lints
+     */
+    PkMono(final Iterable<Lint<XML>> lints) {
         super(
             new Joined<>(
                 new Mapped<Lint<XML>>(
                     LtUnlint::new,
                     new Joined<Lint<XML>>(
-                        PkMono.LINTS,
-                        List.of(
+                        lints,
+                        new ListOf<>(
                             new LtUnlintNonExistingDefect(
-                                PkMono.LINTS, new ListOf<>(new WpaLintNames())
+                                lints, new ListOf<>(new WpaLintNames())
                             )
                         )
                     )
                 )
+            )
+        );
+    }
+
+    PkMono without(final String... names) {
+        final Collection<String> listed = new ListOf<>(names);
+        return new PkMono(
+            new Filtered<>(
+            PkMono.LINTS,
+            lint -> () -> !listed.contains(lint.name())
             )
         );
     }

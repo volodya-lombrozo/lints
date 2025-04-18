@@ -113,9 +113,11 @@ public final class Programs {
         final Collection<String> listed = new ListOf<>(names);
         return new Programs(
             this.pkg,
-            new Filtered<>(
-                this.lints, lint -> () -> !listed.contains(lint.name())
-            )
+            new PkWpa(
+                new Filtered<>(
+                    this.lints, lint -> () -> !listed.contains(lint.name())
+                )
+            ).without(names)
         );
     }
 

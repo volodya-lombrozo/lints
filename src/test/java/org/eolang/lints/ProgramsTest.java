@@ -4,6 +4,7 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.xml.XML;
 import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
 import com.yegor256.Together;
@@ -15,6 +16,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 import matchers.DefectMatcher;
 import org.cactoos.list.ListOf;
+import org.cactoos.map.MapOf;
 import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
@@ -24,6 +26,8 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Test for {@link Programs}.
@@ -137,19 +141,24 @@ final class ProgramsTest {
         );
     }
 
-    @Test
-    void catchesNonExistingDefectForRemovedLintFromPrograms(@Mktmp final Path dir) throws IOException {
+    @ParameterizedTest
+    @ValueSource(
+        strings = {"unit-test-missing", "unit-test-missing:0"}
+    )
+    void catchesNonExistingDefectForRemovedLintFromPrograms(final String lid) throws IOException {
         final Collection<Defect> found = new Programs(
-            this.withProgram(
-                dir,
-                "f.xmir",
-                String.join(
-                    "\n",
-                    "+unlint unit-test-missing",
-                    "",
-                    "# F.",
-                    "[] > f"
-                )
+            new MapOf<>(
+                "f",
+                new EoSyntax(
+                    "f",
+                    String.join(
+                        "\n",
+                        String.format("+unlint %s", lid),
+                        "",
+                        "# F.",
+                        "[] > f"
+                    )
+                ).parsed()
             )
         ).without("unit-test-missing").defects();
         MatcherAssert.assertThat(
@@ -163,7 +172,10 @@ final class ProgramsTest {
                 found
             ).get(0).text(),
             Matchers.containsString(
-                "Unlinting rule 'unit-test-missing' doesn't make sense"
+                String.format(
+                    "Unlinting rule '%s' doesn't make sense",
+                    lid
+                )
             )
         );
     }
