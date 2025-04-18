@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.stream.Collectors;
 import matchers.DefectMatcher;
 import org.cactoos.list.ListOf;
@@ -133,6 +134,37 @@ final class ProgramsTest {
                 )
             ).without("unit-test-missing", "unit-test-without-live-file").defects(),
             Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void catchesNonExistingDefectForRemovedLintFromPrograms(@Mktmp final Path dir) throws IOException {
+        final Collection<Defect> found = new Programs(
+            this.withProgram(
+                dir,
+                "f.xmir",
+                String.join(
+                    "\n",
+                    "+unlint unit-test-missing",
+                    "",
+                    "# F.",
+                    "[] > f"
+                )
+            )
+        ).without("unit-test-missing").defects();
+        MatcherAssert.assertThat(
+            "Defects were not found, though code is broken",
+            found,
+            Matchers.hasSize(Matchers.greaterThan(0))
+        );
+        MatcherAssert.assertThat(
+            "Found defect does not match with expected",
+            new ListOf<>(
+                found
+            ).get(0).text(),
+            Matchers.containsString(
+                "Unlinting rule 'unit-test-missing' doesn't make sense"
+            )
         );
     }
 
