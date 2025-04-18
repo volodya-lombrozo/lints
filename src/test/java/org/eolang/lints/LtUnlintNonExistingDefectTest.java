@@ -13,6 +13,8 @@ import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests for {@link LtUnlintNonExistingDefect}.
@@ -177,8 +179,11 @@ final class LtUnlintNonExistingDefectTest {
         );
     }
 
-    @Test
-    void catchesNonExistingDefectForRemovedLintFromProgram() throws IOException {
+    @ParameterizedTest
+    @ValueSource(
+        strings = {"mandatory-home", "mandatory-home:0"}
+    )
+    void catchesNonExistingDefectForRemovedLintFromProgram(final String lid) throws IOException {
         MatcherAssert.assertThat(
             "Found defect does not match with expected",
             new ListOf<>(
@@ -187,7 +192,7 @@ final class LtUnlintNonExistingDefectTest {
                         new InputOf(
                             String.join(
                                 "\n",
-                                "+unlint mandatory-home",
+                                String.format("+unlint %s", lid),
                                 "",
                                 "# Foo.",
                                 "[] > foo"
@@ -205,7 +210,10 @@ final class LtUnlintNonExistingDefectTest {
                 ).defects()
             ).get(0).text(),
             Matchers.containsString(
-                "Unlinting rule 'mandatory-home' doesn't make sense"
+                String.format(
+                    "Unlinting rule '%s' doesn't make sense",
+                    lid
+                )
             )
         );
     }
