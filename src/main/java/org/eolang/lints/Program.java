@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
 import org.cactoos.list.ListOf;
@@ -80,15 +79,9 @@ public final class Program {
      * @return Program analysis without specific name
      */
     public Program without(final String... names) {
-        final Collection<String> listed = new ListOf<>(names);
         return new Program(
             this.xmir,
-            new PkMono(
-                new Filtered<>(
-                    this.lints,
-                    lint -> () -> !listed.contains(lint.name())
-                )
-            ).without(names)
+            new PkMono(new WithoutLints<>(this.lints, new ListOf<>(names))).without(names)
         );
     }
 
