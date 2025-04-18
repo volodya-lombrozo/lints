@@ -78,10 +78,7 @@ public final class Program {
      * @return Program analysis without specific name
      */
     public Program without(final String... names) {
-        return new Program(
-            this.xmir,
-            PkMono.without(names)
-        );
+        return new Program(this.xmir, new MonoWithout(names));
     }
 
     /**

@@ -60,13 +60,4 @@ final class PkMono extends IterableEnvelope<Lint<XML>> {
             )
         );
     }
-
-    /**
-     * Without lints.
-     * @param names Lint names to exclude
-     * @return Filtered lints
-     */
-    static PkMono without(final String... names) {
-        return new PkMono(new WithoutLints<>(PkMono.LINTS, names));
-    }
 }

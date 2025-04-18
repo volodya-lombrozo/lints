@@ -109,10 +109,7 @@ public final class Programs {
      * @return Program analysis without specifics names
      */
     public Programs without(final String... names) {
-        return new Programs(
-            this.pkg,
-            PkWpa.without(names)
-        );
+        return new Programs(this.pkg, new WpaWithout(names));
     }
 
     /**
