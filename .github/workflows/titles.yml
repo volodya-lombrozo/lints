@@ -7,7 +7,7 @@ name: titles
   schedule:
     - cron: '0 0 * * *'
   issues:
-    types: [opened]
+    types: [ opened ]
 jobs:
   titles:
     timeout-minutes: 15
@@ -22,7 +22,7 @@ jobs:
           auto-update: true
           max-issues: 10
           model: gpt-4
-          prompt: |
+          prompt: |-
             You are an expert at writing clear, concise, and descriptive GitHub issue titles.
             Please analyze the following issue title and determine if it needs improvement.
             If the title is already clear, specific, and well-formatted, return the original title unchanged.
@@ -47,4 +47,3 @@ jobs:
             Your response should ONLY contain the improved issue title
             or the original title if it's already good.
             Do not include any other text or explanations.
-
