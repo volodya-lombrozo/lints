@@ -5,7 +5,9 @@
 package org.eolang.lints;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.stream.Collectors;
+import org.cactoos.io.InputOf;
 import org.cactoos.list.ListOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
@@ -172,6 +174,39 @@ final class LtUnlintNonExistingDefectTest {
                 ).parsed()
             ),
             Matchers.hasSize(Matchers.greaterThan(0))
+        );
+    }
+
+    @Test
+    void catchesNonExistingDefectForRemovedLintFromProgram() throws IOException {
+        MatcherAssert.assertThat(
+            "Found defects does not match with expected",
+            new ListOf<>(
+                new Program(
+                    new EoSyntax(
+                        new InputOf(
+                            String.join(
+                                "\n",
+                                "+unlint mandatory-home",
+                                "",
+                                "# Foo.",
+                                "[] > foo"
+                            )
+                        )
+                    ).parsed()
+                ).without(
+                    "mandatory-home",
+                    "mandatory-version",
+                    "empty-object",
+                    "mandatory-package",
+                    "mandatory-spdx",
+                    "comment-too-short",
+                    "no-attribute-formation"
+                ).defects()
+            ).get(0).text(),
+            Matchers.containsString(
+                "Unlinting rule 'mandatory-home' doesn't make sense"
+            )
         );
     }
 }
