@@ -49,13 +49,9 @@ final class DefectMissing implements Function<String, Boolean> {
             names = new SetOf<>();
         }
         if (split.length > 1) {
-            if (this.defects != null) {
-                final List<Integer> lines = this.defects.get(name);
-                missing = (!names.contains(name) || !lines.contains(Integer.parseInt(split[1])))
-                    && !this.excluded.contains(name);
-            } else {
-                missing = true;
-            }
+            final List<Integer> lines = this.defects.get(name);
+            missing = (!names.contains(name) || !lines.contains(Integer.parseInt(split[1])))
+                && !this.excluded.contains(name);
         } else {
             missing = !names.contains(name) && !this.excluded.contains(name);
         }

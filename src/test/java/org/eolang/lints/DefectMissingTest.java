@@ -39,15 +39,4 @@ final class DefectMissingTest {
             Matchers.equalTo(true)
         );
     }
-
-    @Test
-    void returnsTrueWhenDefectAreNull() {
-        MatcherAssert.assertThat(
-            "Defect should be missed, since defects are NULL",
-            new DefectMissing(
-                null, new ListOf<>()
-            ).apply("unit-test-missing:0"),
-            Matchers.equalTo(true)
-        );
-    }
 }
