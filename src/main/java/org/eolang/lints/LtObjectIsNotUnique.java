@@ -4,7 +4,6 @@
  */
 package org.eolang.lints;
 
-import com.github.lombrozo.xnav.Filter;
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import java.io.IOException;
@@ -39,15 +38,9 @@ final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
             final Xnav xml = new Xnav(xmir.inner());
             final String src = xml.element("object").element("o")
                 .attribute("name").text().orElse("unknown");
-            if (LtObjectIsNotUnique.hasObjects(xml)) {
-                continue;
-            }
             for (final XML oth : pkg.values()) {
                 final Xnav second = new Xnav(oth.inner());
                 if (Objects.equals(oth, xmir)) {
-                    continue;
-                }
-                if (LtObjectIsNotUnique.hasObjects(second)) {
                     continue;
                 }
                 LtObjectIsNotUnique.programObjects(second).entrySet().stream()
@@ -89,11 +82,6 @@ final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 )
             )
         ).asString();
-    }
-
-    private static boolean hasObjects(final Xnav xml) {
-        return xml.element("object")
-            .elements(Filter.withName("o")).findAny().isEmpty();
     }
 
     private static boolean containsDuplicate(

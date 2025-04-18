@@ -113,7 +113,7 @@ final class LtUnlintNonExistingDefectWpaTest {
                             )
                         ).parsed()
                     ),
-                    new MapEntry<>("e", new XMLDocument("<object name='e'/>"))
+                    new MapEntry<>("e", new XMLDocument("<object><o name='e'/></object>"))
                 )
             ),
             Matchers.hasSize(Matchers.greaterThan(0))

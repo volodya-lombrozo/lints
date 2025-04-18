@@ -32,6 +32,7 @@ import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.parser.EoSyntax;
+import org.eolang.parser.ObjectName;
 
 /**
  * Lint for reserved names.
@@ -90,8 +91,7 @@ final class LtReservedName implements Lint<XML> {
                             new Defect.Default(
                                 this.name(),
                                 Severity.WARNING,
-                                program.element("object").element("o").attribute("name")
-                                    .text().orElse("unknown"),
+                                new ObjectName(xmir).get(),
                                 Integer.parseInt(object.attribute("line").text().orElse("0")),
                                 String.format(
                                     "Object name \"%s\" is already reserved by object in the \"%s\"",

@@ -6,6 +6,7 @@ package org.eolang.lints;
 
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
+import org.eolang.parser.ObjectName;
 
 /**
  * Lint for checking arguments inconsistency provided to the objects.
@@ -52,8 +54,7 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                                         new Defect.Default(
                                             this.name(),
                                             Severity.WARNING,
-                                            program.element("object").element("o")
-                                                .attribute("name").text().orElse("unknown"),
+                                            new ObjectName(new XMLDocument(program.node())).get(),
                                             line,
                                             String.format(
                                                 "Object '%s' has arguments inconsistency",

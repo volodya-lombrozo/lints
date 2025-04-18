@@ -19,6 +19,7 @@ import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
 import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
+import org.eolang.parser.ObjectName;
 
 /**
  * Lint for checking `+unlint` meta to suppress non-existing defects in single program scope.
@@ -88,11 +89,7 @@ final class LtUnlintNonExistingDefect implements Lint<XML> {
                                     new Defect.Default(
                                         this.name(),
                                         Severity.WARNING,
-                                        xml.element("object")
-                                            .element("o")
-                                            .attribute("name")
-                                            .text()
-                                            .orElse("unknown"),
+                                        new ObjectName(xmir).get(),
                                         Integer.parseInt(line),
                                         String.format(
                                             "Unlinting rule '%s' doesn't make sense, since there are no defects with it",

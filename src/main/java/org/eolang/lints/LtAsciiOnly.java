@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
+import org.eolang.parser.ObjectName;
 
 /**
  * A comment must include only ASCII characters.
@@ -51,7 +52,7 @@ final class LtAsciiOnly implements Lint<XML> {
                 new Defect.Default(
                     "ascii-only",
                     Severity.ERROR,
-                    xml.element("object").attribute("name").text().orElse("unknown"),
+                    new ObjectName(xmir).get(),
                     Integer.parseInt(line),
                     String.format(
                         "Only ASCII characters are allowed in comments, while \"%s\" is used at the line no.%s at the position no.%s",
