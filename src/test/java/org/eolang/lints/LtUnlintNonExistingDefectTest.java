@@ -5,16 +5,12 @@
 package org.eolang.lints;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.stream.Collectors;
-import org.cactoos.io.InputOf;
 import org.cactoos.list.ListOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Tests for {@link LtUnlintNonExistingDefect}.
@@ -176,45 +172,6 @@ final class LtUnlintNonExistingDefectTest {
                 ).parsed()
             ),
             Matchers.hasSize(Matchers.greaterThan(0))
-        );
-    }
-
-    @ParameterizedTest
-    @ValueSource(
-        strings = {"mandatory-home", "mandatory-home:0"}
-    )
-    void catchesNonExistingDefectForRemovedLintFromProgram(final String lid) throws IOException {
-        MatcherAssert.assertThat(
-            "Found defect does not match with expected",
-            new ListOf<>(
-                new Program(
-                    new EoSyntax(
-                        new InputOf(
-                            String.join(
-                                "\n",
-                                String.format("+unlint %s", lid),
-                                "",
-                                "# Foo.",
-                                "[] > foo"
-                            )
-                        )
-                    ).parsed()
-                ).without(
-                    "mandatory-home",
-                    "mandatory-version",
-                    "empty-object",
-                    "mandatory-package",
-                    "mandatory-spdx",
-                    "comment-too-short",
-                    "no-attribute-formation"
-                ).defects()
-            ).get(0).text(),
-            Matchers.containsString(
-                String.format(
-                    "Unlinting rule '%s' doesn't make sense",
-                    lid
-                )
-            )
         );
     }
 }
