@@ -61,7 +61,7 @@ final class PkWpa extends IterableEnvelope<Lint<Map<String, XML>>> {
      * @param names Lint names to exclude
      * @return Filtered lints
      */
-    PkWpa without(final String... names) {
+    static PkWpa without(final String... names) {
         return new PkWpa(new WithoutLints<>(PkWpa.WPA, new ListOf<>(names)));
     }
 }

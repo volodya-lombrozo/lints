@@ -111,7 +111,7 @@ public final class Programs {
     public Programs without(final String... names) {
         return new Programs(
             this.pkg,
-            new PkWpa(new WithoutLints<>(this.lints, new ListOf<>(names))).without(names)
+            PkWpa.without(names)
         );
     }
 

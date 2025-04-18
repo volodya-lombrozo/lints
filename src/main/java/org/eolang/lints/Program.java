@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
-import org.cactoos.list.ListOf;
 
 /**
  * A single XMIR program to analyze.
@@ -81,7 +80,7 @@ public final class Program {
     public Program without(final String... names) {
         return new Program(
             this.xmir,
-            new PkMono(new WithoutLints<>(this.lints, new ListOf<>(names))).without(names)
+            PkMono.without(names)
         );
     }
 

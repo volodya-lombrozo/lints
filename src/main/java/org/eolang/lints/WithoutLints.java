@@ -10,6 +10,7 @@ import org.cactoos.iterable.IterableEnvelope;
 
 /**
  * Lints without some lints.
+ * @param <X> Lint generic type
  * @since 0.0.46
  */
 final class WithoutLints<X extends Lint<?>> extends IterableEnvelope<X> {
