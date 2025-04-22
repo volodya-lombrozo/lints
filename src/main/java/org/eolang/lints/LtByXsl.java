@@ -20,6 +20,7 @@ import org.cactoos.Input;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
+import org.eolang.parser.ObjectName;
 
 /**
  * Lint by XSL.
@@ -102,7 +103,7 @@ final class LtByXsl implements Lint<XML> {
                     new Defect.Default(
                         this.rule,
                         Severity.parsed(sever.get()),
-                        LtByXsl.findName(xmir),
+                        new ObjectName(xmir).get(),
                         this.lineno(xml),
                         xml.text().get(),
                         LtByXsl.experimental(xml)
@@ -166,19 +167,6 @@ final class LtByXsl implements Lint<XML> {
             );
         }
         return lineno;
-    }
-
-    /**
-     * Find the name of the program.
-     * @param program XML program
-     * @return Name of the program.
-     */
-    private static String findName(final XML program) {
-        return new Xnav(program.inner())
-            .element("program")
-            .attribute("name")
-            .text()
-            .orElse("unknown");
     }
 
     /**
