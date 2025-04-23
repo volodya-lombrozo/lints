@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collection;
 import java.util.stream.Collectors;
 import matchers.DefectMatcher;
 import org.cactoos.list.ListOf;
@@ -145,32 +144,34 @@ final class ProgramsTest {
         strings = {"unit-test-missing", "unit-test-missing:0"}
     )
     void catchesNonExistingDefectAfterLintWasRemoved(final String lid) throws IOException {
-        final Collection<Defect> found = new Programs(
-            new MapOf<>(
-                "f",
-                new EoSyntax(
-                    String.join(
-                        "\n",
-                        String.format("+unlint %s", lid),
-                        "",
-                        "# F.",
-                        "[] > f"
-                    )
-                ).parsed()
-            )
-        ).without("unit-test-missing").defects();
-        MatcherAssert.assertThat(
-            "Defects were not found, though code is broken",
-            found,
-            Matchers.hasSize(Matchers.greaterThan(0))
-        );
         MatcherAssert.assertThat(
             "Found defect does not match with expected",
-            new ListOf<>(found).get(0).text(),
-            Matchers.containsString(
-                String.format(
-                    "Unlinting rule '%s' doesn't make sense",
-                    lid
+            new Programs(
+                new MapOf<>(
+                    "f",
+                    new EoSyntax(
+                        String.join(
+                            "\n",
+                            String.format("+unlint %s", lid),
+                            "",
+                            "# F.",
+                            "[] > f"
+                        )
+                    ).parsed()
+                )
+            ).without("unit-test-missing").defects(),
+            Matchers.allOf(
+                Matchers.iterableWithSize(1),
+                Matchers.hasItem(
+                    Matchers.hasToString(
+                        Matchers.allOf(
+                            Matchers.containsString("unlint-non-existing-defect WARNING"),
+                            Matchers.containsString(
+                                String.format("Unlinting rule '%s' doesn't make sense,", lid)
+                            ),
+                            Matchers.containsString("since there are no defects with it")
+                        )
+                    )
                 )
             )
         );
