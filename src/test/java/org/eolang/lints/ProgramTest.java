@@ -295,33 +295,37 @@ final class ProgramTest {
     void catchesNonExistingDefectAfterLintWasRemoved(final String lid) throws IOException {
         MatcherAssert.assertThat(
             "Found defect does not match with expected",
-            new ListOf<>(
-                new Program(
-                    new EoSyntax(
-                        new InputOf(
-                            String.join(
-                                "\n",
-                                String.format("+unlint %s", lid),
-                                "",
-                                "# Foo.",
-                                "[] > foo"
-                            )
+            new Program(
+                new EoSyntax(
+                    String.join(
+                        "\n",
+                        String.format("+unlint %s", lid),
+                        "",
+                        "# Foo.",
+                        "[] > foo"
+                    )
+                ).parsed()
+            ).without(
+                "mandatory-home",
+                "mandatory-version",
+                "empty-object",
+                "mandatory-package",
+                "mandatory-spdx",
+                "comment-too-short",
+                "no-attribute-formation"
+            ).defects(),
+            Matchers.allOf(
+                Matchers.iterableWithSize(1),
+                Matchers.hasItem(
+                    Matchers.hasToString(
+                        Matchers.allOf(
+                            Matchers.containsString("unlint-non-existing-defect WARNING"),
+                            Matchers.containsString(
+                                String.format("Unlinting rule '%s' doesn't make sense,", lid)
+                            ),
+                            Matchers.containsString("since there are no defects with it")
                         )
-                    ).parsed()
-                ).without(
-                    "mandatory-home",
-                    "mandatory-version",
-                    "empty-object",
-                    "mandatory-package",
-                    "mandatory-spdx",
-                    "comment-too-short",
-                    "no-attribute-formation"
-                ).defects()
-            ).get(0).text(),
-            Matchers.containsString(
-                String.format(
-                    "Unlinting rule '%s' doesn't make sense",
-                    lid
+                    )
                 )
             )
         );

@@ -149,7 +149,6 @@ final class ProgramsTest {
             new MapOf<>(
                 "f",
                 new EoSyntax(
-                    "f",
                     String.join(
                         "\n",
                         String.format("+unlint %s", lid),
