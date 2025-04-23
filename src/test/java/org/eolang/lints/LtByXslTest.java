@@ -4,6 +4,7 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.manifests.Manifests;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import fixtures.BytecodeClass;
@@ -34,6 +35,8 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.xembly.Directives;
+import org.xembly.Xembler;
 import org.yaml.snakeyaml.Yaml;
 
 /**
@@ -276,7 +279,22 @@ final class LtByXslTest {
             (key, val) -> {
                 if ("document".equals(key) && !loaded.containsKey("schema-ignore")) {
                     Assertions.assertDoesNotThrow(
-                        () -> new StrictXmir(new XMLDocument(val.toString())).inner(),
+                        () ->
+                            new StrictXmir(
+                                new XMLDocument(
+                                    new Xembler(
+                                        new Directives()
+                                            .xpath("/object")
+                                            .attr(
+                                                "noNamespaceSchemaLocation xsi http://www.w3.org/2001/XMLSchema-instance",
+                                                String.format(
+                                                    "https://www.eolang.org/xsd/XMIR-%s.xsd",
+                                                    Manifests.read("EO-Version")
+                                                )
+                                            )
+                                    ).apply(new XMLDocument(val.toString()).inner())
+                                )
+                            ).inner(),
                         "XMIR validation should pass without errors"
                     );
                 }

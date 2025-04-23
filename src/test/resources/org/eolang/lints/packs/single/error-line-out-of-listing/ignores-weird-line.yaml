@@ -7,7 +7,7 @@ asserts:
   - /defects[count(defect)=0]
 schema-ignore: true
 document: |
-  <object xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.eolang.org/xsd/XMIR-0.56.0.xsd">
+  <object>
     <listing>first line
       second line
       third line</listing>

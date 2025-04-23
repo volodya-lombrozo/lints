@@ -8,7 +8,7 @@ asserts:
   - /defects/defect[@line='2']
   - /defects/defect[@line='3']
 document: |
-  <object xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.eolang.org/xsd/XMIR-0.56.0.xsd">
+  <object>
     <o name="foo">
       <o line="1" base="Q.foo" name="z"/>
       <o line="2" base="∅" name="x"/>
