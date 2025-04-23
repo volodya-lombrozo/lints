@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import matchers.DefectsMatcher;
@@ -20,6 +21,7 @@ import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.EoSyntax;
+import org.eolang.parser.StrictXmir;
 import org.eolang.xax.XtSticky;
 import org.eolang.xax.XtYaml;
 import org.eolang.xax.XtoryMatcher;
@@ -32,6 +34,7 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * Test for {@link LtByXsl}.
@@ -262,6 +265,20 @@ final class LtByXslTest {
                     defect.context().length(),
                     Matchers.lessThanOrEqualTo(300)
                 )
+        );
+    }
+
+    @ParameterizedTest
+    @ClasspathSource(value = "org/eolang/lints/packs/single/", glob = "**.yaml")
+    void validatesPacksAgainstXsdSchema(final String yaml) {
+        final Map<String, Object> loaded = new Yaml().load(yaml);
+        loaded.forEach(
+            (key, val) -> {
+                if ("document".equals(key)) {
+                    // validate against XMIR schema
+                    new StrictXmir(new XMLDocument(val.toString())).inner();
+                }
+            }
         );
     }
 }
