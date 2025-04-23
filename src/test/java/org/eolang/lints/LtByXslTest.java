@@ -274,10 +274,10 @@ final class LtByXslTest {
         final Map<String, Object> loaded = new Yaml().load(yaml);
         loaded.forEach(
             (key, val) -> {
-                if ("document".equals(key) && !loaded.containsKey("xmir-ignore")) {
+                if ("document".equals(key) && !loaded.containsKey("schema-ignore")) {
                     Assertions.assertDoesNotThrow(
                         () -> new StrictXmir(new XMLDocument(val.toString())).inner(),
-                        "XMIR should be correctly defined under the `document` key in test pack"
+                        "XMIR validation should pass without errors"
                     );
                 }
             }

@@ -5,7 +5,7 @@ sheets:
   - /org/eolang/lints/comments/comment-not-capitalized.xsl
 asserts:
   - /defects[count(defect[@context and @severity='warning'])=1]
-xmir-ignore: true
+schema-ignore: true
 document: |
   <object>
     <o name="foo" pos="0">

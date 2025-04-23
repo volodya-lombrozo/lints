@@ -5,7 +5,7 @@ sheets:
   - /org/eolang/lints/critical/schema-is-absent.xsl
 asserts:
   - /defects[not(defect)]
-xmir-ignore: true
+schema-ignore: true
 document: |
   <object xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://www.eolang.org/xsd/XMIR-anything.xsd">
