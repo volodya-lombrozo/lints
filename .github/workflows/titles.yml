@@ -13,7 +13,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-24.04
     steps:
-      - uses: horw/issue-title-ai@v0.1.1b
+      - uses: horw/issue-title-ai@v0.1.2b
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
@@ -22,6 +22,8 @@ jobs:
           auto-update: true
           max-issues: 10
           model: gpt-4
+          verbose: true
+          strip-characters: '"'
           prompt: |-
             You are an expert at writing clear, concise, and descriptive GitHub issue titles.
             Please analyze the following issue title and determine if it needs improvement.
