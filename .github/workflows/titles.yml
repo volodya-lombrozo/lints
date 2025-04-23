@@ -13,7 +13,7 @@ jobs:
     timeout-minutes: 15
     runs-on: ubuntu-24.04
     steps:
-      - uses: horw/issue-title-ai@v0.1
+      - uses: horw/issue-title-ai@v0.1.2b
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           openai-api-key: ${{ secrets.OPENAI_API_KEY }}
@@ -22,6 +22,8 @@ jobs:
           auto-update: true
           max-issues: 10
           model: gpt-4
+          verbose: true
+          strip-characters: '"'
           prompt: |-
             You are an expert at writing clear, concise, and descriptive GitHub issue titles.
             Please analyze the following issue title and determine if it needs improvement.
@@ -40,9 +42,9 @@ jobs:
             1. It must sound like a bug report, assuring that something is broken
             2. Use aggressive tone, to ephasize the problem at hands
             3. Keep it concise (under 80 characters ideally)
-            5. Avoid vague terms like "bug" or "issue" without context
-            6. Don't change the meaning or intent of the original issue
-            7. If the original title is already good enough, do not change it
+            4. Avoid vague terms like "bug" or "issue" without context
+            5. Don't change the meaning or intent of the original issue
+            6. If the original title is already good enough, do not change it
 
             Your response should ONLY contain the improved issue title
             or the original title if it's already good.
