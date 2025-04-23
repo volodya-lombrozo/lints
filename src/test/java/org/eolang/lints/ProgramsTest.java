@@ -143,7 +143,7 @@ final class ProgramsTest {
     @ValueSource(
         strings = {"unit-test-missing", "unit-test-missing:0"}
     )
-    void catchesNonExistingDefectAfterLintWasRemoved(final String lid) throws IOException {
+    void catchesBrokenUnlintAfterLintWasRemoved(final String lid) throws IOException {
         MatcherAssert.assertThat(
             "Found defect does not match with expected",
             new Programs(

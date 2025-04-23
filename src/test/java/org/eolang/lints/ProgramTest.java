@@ -292,7 +292,7 @@ final class ProgramTest {
     @ValueSource(
         strings = {"mandatory-home", "mandatory-home:0"}
     )
-    void catchesNonExistingDefectAfterLintWasRemoved(final String lid) throws IOException {
+    void catchesBrokenUnlintAfterLintWasRemoved(final String lid) throws IOException {
         MatcherAssert.assertThat(
             "Found defect does not match with expected",
             new Program(
