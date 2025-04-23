@@ -6,8 +6,8 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='error'])=1]
 document: |
-  <object>
-    <o abstract="">
+  <object xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.eolang.org/xsd/XMIR-0.56.0.xsd">
+    <o>
       <o name="foo"/>
       <o name="bar" base="foo"/>
     </o>

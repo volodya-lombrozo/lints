@@ -7,8 +7,8 @@ asserts:
   - /defects[count(defect[@severity='critical'])=1]
   - /defects/defect[@line='2']
 document: |
-  <object>
-    <o line="2" base="man">
+  <object xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.eolang.org/xsd/XMIR-0.56.0.xsd">
+    <o line="2" base="Q.man">
       <o base="string" as="name"/>
       <o base="number"/>
     </o>
