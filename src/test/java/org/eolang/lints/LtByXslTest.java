@@ -275,8 +275,10 @@ final class LtByXslTest {
         loaded.forEach(
             (key, val) -> {
                 if ("document".equals(key)) {
-                    // validate against XMIR schema
-                    new StrictXmir(new XMLDocument(val.toString())).inner();
+                    Assertions.assertDoesNotThrow(
+                        () -> new StrictXmir(new XMLDocument(val.toString())).inner(),
+                        "XMIR should be correctly defined under the `document` key in test pack"
+                    );
                 }
             }
         );
