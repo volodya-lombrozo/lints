@@ -5,14 +5,15 @@ sheets:
   - /org/eolang/lints/comments/comment-without-dot.xsl
 asserts:
   - /defects[count(defect[@context and @severity='warning'])=1]
+xmir-ignore: true
 document: |
-  <object xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://www.eolang.org/xsd/XMIR-0.56.0.xsd">
+  <object>
     <o name="foo" pos="0">
       <o base="Q.org.eolang.number" name="@">
         <o base="Q.org.eolang.bytes">40-45-00-00-00-00-00-00</o>
       </o>
     </o>
     <comments>
-      <comment line="2">This comment does not ends with a dot</comment>
+      <comment>This comment does not ends with a dot</comment>
     </comments>
   </object>
