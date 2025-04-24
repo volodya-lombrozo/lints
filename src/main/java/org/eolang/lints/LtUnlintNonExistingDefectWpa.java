@@ -24,7 +24,7 @@ import org.eolang.parser.ObjectName;
  * Lint for checking `+unlint` meta to suppress non-existing defects in WPA scope.
  * This lint was not included in {@link LtUnlintNonExistingDefect}, because we need
  * to aggregate the XMIR defects using supplied lints. In {@link LtUnlintNonExistingDefect}
- * we work with single program scope, while this class works with WPA scope.
+ * we work with single XMIR scope, while this class works with WPA scope.
  *
  * @see LtUnlintNonExistingDefect
  * @since 0.0.42
@@ -128,7 +128,7 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
     /**
      * Find existing defects.
      *
-     * @param pkg Package with programs to scan
+     * @param pkg Program package to scan
      * @return Map of existing defects
      */
     private Map<XML, Map<String, List<Integer>>> existingDefects(final Map<String, XML> pkg) {
@@ -150,7 +150,7 @@ final class LtUnlintNonExistingDefectWpa implements Lint<Map<String, XML>> {
                 } catch (final IOException exception) {
                     throw new IllegalStateException(
                         String.format(
-                            "IO operation failed while linting package of programs with %s",
+                            "IO operation failed while linting program with %s",
                             wpl.name()
                         ),
                         exception

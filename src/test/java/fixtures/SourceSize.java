@@ -8,30 +8,30 @@ package fixtures;
  * Program size.
  * @since 0.0.45
  */
-public enum ProgramSize {
+public enum SourceSize {
 
     /**
-     * Standard program.
+     * Standard source.
      */
     S("S", 5, 50, "com/sun/jna/PointerType.class"),
 
     /**
-     * Medium-sized program.
+     * Medium-sized source.
      */
     M("M", 90, 200, "com/sun/jna/Memory.class"),
 
     /**
-     * Large-size program.
+     * Large-size source.
      */
     L("L", 400, 700, "com/sun/jna/Pointer.class"),
 
     /**
-     * Extra-large program.
+     * Extra-large source.
      */
     XL("XL", 800, 1200, "com/sun/jna/Structure.class"),
 
     /**
-     * XXL program.
+     * XXL source.
      */
     XXL(
         "XXL",
@@ -41,7 +41,7 @@ public enum ProgramSize {
     );
 
     /**
-     * Program largeness.
+     * Source largeness.
      */
     private final String largeness;
 
@@ -68,7 +68,7 @@ public enum ProgramSize {
      * @param java Java bytecode class path
      * @checkstyle ParameterNumberCheck (3 lines)
      */
-    ProgramSize(final String txt, final int start, final int end, final String java) {
+    SourceSize(final String txt, final int start, final int end, final String java) {
         this.largeness = txt;
         this.min = start;
         this.max = end;
@@ -76,7 +76,7 @@ public enum ProgramSize {
     }
 
     /**
-     * Program type.
+     * Source largeness.
      * @return Program type as string
      */
     public String type() {
