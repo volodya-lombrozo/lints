@@ -25,19 +25,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 /**
- * Test for {@link Programs}.
+ * Test for {@link Program}.
  *
  * @since 0.1.0
  */
 @ExtendWith(MktmpResolver.class)
-final class ProgramsTest {
+final class ProgramTest {
 
     @Test
     void checksSimple(@Mktmp final Path dir) throws IOException {
         MatcherAssert.assertThat(
             "the defect is found",
-            new Programs(
-                this.withProgram(
+            new Program(
+                this.withSource(
                     dir,
                     "a/b/c/foo.xmir",
                     "# first.\n[] > foo\n# second.\n[] > foo\n"
@@ -54,8 +54,8 @@ final class ProgramsTest {
     void skipsAllWarnings(@Mktmp final Path dir) throws IOException {
         MatcherAssert.assertThat(
             "the defect is found",
-            new Programs(
-                this.withProgram(
+            new Program(
+                this.withSource(
                     dir,
                     "bar.xmir",
                     String.join(
@@ -74,7 +74,7 @@ final class ProgramsTest {
     @Tag("deep")
     @RepeatedTest(5)
     void checksInParallel(@Mktmp final Path dir) throws IOException {
-        final Path program = this.withProgram(
+        final Path source = this.withSource(
             dir,
             "foo.xmir",
             "# first.\n# second.\n[] > foo\n"
@@ -83,7 +83,7 @@ final class ProgramsTest {
             "",
             new SetOf<>(
                 new Together<>(
-                    thread -> new Programs(program).defects().size()
+                    thread -> new Program(source).defects().size()
                 )
             ).size(),
             Matchers.equalTo(1)
@@ -93,18 +93,18 @@ final class ProgramsTest {
     @Test
     void doesNotThrowIoException() {
         Assertions.assertDoesNotThrow(
-            () -> new Programs(new ListOf<>()).defects(),
+            () -> new Program(new ListOf<>()).defects(),
             "Exception was thrown, but it should not be"
         );
     }
 
     @Test
-    void createsProgramsWithoutOneLint(@Mktmp final Path dir) throws IOException {
+    void createsProgramWithoutOneLint(@Mktmp final Path dir) throws IOException {
         final String disabled = "unit-test-missing";
         MatcherAssert.assertThat(
             "Defects for disabled lint are not empty, but should be",
-            new Programs(
-                this.withProgram(
+            new Program(
+                this.withSource(
                     dir,
                     "bar.xmir",
                     "# first.\n# second.\n[] > bar\n"
@@ -117,16 +117,16 @@ final class ProgramsTest {
     }
 
     @Test
-    void createsProgramsWithoutMultipleLints(@Mktmp final Path dir) throws IOException {
+    void createsProgramWithoutMultipleLints(@Mktmp final Path dir) throws IOException {
         MatcherAssert.assertThat(
             "Defects for disabled lint are not empty, but should be",
-            new Programs(
-                this.withProgram(
+            new Program(
+                this.withSource(
                     dir,
                     "bar.xmir",
                     "# first.\n# second.\n[] > bar\n"
                 ),
-                this.withProgram(
+                this.withSource(
                     dir,
                     "foo-test.xmir",
                     "# first.\n# second.\n[] > x\n"
@@ -136,7 +136,7 @@ final class ProgramsTest {
         );
     }
 
-    private Path withProgram(final Path dir, final String name,
+    private Path withSource(final Path dir, final String name,
         final String text) throws IOException {
         final Path path = dir.resolve(name);
         path.toFile().getParentFile().mkdirs();

@@ -44,7 +44,7 @@ final class LtWpaUnlint implements Lint<Map<String, XML>> {
             if (xmir == null) {
                 throw new IllegalArgumentException(
                     Logger.format(
-                        "The \"%s\" defect was found in \"%s\", but this program is not in scope (%[list]s), how come?",
+                        "The \"%s\" defect was found in \"%s\", but this source is not in scope (%[list]s), how come?",
                         defect.rule(), defect.program(), map.keySet()
                     )
                 );

@@ -27,7 +27,7 @@ import org.cactoos.text.UncheckedText;
 import org.eolang.parser.ObjectName;
 
 /**
- * All atom FQNs in the entire scope of programs must be unique.
+ * All atom FQNs in the entire scope of EO program must be unique.
  * This lint firstly transforms the original XMIR into XMIR that contains `@fqn`
  * attributes for each atom `o`, and then lints it.
  *

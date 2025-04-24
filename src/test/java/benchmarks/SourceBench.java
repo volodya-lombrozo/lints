@@ -36,7 +36,7 @@ import org.openjdk.jmh.annotations.Warmup;
 @Warmup(iterations = 1)
 @Measurement(iterations = 3, time = 1, timeUnit = TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
-public class ProgramBench {
+public class SourceBench {
 
     @Benchmark
     public final void scansXmir(final BenchmarkState state) {
@@ -51,7 +51,7 @@ public class ProgramBench {
     public static class BenchmarkState {
 
         /**
-         * Program size.
+         * Source size.
          */
         @Param({"S", "M", "L", "XL", "XXL"})
         private String size;

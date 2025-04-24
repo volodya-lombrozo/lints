@@ -43,7 +43,7 @@ final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
                 if (Objects.equals(oth, xmir)) {
                     continue;
                 }
-                LtObjectIsNotUnique.programObjects(second).entrySet().stream()
+                LtObjectIsNotUnique.sourceObjects(second).entrySet().stream()
                     .filter(
                         object ->
                             LtObjectIsNotUnique.containsDuplicate(xml, second, object.getKey())
@@ -83,12 +83,12 @@ final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
     private static boolean containsDuplicate(
         final Xnav original, final Xnav oth, final String name
     ) {
-        return LtObjectIsNotUnique.programObjects(original).containsKey(name)
+        return LtObjectIsNotUnique.sourceObjects(original).containsKey(name)
             && LtObjectIsNotUnique.packageName(oth)
             .equals(LtObjectIsNotUnique.packageName(original));
     }
 
-    private static Map<String, String> programObjects(final Xnav xml) {
+    private static Map<String, String> sourceObjects(final Xnav xml) {
         final List<String> names = xml.path("/object/o/@name")
             .map(oname -> oname.text().get())
             .collect(Collectors.toList());

@@ -16,7 +16,7 @@ import com.yegor256.tojos.TjCached;
 import com.yegor256.tojos.TjDefault;
 import com.yegor256.tojos.Tojos;
 import fixtures.BytecodeClass;
-import fixtures.ProgramSize;
+import fixtures.SourceSize;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -50,20 +50,20 @@ import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 /**
- * Test for {@link Program}.
+ * Test for {@link Source}.
  *
  * @since 0.0.1
  * @checkstyle MethodBodyCommentsCheck (50 lines)
  */
 @SuppressWarnings("PMD.TooManyMethods")
 @ExtendWith(MktmpResolver.class)
-final class ProgramTest {
+final class SourceTest {
 
     @Test
     void returnsEmptyListOfDefects() throws IOException {
         MatcherAssert.assertThat(
             "defects found even though the code is clean",
-            new Program(
+            new Source(
                 new EoSyntax(
                     String.join(
                         "\n",
@@ -89,7 +89,7 @@ final class ProgramTest {
     void suppressesManyLints() throws IOException {
         MatcherAssert.assertThat(
             "defect found even though lint is suppressed",
-            new Program(
+            new Source(
                 new EoSyntax(
                     new InputOf(
                         String.join(
@@ -125,7 +125,7 @@ final class ProgramTest {
         );
         MatcherAssert.assertThat(
             "the defect is found",
-            new Program(path).defects().size(),
+            new Source(path).defects().size(),
             Matchers.greaterThan(0)
         );
     }
@@ -138,7 +138,7 @@ final class ProgramTest {
             "wrong number of defects found, in parallel",
             new SetOf<>(
                 new Together<>(
-                    t -> new Program(
+                    t -> new Source(
                         new EoSyntax(
                             "# first.\n[] > foo\n"
                         ).parsed()
@@ -150,10 +150,10 @@ final class ProgramTest {
     }
 
     @Test
-    void checksLargerBrokenProgram() throws IOException {
+    void checksLargerBrokenSource() throws IOException {
         MatcherAssert.assertThat(
             "checking passes",
-            new Program(
+            new Source(
                 new EoSyntax(
                     new InputOf(
                         String.join(
@@ -205,7 +205,7 @@ final class ProgramTest {
         ).parsed();
         MatcherAssert.assertThat(
             String.format("no errors in canonical code in %s", xmir),
-            new Program(xmir).defects(),
+            new Source(xmir).defects(),
             Matchers.emptyIterable()
         );
     }
@@ -214,19 +214,19 @@ final class ProgramTest {
     void doesNotThrowIoException() {
         Assertions.assertDoesNotThrow(
             () ->
-                new Program(
-                    new XMLDocument("<program name='correct'/>")
+                new Source(
+                    new XMLDocument("<object><o name='correct'/></object>")
                 ).defects(),
             "Exception was thrown, but it should not be"
         );
     }
 
     @Test
-    void createsProgramWithoutOneLint() throws IOException {
+    void createsSourceWithoutOneLint() throws IOException {
         final String disabled = "ascii-only";
         MatcherAssert.assertThat(
             "Defects for disabled lint are not empty, but should be",
-            new Program(
+            new Source(
                 new EoSyntax(
                     "# привет\n# как дела?\n[] > foo\n"
                 ).parsed()
@@ -238,10 +238,10 @@ final class ProgramTest {
     }
 
     @Test
-    void createsProgramWithoutMultipleLints() throws IOException {
+    void createsSourceWithoutMultipleLints() throws IOException {
         MatcherAssert.assertThat(
             "Defects for disabled lints are not empty, but should be",
-            new Program(
+            new Source(
                 new EoSyntax(
                     "# привет\n# как дела?\n[] > foo\n"
                 ).parsed()
@@ -265,7 +265,7 @@ final class ProgramTest {
     void returnsOnlyOneDefect() throws IOException {
         MatcherAssert.assertThat(
             "Only one defect should be found",
-            new Program(
+            new Source(
                 new EoSyntax(
                     String.join(
                         "\n",
@@ -291,21 +291,21 @@ final class ProgramTest {
     @ExtendWith(MktmpResolver.class)
     @ExtendWith(MayBeSlow.class)
     @Timeout(600L)
-    void lintsBenchmarkProgramsFromJava() throws Exception {
+    void lintsBenchmarkSourcesFromJava() throws Exception {
         final StringBuilder sum = new StringBuilder();
-        new ListOf<>(ProgramSize.values()).forEach(
-            program -> {
-                final XML xmir = new Unchecked<>(new BytecodeClass(program)).value();
+        new ListOf<>(SourceSize.values()).forEach(
+            source -> {
+                final XML xmir = new Unchecked<>(new BytecodeClass(source)).value();
                 final long start = System.currentTimeMillis();
-                final Collection<Defect> defects = new BcProgram(
-                    xmir, program.type()
+                final Collection<Defect> defects = new BcSource(
+                    xmir, source.type()
                 ).defects();
                 final long msec = System.currentTimeMillis() - start;
                 sum.append(
                     String.join(
                         "\n",
                         String.format(
-                            "Input: %s (%s program)", program.java(), program.type()
+                            "Input: %s (%s source)", source.java(), source.type()
                         ),
                         Logger.format(
                             "Lint time: %s[ms]s (%d ms)",
@@ -327,28 +327,28 @@ final class ProgramTest {
     }
 
     @Test
-    void checksJavaProgramsForBenchmarking() {
-        new ListOf<>(ProgramSize.values()).forEach(
-            program -> {
+    void checksJavaSourcesForBenchmarking() {
+        new ListOf<>(SourceSize.values()).forEach(
+            src -> {
                 final LineCountVisitor visitor = new LineCountVisitor();
                 new ClassReader(
                     new UncheckedBytes(
                         new BytesOf(
                             new ResourceOf(
-                                program.java()
+                                src.java()
                             )
                         )
                     ).asBytes()
                 ).accept(visitor, 0);
                 final int lines = visitor.total();
-                final int min = program.minAllowed();
-                final int max = program.maxAllowed();
+                final int min = src.minAllowed();
+                final int max = src.maxAllowed();
                 MatcherAssert.assertThat(
                     String.join(
                         ", ",
                         String.format(
-                            "Java program \"%s\" was supplied with incorrect size marker (\"%s\")",
-                            program, program.type()
+                            "Java source \"%s\" was supplied with incorrect size marker (\"%s\")",
+                            src, src.type()
                         ),
                         String.format(
                             "since it has %d executable lines inside",
@@ -370,10 +370,10 @@ final class ProgramTest {
     }
 
     /**
-     * Benchmarked program.
+     * Benchmarked source.
      * @since 0.0.29
      */
-    private static final class BcProgram {
+    private static final class BcSource {
 
         /**
          * XMIR.
@@ -391,18 +391,18 @@ final class ProgramTest {
         private final Tojos timings;
 
         /**
-         * Size marker of the program.
+         * Size marker of the source.
          */
         private final String marker;
 
         /**
          * Ctor.
-         * @param program XMIR program to lint
-         * @param size Program size
+         * @param source XMIR source to lint
+         * @param size Source size
          */
-        BcProgram(final XML program, final String size) {
+        BcSource(final XML source, final String size) {
             this(
-                program,
+                source,
                 new Synced<>(new Sticky<>(new PkMono())),
                 new TjCached(
                     new TjDefault(
@@ -415,16 +415,16 @@ final class ProgramTest {
 
         /**
          * Ctor.
-         * @param program XMIR program to lint
+         * @param source XMIR source file to lint
          * @param lnts Lints to apply
          * @param tmngs Timings
-         * @param size Program size
+         * @param size Source size
          * @checkstyle ParameterNumberCheck (5 lines)
          */
-        BcProgram(
-            final XML program, final Iterable<Lint<XML>> lnts, final Tojos tmngs, final String size
+        BcSource(
+            final XML source, final Iterable<Lint<XML>> lnts, final Tojos tmngs, final String size
         ) {
-            this.xmir = program;
+            this.xmir = source;
             this.lints = lnts;
             this.timings = tmngs;
             this.marker = size;
@@ -433,9 +433,9 @@ final class ProgramTest {
         /**
          * Defects.
          * @return Defects
-         * @todo #144:35min Resolve code duplication with Program.java class.
-         *  Currently, BcProgram.java is duplication of Program.java. Let's make
-         *  it use the original Program.java, so they will stay synced. Don't forget
+         * @todo #144:35min Resolve code duplication with Source.java class.
+         *  Currently, BcSource.java is duplication of Source.java. Let's make
+         *  it use the original Source.java, so they will stay synced. Don't forget
          *  to remove this puzzle.
          */
         public Collection<Defect> defects() {
@@ -491,7 +491,7 @@ final class ProgramTest {
             return new MethodVisitor(Opcodes.ASM9) {
                 @Override
                 public void visitLineNumber(final int line, final Label start) {
-                    ProgramTest.LineCountVisitor.this.count += 1;
+                    SourceTest.LineCountVisitor.this.count += 1;
                 }
             };
         }

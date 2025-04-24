@@ -24,7 +24,7 @@ import org.cactoos.list.ListOf;
 import org.cactoos.list.Synced;
 
 /**
- * A collection of XMIR programs to analyze.
+ * Whole EO program, as collection of XMIR sources to analyze.
  * To get the current version of `lints`, you should read it from
  * MANIFEST.MF file, packaged with library. You can do it like this:
  * <pre>
@@ -37,7 +37,7 @@ import org.cactoos.list.Synced;
  * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR</a>
  * @since 0.1.0
  */
-public final class Programs {
+public final class Program {
 
     /**
      * Collection of mono lints, preloaded on JVM start.
@@ -56,7 +56,7 @@ public final class Programs {
     private final Iterable<Lint<Map<String, XML>>> lints;
 
     /**
-     * The package of XMIR files.
+     * The program package of XMIR files.
      */
     private final Map<String, XML> pkg;
 
@@ -65,7 +65,7 @@ public final class Programs {
      * @param dirs The directory
      * @throws IOException If fails
      */
-    public Programs(final Path... dirs) throws IOException {
+    public Program(final Path... dirs) throws IOException {
         this(Arrays.asList(dirs));
     }
 
@@ -78,16 +78,16 @@ public final class Programs {
      * @param dirs The directory
      * @throws IOException If fails
      */
-    public Programs(final Collection<Path> dirs) throws IOException {
-        this(Programs.discover(dirs));
+    public Program(final Collection<Path> dirs) throws IOException {
+        this(Program.discover(dirs));
     }
 
     /**
      * Ctor.
      * @param map The map with them
      */
-    public Programs(final Map<String, XML> map) {
-        this(map, Programs.WPA);
+    public Program(final Map<String, XML> map) {
+        this(map, Program.WPA);
     }
 
     /**
@@ -99,19 +99,19 @@ public final class Programs {
      * @param map The map with them
      * @param list The lints
      */
-    Programs(final Map<String, XML> map, final Iterable<Lint<Map<String, XML>>> list) {
+    Program(final Map<String, XML> map, final Iterable<Lint<Map<String, XML>>> list) {
         this.pkg = Collections.unmodifiableMap(map);
         this.lints = list;
     }
 
     /**
-     * Programs with disabled lints.
+     * Program with disabled lints.
      * @param names Lint names
      * @return Program analysis without specifics names
      */
-    public Programs without(final String... names) {
+    public Program without(final String... names) {
         final Collection<String> listed = new ListOf<>(names);
-        return new Programs(
+        return new Program(
             this.pkg,
             new Filtered<>(
                 this.lints, lint -> () -> !listed.contains(lint.name())
@@ -120,7 +120,7 @@ public final class Programs {
     }
 
     /**
-     * Find defects possible defects in the XMIR file.
+     * Find all possible defects in the EO program.
      * @return All defects found
      * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR guide</a>
      * @see <a href="https://www.eolang.org/XMIR.html">XMIR specification</a>
@@ -154,7 +154,7 @@ public final class Programs {
     private static Map<String, XML> discover(final Iterable<Path> dirs) throws IOException {
         final Map<String, XML> map = new HashMap<>(0);
         for (final Path dir : dirs) {
-            map.putAll(Programs.discover(dir));
+            map.putAll(Program.discover(dir));
         }
         return map;
     }

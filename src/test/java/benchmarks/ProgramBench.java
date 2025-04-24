@@ -12,8 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 import org.cactoos.scalar.IoChecked;
-import org.eolang.lints.Source;
 import org.eolang.lints.Program;
+import org.eolang.lints.Source;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -37,7 +37,7 @@ import org.openjdk.jmh.annotations.Warmup;
 @Warmup(iterations = 1)
 @Measurement(iterations = 3, time = 1, timeUnit = TimeUnit.MILLISECONDS)
 @State(Scope.Benchmark)
-public class ProgramsBench {
+public class ProgramBench {
 
     /**
      * Large XMIR document.
@@ -45,11 +45,11 @@ public class ProgramsBench {
     private final Path home;
 
     @SuppressWarnings("PMD.ConstructorOnlyInitializesOrCallOtherConstructors")
-    public ProgramsBench() {
+    public ProgramBench() {
         try {
             this.home = Files.createTempDirectory("tmp");
             for (int idx = 0; idx < 10; ++idx) {
-                final String name = String.format("program-%d.xmir", idx);
+                final String name = String.format("src-%d.xmir", idx);
                 Files.write(
                     this.home.resolve(String.format("%s.xmir", name)),
                     new IoChecked<>(new BytecodeClass(name, SourceSize.L.java()))
