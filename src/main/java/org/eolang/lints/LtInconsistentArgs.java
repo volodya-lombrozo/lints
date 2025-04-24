@@ -41,12 +41,12 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
         final Collection<Defect> defects = new LinkedList<>();
         final Map<Xnav, Map<String, List<Integer>>> whole = LtInconsistentArgs.scanUsages(pkg);
         final Map<String, List<Xnav>> bases = LtInconsistentArgs.baseOccurrences(whole);
-        LtInconsistentArgs.mergedPrograms(whole).forEach(
+        LtInconsistentArgs.mergedSources(whole).forEach(
             (base, counts) -> {
                 if (counts.stream().distinct().count() != 1L) {
-                    final List<Xnav> programs = bases.get(base);
-                    programs.forEach(
-                        program -> program.path(String.format("//o[@base='%s']", base))
+                    final List<Xnav> sources = bases.get(base);
+                    sources.forEach(
+                        src -> src.path(String.format("//o[@base='%s']", base))
                             .map(o -> Integer.parseInt(o.attribute("line").text().orElse("0")))
                             .forEach(
                                 line ->
@@ -54,7 +54,7 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                                         new Defect.Default(
                                             this.name(),
                                             Severity.WARNING,
-                                            new ObjectName(new XMLDocument(program.node())).get(),
+                                            new ObjectName(new XMLDocument(src.node())).get(),
                                             line,
                                             String.format(
                                                 "Object '%s' has arguments inconsistency",
@@ -85,16 +85,16 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
 
     /**
      * Scan all usages across package.
-     * @param pkg Package with programs
-     * @return Map of all object usages: program is the key, object name, arguments is the value.
+     * @param pkg Package with sources
+     * @return Map of all object usages: source is the key, object name, arguments is the value.
      */
     private static Map<Xnav, Map<String, List<Integer>>> scanUsages(final Map<String, XML> pkg) {
         final Map<Xnav, Map<String, List<Integer>>> usages = new HashMap<>(0);
         pkg.values().forEach(
             xmir -> {
                 final Map<String, List<Integer>> local = new HashMap<>(0);
-                final Xnav program = new Xnav(xmir.inner());
-                program.path("//o[@base]").forEach(
+                final Xnav source = new Xnav(xmir.inner());
+                source.path("//o[@base]").forEach(
                     base -> {
                         final int args = base.node().getChildNodes().getLength();
                         local.computeIfAbsent(
@@ -103,7 +103,7 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                         ).add(args);
                     }
                 );
-                usages.put(program, local);
+                usages.put(source, local);
             }
         );
         return usages;
@@ -111,10 +111,10 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
 
     /**
      * Merge all object usages into single map.
-     * @param whole All object usages across all programs
+     * @param whole All object usages across all sources
      * @return Merged object usages as a map
      */
-    private static Map<String, List<Integer>> mergedPrograms(
+    private static Map<String, List<Integer>> mergedSources(
         final Map<Xnav, Map<String, List<Integer>>> whole
     ) {
         final Map<String, List<Integer>> merged = new HashMap<>(0);
@@ -129,19 +129,19 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
     }
 
     /**
-     * Object occurrences across all programs, grouped by object base attribute.
-     * @param whole All object usages across all programs.
-     * @return Grouped base occurrences in the programs.
+     * Object occurrences across all sources, grouped by object base attribute.
+     * @param whole All object usages across all sources.
+     * @return Grouped base occurrences in the sources.
      */
     private static Map<String, List<Xnav>> baseOccurrences(
         final Map<Xnav, Map<String, List<Integer>>> whole
     ) {
         final Map<String, List<Xnav>> result = new HashMap<>(0);
         whole.forEach(
-            (program, local) ->
+            (src, local) ->
                 local.forEach(
                     (base, value) ->
-                        result.computeIfAbsent(base, k -> new ListOf<>()).add(program)
+                        result.computeIfAbsent(base, k -> new ListOf<>()).add(src)
                 )
         );
         return result;

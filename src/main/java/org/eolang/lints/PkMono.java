@@ -14,7 +14,7 @@ import org.cactoos.list.ListOf;
 
 /**
  * Collection of lints for individual XML files, provided
- * by the {@link Program} class.
+ * by the {@link Source} class.
  *
  * <p>This class is thread-safe.</p>
  *

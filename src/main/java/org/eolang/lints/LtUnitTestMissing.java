@@ -14,7 +14,7 @@ import org.cactoos.text.IoCheckedText;
 import org.cactoos.text.TextOf;
 
 /**
- * A test is missing for a live EO program.
+ * A test is missing for a live EO source.
  *
  * @since 0.1.0
  */

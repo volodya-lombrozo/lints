@@ -69,9 +69,9 @@ final class LtInconsistentArgsTest {
     }
 
     @Test
-    void catchesInconsistencyAcrossPrograms() throws IOException {
+    void catchesInconsistencyAcrossSources() throws IOException {
         MatcherAssert.assertThat(
-            "Defects are not caught across multiple programs, but they should",
+            "Defects are not caught across multiple sources, but they should",
             new LtInconsistentArgs().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>(
@@ -103,7 +103,7 @@ final class LtInconsistentArgsTest {
     }
 
     @Test
-    void allowsConsistentArgumentsAcrossPrograms() throws IOException {
+    void allowsConsistentArgumentsAcrossSources() throws IOException {
         MatcherAssert.assertThat(
             "Defects are not empty, but they should",
             new LtInconsistentArgs().defects(
@@ -137,9 +137,9 @@ final class LtInconsistentArgsTest {
     }
 
     @Test
-    void catchesInconsistencyAcrossProgramsWithAlias() throws IOException {
+    void catchesInconsistencyAcrossSourcesWithAlias() throws IOException {
         MatcherAssert.assertThat(
-            "Defects are not caught across multiple programs with alias, but they should",
+            "Defects are not caught across multiple sources with alias, but they should",
             new LtInconsistentArgs().defects(
                 new MapOf<String, XML>(
                     new MapEntry<>(
