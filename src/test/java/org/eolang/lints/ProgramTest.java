@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
@@ -307,7 +308,10 @@ final class ProgramTest {
             }
         );
         MatcherAssert.assertThat(
-            "Aggregated defects should not contain duplicates",
+            Logger.format(
+                "Aggregated defects (%[list]s) should not contain duplicates",
+                aggregated
+            ),
             new HashSet<>(aggregated).size() == aggregated.size(),
             Matchers.equalTo(true)
         );
@@ -321,8 +325,28 @@ final class ProgramTest {
             ).parsed()
         );
         MatcherAssert.assertThat(
-            "Aggregated defects should not contain duplicates",
+            Logger.format(
+                "Found defects (%[list]s) should not contain duplicates",
+                defects
+            ),
             new HashSet<>(defects).size() == defects.size(),
+            Matchers.equalTo(true)
+        );
+    }
+
+    @Test
+    void lintsTupleByAllProgramLints() throws Exception {
+        final Collection<Defect> found = new Program(
+            new EoSyntax(
+                new TextOf(new ResourceOf("org/eolang/lints/tuple.eo")).asString()
+            ).parsed()
+        ).defects();
+        MatcherAssert.assertThat(
+            Logger.format(
+                "Found defects (%[list]s) should not contain duplicates",
+                found
+            ),
+            new HashSet<>(found).size() == found.size(),
             Matchers.equalTo(true)
         );
     }
