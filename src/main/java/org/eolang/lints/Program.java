@@ -8,56 +8,86 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.Sticky;
-import org.cactoos.iterable.Synced;
 import org.cactoos.list.ListOf;
+import org.cactoos.list.Synced;
 
 /**
- * A single XMIR program to analyze.
+ * A collection of XMIR programs to analyze.
+ * To get the current version of `lints`, you should read it from
+ * MANIFEST.MF file, packaged with library. You can do it like this:
+ * <pre>
+ * {@code
+ * import com.jcabi.manifests.Manifests;
  *
+ * final String version = Manifests.read("Lints-Version");
+ * }
+ * </pre>
  * @see <a href="https://news.eolang.org/2022-11-25-xmir-guide.html">XMIR</a>
  * @since 0.1.0
  */
-public final class Program {
+public final class Programs {
 
     /**
      * Collection of mono lints, preloaded on JVM start.
      */
-    private static final Iterable<Lint<XML>> MONO = new Synced<>(
-        new Sticky<>(
-            new PkMono()
+    private static final Iterable<Lint<Map<String, XML>>> WPA = new Synced<>(
+        new ListOf<>(
+            new Sticky<>(
+                new PkWpa()
+            )
         )
     );
 
     /**
-     * The XMIR program to analyze.
+     * Lints to use.
      */
-    private final XML xmir;
+    private final Iterable<Lint<Map<String, XML>>> lints;
 
     /**
-     * Lint to use.
+     * The package of XMIR files.
      */
-    private final Iterable<Lint<XML>> lints;
+    private final Map<String, XML> pkg;
 
     /**
      * Ctor.
-     * @param file The absolute path of the XMIR file
-     * @throws FileNotFoundException If file isn't found
+     * @param dirs The directory
+     * @throws IOException If fails
      */
-    public Program(final Path file) throws FileNotFoundException {
-        this(new XMLDocument(file));
+    public Programs(final Path... dirs) throws IOException {
+        this(Arrays.asList(dirs));
     }
 
     /**
      * Ctor.
-     * @param xml The XMIR
+     *
+     * <p>Pay attention, it's important to use {@link Collection} as a type
+     * of argument, because {@link Path} implements {@link Iterable}.</p>
+     *
+     * @param dirs The directory
+     * @throws IOException If fails
      */
-    public Program(final XML xml) {
-        this(xml, Program.MONO);
+    public Programs(final Collection<Path> dirs) throws IOException {
+        this(Programs.discover(dirs));
+    }
+
+    /**
+     * Ctor.
+     * @param map The map with them
+     */
+    public Programs(final Map<String, XML> map) {
+        this(map, Programs.WPA);
     }
 
     /**
@@ -66,23 +96,23 @@ public final class Program {
      * <p>This constructor is for internal use only. It is not supposed
      * to be visible by end-users. Keep it this way!</p>
      *
-     * @param xml The XMIR
+     * @param map The map with them
      * @param list The lints
      */
-    Program(final XML xml, final Iterable<Lint<XML>> list) {
-        this.xmir = xml;
+    Programs(final Map<String, XML> map, final Iterable<Lint<Map<String, XML>>> list) {
+        this.pkg = Collections.unmodifiableMap(map);
         this.lints = list;
     }
 
     /**
-     * Program with disabled lints.
+     * Programs with disabled lints.
      * @param names Lint names
-     * @return Program analysis without specific name
+     * @return Program analysis without specifics names
      */
-    public Program without(final String... names) {
+    public Programs without(final String... names) {
         final Collection<String> listed = new ListOf<>(names);
-        return new Program(
-            this.xmir,
+        return new Programs(
+            this.pkg,
             new Filtered<>(
                 this.lints, lint -> () -> !listed.contains(lint.name())
             )
@@ -97,17 +127,61 @@ public final class Program {
      * @see <a href="https://www.eolang.org/XMIR.xsd">XMIR schema</a>
      */
     public Collection<Defect> defects() {
-        try {
-            final Collection<Defect> messages = new ArrayList<>(0);
-            for (final Lint<XML> lint : this.lints) {
-                messages.addAll(lint.defects(this.xmir));
+        final Collection<Defect> messages = new LinkedList<>();
+        for (final Lint<Map<String, XML>> lint : this.lints) {
+            try {
+                messages.addAll(lint.defects(this.pkg));
+            } catch (final IOException exception) {
+                throw new IllegalStateException(
+                    String.format(
+                        "Failed to find defects in the '%s' package with '%s' lint",
+                        this.pkg,
+                        lint
+                    ),
+                    exception
+                );
             }
-            return messages;
-        } catch (final IOException ex) {
-            throw new IllegalStateException(
-                "Failed to find defects in the XMIR file",
-                ex
-            );
+        }
+        return messages;
+    }
+
+    /**
+     * Discover all XMIR files in the directory.
+     * @param dirs The directories to search for XMIR files in (recursively)
+     * @return Map of XMIR files
+     * @throws IOException If fails
+     */
+    private static Map<String, XML> discover(final Iterable<Path> dirs) throws IOException {
+        final Map<String, XML> map = new HashMap<>(0);
+        for (final Path dir : dirs) {
+            map.putAll(Programs.discover(dir));
+        }
+        return map;
+    }
+
+    /**
+     * Discover all XMIR files in the directory.
+     * @param dir The directories to search for XMIR files in (recursively)
+     * @return Map of XMIR files
+     * @throws IOException If fails
+     */
+    private static Map<String, XML> discover(final Path dir) throws IOException {
+        try (Stream<Path> walk = Files.walk(dir)) {
+            return walk
+                .filter(Files::isRegularFile)
+                .collect(
+                    Collectors.toMap(
+                        path -> new XmirKey(path, dir).asString(),
+                        path -> {
+                            try {
+                                return new XMLDocument(path);
+                            } catch (final FileNotFoundException ex) {
+                                throw new IllegalArgumentException(ex);
+                            }
+                        }
+                    )
+                );
         }
     }
+
 }
