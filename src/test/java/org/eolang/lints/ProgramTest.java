@@ -28,18 +28,18 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * Test for {@link Programs}.
+ * Test for {@link Program}.
  *
  * @since 0.1.0
  */
 @ExtendWith(MktmpResolver.class)
-final class ProgramsTest {
+final class ProgramTest {
 
     @Test
     void checksSimple(@Mktmp final Path dir) throws IOException {
         MatcherAssert.assertThat(
             "the defect is found",
-            new Programs(
+            new Program(
                 this.withProgram(
                     dir,
                     "a/b/c/foo.xmir",
@@ -57,7 +57,7 @@ final class ProgramsTest {
     void skipsAllWarnings(@Mktmp final Path dir) throws IOException {
         MatcherAssert.assertThat(
             "the defect is found",
-            new Programs(
+            new Program(
                 this.withProgram(
                     dir,
                     "bar.xmir",
@@ -86,7 +86,7 @@ final class ProgramsTest {
             "",
             new SetOf<>(
                 new Together<>(
-                    thread -> new Programs(program).defects().size()
+                    thread -> new Program(program).defects().size()
                 )
             ).size(),
             Matchers.equalTo(1)
@@ -96,7 +96,7 @@ final class ProgramsTest {
     @Test
     void doesNotThrowIoException() {
         Assertions.assertDoesNotThrow(
-            () -> new Programs(new ListOf<>()).defects(),
+            () -> new Program(new ListOf<>()).defects(),
             "Exception was thrown, but it should not be"
         );
     }
@@ -106,7 +106,7 @@ final class ProgramsTest {
         final String disabled = "unit-test-missing";
         MatcherAssert.assertThat(
             "Defects for disabled lint are not empty, but should be",
-            new Programs(
+            new Program(
                 this.withProgram(
                     dir,
                     "bar.xmir",
@@ -123,7 +123,7 @@ final class ProgramsTest {
     void createsProgramsWithoutMultipleLints(@Mktmp final Path dir) throws IOException {
         MatcherAssert.assertThat(
             "Defects for disabled lint are not empty, but should be",
-            new Programs(
+            new Program(
                 this.withProgram(
                     dir,
                     "bar.xmir",
@@ -146,7 +146,7 @@ final class ProgramsTest {
     void catchesBrokenUnlintAfterLintWasRemoved(final String lid) throws IOException {
         MatcherAssert.assertThat(
             "Found defect does not match with expected",
-            new Programs(
+            new Program(
                 new MapOf<>(
                     "f",
                     new EoSyntax(

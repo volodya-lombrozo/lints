@@ -43,6 +43,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
@@ -283,6 +285,49 @@ final class SourceTest {
                 ).parsed()
             ).without("mandatory-spdx").defects(),
             Matchers.hasSize(1)
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = {"mandatory-home", "mandatory-home:0"}
+    )
+    void catchesBrokenUnlintAfterLintWasRemoved(final String lid) throws IOException {
+        MatcherAssert.assertThat(
+            "Found defect does not match with expected",
+            new Source(
+                new EoSyntax(
+                    String.join(
+                        "\n",
+                        String.format("+unlint %s", lid),
+                        "",
+                        "# Foo.",
+                        "[] > foo"
+                    )
+                ).parsed()
+            ).without(
+                "mandatory-home",
+                "mandatory-version",
+                "empty-object",
+                "mandatory-package",
+                "mandatory-spdx",
+                "comment-too-short",
+                "no-attribute-formation"
+            ).defects(),
+            Matchers.allOf(
+                Matchers.iterableWithSize(1),
+                Matchers.hasItem(
+                    Matchers.hasToString(
+                        Matchers.allOf(
+                            Matchers.containsString("unlint-non-existing-defect WARNING"),
+                            Matchers.containsString(
+                                String.format("Unlinting rule '%s' doesn't make sense,", lid)
+                            ),
+                            Matchers.containsString("since there are no defects with it")
+                        )
+                    )
+                )
+            )
         );
     }
 
