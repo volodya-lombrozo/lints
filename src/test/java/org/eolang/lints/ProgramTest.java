@@ -77,7 +77,7 @@ final class ProgramTest {
     @Tag("deep")
     @RepeatedTest(5)
     void checksInParallel(@Mktmp final Path dir) throws IOException {
-        final Path program = this.withSource(
+        final Path source = this.withSource(
             dir,
             "foo.xmir",
             "# first.\n# second.\n[] > foo\n"
@@ -86,7 +86,7 @@ final class ProgramTest {
             "",
             new SetOf<>(
                 new Together<>(
-                    thread -> new Program(program).defects().size()
+                    thread -> new Program(source).defects().size()
                 )
             ).size(),
             Matchers.equalTo(1)
