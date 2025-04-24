@@ -20,6 +20,7 @@ import matchers.DefectsMatcher;
 import org.cactoos.io.ReaderOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
+import org.cactoos.map.MapOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.jucs.ClasspathSource;
@@ -279,13 +280,18 @@ final class LtByXslTest {
             .filter(Files::isRegularFile)
             .filter(p -> p.toString().endsWith(".yaml"))
             .map(
-                (Function<Path, Map<String, Object>>)
+                (Function<Path, Map<Path, Map<String, Object>>>)
                     p ->
-                        new Yaml().load(new ReaderOf(p.toFile()))
+                        new MapOf<>(p, new Yaml().load(new ReaderOf(p.toFile())))
             )
-            .filter(yaml -> yaml.containsKey("document") && !yaml.containsKey("ignore-schema"))
+            .filter(
+                pack -> {
+                    final Map<String, Object> yaml = pack.values().stream().findFirst().get();
+                    return yaml.containsKey("document") && !yaml.containsKey("ignore-schema");
+                }
+            )
             .forEach(
-                yaml -> {
+                pack -> {
                     Assertions.assertDoesNotThrow(
                         () ->
                             new StrictXmir(
@@ -302,12 +308,17 @@ final class LtByXslTest {
                                             )
                                     ).apply(
                                         new XMLDocument(
-                                            (String) yaml.get("document")
+                                            (String) pack.values().stream().findFirst().get().get(
+                                                "document"
+                                            )
                                         ).inner()
                                     )
                                 )
                             ).inner(),
-                        "XMIR validation should pass without errors"
+                        String.format(
+                            "Validation of XMIR in '%s' pack failed, but it should pass without errors",
+                            pack.keySet().iterator().next()
+                        )
                     );
                 }
             );
