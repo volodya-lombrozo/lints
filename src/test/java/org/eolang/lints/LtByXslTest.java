@@ -271,34 +271,54 @@ final class LtByXslTest {
         );
     }
 
-    @ParameterizedTest
-    @ClasspathSource(value = "org/eolang/lints/packs/single/", glob = "**.yaml")
-    void validatesPacksAgainstXsdSchema(final String yaml) {
-        final Map<String, Object> loaded = new Yaml().load(yaml);
-        loaded.forEach(
-            (key, val) -> {
-                if ("document".equals(key) && !loaded.containsKey("schema-ignore")) {
-                    Assertions.assertDoesNotThrow(
-                        () ->
-                            new StrictXmir(
-                                new XMLDocument(
-                                    new Xembler(
-                                        new Directives()
-                                            .xpath("/object")
-                                            .attr(
-                                                "noNamespaceSchemaLocation xsi http://www.w3.org/2001/XMLSchema-instance",
-                                                String.format(
-                                                    "https://www.eolang.org/xsd/XMIR-%s.xsd",
-                                                    Manifests.read("EO-Version")
-                                                )
+    @Test
+    void validatesPacksAgainstXsdSchema() throws IOException {
+        Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs/single"))
+            .filter(Files::isRegularFile)
+            .filter(p -> p.toString().endsWith(".yaml"))
+            .forEach(
+                p -> {
+                    try {
+                        final Map<String, Object> loaded = new Yaml().load(
+                            new TextOf(p.toFile()).asString()
+                        );
+                        if (
+                            loaded.containsKey("document")
+                                && !loaded.containsKey("schema-ignore")
+                        ) {
+                            Assertions.assertDoesNotThrow(
+                                () ->
+                                    new StrictXmir(
+                                        new XMLDocument(
+                                            new Xembler(
+                                                new Directives()
+                                                    .xpath("/object")
+                                                    .attr(
+                                                        "noNamespaceSchemaLocation xsi http://www.w3.org/2001/XMLSchema-instance",
+                                                        String.format(
+                                                            "https://www.eolang.org/xsd/XMIR-%s.xsd",
+                                                            Manifests.read("EO-Version")
+                                                        )
+                                                    )
+                                            ).apply(
+                                                new XMLDocument(
+                                                    (String) loaded.get("document")
+                                                ).inner()
                                             )
-                                    ).apply(new XMLDocument(val.toString()).inner())
-                                )
-                            ).inner(),
-                        "XMIR validation should pass without errors"
-                    );
+                                        )
+                                    ).inner(),
+                                "XMIR validation should pass without errors"
+                            );
+                        }
+                    } catch (final Exception exception) {
+                        throw new IllegalStateException(
+                            String.format(
+                                "Failed to load YAML from '%s' pack", p
+                            ),
+                            exception
+                        );
+                    }
                 }
-            }
-        );
+            );
     }
 }
