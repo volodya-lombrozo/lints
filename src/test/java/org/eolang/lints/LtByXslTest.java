@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import matchers.DefectsMatcher;
 import org.cactoos.io.ReaderOf;
@@ -277,37 +278,37 @@ final class LtByXslTest {
         Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs/single"))
             .filter(Files::isRegularFile)
             .filter(p -> p.toString().endsWith(".yaml"))
+            .map(
+                (Function<Path, Map<String, Object>>)
+                    p ->
+                        new Yaml().load(new ReaderOf(p.toFile()))
+            )
+            .filter(yaml -> yaml.containsKey("document") && !yaml.containsKey("ignore-schema"))
             .forEach(
-                p -> {
-                    final Map<String, Object> loaded = new Yaml().load(new ReaderOf(p.toFile()));
-                    if (
-                        loaded.containsKey("document")
-                            && !loaded.containsKey("schema-ignore")
-                    ) {
-                        Assertions.assertDoesNotThrow(
-                            () ->
-                                new StrictXmir(
-                                    new XMLDocument(
-                                        new Xembler(
-                                            new Directives()
-                                                .xpath("/object")
-                                                .attr(
-                                                    "noNamespaceSchemaLocation xsi http://www.w3.org/2001/XMLSchema-instance",
-                                                    String.format(
-                                                        "https://www.eolang.org/xsd/XMIR-%s.xsd",
-                                                        Manifests.read("EO-Version")
-                                                    )
+                yaml -> {
+                    Assertions.assertDoesNotThrow(
+                        () ->
+                            new StrictXmir(
+                                new XMLDocument(
+                                    new Xembler(
+                                        new Directives()
+                                            .xpath("/object")
+                                            .attr(
+                                                "noNamespaceSchemaLocation xsi http://www.w3.org/2001/XMLSchema-instance",
+                                                String.format(
+                                                    "https://www.eolang.org/xsd/XMIR-%s.xsd",
+                                                    Manifests.read("EO-Version")
                                                 )
-                                        ).apply(
-                                            new XMLDocument(
-                                                (String) loaded.get("document")
-                                            ).inner()
-                                        )
+                                            )
+                                    ).apply(
+                                        new XMLDocument(
+                                            (String) yaml.get("document")
+                                        ).inner()
                                     )
-                                ).inner(),
-                            "XMIR validation should pass without errors"
-                        );
-                    }
+                                )
+                            ).inner(),
+                        "XMIR validation should pass without errors"
+                    );
                 }
             );
     }
