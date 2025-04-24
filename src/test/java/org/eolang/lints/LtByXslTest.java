@@ -291,7 +291,7 @@ final class LtByXslTest {
                 }
             )
             .forEach(
-                pack -> {
+                pack ->
                     Assertions.assertDoesNotThrow(
                         () ->
                             new StrictXmir(
@@ -319,8 +319,7 @@ final class LtByXslTest {
                             "Validation of XMIR in '%s' pack failed, but it should pass without errors",
                             pack.keySet().iterator().next()
                         )
-                    );
-                }
+                    )
             );
     }
 }
