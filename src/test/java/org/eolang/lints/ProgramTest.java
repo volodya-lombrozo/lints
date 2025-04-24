@@ -40,7 +40,7 @@ final class ProgramTest {
         MatcherAssert.assertThat(
             "the defect is found",
             new Program(
-                this.withProgram(
+                this.withSource(
                     dir,
                     "a/b/c/foo.xmir",
                     "# first.\n[] > foo\n# second.\n[] > foo\n"
@@ -58,7 +58,7 @@ final class ProgramTest {
         MatcherAssert.assertThat(
             "the defect is found",
             new Program(
-                this.withProgram(
+                this.withSource(
                     dir,
                     "bar.xmir",
                     String.join(
@@ -77,7 +77,7 @@ final class ProgramTest {
     @Tag("deep")
     @RepeatedTest(5)
     void checksInParallel(@Mktmp final Path dir) throws IOException {
-        final Path program = this.withProgram(
+        final Path program = this.withSource(
             dir,
             "foo.xmir",
             "# first.\n# second.\n[] > foo\n"
@@ -102,12 +102,12 @@ final class ProgramTest {
     }
 
     @Test
-    void createsProgramsWithoutOneLint(@Mktmp final Path dir) throws IOException {
+    void createsProgramWithoutOneLint(@Mktmp final Path dir) throws IOException {
         final String disabled = "unit-test-missing";
         MatcherAssert.assertThat(
             "Defects for disabled lint are not empty, but should be",
             new Program(
-                this.withProgram(
+                this.withSource(
                     dir,
                     "bar.xmir",
                     "# first.\n# second.\n[] > bar\n"
@@ -120,16 +120,16 @@ final class ProgramTest {
     }
 
     @Test
-    void createsProgramsWithoutMultipleLints(@Mktmp final Path dir) throws IOException {
+    void createsProgramWithoutMultipleLints(@Mktmp final Path dir) throws IOException {
         MatcherAssert.assertThat(
             "Defects for disabled lint are not empty, but should be",
             new Program(
-                this.withProgram(
+                this.withSource(
                     dir,
                     "bar.xmir",
                     "# first.\n# second.\n[] > bar\n"
                 ),
-                this.withProgram(
+                this.withSource(
                     dir,
                     "foo-test.xmir",
                     "# first.\n# second.\n[] > x\n"
@@ -177,7 +177,7 @@ final class ProgramTest {
         );
     }
 
-    private Path withProgram(final Path dir, final String name,
+    private Path withSource(final Path dir, final String name,
         final String text) throws IOException {
         final Path path = dir.resolve(name);
         path.toFile().getParentFile().mkdirs();
