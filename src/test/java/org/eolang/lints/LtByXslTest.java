@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import matchers.DefectsMatcher;
+import org.cactoos.io.ReaderOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
@@ -278,44 +279,33 @@ final class LtByXslTest {
             .filter(p -> p.toString().endsWith(".yaml"))
             .forEach(
                 p -> {
-                    try {
-                        final Map<String, Object> loaded = new Yaml().load(
-                            new TextOf(p.toFile()).asString()
-                        );
-                        if (
-                            loaded.containsKey("document")
-                                && !loaded.containsKey("schema-ignore")
-                        ) {
-                            Assertions.assertDoesNotThrow(
-                                () ->
-                                    new StrictXmir(
-                                        new XMLDocument(
-                                            new Xembler(
-                                                new Directives()
-                                                    .xpath("/object")
-                                                    .attr(
-                                                        "noNamespaceSchemaLocation xsi http://www.w3.org/2001/XMLSchema-instance",
-                                                        String.format(
-                                                            "https://www.eolang.org/xsd/XMIR-%s.xsd",
-                                                            Manifests.read("EO-Version")
-                                                        )
+                    final Map<String, Object> loaded = new Yaml().load(new ReaderOf(p.toFile()));
+                    if (
+                        loaded.containsKey("document")
+                            && !loaded.containsKey("schema-ignore")
+                    ) {
+                        Assertions.assertDoesNotThrow(
+                            () ->
+                                new StrictXmir(
+                                    new XMLDocument(
+                                        new Xembler(
+                                            new Directives()
+                                                .xpath("/object")
+                                                .attr(
+                                                    "noNamespaceSchemaLocation xsi http://www.w3.org/2001/XMLSchema-instance",
+                                                    String.format(
+                                                        "https://www.eolang.org/xsd/XMIR-%s.xsd",
+                                                        Manifests.read("EO-Version")
                                                     )
-                                            ).apply(
-                                                new XMLDocument(
-                                                    (String) loaded.get("document")
-                                                ).inner()
-                                            )
+                                                )
+                                        ).apply(
+                                            new XMLDocument(
+                                                (String) loaded.get("document")
+                                            ).inner()
                                         )
-                                    ).inner(),
-                                "XMIR validation should pass without errors"
-                            );
-                        }
-                    } catch (final Exception exception) {
-                        throw new IllegalStateException(
-                            String.format(
-                                "Failed to load YAML from '%s' pack", p
-                            ),
-                            exception
+                                    )
+                                ).inner(),
+                            "XMIR validation should pass without errors"
                         );
                     }
                 }
