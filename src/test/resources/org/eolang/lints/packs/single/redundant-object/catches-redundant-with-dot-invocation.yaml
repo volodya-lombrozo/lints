@@ -10,5 +10,5 @@ input: |
   # Foo.
   [] > foo
     52 > bar
-    x.
+    x. > @
       bar.plus 2

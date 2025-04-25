@@ -9,5 +9,6 @@ input: |
   # Foo.
   [] > foo
     52 > spb
-    spb.plus 2
-    spb.plus 4
+    f > @
+      spb.plus 2
+      spb.plus 4

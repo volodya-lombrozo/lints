@@ -11,4 +11,4 @@ input: |
   [] > foo
     52 > spb
     [] > tx
-      ^.spb.plus 2
+      ^.spb.plus 2 > @

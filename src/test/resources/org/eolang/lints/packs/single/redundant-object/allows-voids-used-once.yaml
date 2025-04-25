@@ -8,4 +8,4 @@ asserts:
 input: |
   # Foo.
   [spb] > foo
-    spb.plus 2
+    spb.plus 2 > @

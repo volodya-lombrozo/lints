@@ -11,6 +11,6 @@ input: |
   [] > foo
     list > created
       * 1 2 3
-    contains.
+    contains. > @
       created
       52

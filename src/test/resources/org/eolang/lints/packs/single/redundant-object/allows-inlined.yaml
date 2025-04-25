@@ -8,4 +8,4 @@ asserts:
 input: |
   # Foo.
   [] > foo
-    52.plus 2
+    52.plus 2 > @

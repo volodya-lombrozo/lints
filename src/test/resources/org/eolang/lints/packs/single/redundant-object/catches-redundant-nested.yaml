@@ -11,7 +11,7 @@ input: |
   # Foo.
   [] > foo
     52 > xo
-    f
+    f > @
       a
       b
       c
