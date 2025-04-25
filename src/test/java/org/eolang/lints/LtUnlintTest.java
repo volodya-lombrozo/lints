@@ -152,7 +152,7 @@ final class LtUnlintTest {
     }
 
     @Test
-    void doesNotReportTwiceWhenThereIsNoUnlint() throws IOException {
+    void doesNotDuplicateDefectsFromTheSameLineWhenThereIsNoUnlint() throws IOException {
         final Collection<Defect> defects = new LtUnlint(
             new LtByXsl("misc/unused-void-attr")
         ).defects(
