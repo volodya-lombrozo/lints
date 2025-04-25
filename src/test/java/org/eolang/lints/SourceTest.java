@@ -333,9 +333,15 @@ final class SourceTest {
     }
 
     @Test
-    void lintsTupleByAllSourceLintsWithoutDuplicates() throws IOException {
+    void doesNotDuplicateDefectsWhenMultipleDefectsOnTheSameLine() throws IOException {
         final Collection<Defect> defects = new Source(
-            new EoSyntax(new ResourceOf("org/eolang/lints/tuple.eo")).parsed()
+            new EoSyntax(
+                String.join(
+                    "\n",
+                    "# Foo with unused voids on the same line.",
+                    "[x y z] > foo"
+                )
+            ).parsed()
         ).defects();
         MatcherAssert.assertThat(
             Logger.format(

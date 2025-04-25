@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import org.cactoos.io.InputOf;
-import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
 import org.cactoos.proc.ForEach;
 import org.cactoos.text.TextOf;
@@ -76,9 +75,13 @@ final class PkByXslTest {
     }
 
     @Test
-    void lintsTupleByAllXslsWithoutDuplicates() throws Exception {
+    void doesNotDuplicateDefectsWhenMultipleDefectsOnTheSameLine() throws Exception {
         final XML tuple = new EoSyntax(
-            new TextOf(new ResourceOf("org/eolang/lints/tuple.eo")).asString()
+            String.join(
+                "\n",
+                "# Foo with unused voids on the same line.",
+                "[x y z] > foo"
+            )
         ).parsed();
         final Collection<Defect> aggregated = new ListOf<>();
         new PkByXsl().forEach(

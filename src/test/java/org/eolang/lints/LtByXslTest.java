@@ -269,10 +269,14 @@ final class LtByXslTest {
     }
 
     @Test
-    void lintsTupleByXslWithoutDuplicates() throws Exception {
+    void doesNotDuplicateDefectsWhenMultipleDefectsOnTheSameLine() throws Exception {
         final Collection<Defect> defects = new LtByXsl("misc/unused-void-attr").defects(
             new EoSyntax(
-                new TextOf(new ResourceOf("org/eolang/lints/tuple.eo")).asString()
+                String.join(
+                    "\n",
+                    "# Foo with unused voids on the same line.",
+                    "[x y z] > foo"
+                )
             ).parsed()
         );
         MatcherAssert.assertThat(

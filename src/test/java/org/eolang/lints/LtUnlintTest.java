@@ -8,7 +8,6 @@ import com.jcabi.log.Logger;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
-import org.cactoos.io.ResourceOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -152,11 +151,17 @@ final class LtUnlintTest {
     }
 
     @Test
-    void doesNotDuplicateDefectsFromTheSameLineWhenThereIsNoUnlint() throws IOException {
+    void doesNotDuplicateDefectsWhenMultipleDefectsOnTheSameLine() throws IOException {
         final Collection<Defect> defects = new LtUnlint(
             new LtByXsl("misc/unused-void-attr")
         ).defects(
-            new EoSyntax(new ResourceOf("org/eolang/lints/tuple.eo")).parsed()
+            new EoSyntax(
+                String.join(
+                    "\n",
+                    "# Foo with unused voids on the same line.",
+                    "[x y z] > foo"
+                )
+            ).parsed()
         );
         MatcherAssert.assertThat(
             Logger.format(
