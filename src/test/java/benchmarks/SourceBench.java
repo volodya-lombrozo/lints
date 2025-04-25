@@ -41,10 +41,10 @@ public class SourceBench {
     /**
      * Benchmark for XMIR scanning.
      * @param state State
-     * @todo #376:60min Enable redundant object in the single scope program benchmarks.
-     *  As for now, the lint is too slow, especially on L, XL and XXL-sized programs.
+     * @todo #376:60min Enable redundant object in the single XMIR scope benchmarks.
+     *  As for now, the lint is too slow, especially on L, XL and XXL-sized XMIRs.
      *  This happens mostly because of multiple XPath `//o` selects in the XSL. Once,
-     *  the lint will be optimized, we can enable it in the benchmarks.
+     *  the lint will be optimized, we can enable the lint in the benchmarks.
      */
     @Benchmark
     public final void scansXmir(final BenchmarkState state) {
