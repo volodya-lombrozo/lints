@@ -5,6 +5,7 @@
 package org.eolang.lints;
 
 import com.jcabi.log.Logger;
+import com.jcabi.manifests.Manifests;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import fixtures.BytecodeClass;
@@ -14,15 +15,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import matchers.DefectsMatcher;
+import org.cactoos.io.ReaderOf;
 import org.cactoos.io.ResourceOf;
 import org.cactoos.list.ListOf;
+import org.cactoos.map.MapOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.EoSyntax;
+import org.eolang.parser.StrictXmir;
 import org.eolang.xax.XtSticky;
 import org.eolang.xax.XtYaml;
 import org.eolang.xax.XtoryMatcher;
@@ -35,6 +41,9 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.condition.DisabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.xembly.Directives;
+import org.xembly.Xembler;
+import org.yaml.snakeyaml.Yaml;
 
 /**
  * Test for {@link LtByXsl}.
@@ -266,6 +275,55 @@ final class LtByXslTest {
                     Matchers.lessThanOrEqualTo(300)
                 )
         );
+    }
+
+    @Test
+    void validatesPacksAgainstXsdSchema() throws IOException {
+        Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs/single"))
+            .filter(Files::isRegularFile)
+            .filter(p -> p.toString().endsWith(".yaml"))
+            .map(
+                (Function<Path, Map<Path, Map<String, Object>>>)
+                    p ->
+                        new MapOf<>(p, new Yaml().load(new ReaderOf(p.toFile())))
+            )
+            .filter(
+                pack -> {
+                    final Map<String, Object> yaml = pack.values().stream().findFirst().get();
+                    return yaml.containsKey("document") && !yaml.containsKey("ignore-schema");
+                }
+            )
+            .forEach(
+                pack ->
+                    Assertions.assertDoesNotThrow(
+                        () ->
+                            new StrictXmir(
+                                new XMLDocument(
+                                    new Xembler(
+                                        new Directives()
+                                            .xpath("/object")
+                                            .attr(
+                                                "noNamespaceSchemaLocation xsi http://www.w3.org/2001/XMLSchema-instance",
+                                                String.format(
+                                                    "https://www.eolang.org/xsd/XMIR-%s.xsd",
+                                                    Manifests.read("EO-Version")
+                                                )
+                                            )
+                                    ).apply(
+                                        new XMLDocument(
+                                            (String) pack.values().stream().findFirst().get().get(
+                                                "document"
+                                            )
+                                        ).inner()
+                                    )
+                                )
+                            ).inner(),
+                        String.format(
+                            "Validation of XMIR in '%s' pack failed, but it should pass without errors",
+                            pack.keySet().iterator().next()
+                        )
+                    )
+            );
     }
 
     @Test

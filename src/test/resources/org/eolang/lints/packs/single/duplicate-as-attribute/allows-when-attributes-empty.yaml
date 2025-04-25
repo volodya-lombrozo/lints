@@ -7,7 +7,7 @@ asserts:
   - /defects[count(defect[@severity='warning'])=0]
 document: |
   <object>
-    <o base="man" name="jeff">
+    <o base="Q.man" name="jeff">
       <o base="home"/>
     </o>
   </object>

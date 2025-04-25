@@ -9,7 +9,7 @@ asserts:
   - /defects/defect[@line='3']
 document: |
   <object>
-    <o line="2" base="man">
+    <o line="2" base="Q.man">
       <o base="string" as="name"/>
       <o line="3" base="car">
         <o base="string" as="model"/>
