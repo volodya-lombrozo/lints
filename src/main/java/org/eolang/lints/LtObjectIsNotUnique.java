@@ -110,8 +110,7 @@ final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
         if (
             xml.path("/object/metas/meta[head='package']").count() == 1L
         ) {
-            name = xml.path("/object/metas/meta[head='package']/tail")
-                .findFirst().get().text().get();
+            name = xml.one("/object/metas/meta[head='package']/tail").text().get();
         } else {
             name = "";
         }
