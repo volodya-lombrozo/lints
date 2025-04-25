@@ -23,7 +23,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
@@ -32,6 +36,7 @@ import org.cactoos.io.ResourceOf;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
 import org.cactoos.list.ListOf;
+import org.cactoos.map.MapOf;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
@@ -337,38 +342,51 @@ final class SourceTest {
     @ExtendWith(MayBeSlow.class)
     @Timeout(600L)
     void lintsBenchmarkSourcesFromJava() throws Exception {
-        final StringBuilder sum = new StringBuilder();
-        new ListOf<>(SourceSize.values()).forEach(
-            source -> {
-                final XML xmir = new Unchecked<>(new BytecodeClass(source)).value();
-                final long start = System.currentTimeMillis();
-                final Collection<Defect> defects = new BcSource(
-                    xmir, source.type()
-                ).defects();
-                final long msec = System.currentTimeMillis() - start;
-                sum.append(
-                    String.join(
-                        "\n",
-                        String.format(
-                            "Input: %s (%s source)", source.java(), source.type()
-                        ),
-                        Logger.format(
-                            "Lint time: %s[ms]s (%d ms)",
-                            msec, msec
-                        )
-                    )
-                ).append("\n\n");
+        final Map<Map<SourceSize, Collection<Defect>>, String> result =
+            SourceTest.benchmarkResults();
+        result.keySet().forEach(
+            defects -> {
+                final SourceSize source = defects.keySet().iterator().next();
                 MatcherAssert.assertThat(
-                    "Defects are empty, but they should not be",
-                    defects,
+                    String.format(
+                        "Defects for source '%s' are empty, but they should not be",
+                        source.java()
+                    ),
+                    defects.get(source),
                     Matchers.hasSize(Matchers.greaterThan(0))
                 );
             }
         );
         Files.write(
             Paths.get("target").resolve("lint-summary.txt"),
-            sum.toString().getBytes(StandardCharsets.UTF_8)
+            result.values().iterator().next().getBytes(StandardCharsets.UTF_8)
         );
+    }
+
+    @Test
+    @Tag("benchmark")
+    @ExtendWith(MayBeSlow.class)
+    @Timeout(600L)
+    void checksLintTimeFormattingInBenchmarkResults() {
+        final Pattern tpattern = Pattern.compile(
+            "^Lint time: (\\d+(?:\\.\\d+)?)(ms|s|min|h) \\(\\d+ ms\\)$"
+        );
+        final Pattern nlines = Pattern.compile("\\R");
+        Arrays.stream(
+            nlines.split(SourceTest.benchmarkResults().values().iterator().next())
+            )
+            .filter(line -> line.startsWith("Lint time:"))
+            .forEach(
+                text ->
+                    MatcherAssert.assertThat(
+                        String.format(
+                            "Lint time '%s' does not match '%s' regex, but it should",
+                            text, tpattern
+                        ),
+                        tpattern.matcher(text).matches(),
+                        Matchers.equalTo(true)
+                    )
+            );
     }
 
     @Test
@@ -411,6 +429,41 @@ final class SourceTest {
                     )
                 );
             }
+        );
+    }
+
+    /**
+     * Run benchmark, and output the results.
+     * @return Benchmark results
+     */
+    private static Map<Map<SourceSize, Collection<Defect>>, String> benchmarkResults() {
+        final List<Map<SourceSize, Collection<Defect>>> runs = new ListOf<>();
+        final StringBuilder sum = new StringBuilder();
+        new ListOf<>(SourceSize.values()).forEach(
+            source -> {
+                final XML xmir = new Unchecked<>(new BytecodeClass(source)).value();
+                final long start = System.currentTimeMillis();
+                final Collection<Defect> defects = new BcSource(
+                    xmir, source.type()
+                ).defects();
+                final long msec = System.currentTimeMillis() - start;
+                runs.add(new MapOf<>(source, defects));
+                sum.append(
+                    String.join(
+                        "\n",
+                        String.format(
+                            "Input: %s (%s source)", source.java(), source.type()
+                        ),
+                        Logger.format(
+                            "Lint time: %[ms]s (%d ms)",
+                            msec, msec
+                        )
+                    )
+                ).append("\n\n");
+            }
+        );
+        return runs.stream().collect(
+            Collectors.toMap(run -> run, run -> sum.toString())
         );
     }
 
