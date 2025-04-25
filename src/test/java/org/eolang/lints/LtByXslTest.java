@@ -4,6 +4,7 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.log.Logger;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
 import fixtures.BytecodeClass;
@@ -11,6 +12,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import matchers.DefectsMatcher;
@@ -262,6 +265,23 @@ final class LtByXslTest {
                     defect.context().length(),
                     Matchers.lessThanOrEqualTo(300)
                 )
+        );
+    }
+
+    @Test
+    void lintsTupleByXslWithoutDuplicates() throws Exception {
+        final Collection<Defect> defects = new LtByXsl("misc/unused-void-attr").defects(
+            new EoSyntax(
+                new TextOf(new ResourceOf("org/eolang/lints/tuple.eo")).asString()
+            ).parsed()
+        );
+        MatcherAssert.assertThat(
+            Logger.format(
+                "Found defects (%[list]s) should not contain duplicates",
+                defects
+            ),
+            new HashSet<>(defects).size() == defects.size(),
+            Matchers.equalTo(true)
         );
     }
 }
