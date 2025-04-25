@@ -18,7 +18,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.list.ListOf;
 import org.cactoos.list.Synced;
@@ -110,13 +109,7 @@ public final class Program {
      * @return Program analysis without specifics names
      */
     public Program without(final String... names) {
-        final Collection<String> listed = new ListOf<>(names);
-        return new Program(
-            this.pkg,
-            new Filtered<>(
-                this.lints, lint -> () -> !listed.contains(lint.name())
-            )
-        );
+        return new Program(this.pkg, new WpaWithout(names));
     }
 
     /**

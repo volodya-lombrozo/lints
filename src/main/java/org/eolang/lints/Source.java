@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
-import org.cactoos.iterable.Filtered;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
-import org.cactoos.list.ListOf;
 
 /**
  * A single source XMIR to analyze.
@@ -80,13 +78,7 @@ public final class Source {
      * @return Program analysis without specific name
      */
     public Source without(final String... names) {
-        final Collection<String> listed = new ListOf<>(names);
-        return new Source(
-            this.xmir,
-            new Filtered<>(
-                this.lints, lint -> () -> !listed.contains(lint.name())
-            )
-        );
+        return new Source(this.xmir, new MonoWithout(names));
     }
 
     /**

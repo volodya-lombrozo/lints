@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.stream.Collectors;
 import matchers.DefectMatcher;
 import org.cactoos.list.ListOf;
+import org.cactoos.map.MapOf;
 import org.cactoos.set.SetOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
@@ -23,6 +24,8 @@ import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  * Test for {@link Program}.
@@ -133,6 +136,44 @@ final class ProgramTest {
                 )
             ).without("unit-test-missing", "unit-test-without-live-file").defects(),
             Matchers.emptyIterable()
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = {"unit-test-missing", "unit-test-missing:0"}
+    )
+    void catchesBrokenUnlintAfterLintWasRemoved(final String lid) throws IOException {
+        MatcherAssert.assertThat(
+            "Found defect does not match with expected",
+            new Program(
+                new MapOf<>(
+                    "f",
+                    new EoSyntax(
+                        String.join(
+                            "\n",
+                            String.format("+unlint %s", lid),
+                            "",
+                            "# F.",
+                            "[] > f"
+                        )
+                    ).parsed()
+                )
+            ).without("unit-test-missing").defects(),
+            Matchers.allOf(
+                Matchers.iterableWithSize(1),
+                Matchers.hasItem(
+                    Matchers.hasToString(
+                        Matchers.allOf(
+                            Matchers.containsString("unlint-non-existing-defect WARNING"),
+                            Matchers.containsString(
+                                String.format("Unlinting rule '%s' doesn't make sense,", lid)
+                            ),
+                            Matchers.containsString("since there are no defects with it")
+                        )
+                    )
+                )
+            )
         );
     }
 
