@@ -4,27 +4,28 @@
  */
 package benchmarks;
 
-import com.jcabi.xml.XML;
 import fixtures.BytecodeClass;
-import fixtures.ProgramSize;
+import fixtures.SourceSize;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
-import org.cactoos.scalar.Unchecked;
+import org.cactoos.scalar.IoChecked;
 import org.eolang.lints.Program;
+import org.eolang.lints.Source;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
 /**
- * Benchmark for {@link Program}.
+ * Benchmark for {@link Source}.
  *
  * @since 0.0.34
  * @checkstyle DesignForExtensionCheck (10 lines)
@@ -39,42 +40,29 @@ import org.openjdk.jmh.annotations.Warmup;
 public class ProgramBench {
 
     /**
-     * Benchmark for XMIR scanning.
-     * @param state State
-     * @todo #376:60min Enable redundant object in the single scope program benchmarks.
-     *  As for now, the lint is too slow, especially on L, XL and XXL-sized programs.
-     *  This happens mostly because of multiple XPath `//o` selects in the XSL. Once,
-     *  the lint will be optimized, we can enable it in the benchmarks.
+     * Large XMIR document.
      */
-    @Benchmark
-    public final void scansXmir(final BenchmarkState state) {
-        new Program(state.xmir).without("redundant-object").defects();
+    private final Path home;
+
+    @SuppressWarnings("PMD.ConstructorOnlyInitializesOrCallOtherConstructors")
+    public ProgramBench() {
+        try {
+            this.home = Files.createTempDirectory("tmp");
+            for (int idx = 0; idx < 10; ++idx) {
+                final String name = String.format("src-%d.xmir", idx);
+                Files.write(
+                    this.home.resolve(String.format("%s.xmir", name)),
+                    new IoChecked<>(new BytecodeClass(name, SourceSize.L.java()))
+                        .value().toString().getBytes(StandardCharsets.UTF_8)
+                );
+            }
+        } catch (final IOException ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
-    /**
-     * Benchmark state.
-     * @since 0.0.45
-     */
-    @State(Scope.Benchmark)
-    public static class BenchmarkState {
-
-        /**
-         * Program size.
-         */
-        @Param({"S", "M", "L", "XL", "XXL"})
-        private String size;
-
-        /**
-         * XMIR.
-         */
-        private XML xmir;
-
-        /**
-         * Initialize the state.
-         */
-        @Setup(Level.Trial)
-        public void init() {
-            this.xmir = new Unchecked<>(new BytecodeClass(ProgramSize.valueOf(this.size))).value();
-        }
+    @Benchmark
+    public final void scansLargeProgram() throws IOException {
+        new Program(this.home).defects();
     }
 }

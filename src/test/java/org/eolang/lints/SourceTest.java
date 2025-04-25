@@ -79,7 +79,7 @@ final class SourceTest {
                         "",
                         "# This is just a test object with no functionality.",
                         "[i] > foo",
-                        "  i > x"
+                        "  i > @"
                     )
                 ).parsed()
             ).defects(),
