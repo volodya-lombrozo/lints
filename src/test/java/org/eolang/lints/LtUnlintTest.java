@@ -4,7 +4,11 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.log.Logger;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
+import org.cactoos.io.ResourceOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -144,6 +148,23 @@ final class LtUnlintTest {
                 ).parsed()
             ),
             Matchers.emptyIterable()
+        );
+    }
+
+    @Test
+    void doesNotReportTwiceWhenThereIsNoUnlint() throws IOException {
+        final Collection<Defect> defects = new LtUnlint(
+            new LtByXsl("misc/unused-void-attr")
+        ).defects(
+            new EoSyntax(new ResourceOf("org/eolang/lints/tuple.eo")).parsed()
+        );
+        MatcherAssert.assertThat(
+            Logger.format(
+                "Found defects (%[list]s) contain duplicates, but they should not",
+                defects
+            ),
+            new HashSet<>(defects).size() == defects.size(),
+            Matchers.equalTo(true)
         );
     }
 }
