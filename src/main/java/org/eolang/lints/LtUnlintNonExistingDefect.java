@@ -22,7 +22,7 @@ import org.cactoos.text.TextOf;
 import org.eolang.parser.ObjectName;
 
 /**
- * Lint for checking `+unlint` meta to suppress non-existing defects in single program scope.
+ * Lint for checking `+unlint` meta to suppress non-existing defects in single XMIR scope.
  *
  * @since 0.0.40
  */

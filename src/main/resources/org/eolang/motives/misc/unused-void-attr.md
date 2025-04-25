@@ -18,7 +18,7 @@ Correct:
   x > bar
 ```
 
-Unused void attributes are allowed only if there are atoms in the program:
+Unused void attributes are allowed only if there are atoms in the object:
 
 ```eo
 # Foo.
