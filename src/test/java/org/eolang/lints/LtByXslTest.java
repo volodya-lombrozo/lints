@@ -4,6 +4,7 @@
  */
 package org.eolang.lints;
 
+import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import com.jcabi.matchers.XhtmlMatchers;
 import com.jcabi.xml.XMLDocument;
@@ -12,6 +13,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -321,5 +324,26 @@ final class LtByXslTest {
                         )
                     )
             );
+    }
+
+    @Test
+    void doesNotDuplicateDefectsWhenMultipleDefectsOnTheSameLine() throws Exception {
+        final Collection<Defect> defects = new LtByXsl("misc/unused-void-attr").defects(
+            new EoSyntax(
+                String.join(
+                    "\n",
+                    "# Foo with unused voids on the same line.",
+                    "[x y z] > foo"
+                )
+            ).parsed()
+        );
+        MatcherAssert.assertThat(
+            Logger.format(
+                "Found defects (%[list]s) should not contain duplicates",
+                defects
+            ),
+            new HashSet<>(defects).size() == defects.size(),
+            Matchers.equalTo(true)
+        );
     }
 }

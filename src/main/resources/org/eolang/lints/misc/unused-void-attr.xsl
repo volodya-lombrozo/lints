@@ -26,7 +26,7 @@
               </xsl:attribute>
             </xsl:if>
             <xsl:attribute name="severity">
-              <xsl:text>error</xsl:text>
+              <xsl:text>warning</xsl:text>
             </xsl:attribute>
             <xsl:text>The void attribute </xsl:text>
             <xsl:value-of select="eo:escape($attr)"/>

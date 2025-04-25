@@ -53,6 +53,7 @@ final class LtUnlint implements Lint<XML> {
         final List<Integer> problematic = found.stream()
             .filter(defect -> defect.rule().equals(lname))
             .map(Defect::line)
+            .distinct()
             .collect(Collectors.toList());
         final List<String> granular = new Xnav(xmir.inner()).path(
             String.format(
@@ -86,7 +87,7 @@ final class LtUnlint implements Lint<XML> {
             )
         );
         if (!added.get() && !global) {
-            defects.addAll(this.origin.defects(xmir));
+            defects.addAll(found);
         }
         return defects;
     }

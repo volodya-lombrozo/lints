@@ -81,8 +81,8 @@ final class LtReservedName implements Lint<XML> {
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
-        final Xnav program = new Xnav(xmir.inner());
-        program.path("//o[@name]")
+        final Xnav source = new Xnav(xmir.inner());
+        source.path("//o[@name]")
             .forEach(
                 object -> {
                     final String oname = object.attribute("name").text().get();
@@ -123,7 +123,7 @@ final class LtReservedName implements Lint<XML> {
      * During the `generate-sources` maven phase we are downloading <a href="https://github.com/objectionary/home">home repo</a>
      * as the source of object names. After repo downloaded, during `process-resources` phase,
      * we copy downloaded repo to classes in lints JAR: `${project.build.directory}/classes/`.
-     * This is mandatory step in order to provide access to the home repo files, when the programs
+     * This is mandatory step in order to provide access to the home repo files, when the sources
      * are linted from the outside the lints project, using lints as dependency. While, in local
      * tests, home repo is accessed as normal file.
      * Both methods depend on the same directory, which we pass in the ctor, the only difference

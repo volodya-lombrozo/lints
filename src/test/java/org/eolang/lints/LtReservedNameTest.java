@@ -63,7 +63,7 @@ final class LtReservedNameTest {
     }
 
     @Test
-    void allowsUniqueNameInTopProgramObject() throws IOException {
+    void allowsUniqueNameInTopSourceObject() throws IOException {
         MatcherAssert.assertThat(
             "Defects are not empty, but they should",
             new LtReservedName(new MapOf<>("f", "org.eolang.f.eo"))
