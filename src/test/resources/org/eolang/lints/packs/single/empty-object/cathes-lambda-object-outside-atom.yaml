@@ -6,8 +6,6 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='warning'])=1]
 document: |
-  <program>
-    <objects>
-      <o name="λ"/>
-    </objects>
-  </program>
+  <object>
+    <o name="λ"/>
+  </object>
