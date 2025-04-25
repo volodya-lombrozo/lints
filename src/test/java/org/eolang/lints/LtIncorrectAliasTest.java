@@ -41,7 +41,7 @@ final class LtIncorrectAliasTest {
                         new EoSyntax(
                             String.join(
                                 "\n",
-                                "+alias foo ",
+                                "+alias foo",
                                 "+package ttt\n",
                                 "# Bar",
                                 "[] > bar",
@@ -77,7 +77,7 @@ final class LtIncorrectAliasTest {
                             )
                         ).parsed()
                     ),
-                    new MapEntry<>("foo", new XMLDocument("<program/>"))
+                    new MapEntry<>("foo", new XMLDocument("<object><o name='foo'/></object>"))
                 )
             ),
             Matchers.hasSize(0)
@@ -91,7 +91,7 @@ final class LtIncorrectAliasTest {
             "org/eolang/lints/critical/incorrect-alias/no-package.eo"
         }
     )
-    void ignoresProgram(final String path) throws Exception {
+    void ignoresSource(final String path) throws Exception {
         MatcherAssert.assertThat(
             "Defects aren't empty, but should be",
             new LtIncorrectAlias().defects(
@@ -110,7 +110,6 @@ final class LtIncorrectAliasTest {
                     new MapEntry<>(
                         "longer-alias",
                         new EoSyntax(
-                            "bar",
                             String.join(
                                 "\n",
                                 "+alias stdout org.eolang.io.stdout",
@@ -123,7 +122,7 @@ final class LtIncorrectAliasTest {
                     ),
                     new MapEntry<>(
                         "org.eolang.io.stdout",
-                        new XMLDocument("<program><objects/></program>")
+                        new XMLDocument("<object><o name='stdout'/></object>")
                     )
                 )
             ),
@@ -137,7 +136,6 @@ final class LtIncorrectAliasTest {
         Files.write(
             dir.resolve("bar.xmir"),
             new EoSyntax(
-                "bar",
                 String.join(
                     "\n",
                     "+alias ttt.foo",
@@ -149,12 +147,13 @@ final class LtIncorrectAliasTest {
             ).parsed().toString().getBytes()
         );
         Files.createDirectory(dir.resolve("ttt"));
-        Files.write(dir.resolve("ttt/foo.xmir"), "<program/>".getBytes());
-        Files.write(dir.resolve("bar-tests.xmir"), "<program/>".getBytes());
-        Files.write(dir.resolve("ttt/foo-tests.xmir"), "<program/>".getBytes());
+        final String source = "<object/>";
+        Files.write(dir.resolve("ttt/foo.xmir"), source.getBytes());
+        Files.write(dir.resolve("bar-tests.xmir"), source.getBytes());
+        Files.write(dir.resolve("ttt/foo-tests.xmir"), source.getBytes());
         MatcherAssert.assertThat(
             "Defects are not empty, but should be",
-            new Programs(dir).defects(),
+            new Program(dir).defects(),
             Matchers.emptyIterable()
         );
     }
@@ -165,7 +164,6 @@ final class LtIncorrectAliasTest {
         Files.write(
             dir.resolve("main.xmir"),
             new EoSyntax(
-                "main",
                 String.join(
                     "\n",
                     "+alias stdout org.eolang.io.stdout",
@@ -176,9 +174,10 @@ final class LtIncorrectAliasTest {
                 )
             ).parsed().toString().getBytes(StandardCharsets.UTF_8)
         );
+        final String source = "<object/>";
         Files.write(
             dir.resolve("main-tests.xmir"),
-            "<program><objects/></program>".getBytes()
+            source.getBytes()
         );
         Files.createDirectory(
             Files.createDirectory(
@@ -189,15 +188,15 @@ final class LtIncorrectAliasTest {
         );
         Files.write(
             dir.resolve("org/eolang/io/stdout.xmir"),
-            "<program><objects/></program>".getBytes()
+            source.getBytes()
         );
         Files.write(
             dir.resolve("org/eolang/io/stdout-tests.xmir"),
-            "<program><objects/></program>".getBytes()
+            source.getBytes()
         );
         MatcherAssert.assertThat(
             "Defects are not empty, but should be",
-            new Programs(dir).defects(),
+            new Program(dir).defects(),
             Matchers.emptyIterable()
         );
     }

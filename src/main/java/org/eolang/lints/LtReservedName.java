@@ -32,6 +32,7 @@ import org.cactoos.list.ListOf;
 import org.cactoos.text.TextOf;
 import org.cactoos.text.UncheckedText;
 import org.eolang.parser.EoSyntax;
+import org.eolang.parser.ObjectName;
 
 /**
  * Lint for reserved names.
@@ -80,8 +81,8 @@ final class LtReservedName implements Lint<XML> {
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
         final Collection<Defect> defects = new LinkedList<>();
-        final Xnav program = new Xnav(xmir.inner());
-        program.path("//o[@name]")
+        final Xnav source = new Xnav(xmir.inner());
+        source.path("//o[@name]")
             .forEach(
                 object -> {
                     final String oname = object.attribute("name").text().get();
@@ -90,8 +91,7 @@ final class LtReservedName implements Lint<XML> {
                             new Defect.Default(
                                 this.name(),
                                 Severity.WARNING,
-                                program.element("program").attribute("name")
-                                    .text().orElse("unknown"),
+                                new ObjectName(xmir).get(),
                                 Integer.parseInt(object.attribute("line").text().orElse("0")),
                                 String.format(
                                     "Object name \"%s\" is already reserved by object in the \"%s\"",
@@ -123,7 +123,7 @@ final class LtReservedName implements Lint<XML> {
      * During the `generate-sources` maven phase we are downloading <a href="https://github.com/objectionary/home">home repo</a>
      * as the source of object names. After repo downloaded, during `process-resources` phase,
      * we copy downloaded repo to classes in lints JAR: `${project.build.directory}/classes/`.
-     * This is mandatory step in order to provide access to the home repo files, when the programs
+     * This is mandatory step in order to provide access to the home repo files, when the sources
      * are linted from the outside the lints project, using lints as dependency. While, in local
      * tests, home repo is accessed as normal file.
      * Both methods depend on the same directory, which we pass in the ctor, the only difference
@@ -185,7 +185,7 @@ final class LtReservedName implements Lint<XML> {
     private static Map<String, String> namesInFile(final Path path) {
         final XML parsed;
         try {
-            parsed = new EoSyntax("reserved", new UncheckedInput(new InputOf(path.toFile())))
+            parsed = new EoSyntax(new UncheckedInput(new InputOf(path.toFile())))
                 .parsed();
         } catch (final IOException exception) {
             throw new IllegalStateException(
@@ -206,7 +206,7 @@ final class LtReservedName implements Lint<XML> {
     private static Map<String, String> namesInJar(final Path path) {
         final XML parsed;
         try (InputStream input = Files.newInputStream(path)) {
-            parsed = new EoSyntax("reserved", new TextOf(input).asString()).parsed();
+            parsed = new EoSyntax(new TextOf(input).asString()).parsed();
         } catch (final Exception exception) {
             throw new IllegalStateException(
                 String.format("Failed to parse EO source in \"%s\"", path),
@@ -224,7 +224,7 @@ final class LtReservedName implements Lint<XML> {
      */
     private static Map<String, String> namesInXmir(final XML xmir, final Path path) {
         final Map<String, String> names = new HashMap<>(64);
-        new Xnav(xmir.inner()).path("/program/objects/o/@name")
+        new Xnav(xmir.inner()).path("/object/o/@name")
             .map(oname -> oname.text().get())
             .forEach(
                 oname ->

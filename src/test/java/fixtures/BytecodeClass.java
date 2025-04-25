@@ -38,7 +38,7 @@ public final class BytecodeClass implements Scalar<XML> {
      * Constructor.
      * @param psize Program size
      */
-    public BytecodeClass(final ProgramSize psize) {
+    public BytecodeClass(final SourceSize psize) {
         this(psize.name(), psize.java());
     }
 

@@ -66,7 +66,7 @@
     <dependency>
       <groupId>com.jcabi</groupId>
       <artifactId>jcabi-xml</artifactId>
-      <version>0.33.5</version>
+      <version>0.34.0</version>
     </dependency>
     <dependency>
       <groupId>io.github.secretx33</groupId>
@@ -119,13 +119,13 @@
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.55.2</version>
+      <version>0.56.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>com.github.volodya-lombrozo</groupId>
       <artifactId>xnav</artifactId>
-      <version>0.1.16</version>
+      <version>0.1.18</version>
     </dependency>
     <dependency>
       <groupId>org.apache.opennlp</groupId>
@@ -313,11 +313,11 @@
                   <threads>6</threads>
                   <mutationThreshold>60</mutationThreshold>
                   <excludedTestClasses>
-                    <class>org.eolang.lints.ProgramTest</class>
+                    <class>org.eolang.lints.SourceTest</class>
                     <class>org.eolang.lints.PkMonoTest</class>
                     <class>org.eolang.lints.LtByXslTest</class>
                     <class>org.eolang.lints.PkWpaTest</class>
-                    <class>org.eolang.lints.ProgramsTest</class>
+                    <class>org.eolang.lints.ProgramTest</class>
                     <class>org.eolang.lints.LtUnlintNonExistingDefectWpaTest</class>
                     <class>org.eolang.lints.LtTestNotVerbTest</class>
                     <class>org.eolang.lints.WpaLintsTest</class>

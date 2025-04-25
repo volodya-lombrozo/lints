@@ -13,7 +13,7 @@
 
 This Java package is a collection of "lints" (aka "checkers") for
 [XMIR] (an intermediate representation of a
-[EO] program). This is not about static analysis or code
+[EO] object). This is not about static analysis or code
 formatting. This is about best practices and readiness of code
 for successful compilation and execution.
 
@@ -33,37 +33,37 @@ of [XMIR] documents your software may generate:
 
 ```java
 import com.jcabi.xml.StrictXML;
-import org.eolang.lints.Program;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-
-final class Foo {
-  @Test
-  void testValidProgram() {
-    Assertions.assertTrue(
-      new Program(
-        new StrictXML("<program> your XMIR goes here </program>")
-      ).defects().isEmpty()
-    );
-  }
-}
-```
-
-Then, you can run a whole-program analysis of XMIR files
-in your project, using the `Programs` class (there is a
-different set of lints to be executed here!):
-
-```java
-import java.nio.file.Paths;
-import org.eolang.lints.Programs;
+import org.eolang.lints.Source;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 final class Foo {
     @Test
-    void testSetOfPrograms() {
+    void testValidSource() {
         Assertions.assertTrue(
-            new Programs(
+            new Source(
+                new StrictXML("<object> your XMIR goes here </object>")
+            ).defects().isEmpty()
+        );
+    }
+}
+```
+
+Then, you can run a whole-program analysis of XMIR files
+in your project, using the `Program` class (there is a
+different set of lints to be executed here!):
+
+```java
+import java.nio.file.Paths;
+import org.eolang.lints.Program;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+final class Foo {
+    @Test
+    void testProgram() {
+        Assertions.assertTrue(
+            new Program(
                 Paths.get("xmir-files") // directory with XMIR files
             ).defects().isEmpty()
         );
@@ -79,21 +79,21 @@ with the help of the `+unlint` meta.
 The library is designed as a set of lints, each of which
 is a separate class implementing the `Lint` interface.
 Each lint is responsible for checking one particular aspect
-of the [XMIR] document. The `Program` class is responsible for
+of the [XMIR] document. The `Source` class is responsible for
 running all lints and collecting defects for a single XMIR file.
-The `Programs` class is responsible for running all lints and
-collecting defects for a set of XMIR files. All in all,
+The `Program` class is responsible for running all lints and
+collecting defects for whole EO program, as set of XMIR files. All in all,
 there are only four classes and interfaces that are supposed to
 be exposed to a user of the library:
 
-* `Program` - checker of a single [XMIR]
-* `Programs` - checker of a set of [XMIR]
+* `Source` - checker of a single [XMIR]
+* `Program` - checker of a set of [XMIR]
 * `Defect` - a single defect discovered
 * `Severity` - a severity of a defect
 
 There are also a few classes that implement `Iterable<Lint>`:
 `PkMono`, `PkWpa`, and `PkByXsl`.
-They are supposed to be used only by the `Program` and `Programs`,
+They are supposed to be used only by the `Source` and `Program`,
 and are not supposed to be exposed to the user of the library.
 They are responsible for providing a set of lints to be executed,
 building them from the information in classpath.
@@ -163,6 +163,8 @@ mvn jmh:benchmark
 ```
 
 You will need [Maven 3.3+](https://maven.apache.org) and Java 11+ installed.
+Also, if you have [xcop](https://github.com/yegor256/xcop) installed, make sure
+it is version `0.8.0`+.
 
 [XMIR]: https://news.eolang.org/2022-11-25-xmir-guide.html
 [EO]: https://www.eolang.org

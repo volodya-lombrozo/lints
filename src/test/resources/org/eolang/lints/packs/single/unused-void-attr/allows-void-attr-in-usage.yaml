@@ -2,9 +2,9 @@
 # SPDX-License-Identifier: MIT
 ---
 sheets:
-  - /org/eolang/lints/errors/unused-void-attr.xsl
+  - /org/eolang/lints/misc/unused-void-attr.xsl
 asserts:
-  - /defects[count(defect[@severity='error'])=0]
+  - /defects[count(defect)=0]
 input: |
   # Foo
   [x] > foo
