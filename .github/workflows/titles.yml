@@ -23,6 +23,7 @@ jobs:
           max-issues: 10
           model: gpt-4
           verbose: true
+          quiet: true
           strip-characters: '"'
           prompt: |-
             You are an expert at writing clear, concise, and descriptive GitHub issue titles.
