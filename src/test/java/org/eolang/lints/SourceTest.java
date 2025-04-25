@@ -24,6 +24,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
@@ -34,6 +35,7 @@ import org.cactoos.iterable.Synced;
 import org.cactoos.list.ListOf;
 import org.cactoos.scalar.Unchecked;
 import org.cactoos.set.SetOf;
+import org.cactoos.text.TextOf;
 import org.eolang.parser.EoSyntax;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -328,6 +330,51 @@ final class SourceTest {
                     )
                 )
             )
+        );
+    }
+
+    @Test
+    void lintsTupleByAllXslsWithoutDuplicates() throws Exception {
+        final XML tuple = new EoSyntax(
+            new TextOf(new ResourceOf("org/eolang/lints/tuple.eo")).asString()
+        ).parsed();
+        final Collection<Defect> aggregated = new ListOf<>();
+        new PkByXsl().forEach(
+            xsl -> {
+                try {
+                    aggregated.addAll(xsl.defects(tuple));
+                } catch (final IOException exception) {
+                    throw new IllegalStateException(
+                        String.format("Failed to lint tuple with '%s' lint", xsl.name()),
+                        exception
+                    );
+                }
+            }
+        );
+        MatcherAssert.assertThat(
+            Logger.format(
+                "Aggregated defects (%[list]s) should not contain duplicates",
+                aggregated
+            ),
+            new HashSet<>(aggregated).size() == aggregated.size(),
+            Matchers.equalTo(true)
+        );
+    }
+
+    @Test
+    void lintsTupleByXslWithoutDuplicates() throws Exception {
+        final Collection<Defect> defects = new LtByXsl("misc/unused-void-attr").defects(
+            new EoSyntax(
+                new TextOf(new ResourceOf("org/eolang/lints/tuple.eo")).asString()
+            ).parsed()
+        );
+        MatcherAssert.assertThat(
+            Logger.format(
+                "Found defects (%[list]s) should not contain duplicates",
+                defects
+            ),
+            new HashSet<>(defects).size() == defects.size(),
+            Matchers.equalTo(true)
         );
     }
 
