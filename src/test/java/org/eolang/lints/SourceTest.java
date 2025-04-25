@@ -23,7 +23,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
@@ -320,9 +325,26 @@ final class SourceTest {
                 );
             }
         );
+        final String summary = sum.toString();
+        final Pattern tpattern = Pattern.compile(
+            "^Lint time: (\\d+(?:\\.\\d+)?)(ms|s) \\(\\d+ ms\\)$"
+        );
+        Arrays.stream(summary.split("\\R"))
+            .filter(line -> line.startsWith("Lint time:"))
+            .forEach(
+                text ->
+                    MatcherAssert.assertThat(
+                        String.format(
+                            "Lint time '%s' does not match '%s' regex, but it should",
+                            text, tpattern
+                        ),
+                        tpattern.matcher(text).matches(),
+                        Matchers.equalTo(true)
+                    )
+            );
         Files.write(
             Paths.get("target").resolve("lint-summary.txt"),
-            sum.toString().getBytes(StandardCharsets.UTF_8)
+            summary.getBytes(StandardCharsets.UTF_8)
         );
     }
 
