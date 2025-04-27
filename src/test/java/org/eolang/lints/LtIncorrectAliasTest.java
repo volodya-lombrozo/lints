@@ -144,13 +144,16 @@ final class LtIncorrectAliasTest {
                     "[] > bar",
                     "  foo > @"
                 )
-            ).parsed().toString().getBytes()
+            ).parsed().toString().getBytes(StandardCharsets.UTF_8)
         );
         Files.createDirectory(dir.resolve("ttt"));
         final String source = "<object/>";
-        Files.write(dir.resolve("ttt/foo.xmir"), source.getBytes());
-        Files.write(dir.resolve("bar-tests.xmir"), source.getBytes());
-        Files.write(dir.resolve("ttt/foo-tests.xmir"), source.getBytes());
+        Files.write(dir.resolve("ttt/foo.xmir"), source.getBytes(StandardCharsets.UTF_8));
+        Files.write(dir.resolve("bar-tests.xmir"), source.getBytes(StandardCharsets.UTF_8));
+        Files.write(
+            dir.resolve("ttt/foo-tests.xmir"),
+            source.getBytes(StandardCharsets.UTF_8)
+        );
         MatcherAssert.assertThat(
             "Defects are not empty, but should be",
             new Program(dir).defects(),
@@ -177,7 +180,7 @@ final class LtIncorrectAliasTest {
         final String source = "<object/>";
         Files.write(
             dir.resolve("main-tests.xmir"),
-            source.getBytes()
+            source.getBytes(StandardCharsets.UTF_8)
         );
         Files.createDirectory(
             Files.createDirectory(
@@ -188,11 +191,11 @@ final class LtIncorrectAliasTest {
         );
         Files.write(
             dir.resolve("org/eolang/io/stdout.xmir"),
-            source.getBytes()
+            source.getBytes(StandardCharsets.UTF_8)
         );
         Files.write(
             dir.resolve("org/eolang/io/stdout-tests.xmir"),
-            source.getBytes()
+            source.getBytes(StandardCharsets.UTF_8)
         );
         MatcherAssert.assertThat(
             "Defects are not empty, but should be",

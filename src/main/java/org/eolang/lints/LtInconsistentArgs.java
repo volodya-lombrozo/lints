@@ -8,9 +8,9 @@ import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.cactoos.io.ResourceOf;
@@ -38,7 +38,7 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
 
     @Override
     public Collection<Defect> defects(final Map<String, XML> pkg) throws IOException {
-        final Collection<Defect> defects = new LinkedList<>();
+        final Collection<Defect> defects = new ArrayList<>(0);
         final Map<Xnav, Map<String, List<Integer>>> whole = LtInconsistentArgs.scanUsages(pkg);
         final Map<String, List<Xnav>> bases = LtInconsistentArgs.baseOccurrences(whole);
         LtInconsistentArgs.mergedSources(whole).forEach(

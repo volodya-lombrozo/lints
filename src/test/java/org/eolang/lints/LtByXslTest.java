@@ -98,6 +98,7 @@ final class LtByXslTest {
     }
 
     @Test
+    @SuppressWarnings("StreamResourceLeak")
     void checksLocationsOfYamlPacks() throws IOException {
         final Set<String> groups = Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
             .filter(Files::isRegularFile)
@@ -134,6 +135,7 @@ final class LtByXslTest {
 
     @Test
     @DisabledOnOs(OS.WINDOWS)
+    @SuppressWarnings("StreamResourceLeak")
     void catchesLostYamls() throws IOException {
         Files.walk(Paths.get("src/test/resources/org/eolang/lints"))
             .filter(Files::isRegularFile)
@@ -156,6 +158,7 @@ final class LtByXslTest {
     }
 
     @Test
+    @SuppressWarnings("StreamResourceLeak")
     void catchesLostNonYamls() throws IOException {
         Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs"))
             .filter(Files::isRegularFile)
@@ -172,6 +175,7 @@ final class LtByXslTest {
     }
 
     @Test
+    @SuppressWarnings("StreamResourceLeak")
     void checksFileNaming() throws IOException {
         Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs"))
             .filter(Files::isRegularFile)
@@ -185,6 +189,7 @@ final class LtByXslTest {
     }
 
     @Test
+    @SuppressWarnings("StreamResourceLeak")
     void checksIdsInXslStylesheets() throws IOException {
         Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
             .filter(Files::isRegularFile)
@@ -206,6 +211,7 @@ final class LtByXslTest {
     }
 
     @Test
+    @SuppressWarnings("StreamResourceLeak")
     void checksMotivesForPresence() throws IOException {
         Files.walk(Paths.get("src/main/resources/org/eolang/lints"))
             .filter(Files::isRegularFile)
@@ -278,6 +284,7 @@ final class LtByXslTest {
     }
 
     @Test
+    @SuppressWarnings("StreamResourceLeak")
     void validatesPacksAgainstXsdSchema() throws IOException {
         Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs/single"))
             .filter(Files::isRegularFile)
