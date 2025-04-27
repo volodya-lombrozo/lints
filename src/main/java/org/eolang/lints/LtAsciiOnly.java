@@ -7,8 +7,8 @@ package org.eolang.lints;
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,13 +28,17 @@ import org.eolang.parser.ObjectName;
  * @todo #19:45min Create Lint envelope called `JavaLint` that will fetch motive from
  *  Markdown file based on the lint's name (Java class name) and lint's dimension
  *  (Java package name, e.g. `comments`).
+ * @todo #402:15min Replace the creation of new ArrayList<>(0) with the creation of
+ *  ArrayList<>() without a constructor argument in whole project. Add ignore warning
+ *  ConditionalRegexpMultilineCheck from Checkstyle (it doesn't seem to be possible at the moment
+ *  <a href="https://github.com/yegor256/qulice/issues/1328">issue 1328</a>)
  * @checkstyle StringLiteralsConcatenationCheck (30 lines)
  */
 final class LtAsciiOnly implements Lint<XML> {
 
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
-        final Collection<Defect> defects = new LinkedList<>();
+        final Collection<Defect> defects = new ArrayList<>(0);
         final Xnav xml = new Xnav(xmir.inner());
         final List<Xnav> comments = xml.path("/object/comments/comment")
             .collect(Collectors.toList());

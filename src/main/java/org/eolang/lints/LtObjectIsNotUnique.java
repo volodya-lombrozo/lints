@@ -7,8 +7,8 @@ package org.eolang.lints;
 import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -34,7 +34,7 @@ final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
 
     @Override
     public Collection<Defect> defects(final Map<String, XML> pkg) {
-        final Collection<Defect> defects = new LinkedList<>();
+        final Collection<Defect> defects = new ArrayList<>(0);
         for (final XML xmir : pkg.values()) {
             final Xnav xml = new Xnav(xmir.inner());
             final String src = new ObjectName(xmir).get();
@@ -110,8 +110,7 @@ final class LtObjectIsNotUnique implements Lint<Map<String, XML>> {
         if (
             xml.path("/object/metas/meta[head='package']").count() == 1L
         ) {
-            name = xml.path("/object/metas/meta[head='package']/tail")
-                .findFirst().get().text().get();
+            name = xml.one("/object/metas/meta[head='package']/tail").text().get();
         } else {
             name = "";
         }

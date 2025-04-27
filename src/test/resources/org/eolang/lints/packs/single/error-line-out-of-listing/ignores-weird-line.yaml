@@ -5,6 +5,7 @@ sheets:
   - /org/eolang/lints/lines/error-line-out-of-listing.xsl
 asserts:
   - /defects[count(defect)=0]
+ignore-schema: true
 document: |
   <object>
     <listing>first line

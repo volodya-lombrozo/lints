@@ -10,9 +10,9 @@ import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import com.jcabi.xml.XSL;
 import com.jcabi.xml.XSLDocument;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -69,7 +69,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
 
     @Override
     public Collection<Defect> defects(final Map<String, XML> pkg) {
-        final Collection<Defect> defects = new LinkedList<>();
+        final Collection<Defect> defects = new ArrayList<>(0);
         final Map<Xnav, List<String>> index = pkg.values().stream()
             .map(this.pre::transform)
             .map(xmir -> new Xnav(xmir.inner()))
@@ -169,9 +169,7 @@ final class LtAtomIsNotUnique implements Lint<Map<String, XML>> {
         if (
             xml.path("/object/metas/meta[head='package']").count() == 1L
         ) {
-            final String pack = xml.path("/object/metas/meta[head='package']/tail")
-                .map(o -> o.text().get())
-                .findFirst().get();
+            final String pack = xml.one("/object/metas/meta[head='package']/tail").text().get();
             result = fqns.stream().map(fqn -> String.format("%s.%s", pack, fqn))
                 .collect(Collectors.toList());
         } else {
