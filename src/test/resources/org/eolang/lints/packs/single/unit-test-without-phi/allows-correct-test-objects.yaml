@@ -4,11 +4,13 @@
 sheets:
   - /org/eolang/lints/tests/unit-test-without-phi.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='5']
+  - /defects[count(defect[@severity='warning'])=0]
 input: |
   +tests
 
-  # No comments.
-  [] > test
-    true > i
+  # Test.
+  [] > stdout-tests
+    # Test works.
+    [] > prints-hello-world
+    stdout > @
+      "Hello, world"
