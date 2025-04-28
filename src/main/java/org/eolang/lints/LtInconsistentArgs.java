@@ -45,22 +45,36 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
             (base, counts) -> {
                 if (counts.stream().distinct().count() != 1L) {
                     final List<Xnav> sources = bases.get(base);
+                    final Map<String, List<Integer>> clashes = LtInconsistentArgs.clashes(sources, base);
                     sources.forEach(
                         src -> src.path(String.format("//o[@base='%s']", base))
-                            .map(o -> Integer.parseInt(o.attribute("line").text().orElse("0")))
                             .forEach(
-                                line -> {
-                                    System.out.println(new ObjectName(new XMLDocument(src.node())).get());
-                                    System.out.println(line);
+                                o -> {
+                                    final String current = new ObjectName(new XMLDocument(src.node())).get();
+                                    final int cline = Integer.parseInt(
+                                        o.attribute("line").text().orElse("0")
+                                    );
+                                    final Collection<String> others = new ArrayList<>();
+                                    clashes.forEach(
+                                        (program, lines) ->
+                                            lines.forEach(
+                                            line -> {
+                                                if (!(program.equals(current) && line == cline)) {
+                                                    others.add(String.format("%s:%d", program, line));
+                                                }
+                                            }
+                                        )
+                                    );
                                     defects.add(
                                         new Defect.Default(
                                             this.name(),
                                             Severity.WARNING,
-                                            new ObjectName(new XMLDocument(src.node())).get(),
-                                            line,
+                                            current,
+                                            cline,
                                             String.format(
-                                                "Object '%s' has arguments inconsistency (the usage clashes with %s",
-                                                base
+                                                "Object '%s' has arguments inconsistency (the usage clashes with [%s])",
+                                                base,
+                                                String.join(", ", others)
                                             )
                                         )
                                     );
@@ -148,5 +162,26 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                 )
         );
         return result;
+    }
+
+    /**
+     * Aggregate usage clashes for the given base.
+     * @param sources Sources
+     * @param base Base
+     * @return Usage clashes
+     */
+    private static Map<String, List<Integer>> clashes(final List<Xnav> sources, final String base) {
+        final Map<String, List<Integer>> clashes = new HashMap<>(16);
+        sources.forEach(
+            src -> src.path(String.format("//o[@base='%s']", base))
+                .forEach(
+                    o -> {
+                        final String program = new ObjectName(new XMLDocument(src.node())).get();
+                        final int line = Integer.parseInt(o.attribute("line").text().orElse("0"));
+                        clashes.computeIfAbsent(program, k -> new ArrayList<>()).add(line);
+                    }
+                )
+        );
+        return clashes;
     }
 }
