@@ -49,7 +49,9 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                         src -> src.path(String.format("//o[@base='%s']", base))
                             .map(o -> Integer.parseInt(o.attribute("line").text().orElse("0")))
                             .forEach(
-                                line ->
+                                line -> {
+                                    System.out.println(new ObjectName(new XMLDocument(src.node())).get());
+                                    System.out.println(line);
                                     defects.add(
                                         new Defect.Default(
                                             this.name(),
@@ -57,11 +59,12 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                                             new ObjectName(new XMLDocument(src.node())).get(),
                                             line,
                                             String.format(
-                                                "Object '%s' has arguments inconsistency",
+                                                "Object '%s' has arguments inconsistency (the usage clashes with %s",
                                                 base
                                             )
                                         )
-                                    )
+                                    );
+                                }
                             )
                     );
                 }
