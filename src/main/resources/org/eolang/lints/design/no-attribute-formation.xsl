@@ -12,7 +12,8 @@
   <xsl:template match="/">
     <defects>
       <xsl:if test="not(/object[metas/meta[head='tests']])">
-        <xsl:for-each select="//o[eo:abstract(.) and not(parent::o[eo:abstract(.)]) and not(@name = 'λ' and parent::o[eo:atom(.)]) and not(parent::o[@base='Q.org.eolang.bytes']) and not(o[@base='∅'])]">
+        <xsl:variable name="primary" select="/object/o[1]/@name"/>
+        <xsl:for-each select="//o[eo:abstract(.) and not(parent::o[eo:abstract(.) and @name != $primary]) and not(parent::o[o[@base='∅']]) and not(@name = 'λ' and parent::o[eo:atom(.)]) and not(parent::o[@base='Q.org.eolang.bytes']) and not(o[@base='∅'])]">
           <defect>
             <xsl:variable name="line" select="eo:lineno(@line)"/>
             <xsl:attribute name="line">
