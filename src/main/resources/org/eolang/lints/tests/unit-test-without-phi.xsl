@@ -11,7 +11,7 @@
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:for-each select="(/object[metas/meta[head='tests']]/o)[1]/o[eo:abstract(.) and count(o[not(eo:abstract(.)) and @name='@']) = 0]">
+      <xsl:for-each select="(/object[metas/meta[head='tests']]/o)[1]/o[eo:abstract(.) and count(o[@name='@']) = 0]">
         <xsl:element name="defect">
           <xsl:variable name="line" select="eo:lineno(@line)"/>
           <xsl:attribute name="line">
