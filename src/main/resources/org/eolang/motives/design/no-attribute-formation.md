@@ -19,4 +19,14 @@ Correct:
   x > sbp
 ```
 
+It is also correct having an "attribute-free" formation, but only if its parent
+is a formation as well:
+
+```eo
+# Foo.
+[x] > foo
+  # Bar, have an access to `x`.
+  [] > bar
+```
+
 [Utility classes]: https://www.yegor256.com/2015/02/26/composable-decorators.html
