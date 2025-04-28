@@ -4,8 +4,8 @@
 sheets:
   - /org/eolang/lints/misc/duplicate-names-in-diff-context.xsl
 asserts:
-  - /defects[count(defect[@severity='warning'])=2]
   - /defects/defect[@line='4' or @line='6']
+  - /defects[count(defect[@severity='warning'])=2]
 input: |
   # No comments.
   [] > foo
