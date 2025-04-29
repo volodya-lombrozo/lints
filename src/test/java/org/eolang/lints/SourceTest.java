@@ -359,6 +359,31 @@ final class SourceTest {
     }
 
     @Test
+    void outputsInformationAboutSingleScope() throws IOException {
+        MatcherAssert.assertThat(
+            "Found defects don't contain information about Single scope, but they should",
+            new Source(
+                new EoSyntax(
+                    String.join(
+                        "\n",
+                        "# Foo",
+                        "[] > foo"
+                    )
+                ).parsed()
+            ).defects(),
+            Matchers.hasItem(
+                Matchers.hasToString(
+                    Matchers.allOf(
+                        Matchers.containsString("comment-without-dot WARNING"),
+                        Matchers.containsString(":2"),
+                        Matchers.containsString("(Single)")
+                    )
+                )
+            )
+        );
+    }
+
+    @Test
     @Tag("benchmark")
     @ExtendWith(MktmpResolver.class)
     @ExtendWith(MayBeSlow.class)
