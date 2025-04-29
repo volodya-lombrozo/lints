@@ -12,27 +12,7 @@
     <defects>
       <xsl:for-each select="//o[@name and @name != '@' and @base and @base != '∅']">
         <xsl:variable name="usage" select="concat('^\$(?:\.\^)*\.', @name, '(?:\.\w+)?$')"/>
-        <!--
-          @todo #376:45min Define usage of iteration objects properly.
-           Currently, in the `$looped` and `$looped-auto` we are looking for objects with bases
-           equal to either `.eachi` or `.each`. It can be more iteration objects in EO, besides
-           that, custom iteration objects can be introduced by the programmers. Also, since EO is
-           dynamically-typed language, and we don't have predefined control flow in the language,
-           we can't denote which object is an iteration one. Probably, the solution is to allow
-           redundant object to be composed, and used by the different object. Like in this example:
-           ```eo
-           # Foo.
-           [] > foo
-             52 > created  # not redundant
-             x.created > ...
-             ...
-             42 > f # redundant
-             f.plus 4 > ...
-           ```
-        -->
-        <xsl:variable name="looped" select="boolean(//o[@base = '.eachi' or @base = '.each']/o[matches(@base, $usage)])"/>
-        <xsl:variable name="looped-auto" select="boolean(//o[@name=substring(//o[@base = '.eachi' or @base = '.each']/o[starts-with(@base, '$.a🌵')]/@base, 3)]/o[matches(@base, $usage)])"/>
-        <xsl:if test="count(//o[matches(@base, $usage)])&lt;=1 and not($looped) and not($looped-auto)">
+        <xsl:if test="count(//o[matches(@base, $usage)])&lt;=1">
           <xsl:element name="defect">
             <xsl:variable name="line" select="eo:lineno(@line)"/>
             <xsl:attribute name="line">
