@@ -177,6 +177,33 @@ final class ProgramTest {
         );
     }
 
+    @Test
+    void outputsInformationAboutWpaScope() throws IOException {
+        MatcherAssert.assertThat(
+            "Found defects don't contain information about WPA scope, but they should",
+            new Program(
+                new MapOf<>(
+                    "foo",
+                    new EoSyntax(
+                        String.join(
+                            "\n",
+                            "# Foo",
+                            "[] > foo"
+                        )
+                    ).parsed()
+                )
+            ).defects(),
+            Matchers.hasItem(
+                Matchers.hasToString(
+                    Matchers.allOf(
+                        Matchers.containsString("unit-test-missing WARNING"),
+                        Matchers.containsString("(WPA)")
+                    )
+                )
+            )
+        );
+    }
+
     private Path withSource(final Path dir, final String name,
         final String text) throws IOException {
         final Path path = dir.resolve(name);
