@@ -16,7 +16,8 @@ import org.hamcrest.Description;
  *
  * @since 0.0.43
  */
-public final class WpaStoryMatcher extends BaseMatcher<Map<List<String>, Map<XML, Map<String, XML>>>> {
+public final class WpaStoryMatcher
+    extends BaseMatcher<Map<List<String>, Map<XML, Map<String, XML>>>> {
 
     /**
      * Summary.
