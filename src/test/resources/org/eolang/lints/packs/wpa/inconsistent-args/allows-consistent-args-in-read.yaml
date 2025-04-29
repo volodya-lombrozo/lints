@@ -4,8 +4,7 @@
 lints:
   - inconsistent-args
 asserts:
-  - /defects[count(defect)=1]
-# print full XMIR?
+  - /defects[count(defect)=0]
 tee-input-tests.eo: |
   # Tee tests.
   [] > tee-input-tests
