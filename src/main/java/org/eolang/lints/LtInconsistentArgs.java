@@ -45,23 +45,35 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
             (base, counts) -> {
                 if (counts.stream().distinct().count() != 1L) {
                     final List<Xnav> sources = bases.get(base);
+                    final Map<String, List<Integer>> clashes = LtInconsistentArgs.clashes(
+                        sources, base
+                    );
                     sources.forEach(
                         src -> src.path(String.format("//o[@base='%s']", base))
-                            .map(o -> Integer.parseInt(o.attribute("line").text().orElse("0")))
                             .forEach(
-                                line ->
+                                o -> {
+                                    final String current = new ObjectName(
+                                        new XMLDocument(src.node())
+                                    ).get();
+                                    final int cline = Integer.parseInt(
+                                        o.attribute("line").text().orElse("0")
+                                    );
                                     defects.add(
                                         new Defect.Default(
                                             this.name(),
                                             Severity.WARNING,
-                                            new ObjectName(new XMLDocument(src.node())).get(),
-                                            line,
+                                            current,
+                                            cline,
                                             String.format(
-                                                "Object '%s' has arguments inconsistency",
-                                                base
+                                                "Object '%s' has arguments inconsistency (the usage clashes with [%s])",
+                                                base,
+                                                LtInconsistentArgs.objectClashes(
+                                                    clashes, current, cline
+                                                )
                                             )
                                         )
-                                    )
+                                    );
+                                }
                             )
                     );
                 }
@@ -130,8 +142,8 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
 
     /**
      * Object occurrences across all sources, grouped by object base attribute.
-     * @param whole All object usages across all sources.
-     * @return Grouped base occurrences in the sources.
+     * @param whole All object usages across all sources
+     * @return Grouped base occurrences in the sources
      */
     private static Map<String, List<Xnav>> baseOccurrences(
         final Map<Xnav, Map<String, List<Integer>>> whole
@@ -145,5 +157,52 @@ final class LtInconsistentArgs implements Lint<Map<String, XML>> {
                 )
         );
         return result;
+    }
+
+    /**
+     * Aggregate usage clashes for the given base.
+     * @param sources Sources
+     * @param base Base
+     * @return Usage clashes
+     */
+    private static Map<String, List<Integer>> clashes(
+        final Iterable<Xnav> sources, final String base
+    ) {
+        final Map<String, List<Integer>> clashes = new HashMap<>(16);
+        sources.forEach(
+            src -> src.path(String.format("//o[@base='%s']", base))
+                .forEach(
+                    o -> {
+                        final String program = new ObjectName(new XMLDocument(src.node())).get();
+                        final int line = Integer.parseInt(o.attribute("line").text().orElse("0"));
+                        clashes.computeIfAbsent(program, k -> new ListOf<>()).add(line);
+                    }
+                )
+        );
+        return clashes;
+    }
+
+    /**
+     * List of clashes for given object.
+     * @param clashes List of clashes
+     * @param current Current object
+     * @param oline Origin line in given object
+     * @return With which objects, given object clashes, as string expression
+     */
+    private static String objectClashes(
+        final Map<String, List<Integer>> clashes, final String current, final int oline
+    ) {
+        final Collection<String> others = new ListOf<>();
+        clashes.forEach(
+            (program, lines) ->
+                lines.forEach(
+                    line -> {
+                        if (!(program.equals(current) && line == oline)) {
+                            others.add(String.format("%s:%d", program, line));
+                        }
+                    }
+                )
+        );
+        return String.join(", ", others);
     }
 }
