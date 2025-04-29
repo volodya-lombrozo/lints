@@ -17,13 +17,11 @@
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="//o[not(@name) and not(@base) and not(eo:has-data(.) and parent::o[@base='Q.org.eolang.bytes'])]">
-        <xsl:variable name="voids" select="o[@base='∅']"/>
         <xsl:variable name="allowed" as="xs:string*">
-          <xsl:for-each select="$voids">
-            <xsl:sequence select="concat('\$(\.\^)+\.', @name, '\.\w+')" />
+          <xsl:for-each select="o[@base='∅']">
+            <xsl:sequence select="concat('\$(\.\^)+\.', @name, '\.\w+')"/>
           </xsl:for-each>
         </xsl:variable>
-        <!-- check that @base does not match any regexes produced above -->
         <xsl:for-each select=".//o[starts-with(@base, '$.^.') and not(eo:matches-any-void(@base, $allowed))]">
           <defect>
             <xsl:variable name="line" select="eo:lineno(@line)"/>
