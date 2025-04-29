@@ -12,7 +12,10 @@
   <xsl:template match="/">
     <defects>
       <xsl:for-each select="//o[not(@name) and not(@base) and not(eo:has-data(.) and parent::o[@base='Q.org.eolang.bytes'])]">
-        <xsl:for-each select=".//o[starts-with(@base, '$.^.')]">
+<!--        <xsl:for-each select="/o[@base='∅']">-->
+          <!-- build the list of regexes for void: '\$(\.\^)+\.$void\.\w+' -->
+<!--        </xsl:for-each>-->
+        <xsl:for-each select=".//o[starts-with(@base, '$.^.') and not(matches(@base, '\$(\.\^)+\.i\.\w+'))]">
           <defect>
             <xsl:variable name="line" select="eo:lineno(@line)"/>
             <xsl:attribute name="line">
