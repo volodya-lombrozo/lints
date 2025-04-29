@@ -25,6 +25,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -192,7 +193,7 @@ final class SourceTest {
                 Matchers.hasItem(
                     Matchers.hasToString(
                         Matchers.allOf(
-                            Matchers.containsString("alias-too-long ERROR"),
+                            Matchers.containsString("alias-too-long"),
                             Matchers.containsString("The alias has too many parts"),
                             Matchers.containsString(":3")
                         )
@@ -324,12 +325,57 @@ final class SourceTest {
                 Matchers.hasItem(
                     Matchers.hasToString(
                         Matchers.allOf(
-                            Matchers.containsString("unlint-non-existing-defect WARNING"),
+                            Matchers.containsString("unlint-non-existing-defect"),
                             Matchers.containsString(
                                 String.format("Unlinting rule '%s' doesn't make sense,", lid)
                             ),
                             Matchers.containsString("since there are no defects with it")
                         )
+                    )
+                )
+            )
+        );
+    }
+
+    @Test
+    void doesNotDuplicateDefectsWhenMultipleDefectsOnTheSameLine() throws IOException {
+        final Collection<Defect> defects = new Source(
+            new EoSyntax(
+                String.join(
+                    "\n",
+                    "# Foo with unused voids on the same line.",
+                    "[x y z] > foo"
+                )
+            ).parsed()
+        ).defects();
+        MatcherAssert.assertThat(
+            Logger.format(
+                "Found defects (%[list]s) contain duplicates, but they should not",
+                defects
+            ),
+            new HashSet<>(defects).size() == defects.size(),
+            Matchers.equalTo(true)
+        );
+    }
+
+    @Test
+    void outputsInformationAboutSingleScope() throws IOException {
+        MatcherAssert.assertThat(
+            "Found defects don't contain information about Single scope, but they should",
+            new Source(
+                new EoSyntax(
+                    String.join(
+                        "\n",
+                        "# Foo",
+                        "[] > foo"
+                    )
+                ).parsed()
+            ).defects(),
+            Matchers.hasItem(
+                Matchers.hasToString(
+                    Matchers.allOf(
+                        Matchers.containsString("comment-without-dot (Single) WARNING"),
+                        Matchers.containsString(":2")
                     )
                 )
             )

@@ -8,7 +8,7 @@ asserts:
   - /defects/defect[@line='2']
 document: |
   <object>
-    <o line="2" base="man">
+    <o line="2" base="Q.man">
       <o base="string" as="name"/>
       <o base="number"/>
     </o>

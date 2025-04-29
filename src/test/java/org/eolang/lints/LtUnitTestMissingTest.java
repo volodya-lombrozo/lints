@@ -9,6 +9,7 @@ import com.jcabi.xml.XMLDocument;
 import com.yegor256.Mktmp;
 import com.yegor256.MktmpResolver;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import matchers.DefectMatcher;
@@ -45,9 +46,13 @@ final class LtUnitTestMissingTest {
 
     @Test
     void acceptsValidDirectory(@Mktmp final Path dir) throws IOException {
-        Files.write(dir.resolve("foo.xmir"), "<object><o name='foo'/></object>".getBytes());
         Files.write(
-            dir.resolve("foo-tests.xmir"), "<object><o name='foo-tests'/></object>".getBytes()
+            dir.resolve("foo.xmir"),
+            "<object><o name='foo'/></object>".getBytes(StandardCharsets.UTF_8)
+        );
+        Files.write(
+            dir.resolve("foo-tests.xmir"),
+            "<object><o name='foo-tests'/></object>".getBytes(StandardCharsets.UTF_8)
         );
         MatcherAssert.assertThat(
             "some defects found by mistake",
@@ -59,7 +64,10 @@ final class LtUnitTestMissingTest {
     @SuppressWarnings("JTCOP.RuleNotContainsTestWord")
     @Test
     void issuesDetectsOnMissingTest(@Mktmp final Path dir) throws IOException {
-        Files.write(dir.resolve("aaa.xmir"), "<object><o name='aaa'/></object>".getBytes());
+        Files.write(
+            dir.resolve("aaa.xmir"),
+            "<object><o name='aaa'/></object>".getBytes(StandardCharsets.UTF_8)
+        );
         MatcherAssert.assertThat(
             " defects found",
             new Program(dir).defects(),

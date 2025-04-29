@@ -165,13 +165,37 @@ final class ProgramTest {
                 Matchers.hasItem(
                     Matchers.hasToString(
                         Matchers.allOf(
-                            Matchers.containsString("unlint-non-existing-defect WARNING"),
+                            Matchers.containsString("unlint-non-existing-defect"),
                             Matchers.containsString(
                                 String.format("Unlinting rule '%s' doesn't make sense,", lid)
                             ),
                             Matchers.containsString("since there are no defects with it")
                         )
                     )
+                )
+            )
+        );
+    }
+
+    @Test
+    void outputsInformationAboutWpaScope() throws IOException {
+        MatcherAssert.assertThat(
+            "Found defects don't contain information about WPA scope, but they should",
+            new Program(
+                new MapOf<>(
+                    "foo",
+                    new EoSyntax(
+                        String.join(
+                            "\n",
+                            "# Foo",
+                            "[] > foo"
+                        )
+                    ).parsed()
+                )
+            ).defects(),
+            Matchers.hasItem(
+                Matchers.hasToString(
+                    Matchers.containsString("unit-test-missing (WPA) WARNING")
                 )
             )
         );

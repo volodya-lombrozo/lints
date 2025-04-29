@@ -15,5 +15,5 @@ document: |
         <part>something</part>
       </meta>
     </metas>
-    <o base="org.eolang.foo"/>
+    <o base="Q.org.eolang.foo"/>
   </object>
