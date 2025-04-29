@@ -11,4 +11,5 @@ input: |
     x > @
       [i]
         seq > @
-          i.put 1
+          *
+            i.put 1
