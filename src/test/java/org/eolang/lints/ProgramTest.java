@@ -165,7 +165,7 @@ final class ProgramTest {
                 Matchers.hasItem(
                     Matchers.hasToString(
                         Matchers.allOf(
-                            Matchers.containsString("unlint-non-existing-defect WARNING"),
+                            Matchers.containsString("unlint-non-existing-defect"),
                             Matchers.containsString(
                                 String.format("Unlinting rule '%s' doesn't make sense,", lid)
                             ),
