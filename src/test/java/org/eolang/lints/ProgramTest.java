@@ -195,10 +195,7 @@ final class ProgramTest {
             ).defects(),
             Matchers.hasItem(
                 Matchers.hasToString(
-                    Matchers.allOf(
-                        Matchers.containsString("unit-test-missing WARNING"),
-                        Matchers.containsString("(WPA)")
-                    )
+                    Matchers.containsString("unit-test-missing (WPA) WARNING")
                 )
             )
         );

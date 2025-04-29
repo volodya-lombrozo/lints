@@ -26,11 +26,11 @@ final class ScopedDefects extends CollectionEnvelope<Defect> {
                 new Mapped<>(
                     defect -> new DfContext(
                         new Defect.Default(
-                            defect.rule(),
+                            String.format("%s (%s)", defect.rule(), marker),
                             defect.severity(),
                             defect.program(),
                             defect.line(),
-                            String.format("%s (%s)", defect.text(), marker),
+                            defect.text(),
                             defect.experimental()
                         ),
                         defect.context()

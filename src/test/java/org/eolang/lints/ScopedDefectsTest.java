@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 final class ScopedDefectsTest {
 
     @Test
-    void appendsScopeToMessage() {
+    void appendsScopeToRuleName() {
         final String marker = "X!";
         MatcherAssert.assertThat(
             String.format(
@@ -38,7 +38,7 @@ final class ScopedDefectsTest {
             ),
             Matchers.hasItem(
                 Matchers.hasToString(
-                    "[foo boom-lint ERROR]:42 Foo bar! (X!)"
+                    "[foo boom-lint (X!) ERROR]:42 Foo bar!"
                 )
             )
         );
