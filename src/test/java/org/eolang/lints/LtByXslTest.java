@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import matchers.DefectsMatcher;
@@ -36,6 +37,7 @@ import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.condition.DisabledOnOs;
@@ -352,5 +354,48 @@ final class LtByXslTest {
             new HashSet<>(defects).size() == defects.size(),
             Matchers.equalTo(true)
         );
+    }
+
+    @SuppressWarnings("StreamResourceLeak")
+    @Tag("deep")
+    @Timeout(60L)
+    @Test
+    void validatesEoPacksForErrors() throws IOException {
+        Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs/single"))
+            .filter(Files::isRegularFile)
+            .filter(p -> p.toString().endsWith(".yaml"))
+            .map(
+                (Function<Path, Map<Path, Map<String, Object>>>)
+                    p ->
+                        new MapOf<>(p, new Yaml().load(new ReaderOf(p.toFile())))
+            )
+            .filter(
+                pack ->
+                    pack.values().stream().findFirst().get().containsKey("input")
+            )
+            .forEach(
+                pack -> {
+                    final Path location = pack.keySet().iterator().next();
+                    try {
+                        MatcherAssert.assertThat(
+                            String.format(
+                                "EO snippet in '%s' pack contains errors, but it should not",
+                                location
+                            ),
+                            new EoSyntax(
+                                (String) pack.values().stream().findFirst().get().get("input")
+                            ).parsed().nodes("/object[errors]").isEmpty(),
+                            Matchers.equalTo(true)
+                        );
+                    } catch (final IOException exception) {
+                        throw new IllegalStateException(
+                            String.format(
+                                "Failed to parse EO snippet from '%s' pack", location
+                            ),
+                            exception
+                        );
+                    }
+                }
+            );
     }
 }
