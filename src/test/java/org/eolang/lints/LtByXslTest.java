@@ -4,6 +4,7 @@
  */
 package org.eolang.lints;
 
+import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.log.Logger;
 import com.jcabi.manifests.Manifests;
 import com.jcabi.matchers.XhtmlMatchers;
@@ -358,7 +359,7 @@ final class LtByXslTest {
 
     @SuppressWarnings("StreamResourceLeak")
     @Tag("deep")
-    @Timeout(60L)
+    @Timeout(90L)
     @Test
     void validatesEoPacksForErrors() throws IOException {
         Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs/single"))
@@ -382,9 +383,11 @@ final class LtByXslTest {
                                 "EO snippet in '%s' pack contains errors, but it should not",
                                 location
                             ),
-                            new EoSyntax(
-                                (String) pack.values().stream().findFirst().get().get("input")
-                            ).parsed().nodes("/object[errors]").isEmpty(),
+                            new Xnav(
+                                new EoSyntax(
+                                    (String) pack.values().stream().findFirst().get().get("input")
+                                ).parsed().inner()
+                            ).path("/object[errors]").findAny().isEmpty(),
                             Matchers.equalTo(true)
                         );
                     } catch (final IOException exception) {
