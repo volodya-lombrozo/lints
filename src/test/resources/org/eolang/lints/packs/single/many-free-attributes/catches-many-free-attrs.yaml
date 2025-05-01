@@ -25,7 +25,7 @@ input: |
       [v] > oo ?
       # No comments
       [v] > pp ?
-    
+
       # No comments
       [] > not-many-free-attributes
         # No comments
