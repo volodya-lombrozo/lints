@@ -18,8 +18,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import matchers.DefectsMatcher;
 import org.cactoos.io.ReaderOf;
@@ -142,7 +142,7 @@ final class LtByXslTest {
     void catchesLostYamls() throws IOException {
         Files.walk(Paths.get("src/test/resources/org/eolang/lints"))
             .filter(Files::isRegularFile)
-            .filter(path -> path.toString().endsWith(".yaml"))
+            .filter(LtByXslTest.yamls())
             .map(path -> path.getParent().getParent().toString())
             .collect(Collectors.toSet())
             .forEach(
@@ -291,7 +291,7 @@ final class LtByXslTest {
     void validatesPacksAgainstXsdSchema() throws IOException {
         Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs/single"))
             .filter(Files::isRegularFile)
-            .filter(p -> p.toString().endsWith(".yaml"))
+            .filter(LtByXslTest.yamls())
             .map(
                 (Function<Path, Map<Path, Map<String, Object>>>)
                     p ->
@@ -364,7 +364,7 @@ final class LtByXslTest {
     void validatesEoPacksForErrors() throws IOException {
         Files.walk(Paths.get("src/test/resources/org/eolang/lints/packs/single"))
             .filter(Files::isRegularFile)
-            .filter(p -> p.toString().endsWith(".yaml"))
+            .filter(LtByXslTest.yamls())
             .map(
                 (Function<Path, Map<Path, Map<String, Object>>>)
                     p ->
@@ -400,5 +400,14 @@ final class LtByXslTest {
                     }
                 }
             );
+    }
+
+    /**
+     * Filter YAML files.
+     * @return Predicate
+     */
+    @SuppressWarnings("UnnecessaryLambda")
+    private static Predicate<Path> yamls() {
+        return path -> path.toString().endsWith(".yaml");
     }
 }
