@@ -13,7 +13,7 @@ document: |
          <tail/>
       </meta>
     </metas>
-    <o name="test">
-       <o base="Q.org.eolang.true"/>
+    <o name="foo-tests">
+       <o name="works-just-fine"/>
     </o>
   </object>

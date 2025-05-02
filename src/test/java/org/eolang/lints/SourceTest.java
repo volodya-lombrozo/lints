@@ -193,7 +193,7 @@ final class SourceTest {
                 Matchers.hasItem(
                     Matchers.hasToString(
                         Matchers.allOf(
-                            Matchers.containsString("alias-too-long ERROR"),
+                            Matchers.containsString("alias-too-long"),
                             Matchers.containsString("The alias has too many parts"),
                             Matchers.containsString(":3")
                         )
@@ -325,7 +325,7 @@ final class SourceTest {
                 Matchers.hasItem(
                     Matchers.hasToString(
                         Matchers.allOf(
-                            Matchers.containsString("unlint-non-existing-defect WARNING"),
+                            Matchers.containsString("unlint-non-existing-defect"),
                             Matchers.containsString(
                                 String.format("Unlinting rule '%s' doesn't make sense,", lid)
                             ),
@@ -355,6 +355,30 @@ final class SourceTest {
             ),
             new HashSet<>(defects).size() == defects.size(),
             Matchers.equalTo(true)
+        );
+    }
+
+    @Test
+    void outputsInformationAboutSingleScope() throws IOException {
+        MatcherAssert.assertThat(
+            "Found defects don't contain information about Single scope, but they should",
+            new Source(
+                new EoSyntax(
+                    String.join(
+                        "\n",
+                        "# Foo",
+                        "[] > foo"
+                    )
+                ).parsed()
+            ).defects(),
+            Matchers.hasItem(
+                Matchers.hasToString(
+                    Matchers.allOf(
+                        Matchers.containsString("comment-without-dot (Single) WARNING"),
+                        Matchers.containsString(":2")
+                    )
+                )
+            )
         );
     }
 
