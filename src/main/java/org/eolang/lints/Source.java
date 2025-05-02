@@ -92,7 +92,7 @@ public final class Source {
         try {
             final Collection<Defect> messages = new ArrayList<>(0);
             for (final Lint<XML> lint : this.lints) {
-                messages.addAll(lint.defects(this.xmir));
+                messages.addAll(new ScopedDefects(lint.defects(this.xmir), "Single"));
             }
             return messages;
         } catch (final IOException ex) {

@@ -97,7 +97,7 @@ final class WpaStory {
         final Directives directives = new Directives().add("defects");
         defects.forEach(
             d -> directives.add("defect")
-                .attr("program", d.program())
+                .attr("object", d.object())
                 .attr("line", d.line())
                 .attr("severity", d.severity().toString().toLowerCase(Locale.ROOT))
                 .attr("context", d.context())
