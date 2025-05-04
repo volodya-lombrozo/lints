@@ -4,6 +4,7 @@
  */
 package org.eolang.lints;
 
+import com.github.lombrozo.xnav.Xnav;
 import com.jcabi.xml.XML;
 import com.jcabi.xml.XMLDocument;
 import java.io.IOException;
@@ -63,7 +64,9 @@ final class WpaStory {
                 if (key.endsWith(".eo")) {
                     try {
                         final String name = key.substring(0, key.length() - 3);
-                        programs.put(name, new EoSyntax((String) val).parsed());
+                        programs.put(
+                            name, WpaStory.checkForErrors(name, new EoSyntax((String) val).parsed())
+                        );
                     } catch (final IOException exception) {
                         throw new IllegalStateException(
                             "Failed to parse EO syntax", exception
@@ -111,5 +114,17 @@ final class WpaStory {
                 "Failed to create XML document from defects", exception
             );
         }
+    }
+
+    private static XML checkForErrors(final String name, final XML xmir) {
+        if (new Xnav(xmir.inner()).path("/object[errors]").findAny().isEmpty()) {
+            return xmir;
+        }
+        throw new IllegalStateException(
+            String.format(
+                "Parsed EO snippet '%s' contains errors, but it should not:\n %s",
+                name, xmir
+            )
+        );
     }
 }
