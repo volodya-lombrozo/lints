@@ -2,13 +2,14 @@
 # SPDX-License-Identifier: MIT
 ---
 sheets:
-  - /org/eolang/lints/critical/duplicate-names.xsl
+  - /org/eolang/lints/names/anonymous-formation.xsl
 asserts:
   - /defects[count(defect)=0]
 input: |
-  # Foo.
-  [] > foo
+  # App.
+  [] > main
     x > @
-      *
-        [x] (x.zz > xzz)
-        [x] (x.tt > xtt)
+      [i]
+        seq > @
+          *
+            i.put 1
