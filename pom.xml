@@ -62,6 +62,14 @@
       <url>https://github.com/objectionary/lints</url>
     </site>
   </distributionManagement>
+  <properties>
+    <!-- This is the flag that allows to skip unit tests run by maven-surefire-plugin -->
+    <skipUTs/>
+    <!-- This is the flag that allows to skip integration tests run by maven-invoker-plugin -->
+    <skipITs/>
+    <!-- This is the flag that allows to skip all tests -->
+    <skipTests/>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>com.jcabi</groupId>
@@ -229,6 +237,40 @@
     </dependency>
   </dependencies>
   <profiles>
+    <profile>
+      <id>skipTests</id>
+      <activation>
+        <property>
+          <name>skipTests</name>
+        </property>
+      </activation>
+      <properties>
+        <skipITs>true</skipITs>
+        <skipUTs>true</skipUTs>
+      </properties>
+    </profile>
+    <profile>
+      <id>skipITs</id>
+      <activation>
+        <property>
+          <name>skipITs</name>
+        </property>
+      </activation>
+      <properties>
+        <skipITs>true</skipITs>
+      </properties>
+    </profile>
+    <profile>
+      <id>skipUTs</id>
+      <activation>
+        <property>
+          <name>skipUTs</name>
+        </property>
+      </activation>
+      <properties>
+        <skipUTs>true</skipUTs>
+      </properties>
+    </profile>
     <profile>
       <id>qulice</id>
       <activation>
@@ -442,6 +484,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <!-- version from the parent pom -->
         <configuration>
+          <skipTests>${skipUTs}</skipTests>
           <excludedGroups>benchmark,deep</excludedGroups>
           <excludes>
             <exclude>
@@ -452,6 +495,9 @@
       </plugin>
       <plugin>
         <artifactId>maven-invoker-plugin</artifactId>
+        <configuration>
+          <skipInvocation>${skipITs}</skipInvocation>
+        </configuration>
         <!-- version from the parent pom -->
       </plugin>
       <plugin>
