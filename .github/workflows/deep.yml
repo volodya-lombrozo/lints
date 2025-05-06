@@ -27,3 +27,4 @@ jobs:
           restore-keys: ubuntu-surefire-jdk-23-maven-
       - run: |
           mvn clean install -Pdeep --errors --batch-mode
+
