@@ -54,6 +54,7 @@ public class SourceBench {
     public final void scansXmir(final BenchmarkState state) {
         new Source(state.xmir).without("redundant-object", "duplicate-names-in-diff-context")
             .defects();
+    }
 
     /**
      * Benchmark state.
