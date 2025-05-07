@@ -40,6 +40,7 @@ public class SourceBench {
 
     /**
      * Benchmark for XMIR scanning.
+     * Scans XMIR.
      * @param state State
      * @todo #555:35min Enable `duplicate-names-in-diff-context` benchmark.
      *  Currently, its slow, especially for `L` and `XL`-sized sources. Let's optimize it,
@@ -53,7 +54,6 @@ public class SourceBench {
     public final void scansXmir(final BenchmarkState state) {
         new Source(state.xmir).without("redundant-object", "duplicate-names-in-diff-context")
             .defects();
-    }
 
     /**
      * Benchmark state.
