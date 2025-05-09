@@ -8,9 +8,11 @@ asserts:
 document: |
   <object>
     <o>
-      <o name="foo"/>
-    </o>
-    <o>
-      <o name="foo"/>
+      <o>
+        <o name="foo"/>
+      </o>
+      <o>
+        <o name="foo"/>
+      </o>
     </o>
   </object>
