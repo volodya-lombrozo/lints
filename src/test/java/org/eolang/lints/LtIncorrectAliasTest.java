@@ -147,7 +147,7 @@ final class LtIncorrectAliasTest {
             ).parsed().toString().getBytes(StandardCharsets.UTF_8)
         );
         Files.createDirectory(dir.resolve("ttt"));
-        final String source = "<object/>";
+        final String source = "<object><o name='src'/></object>";
         Files.write(dir.resolve("ttt/foo.xmir"), source.getBytes(StandardCharsets.UTF_8));
         Files.write(dir.resolve("bar-tests.xmir"), source.getBytes(StandardCharsets.UTF_8));
         Files.write(
