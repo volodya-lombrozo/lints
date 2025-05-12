@@ -170,14 +170,15 @@ final class LtIncorrectAliasTest {
                 String.join(
                     "\n",
                     "+alias stdout org.eolang.io.stdout",
-                    "+package foo\n",
+                    "+package foo",
+                    "",
+                    "# Main.",
                     "[] > main",
-                    "  stdout > @",
-                    "    \"hi!\""
+                    "  stdout \"hi\" > @"
                 )
             ).parsed().toString().getBytes(StandardCharsets.UTF_8)
         );
-        final String source = "<object/>";
+        final String source = "<object><o name='src'/></object>";
         Files.write(
             dir.resolve("main-tests.xmir"),
             source.getBytes(StandardCharsets.UTF_8)
