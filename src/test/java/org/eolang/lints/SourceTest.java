@@ -78,7 +78,7 @@ final class SourceTest {
             "defects found even though the code is clean",
             new Source(
                 new EoProgram("org/eolang/lints/valid-source.eo").parse()
-            ).defects(),
+            ).without("mandatory-architect").defects(),
             Matchers.emptyIterable()
         );
     }
@@ -202,6 +202,7 @@ final class SourceTest {
             "mandatory-package",
             "comment-too-short",
             "mandatory-spdx",
+            "mandatory-architect",
             "no-attribute-formation",
             "unit-test-missing"
         );
@@ -220,7 +221,7 @@ final class SourceTest {
     void returnsOnlyOneDefect() {
         final Collection<Defect> defects = new Source(
             new EoProgram("org/eolang/lints/main-with-test.eo").parse()
-        ).without("mandatory-spdx").defects();
+        ).without("mandatory-spdx", "mandatory-architect").defects();
         MatcherAssert.assertThat(
             String.format(
                 "Only one defect should be found, but got %d: %s",
@@ -244,6 +245,7 @@ final class SourceTest {
                 "empty-object",
                 "mandatory-package",
                 "mandatory-spdx",
+                "mandatory-architect",
                 "comment-too-short",
                 "no-attribute-formation",
                 "unit-test-missing"
@@ -280,6 +282,7 @@ final class SourceTest {
                 "empty-object",
                 "mandatory-package",
                 "mandatory-spdx",
+                "mandatory-architect",
                 "comment-too-short",
                 "no-attribute-formation",
                 "unit-test-missing"
