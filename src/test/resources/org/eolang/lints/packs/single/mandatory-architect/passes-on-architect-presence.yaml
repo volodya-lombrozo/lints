@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/mandatory-architect.xsl
+asserts:
+  - /defects[count(defect)=0]
+input: |
+  +architect foo@example.com
+
+  # No comments.
+  [] > main
+    42 > @
