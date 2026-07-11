@@ -753,9 +753,6 @@
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
         <version>4.10.3.0</version>
-        <configuration>
-          <excludeFilterFile>${project.basedir}/spotbugs-exclude.xml</excludeFilterFile>
-        </configuration>
         <dependencies>
           <dependency>
             <groupId>com.github.spotbugs</groupId>
