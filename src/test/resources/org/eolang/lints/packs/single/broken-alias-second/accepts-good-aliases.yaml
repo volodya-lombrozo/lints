@@ -3,8 +3,7 @@
 ---
 sheets:
   - /org/eolang/lints/aliases/broken-alias-second.xsl
-asserts:
-  - /defects[count(defect)=0]
+defects: 0
 input: |
   +alias one
   +alias one-two

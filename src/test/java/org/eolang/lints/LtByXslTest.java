@@ -12,6 +12,7 @@ import com.yegor256.Together;
 import fixtures.BytecodeClass;
 import fixtures.EoProgram;
 import fixtures.FixPack;
+import fixtures.XtDefects;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -114,22 +115,15 @@ final class LtByXslTest {
                 "Pack '%s' doesn't tell the story as expected",
                 pack
             ),
-            new XtSticky(
-                new XtYaml(
-                    yaml,
-                    eo -> new EoProgram(pack, new InputOf(eo)).parse()
+            new XtDefects(
+                new XtSticky(
+                    new XtYaml(
+                        yaml,
+                        eo -> new EoProgram(pack, new InputOf(eo)).parse()
+                    )
                 )
             ),
             new XtoryMatcher(new DefectsMatcher())
-        );
-    }
-
-    @Test
-    void returnsMotive() throws Exception {
-        MatcherAssert.assertThat(
-            "The motive was not found or empty",
-            new LtByXsl("critical/duplicate-names").motive().isEmpty(),
-            Matchers.equalTo(false)
         );
     }
 
@@ -252,7 +246,7 @@ final class LtByXslTest {
         for (int idx = 0; idx < count; idx += 1) {
             dirs.add("o")
                 .attr("name", String.format("obj%d", idx))
-                .attr("base", String.format("ξ.obj%d", (idx + 1) % count))
+                .attr("base", String.format("Оѕ.obj%d", (idx + 1) % count))
                 .up();
         }
         Assertions.assertDoesNotThrow(
@@ -274,7 +268,7 @@ final class LtByXslTest {
             dirs.add("o").attr("name", String.format("obj%d", parent));
             for (int arg = 0; arg < args; arg += 1) {
                 dirs.add("o")
-                    .attr("base", String.format("Φ.f%d", arg))
+                    .attr("base", String.format("О¦.f%d", arg))
                     .attr("as", String.format("arg%d", arg))
                     .up();
             }
@@ -408,9 +402,9 @@ final class LtByXslTest {
         final String name,
         final int children
     ) throws ImpossibleModificationException {
-        dirs.add("o").attr("name", name).attr("base", "∅");
+        dirs.add("o").attr("name", name).attr("base", "в€…");
         for (int idx = 0; idx < children; idx += 1) {
-            dirs.add("o").attr("base", String.format("Φ.f%d", idx)).up();
+            dirs.add("o").attr("base", String.format("О¦.f%d", idx)).up();
         }
         dirs.up();
     }

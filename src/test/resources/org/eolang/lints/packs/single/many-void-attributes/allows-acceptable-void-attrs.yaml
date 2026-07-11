@@ -3,8 +3,7 @@
 ---
 sheets:
   - /org/eolang/lints/errors/many-void-attributes.xsl
-asserts:
-  - /defects[count(defect)=0]
+defects: 0
 input: |
   # No comments.
   [x y z] > main
