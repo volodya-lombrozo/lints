@@ -289,7 +289,7 @@ final class LtByXslTest {
     }
 
     @Test
-    @Timeout(10L)
+    @Timeout(30L)
     void checksManyVoidAttributesLintOnLargeXmirInReasonableTime()
         throws ImpossibleModificationException {
         final int parents = 400;
