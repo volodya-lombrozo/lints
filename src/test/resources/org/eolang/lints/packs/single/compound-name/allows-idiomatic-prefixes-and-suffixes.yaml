@@ -9,6 +9,8 @@ input: |
   # No comments.
   [] > main
     x.as-bytes > as-bytes
+    x.cant-read > cant-read
+    x.cant-write > cant-write
     y.as-i64 > as-i64
     z.is-empty > is-empty
     w.is-nan > is-nan
