@@ -455,7 +455,7 @@ final class SourceTest {
                 new Synced<>(new Sticky<>(new PkMono())),
                 new TjCached(
                     new TjDefault(
-                        new MnCsv("target/timings.csv")
+                        new MnCsv(Paths.get("target/timings.csv"))
                     )
                 ),
                 size
