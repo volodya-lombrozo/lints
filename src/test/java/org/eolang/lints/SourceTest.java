@@ -425,6 +425,11 @@ final class SourceTest {
     private static final class BcSource {
 
         /**
+         * Path to timings.
+         */
+        private static final Path TIMINGS = Paths.get("target/timings.csv");
+
+        /**
          * XMIR.
          */
         private final XML xmir;
@@ -455,7 +460,7 @@ final class SourceTest {
                 new Synced<>(new Sticky<>(new PkMono())),
                 new TjCached(
                     new TjDefault(
-                        new MnCsv(Paths.get("target/timings.csv"))
+                        new MnCsv(BcSource.TIMINGS)
                     )
                 ),
                 size
