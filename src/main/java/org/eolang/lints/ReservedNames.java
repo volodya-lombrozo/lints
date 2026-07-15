@@ -8,6 +8,7 @@ import com.yegor256.tojos.MnCsv;
 import com.yegor256.tojos.TjCached;
 import com.yegor256.tojos.TjDefault;
 import com.yegor256.tojos.TjSynchronized;
+import java.nio.file.Paths;
 import org.cactoos.iterable.IterableOf;
 import org.cactoos.map.MapEntry;
 import org.cactoos.map.MapEnvelope;
@@ -37,7 +38,7 @@ final class ReservedNames extends MapEnvelope<String, String> {
                 new IterableOf<>(
                     () -> new TjCached(
                         new TjSynchronized(
-                            new TjDefault(new MnCsv(path))
+                            new TjDefault(new MnCsv(Paths.get(path)))
                         )
                     ).select(tojo -> true).iterator()
                 )
