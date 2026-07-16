@@ -84,42 +84,42 @@ Here is the result of linting XMIRs:
 <!-- benchmark_begin -->
 ```text
 Input: com/sun/jna/PointerType.class (S source)
-Lint time: 3s (3346 ms)
+Lint time: 4s (4422 ms)
 
 Input: com/sun/jna/Memory.class (M source)
-Lint time: 5s (5304 ms)
+Lint time: 5s (5475 ms)
 
 Input: com/sun/jna/Pointer.class (L source)
-Lint time: 7s (7049 ms)
+Lint time: 8s (8332 ms)
 
 Input: com/sun/jna/Structure.class (XL source)
-Lint time: 10s (10218 ms)
+Lint time: 11s (10725 ms)
 
 Input: org/apache/hadoop/hdfs/server/namenode/FSNamesystem.class (XXL source)
-Lint time: 36s (36077 ms)
+Lint time: 37s (36558 ms)
 
 
 
-unlint-non-existing-defect (XXL) (13961 ms)
-application-without-as-attributes (XXL) (2923 ms)
-unlint-non-existing-defect (XL) (2485 ms)
-unlint-non-existing-defect (L) (1390 ms)
-object-has-data (XXL) (1362 ms)
-empty-object (XXL) (958 ms)
-duplicate-as-attribute (XXL) (709 ms)
-redundant-object (XXL) (652 ms)
-application-without-as-attributes (XL) (557 ms)
-reserved-name (XXL) (552 ms)
-unlint-non-existing-defect (M) (546 ms)
-incorrect-bytes-format (XXL) (519 ms)
-line-is-absent (XXL) (496 ms)
-compound-name (XXL) (469 ms)
-bytes-without-data (XXL) (416 ms)
-application-without-as-attributes (L) (347 ms)
+unlint-non-existing-defect (XXL) (13943 ms)
+application-without-as-attributes (XXL) (3057 ms)
+unlint-non-existing-defect (XL) (2741 ms)
+unlint-non-existing-defect (L) (1533 ms)
+object-has-data (XXL) (1252 ms)
+empty-object (XXL) (990 ms)
+duplicate-as-attribute (XXL) (810 ms)
+redundant-object (XXL) (709 ms)
+reserved-name (XXL) (645 ms)
+unlint-non-existing-defect (M) (618 ms)
+application-without-as-attributes (XL) (572 ms)
+compound-name (XXL) (542 ms)
+line-is-absent (XXL) (525 ms)
+incorrect-bytes-format (XXL) (509 ms)
+bytes-without-data (XXL) (447 ms)
+application-without-as-attributes (L) (323 ms)
 ```
 
 The results were calculated in [this GHA job][benchmark-gha]
-on 2026-07-15 at 14:48,
+on 2026-07-16 at 07:32,
 on Linux with 4 CPUs.
 <!-- benchmark_end -->
 
@@ -152,4 +152,4 @@ just install it and make sure it's in your `PATH`
 
 [XMIR]: https://news.eolang.org/2022-11-25-xmir-guide.html
 [EO]: https://www.eolang.org
-[benchmark-gha]: https://github.com/objectionary/lints/actions/runs/29424371458
+[benchmark-gha]: https://github.com/objectionary/lints/actions/runs/29480031817
