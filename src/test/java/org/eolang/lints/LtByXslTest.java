@@ -12,6 +12,7 @@ import com.yegor256.Together;
 import fixtures.BytecodeClass;
 import fixtures.EoProgram;
 import fixtures.FixPack;
+import fixtures.XtDefects;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -114,10 +115,12 @@ final class LtByXslTest {
                 "Pack '%s' doesn't tell the story as expected",
                 pack
             ),
-            new XtSticky(
-                new XtYaml(
-                    yaml,
-                    eo -> new EoProgram(pack, new InputOf(eo)).parse()
+            new XtDefects(
+                new XtSticky(
+                    new XtYaml(
+                        yaml,
+                        eo -> new EoProgram(pack, new InputOf(eo)).parse()
+                    )
                 )
             ),
             new XtoryMatcher(new DefectsMatcher())
