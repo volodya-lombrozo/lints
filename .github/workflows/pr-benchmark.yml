@@ -4,26 +4,31 @@
 # yamllint disable rule:line-length
 name: pr-benchmark
 'on':
-  workflow_dispatch:
-    inputs:
-      pr:
-        description: 'Pull request number to benchmark'
-        required: true
-        type: number
+  issue_comment:
+    types: [created]
 concurrency:
-  group: pr-benchmark-${{ github.event.inputs.pr }}
+  group: pr-benchmark-${{ github.event.issue.number }}
   cancel-in-progress: true
 permissions:
   contents: read
+  issues: write
   pull-requests: write
 jobs:
   pr-benchmark:
+    if: >-
+      github.event.issue.pull_request != null &&
+      startsWith(github.event.comment.body, '/benchmark') &&
+      contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'), github.event.comment.author_association)
     timeout-minutes: 30
     runs-on: ubuntu-24.04
     steps:
+      - name: Acknowledge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api "repos/${{ github.repository }}/issues/comments/${{ github.event.comment.id }}/reactions" -f content=eyes
       - uses: actions/checkout@v7
         with:
-          ref: refs/pull/${{ github.event.inputs.pr }}/head
+          ref: refs/pull/${{ github.event.issue.number }}/head
       - uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
@@ -39,8 +44,8 @@ jobs:
           git fetch origin master
           git show origin/master:benchmark/timings.csv > /tmp/baseline.csv || printf '"id","ms"\n' > /tmp/baseline.csv
       - name: Build comparison report
-        run: .github/benchmark-diff.sh /tmp/baseline.csv target/timings.csv "${{ github.event.inputs.pr }}" > /tmp/report.md
+        run: .github/benchmark-diff.sh /tmp/baseline.csv target/timings.csv "${{ github.event.issue.number }}" > /tmp/report.md
       - name: Post comment on PR
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh pr comment "${{ github.event.inputs.pr }}" --body-file /tmp/report.md
+        run: gh pr comment "${{ github.event.issue.number }}" --body-file /tmp/report.md --repo "${{ github.repository }}"
