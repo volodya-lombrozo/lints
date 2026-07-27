@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/names/unsorted-named-attributes.xsl
+asserts:
+  - /defects[count(defect)=0]
+input: |
+  # No comments.
+  [x] > app
+    x.plus 1 > a
+    x.mul 2 > b
+    x.mul 3 > c
