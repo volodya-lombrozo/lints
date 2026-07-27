@@ -1,0 +1,46 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+# yamllint disable rule:line-length
+name: pr-benchmark
+'on':
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: 'Pull request number to benchmark'
+        required: true
+        type: number
+concurrency:
+  group: pr-benchmark-${{ github.event.inputs.pr }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  pr-benchmark:
+    timeout-minutes: 30
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: refs/pull/${{ github.event.inputs.pr }}/head
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: 21
+      - uses: actions/cache@v6
+        with:
+          path: ~/.m2/repository
+          key: ubuntu-jdk-21-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ubuntu-jdk-21-maven-
+      - run: mvn clean test -Pbenchmark --errors --batch-mode
+      - name: Fetch baseline timings from master
+        run: |
+          git fetch origin master
+          git show origin/master:benchmark/timings.csv > /tmp/baseline.csv || printf '"id","ms"\n' > /tmp/baseline.csv
+      - name: Build comparison report
+        run: .github/benchmark-diff.sh /tmp/baseline.csv target/timings.csv "${{ github.event.inputs.pr }}" > /tmp/report.md
+      - name: Post comment on PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr comment "${{ github.event.inputs.pr }}" --body-file /tmp/report.md
