@@ -425,9 +425,7 @@
             <configuration>
               <excludedGroups>!benchmark</excludedGroups>
               <excludes>
-                <exclude>
-                  generated/**
-                </exclude>
+                <exclude>generated/**</exclude>
               </excludes>
             </configuration>
           </plugin>
@@ -494,9 +492,8 @@
               <groups>deep</groups>
               <excludedGroups>benchmark,reserved</excludedGroups>
               <excludes>
-                <exclude>
-                  generated/**
-                </exclude>
+                <exclude>generated/**</exclude>
+                <exclude>**/org/junit/**</exclude>
               </excludes>
             </configuration>
           </plugin>
@@ -743,9 +740,8 @@
               <groups>reserved</groups>
               <excludedGroups>benchmark,deep</excludedGroups>
               <excludes>
-                <exclude>
-                  generated/**
-                </exclude>
+                <exclude>generated/**</exclude>
+                <exclude>**/org/junit/**</exclude>
               </excludes>
             </configuration>
           </plugin>
@@ -782,9 +778,7 @@
           <skipTests>${skipUTs}</skipTests>
           <excludedGroups>benchmark,deep,reserved</excludedGroups>
           <excludes>
-            <exclude>
-              generated/**
-            </exclude>
+            <exclude>generated/**</exclude>
           </excludes>
         </configuration>
       </plugin>
