@@ -323,10 +323,9 @@ final class SourceTest {
 
     @Test
     @Tag("benchmark")
-    @ExtendWith(MktmpResolver.class)
     @ExtendWith(MayBeSlow.class)
     @Timeout(600L)
-    void lintsBenchmarkSourcesFromJava() throws Exception {
+    void benchmarksLintPerformance() throws IOException {
         final Map<Map<SourceSize, Collection<Defect>>, String> result =
             SourceTest.benchmarkResults();
         MatcherAssert.assertThat(
@@ -336,29 +335,21 @@ final class SourceTest {
             ),
             Matchers.equalTo(true)
         );
-        Files.write(
-            Paths.get("target").resolve("lint-summary.txt"),
-            result.values().iterator().next().getBytes(StandardCharsets.UTF_8)
-        );
-    }
-
-    @Test
-    @Tag("benchmark")
-    @ExtendWith(MayBeSlow.class)
-    @Timeout(600L)
-    void checksLintTimeFormattingInBenchmarkResults() {
+        final String summary = result.values().iterator().next();
         MatcherAssert.assertThat(
             "All lint time entries must match the expected format",
-            Arrays.stream(
-                Pattern.compile("\\R").split(
-                    SourceTest.benchmarkResults().values().iterator().next()
-                )
-            ).filter(line -> line.startsWith("Lint time:")).allMatch(
-                text -> Pattern.compile(
-                    "^Lint time: (\\d+(?:\\.\\d+)?)(ms|s|min|h) \\(\\d+ ms\\)$"
-                ).matcher(text).matches()
-            ),
+            Arrays.stream(Pattern.compile("\\R").split(summary))
+                .filter(line -> line.startsWith("Lint time:"))
+                .allMatch(
+                    text -> Pattern.compile(
+                        "^Lint time: (\\d+(?:\\.\\d+)?)(ms|s|min|h) \\(\\d+ ms\\)$"
+                    ).matcher(text).matches()
+                ),
             Matchers.equalTo(true)
+        );
+        Files.write(
+            Paths.get("target").resolve("lint-summary.txt"),
+            summary.getBytes(StandardCharsets.UTF_8)
         );
     }
 
