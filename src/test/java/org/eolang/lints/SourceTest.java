@@ -14,6 +14,7 @@ import com.yegor256.Together;
 import com.yegor256.tojos.MnCsv;
 import com.yegor256.tojos.TjCached;
 import com.yegor256.tojos.TjDefault;
+import com.yegor256.tojos.TjSynchronized;
 import com.yegor256.tojos.Tojos;
 import fixtures.BytecodeClass;
 import fixtures.EoProgram;
@@ -430,6 +431,19 @@ final class SourceTest {
         private static final Path TIMINGS = Paths.get("target/timings.csv");
 
         /**
+         * Shared timings, one per JVM, so that concurrently running benchmark
+         * tests don't corrupt {@link BcSource#TIMINGS} by opening it through
+         * several unsynchronized {@link Tojos} instances at once.
+         */
+        private static final Tojos SHARED = new TjSynchronized(
+            new TjCached(
+                new TjDefault(
+                    new MnCsv(BcSource.TIMINGS)
+                )
+            )
+        );
+
+        /**
          * XMIR.
          */
         private final XML xmir;
@@ -458,11 +472,7 @@ final class SourceTest {
             this(
                 source,
                 new Synced<>(new Sticky<>(new PkMono())),
-                new TjCached(
-                    new TjDefault(
-                        new MnCsv(BcSource.TIMINGS)
-                    )
-                ),
+                BcSource.SHARED,
                 size
             );
         }
