@@ -325,6 +325,7 @@ final class SourceTest {
     @Tag("benchmark")
     @ExtendWith(MayBeSlow.class)
     @Timeout(600L)
+    @SuppressWarnings("PMD.UnitTestContainsTooManyAsserts")
     void benchmarksLintPerformance() throws IOException {
         final Map<Map<SourceSize, Collection<Defect>>, String> result =
             SourceTest.benchmarkResults();
@@ -339,8 +340,7 @@ final class SourceTest {
         MatcherAssert.assertThat(
             "All lint time entries must match the expected format",
             Arrays.stream(Pattern.compile("\\R").split(summary))
-                .filter(line -> line.startsWith("Lint time:"))
-                .allMatch(
+                .filter(line -> line.startsWith("Lint time:")).allMatch(
                     text -> Pattern.compile(
                         "^Lint time: (\\d+(?:\\.\\d+)?)(ms|s|min|h) \\(\\d+ ms\\)$"
                     ).matcher(text).matches()
