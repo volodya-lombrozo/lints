@@ -42,7 +42,7 @@ jobs:
       - name: Fetch baseline timings from master
         run: |
           git fetch origin master
-          git show origin/master:benchmark/timings.csv > /tmp/baseline.csv || printf '"id","ms"\n' > /tmp/baseline.csv
+          git show origin/master:benchmark/lint-timings.csv > /tmp/baseline.csv || printf '"id","ms"\n' > /tmp/baseline.csv
       - name: Build comparison report
         run: .github/benchmark-diff.sh /tmp/baseline.csv target/lint-timings.csv "${{ github.event.issue.number }}" > /tmp/report.md
       - name: Post comment on PR

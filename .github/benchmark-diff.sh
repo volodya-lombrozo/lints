@@ -65,7 +65,7 @@ biggest_movers() {
 
 printf '## Benchmark comparison for #%s\n\n' "${pr}"
 # shellcheck disable=SC2016
-printf 'Comparing this branch against the `master` baseline in `benchmark/timings.csv`. Positive deltas are slower, negative are faster.\n\n'
+printf 'Comparing this branch against the `master` baseline in `benchmark/lint-timings.csv`. Positive deltas are slower, negative are faster.\n\n'
 printf '### Biggest changes\n\n'
 printf '| lint (size) | before | after | delta |\n'
 printf '|---|---|---|---|\n'
