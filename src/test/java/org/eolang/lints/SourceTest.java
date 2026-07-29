@@ -73,12 +73,12 @@ final class SourceTest {
 
     @Timeout(unit = TimeUnit.SECONDS, value = 60L)
     @Test
-    void returnsEmptyListOfDefects() throws IOException {
+    void returnsEmptyListOfDefects() {
         MatcherAssert.assertThat(
             "defects found even though the code is clean",
             new Source(
                 new EoProgram("org/eolang/lints/valid-source.eo").parse()
-            ).without(SourceTest.mandatoryArchitect()).defects(),
+            ).defects(),
             Matchers.emptyIterable()
         );
     }
