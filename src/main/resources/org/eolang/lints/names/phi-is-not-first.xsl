@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
- * SPDX-License-Identifier: MIT
+* SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+* SPDX-License-Identifier: MIT
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" version="2.0" id="phi-is-not-first">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
@@ -10,7 +10,7 @@
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
     <defects>
-      <xsl:apply-templates select="(//o[@name='φ'][preceding-sibling::o[not(@base='∅') and not(@base='ξ' and @name='xi🌵')]])[last()]" mode="unordered"/>
+      <xsl:apply-templates select="(//o[@name='φ'][not(@pipe)][preceding-sibling::o[not(@base='∅') and not(@base='ξ' and @name='xi🌵')]])[last()]" mode="unordered"/>
     </defects>
   </xsl:template>
   <xsl:template match="o" mode="unordered">

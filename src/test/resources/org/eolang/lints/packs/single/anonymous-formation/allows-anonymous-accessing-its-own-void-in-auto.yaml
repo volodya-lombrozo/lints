@@ -4,8 +4,7 @@
 # yamllint disable rule:line-length
 sheets:
   - /org/eolang/lints/names/anonymous-formation.xsl
-asserts:
-  - /defects[count(defect)=0]
+defects: 0
 input: |
   # This unit test is supposed to check the functionality of the corresponding object.
   [] > go-tests

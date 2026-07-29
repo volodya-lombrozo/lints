@@ -3,8 +3,7 @@
 ---
 sheets:
   - /org/eolang/lints/lines/object-line-out-of-listing.xsl
-asserts:
-  - /defects[count(defect)=0]
+defects: 0
 ignore-schema: true
 document: |
   <object author="tests">

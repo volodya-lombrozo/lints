@@ -82,7 +82,7 @@ final class HomeNames {
       new TjCached(
         new TjSynchronized(
           new TjDefault(
-            new MnCsv(csv)
+            new MnCsv(Paths.get(csv))
           )
         )
       ),
