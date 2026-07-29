@@ -202,7 +202,6 @@ final class SourceTest {
             "mandatory-package",
             "comment-too-short",
             "mandatory-spdx",
-            SourceTest.mandatoryArchitect(),
             "no-attribute-formation",
             "unit-test-missing"
         );
@@ -221,7 +220,7 @@ final class SourceTest {
     void returnsOnlyOneDefect() {
         final Collection<Defect> defects = new Source(
             new EoProgram("org/eolang/lints/main-with-test.eo").parse()
-        ).without("mandatory-spdx", SourceTest.mandatoryArchitect()).defects();
+        ).without("mandatory-spdx").defects();
         MatcherAssert.assertThat(
             String.format(
                 "Only one defect should be found, but got %d: %s",
@@ -245,7 +244,6 @@ final class SourceTest {
                 "empty-object",
                 "mandatory-package",
                 "mandatory-spdx",
-                SourceTest.mandatoryArchitect(),
                 "comment-too-short",
                 "no-attribute-formation",
                 "unit-test-missing"
@@ -282,7 +280,7 @@ final class SourceTest {
                 "empty-object",
                 "mandatory-package",
                 "mandatory-spdx",
-                SourceTest.mandatoryArchitect(),
+                "mandatory-architect",
                 "comment-too-short",
                 "no-attribute-formation",
                 "unit-test-missing"
@@ -386,14 +384,6 @@ final class SourceTest {
         ).accept(visitor, 0);
         final int lines = visitor.total();
         return lines >= src.minAllowed() && lines <= src.maxAllowed();
-    }
-
-    /**
-     * Mandatory architect lint name.
-     * @return Lint name
-     */
-    private static String mandatoryArchitect() {
-        return "mandatory-architect";
     }
 
     /**
