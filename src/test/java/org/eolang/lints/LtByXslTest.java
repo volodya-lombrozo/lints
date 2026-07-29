@@ -57,7 +57,6 @@ import org.yaml.snakeyaml.Yaml;
  * @since 0.0.1
  * @checkstyle ClassFanOutComplexityCheck (500 lines)
  */
-@SuppressWarnings("PMD.TooManyMethods")
 final class LtByXslTest {
 
     @Test

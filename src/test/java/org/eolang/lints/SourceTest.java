@@ -68,7 +68,6 @@ import org.objectweb.asm.Opcodes;
  * @checkstyle MethodBodyCommentsCheck (50 lines)
  * @checkstyle ClassFanOutComplexityCheck (500 lines)
  */
-@SuppressWarnings("PMD.TooManyMethods")
 @ExtendWith(MktmpResolver.class)
 final class SourceTest {
 
