@@ -565,7 +565,6 @@ final class SourceTest {
          * @return Defects
          * @throws IOException If fails
          */
-        @SuppressWarnings("PMD.UnnecessaryLocalRule")
         Collection<Defect> defects() throws IOException {
             final long before = System.currentTimeMillis();
             try {

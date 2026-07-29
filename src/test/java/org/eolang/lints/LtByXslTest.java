@@ -57,7 +57,7 @@ import org.yaml.snakeyaml.Yaml;
  * @since 0.0.1
  * @checkstyle ClassFanOutComplexityCheck (500 lines)
  */
-@SuppressWarnings({"PMD.TooManyMethods", "PMD.AvoidDuplicateLiterals"})
+@SuppressWarnings("PMD.TooManyMethods")
 final class LtByXslTest {
 
     @Test
@@ -89,7 +89,6 @@ final class LtByXslTest {
 
     @Tag("deep")
     @RepeatedTest(5)
-    @SuppressWarnings("PMD.UnnecessaryLocalRule")
     void lintsInMultipleThreads() {
         final LtByXsl lint = new LtByXsl("critical/duplicate-names");
         MatcherAssert.assertThat(
