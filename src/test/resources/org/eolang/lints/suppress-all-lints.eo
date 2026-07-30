@@ -5,6 +5,7 @@
 +unlint mandatory-home
 +unlint mandatory-package
 +unlint mandatory-version
++unlint mandatory-architect
 +unlint comment-too-short
 +unlint unsorted-metas
 +unlint mandatory-spdx

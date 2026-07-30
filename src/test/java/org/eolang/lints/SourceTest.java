@@ -73,7 +73,7 @@ final class SourceTest {
 
     @Timeout(unit = TimeUnit.SECONDS, value = 60L)
     @Test
-    void returnsEmptyListOfDefects() throws IOException {
+    void returnsEmptyListOfDefects() {
         MatcherAssert.assertThat(
             "defects found even though the code is clean",
             new Source(
@@ -280,6 +280,7 @@ final class SourceTest {
                 "empty-object",
                 "mandatory-package",
                 "mandatory-spdx",
+                "mandatory-architect",
                 "comment-too-short",
                 "no-attribute-formation",
                 "unit-test-missing"

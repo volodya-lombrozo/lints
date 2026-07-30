@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/metas/mandatory-architect.xsl
+asserts:
+  - /defects[count(defect[@severity='error'])=1]
+  - /defects/defect[.='The +architect meta is mandatory, but is absent']
+input: |
+  +package test
+
+  # No comments.
+  [] > main
+    42 > @
