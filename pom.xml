@@ -72,7 +72,7 @@
     <!-- This is the flag that allows to skip all tests -->
     <skipTests/>
     <!-- Pinned objectionary/home tag; keep in sync with the eo-parser version below -->
-    <home.version>0.62.1</home.version>
+    <home.version>0.61.1</home.version>
   </properties>
   <dependencyManagement>
     <dependencies>
@@ -140,7 +140,7 @@
     <dependency>
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
-      <version>0.62.1</version>
+      <version>0.61.1</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>
