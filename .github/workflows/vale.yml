@@ -11,6 +11,8 @@ jobs:
       - uses: errata-ai/vale-action@2.1.2
         with:
           files: 'src/main/resources/org/eolang/motives'
-          fail_on_error: 'true'
+          # Disabled until #1180 is resolved: fail_on_error fails the whole
+          # check even on INFO-level violations, blocking unrelated PRs.
+          fail_on_error: 'false'
           reporter: 'github-pr-review'
           filter_mode: 'nofilter'
