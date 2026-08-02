@@ -10,9 +10,8 @@ jobs:
       - uses: actions/checkout@v7
       - uses: errata-ai/vale-action@2.1.2
         with:
+          version: '3.17.0'
           files: 'src/main/resources/org/eolang/motives'
-          # Disabled until #1180 is resolved: fail_on_error fails the whole
-          # check even on INFO-level violations, blocking unrelated PRs.
-          fail_on_error: 'false'
+          fail_on_error: 'true'
           reporter: 'github-pr-review'
           filter_mode: 'nofilter'

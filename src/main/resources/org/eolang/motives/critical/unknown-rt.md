@@ -1,7 +1,7 @@
 # Unknown `+rt`
 
-The special `+rt` meta must use only allowed values in its first part. Currently,
-the following runtimes are supported:
+The special `+rt` meta must use only allowed values in its first part. The
+following runtimes are supported:
 
 * [JVM](https://github.com/objectionary/eo)
 * [node](https://github.com/objectionary/eo2js)
