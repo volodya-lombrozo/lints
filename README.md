@@ -13,9 +13,10 @@
 
 This Java package is a collection of "lints" (aka "checkers") for
 [XMIR] (an intermediate representation of a
-[EO] object). This is not about static analysis or code
-formatting. This is about best practices and readiness of code
-for successful compilation and execution.
+[EO] object). This is primarily about best practices and readiness
+of code for successful compilation and execution, not about code
+formatting. A few lints also enforce naming conventions, since
+consistent naming is considered a best practice here too.
 
 We use this package as a dependency in the
 [EO-to-Java compiler][EO]:
