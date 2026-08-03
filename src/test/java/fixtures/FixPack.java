@@ -27,7 +27,6 @@ public final class FixPack {
     /**
      * Constructor.
      * @param yaml Raw YAML string containing 'sheets', 'input' and 'output' fields
-     * @checkstyle ConstructorsCodeFreeCheck (5 lines)
      */
     @SuppressWarnings("unchecked")
     public FixPack(final String yaml) {

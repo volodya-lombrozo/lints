@@ -65,8 +65,6 @@ import org.objectweb.asm.Opcodes;
  *  As for now, most lints are too slow, we need to optimize them first, so they
  *  run in milliseconds, not seconds/minutes. It should decrease our build time too.
  *  After that, we need to decrease our test timeouts. Don't forget to remove this puzzle.
- * @checkstyle MethodBodyCommentsCheck (50 lines)
- * @checkstyle ClassFanOutComplexityCheck (500 lines)
  */
 @ExtendWith(MktmpResolver.class)
 final class SourceTest {
@@ -184,7 +182,7 @@ final class SourceTest {
             new Source(
                 new EoProgram("org/eolang/lints/non-ascii-cyrillic.eo").parse()
             ).without("ascii-only").defects().stream()
-                .filter(defect -> defect.rule().equals("ascii-only"))
+                .filter(defect -> "ascii-only".equals(defect.rule()))
                 .collect(Collectors.toList()),
             Matchers.emptyIterable()
         );
@@ -474,7 +472,6 @@ final class SourceTest {
          * @param lnts Lints to apply
          * @param tmngs Timings
          * @param size Source size
-         * @checkstyle ParameterNumberCheck (5 lines)
          */
         BcSource(
             final XML source, final Iterable<Lint> lnts, final Tojos tmngs, final String size
@@ -551,7 +548,6 @@ final class SourceTest {
          * @param xmr XML
          * @param tmngs Timings
          * @param mrkr Marker
-         * @checkstyle ParameterNumberCheck (5 lines)
          */
         TimedLint(final Lint lnt, final XML xmr, final Tojos tmngs, final String mrkr) {
             this.lint = lnt;
