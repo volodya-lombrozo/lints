@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
  *  ArrayList<>() without a constructor argument in whole project. Add ignore warning
  *  ConditionalRegexpMultilineCheck from Checkstyle (it doesn't seem to be possible at the moment
  *  <a href="https://github.com/yegor256/qulice/issues/1328">issue 1328</a>)
- * @checkstyle StringLiteralsConcatenationCheck (30 lines)
  * @checkstyle UnnecessaryParenthesesCheck (30 lines)
  */
 final class LtAsciiOnly implements Lint {

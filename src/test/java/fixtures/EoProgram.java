@@ -81,7 +81,6 @@ public final class EoProgram {
      * @return Parsed XMIR document
      * @throws IOException If parsing fails
      */
-    @SuppressWarnings("PMD.UnnecessaryLocalRule")
     private XML doParse() throws IOException {
         final long start = System.currentTimeMillis();
         final XML xmir = new EoSyntax(this.resource).parsed();

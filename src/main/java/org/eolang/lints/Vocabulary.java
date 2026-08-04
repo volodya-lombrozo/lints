@@ -67,7 +67,7 @@ final class Vocabulary {
     /**
      * Check if the given kebab-case name starts with a verb in third-person singular.
      *
-     * <p>The check uses the "It [verb]s" rule: "It generates-report" → the
+     * <p>The check uses the "It [verb]s" rule: "It generates-report" -> the
      * first word must be tagged {@code VBZ} (verb, 3rd-person singular present).</p>
      *
      * @param name Kebab-case name without any leading {@code +} sigil

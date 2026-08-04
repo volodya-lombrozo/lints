@@ -124,7 +124,6 @@ public interface Defect {
          * @param severity Severity level
          * @param line Line number
          * @param text Description of the defect
-         * @checkstyle ParameterNumberCheck (5 lines)
          */
         public Default(
             final String rule, final Severity severity,
@@ -143,7 +142,6 @@ public interface Defect {
          * @param line Line number
          * @param text Description of the defect
          * @param exprmnt Experimental?
-         * @checkstyle ParameterNumberCheck (5 lines)
          */
         public Default(
             final String rule, final Severity severity,

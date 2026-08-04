@@ -26,7 +26,6 @@ import org.openjdk.jmh.annotations.Warmup;
 /**
  * Benchmark for {@link Source}.
  * @since 0.0.34
- * @checkstyle DesignForExtensionCheck (10 lines)
  * @checkstyle NonStaticMethodCheck (100 lines)
  */
 @Fork(1)
