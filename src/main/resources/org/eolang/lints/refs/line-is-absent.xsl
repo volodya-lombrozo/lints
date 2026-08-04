@@ -18,9 +18,11 @@
           <xsl:attribute name="line">
             <xsl:value-of select="0"/>
           </xsl:attribute>
-          <xsl:attribute name="context">
-            <xsl:value-of select="eo:defect-context(.)"/>
-          </xsl:attribute>
+          <xsl:if test="not(@name)">
+            <xsl:attribute name="context">
+              <xsl:value-of select="eo:defect-context(.)"/>
+            </xsl:attribute>
+          </xsl:if>
           <xsl:attribute name="severity">
             <xsl:text>error</xsl:text>
           </xsl:attribute>

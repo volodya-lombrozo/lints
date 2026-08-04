@@ -5,7 +5,6 @@ sheets:
   - /org/eolang/lints/refs/line-is-absent.xsl
 asserts:
   - /defects[count(defect[@severity='error'])=1]
-  - /defects[count(defect[@context])]
 document:
   <object author="tests">
     <o line="1">
