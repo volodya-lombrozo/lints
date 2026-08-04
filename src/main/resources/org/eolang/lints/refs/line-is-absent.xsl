@@ -7,8 +7,8 @@
   <xsl:import href="/org/eolang/funcs/escape.xsl"/>
   <xsl:import href="/org/eolang/funcs/defect-context.xsl"/>
   <!--
-  Here we go through all objects. If we find the object they refer to,
-  everything is OK. If we don't, we report an error.
+  Here we go through all objects. If it has @line attribute,
+  everything is OK. If it's not, we report an error.
   -->
   <xsl:output encoding="UTF-8" method="xml"/>
   <xsl:template match="/">
