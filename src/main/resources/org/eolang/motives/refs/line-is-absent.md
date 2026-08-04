@@ -1,13 +1,13 @@
 # `@line` is absent
 
-In [XMIR], each `<o/>` element with a `@base` attribute must also have a `@line` attribute.
+In [XMIR], each `<o/>` element must also have a `@line` attribute.
 
 Incorrect:
 
 ```xml
 <object>
   <o>
-    <o name="bar" base="foo"/>
+    <o name="bar"/>
   </o>
 </object>
 ```
@@ -16,8 +16,8 @@ Correct:
 
 ```xml
 <object>
-  <o>
-    <o name="bar" base="foo" line="1"/>
+  <o line="1">
+    <o name="bar" line="1"/>
   </o>
 </object>
 ```
