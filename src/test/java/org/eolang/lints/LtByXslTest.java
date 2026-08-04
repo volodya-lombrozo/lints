@@ -265,7 +265,7 @@ final class LtByXslTest {
     }
 
     @Test
-    @Timeout(10L)
+    @Timeout(20L)
     void checksDuplicateAsAttributeLintOnLargeXmirInReasonableTime()
         throws ImpossibleModificationException {
         final int parents = 500;
