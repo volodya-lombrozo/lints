@@ -381,7 +381,7 @@
     <profile>
       <id>hone</id>
       <activation>
-        <jdk>[11,)</jdk>
+        <activeByDefault>false</activeByDefault>
       </activation>
       <build>
         <plugins>
