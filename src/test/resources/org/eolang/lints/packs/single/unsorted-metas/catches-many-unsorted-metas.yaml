@@ -19,6 +19,5 @@ input: |
   +foo
   +z
 
-  # No comments.
   [] > foo
     42 > @

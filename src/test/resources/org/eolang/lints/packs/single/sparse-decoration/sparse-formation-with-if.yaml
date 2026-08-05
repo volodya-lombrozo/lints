@@ -6,9 +6,7 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='warning'])=2]
 input: |
-  # No comments.
   [] > test
-    # No comments.
     [] > @
       if. > @
         a

@@ -408,7 +408,7 @@ final class LtByXslTest {
         final Directives dirs,
         final String name,
         final int children
-    ) throws ImpossibleModificationException {
+    ) {
         dirs.add("o").attr("name", name).attr("base", "∅");
         for (int idx = 0; idx < children; idx += 1) {
             dirs.add("o").attr("base", String.format("Φ.f%d", idx)).up();

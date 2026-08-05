@@ -6,9 +6,7 @@ sheets:
   - /org/eolang/lints/names/anonymous-formation.xsl
 defects: 0
 input: |
-  # This unit test is supposed to check the functionality of the corresponding object.
   [] > go-tests
-    # This unit test is supposed to check the functionality of the corresponding object.
     [] > tests-goto-jumps-backwards
       eq. > @
         malloc.of

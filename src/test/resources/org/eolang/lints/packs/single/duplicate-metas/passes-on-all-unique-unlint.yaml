@@ -9,5 +9,4 @@ input: |
   +unlint foo
   +unlint bar
 
-  # No comments.
   [] > main

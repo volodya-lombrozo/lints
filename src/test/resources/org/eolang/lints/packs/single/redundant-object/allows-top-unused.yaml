@@ -5,5 +5,4 @@ sheets:
   - /org/eolang/lints/misc/redundant-object.xsl
 defects: 0
 input: |
-  # Foo.
   42 > foo

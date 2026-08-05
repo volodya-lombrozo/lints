@@ -1,8 +1,8 @@
++alias x f a
 +spdx SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
 +spdx SPDX-License-Identifier: MIT
-+unlint comment-without-dot:4-6
++alias a b c
++unlint alias-too-long:1-3
 
-# No dot here
 [] > x
-  # and here
   [] > y

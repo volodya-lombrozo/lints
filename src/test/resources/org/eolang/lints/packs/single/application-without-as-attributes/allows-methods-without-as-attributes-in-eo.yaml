@@ -5,6 +5,5 @@ sheets:
   - /org/eolang/lints/errors/application-without-as-attributes.xsl
 defects: 0
 input: |
-  # This is an object.
   [] > foo
     self.bar 42 52 > @

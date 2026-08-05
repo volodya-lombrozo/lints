@@ -20,6 +20,5 @@ input: |
   +architect hello@mail.ru
   +alias org.eolang.io.stdout
 
-  # No comments.
   [x] > foo
     x.div in.nextInt > @

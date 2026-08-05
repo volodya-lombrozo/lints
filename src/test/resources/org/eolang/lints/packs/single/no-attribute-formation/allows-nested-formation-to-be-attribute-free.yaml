@@ -5,7 +5,5 @@ sheets:
   - /org/eolang/lints/design/no-attribute-formation.xsl
 defects: 0
 input: |
-  # Foo.
   [x] > foo
-    # Bar.
     [] > bar

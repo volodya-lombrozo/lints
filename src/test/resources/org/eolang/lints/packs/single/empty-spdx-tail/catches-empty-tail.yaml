@@ -9,5 +9,4 @@ asserts:
 input: |
   +spdx
 
-  # Foo.
   [] > foo

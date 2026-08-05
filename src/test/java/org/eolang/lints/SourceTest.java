@@ -82,7 +82,7 @@ final class SourceTest {
     }
 
     @Test
-    void suppressesManyLints() throws IOException {
+    void suppressesManyLints() {
         MatcherAssert.assertThat(
             "defect found even though lint is suppressed",
             new Source(
@@ -312,7 +312,7 @@ final class SourceTest {
                 Matchers.hasToString(
                     Matchers.allOf(
                         Matchers.containsString("comment-without-dot/S WARNING"),
-                        Matchers.containsString(":4")
+                        Matchers.containsString(":3")
                     )
                 )
             )

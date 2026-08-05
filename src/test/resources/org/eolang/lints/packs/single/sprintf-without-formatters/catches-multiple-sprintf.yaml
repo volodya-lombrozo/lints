@@ -5,10 +5,9 @@ sheets:
   - /org/eolang/lints/misc/sprintf-without-formatters.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=2]
-  - /defects/defect[@line='4']
-  - /defects/defect[@line='7']
+  - /defects/defect[@line='3']
+  - /defects/defect[@line='6']
 input: |
-  # App.
   [] > app
     io.stdout > @
       txt.sprintf

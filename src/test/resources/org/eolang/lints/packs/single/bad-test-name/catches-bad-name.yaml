@@ -8,4 +8,5 @@ asserts:
 input: |
   [] > foo
     [] > bar
+
     [] +> it-works

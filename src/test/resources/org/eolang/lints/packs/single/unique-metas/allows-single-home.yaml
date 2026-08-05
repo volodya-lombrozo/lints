@@ -8,5 +8,4 @@ asserts:
 input: |
   +home https://github.com/objectionary/eo-dom
 
-  # Document.
   [] > doc

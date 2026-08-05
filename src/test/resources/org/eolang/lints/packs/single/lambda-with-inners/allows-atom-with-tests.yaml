@@ -6,8 +6,7 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='critical'])=0]
 input: |
-  # Foo atom.
   [] > foo /number
-    # Test.
+
     [] +> tests-foo
       foo "x" > @

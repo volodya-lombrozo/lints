@@ -10,5 +10,4 @@ input: |
   +package X.Y.Z
   +package F.o.O
 
-  # Test.
   [] > foo

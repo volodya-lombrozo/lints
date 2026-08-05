@@ -8,5 +8,4 @@ asserts:
 input: |
   +version 0.0.0
 
-  # Document.
   [] > bar

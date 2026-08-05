@@ -41,7 +41,6 @@ final class LtTestNotVerbTest {
                     new InputOf(
                         String.join(
                             System.lineSeparator(),
-                            "# Foo",
                             "[] > foo",
                             String.format("  [] +> %s", name),
                             "    42 > @"

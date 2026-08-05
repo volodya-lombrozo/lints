@@ -5,6 +5,5 @@ sheets:
   - /org/eolang/lints/metas/unsorted-metas.xsl
 defects: 0
 input: |
-  # No comments.
   [] > foo
     42 > @

@@ -6,10 +6,11 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='error'])=0]
 input: |
+  # Foo.
+
   +alias
   +alias a
   +alias a b
   +alias a b.c.d.e
 
-  # Foo.
   [] > foo

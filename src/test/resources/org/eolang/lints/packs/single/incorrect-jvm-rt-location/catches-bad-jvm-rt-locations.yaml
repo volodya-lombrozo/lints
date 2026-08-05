@@ -17,5 +17,4 @@ input: |
   +rt jvm привет!
   +rt jvm org.eolang:eo-runtime:0.0.0.0
 
-  # No comments.
   [] > foo

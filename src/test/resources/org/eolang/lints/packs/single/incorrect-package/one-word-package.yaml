@@ -7,5 +7,4 @@ defects: 0
 input: |
   +package foo
 
-  # No comments.
   [] > main

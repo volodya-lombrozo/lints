@@ -55,16 +55,16 @@ final class LtUnlintTest {
     void unlintsGrainy() throws IOException {
         MatcherAssert.assertThat(
             "Only one defect should be unlinted",
-            new LtUnlint(new LtAsciiOnly()).defects(
-                new EoProgram("org/eolang/lints/unlint-ascii-only-grainy.eo").parse()
+            new LtUnlint(new LtTestNotVerb()).defects(
+                new EoProgram("org/eolang/lints/unlint-test-verb-only-grainy.eo").parse()
             ),
             Matchers.allOf(
                 Matchers.iterableWithSize(1),
                 Matchers.hasItem(
                     Matchers.hasToString(
                         Matchers.allOf(
-                            Matchers.containsString("ascii-only WARNING"),
-                            Matchers.containsString(":8")
+                            Matchers.containsString("unit-test-is-not-verb WARNING"),
+                            Matchers.containsString(":7")
                         )
                     )
                 )
@@ -111,8 +111,8 @@ final class LtUnlintTest {
     void supportsLineRanges() throws IOException {
         MatcherAssert.assertThat(
             "Defects are not empty, but they should",
-            new LtUnlint(new LtByXsl("comments/comment-without-dot")).defects(
-                new EoProgram("org/eolang/lints/unlint-comment-without-dot-range.eo").parse()
+            new LtUnlint(new LtTestNotVerb()).defects(
+                new EoProgram("org/eolang/lints/unlint-test-verb-range.eo").parse()
             ),
             Matchers.emptyIterable()
         );
@@ -122,9 +122,9 @@ final class LtUnlintTest {
     void catchesDefectsIfUnlintsOutOfRange() throws IOException {
         MatcherAssert.assertThat(
             "Resulted defects do not match with expected",
-            new LtUnlint(new LtByXsl("comments/comment-without-dot")).defects(
+            new LtUnlint(new LtByXsl("aliases/alias-too-long")).defects(
                 new EoProgram(
-                    "org/eolang/lints/unlint-comment-without-dot-out-of-range.eo"
+                    "org/eolang/lints/alias-too-long-out-of-range.eo"
                 ).parse()
             ),
             Matchers.allOf(
@@ -132,8 +132,8 @@ final class LtUnlintTest {
                 Matchers.hasItem(
                     Matchers.hasToString(
                         Matchers.allOf(
-                            Matchers.containsString("comment-without-dot WARNING"),
-                            Matchers.containsString(":8")
+                            Matchers.containsString("alias-too-long ERROR"),
+                            Matchers.containsString(":4")
                         )
                     )
                 )
@@ -148,7 +148,7 @@ final class LtUnlintTest {
             new LtUnlint(new LtAsciiOnly()).defects(
                 new EoProgram("org/eolang/lints/unlint-ascii-only-out-of-range.eo").parse()
             ),
-            Matchers.iterableWithSize(2)
+            Matchers.iterableWithSize(1)
         );
     }
 }

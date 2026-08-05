@@ -7,5 +7,6 @@ asserts:
   - /defects[count(defect[@severity='warning'])=0]
 input: |
   # @fixme this code is broken after the refactoring.
+
   [] > foo
     42 > @

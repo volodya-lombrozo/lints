@@ -5,7 +5,6 @@ sheets:
   - /org/eolang/lints/design/missed-obfuscation.xsl
 defects: 0
 input: |
-  # Pair.
   [left right] > pair
     left > first
     right > second

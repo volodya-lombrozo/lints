@@ -5,9 +5,8 @@ sheets:
   - /org/eolang/lints/names/phi-is-not-first.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='5']
+  - /defects/defect[@line='4']
 input: |
-  # No comments.
   [] > foo
     x > bar
     z > hey

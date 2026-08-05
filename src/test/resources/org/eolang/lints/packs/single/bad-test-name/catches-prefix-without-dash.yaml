@@ -8,5 +8,7 @@ asserts:
 input: |
   [] > foo
     [] > bar
+
     [] +> cannonball
+
     [] +> rejection

@@ -5,15 +5,13 @@ sheets:
   - /org/eolang/lints/tests/unit-test-without-phi.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=2]
-  - /defects/defect[@line='4']
-  - /defects/defect[@line='8']
+  - /defects/defect[@line='3']
+  - /defects/defect[@line='6']
 input: |
-  # Foo.
   [] > foo
-    # Unit test.
+
     [] +> works-dummy
       true > i
 
-    # Another unit test.
     [] +> works-good
       true > out

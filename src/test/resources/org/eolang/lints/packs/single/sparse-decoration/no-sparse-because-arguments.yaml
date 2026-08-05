@@ -5,6 +5,5 @@ sheets:
   - /org/eolang/lints/misc/sparse-decoration.xsl
 defects: 0
 input: |
-  # No comments.
   [free] > decorates-with-free-args
     five > @

@@ -7,5 +7,6 @@ asserts:
   - /defects[count(defect[@severity='warning'])=0]
 input: |
   # Another object that wraps a theory of numbers.
+
   [] > foo
     42 > @

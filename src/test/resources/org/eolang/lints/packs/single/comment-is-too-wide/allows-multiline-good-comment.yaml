@@ -10,5 +10,6 @@ input: |
   # This is good line too.
   # This is good line as well.
   # We are here!
+
   [] > foo
     52 > @

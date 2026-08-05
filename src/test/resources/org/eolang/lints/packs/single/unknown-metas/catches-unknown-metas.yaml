@@ -21,5 +21,4 @@ input: |
   +unlint test
   +probe
 
-  # Foo.
   [] > foo

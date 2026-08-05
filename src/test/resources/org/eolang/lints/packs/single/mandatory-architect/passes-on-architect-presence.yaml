@@ -7,6 +7,5 @@ defects: 0
 input: |
   +architect foo@example.com
 
-  # No comments.
   [] > main
     42 > @

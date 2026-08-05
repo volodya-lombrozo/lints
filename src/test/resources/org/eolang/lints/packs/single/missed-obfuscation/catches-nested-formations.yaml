@@ -5,12 +5,10 @@ sheets:
   - /org/eolang/lints/design/missed-obfuscation.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=2]
-  - /defects/defect[@line='2']
-  - /defects/defect[@line='5']
+  - /defects/defect[@line='1']
+  - /defects/defect[@line='3']
 input: |
-  # Outer.
   [a] > outer
     foo > @
-    # Inner.
     [b] > inner
       bar > @

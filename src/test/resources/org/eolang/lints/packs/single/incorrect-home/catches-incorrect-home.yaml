@@ -15,6 +15,5 @@ input: |
   +alias org.eolang.io.stdout
   +home https://|http/wrong.com
 
-  # No comments.
   [x] > foo
     x.div in.nextInt > @

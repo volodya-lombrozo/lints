@@ -6,7 +6,6 @@ sheets:
   - /org/eolang/lints/misc/redundant-object.xsl
 defects: 0
 input: |
-  # Series.
   [point] > series
     point.times point > squared
     poly 30 > @

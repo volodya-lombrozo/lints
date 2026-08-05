@@ -29,6 +29,5 @@ input: |
   +version 1-alpha
   +version alpha.1.1
 
-  # No comments.
   [x] > foo
     x.div in.nextInt > @

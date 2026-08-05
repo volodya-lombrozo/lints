@@ -8,5 +8,4 @@ asserts:
 input: |
   +architect jeff@google.com
 
-  # Foo.
   [] > foo

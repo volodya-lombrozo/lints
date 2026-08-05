@@ -6,6 +6,7 @@ sheets:
 defects: 0
 input: |
   [] > real
+
     [] +> tests-sqrt-check-nan-input
       is-nan. > @
         sqrt.

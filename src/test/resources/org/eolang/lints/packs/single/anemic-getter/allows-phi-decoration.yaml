@@ -6,6 +6,5 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='warning'])=0]
 input: |
-  # Book.
   [title] > book
     title > @
