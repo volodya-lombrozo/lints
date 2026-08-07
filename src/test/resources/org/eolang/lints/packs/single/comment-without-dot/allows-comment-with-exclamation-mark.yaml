@@ -7,5 +7,6 @@ asserts:
   - /defects[count(defect[@severity='warning'])=0]
 input: |
   # This comment is allowed!
+
   [] > foo
     52 > @

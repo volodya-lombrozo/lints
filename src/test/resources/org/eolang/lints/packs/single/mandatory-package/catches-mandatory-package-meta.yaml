@@ -10,6 +10,5 @@ input: |
   +alias stdout org.eolang.io.stdout
   +home https://github.com/objectionary/eo
 
-  # No comments.
   [] > main
     (stdout "Hello, world!").print > @

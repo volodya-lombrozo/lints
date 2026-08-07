@@ -1,8 +1,7 @@
 +spdx SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
 +spdx SPDX-License-Identifier: MIT
-+unlint comment-without-dot:6-8
++unlint unit-test-is-not-verb:6-7
 
-# No dot here
 [] > five
-  # and here
-  [] > bar
+  [] +> bar
+  [] +> hey

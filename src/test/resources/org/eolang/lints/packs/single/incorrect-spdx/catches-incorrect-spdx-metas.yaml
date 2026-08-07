@@ -9,5 +9,4 @@ asserts:
 input: |
   +spdx foo bar
 
-  # Foo.
   [] > foo

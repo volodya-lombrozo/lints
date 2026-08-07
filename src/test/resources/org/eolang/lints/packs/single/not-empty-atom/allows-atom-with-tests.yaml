@@ -5,8 +5,7 @@ sheets:
   - /org/eolang/lints/atoms/not-empty-atom.xsl
 defects: 0
 input: |
-  # Some X atom.
   [] > x /number
-    # Test.
+
     [] +> tests-x
       x "x" > @

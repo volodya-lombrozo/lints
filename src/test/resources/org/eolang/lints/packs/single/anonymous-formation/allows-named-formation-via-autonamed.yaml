@@ -6,7 +6,6 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='warning'])=0]
 input: |
-  # Main.
   [] > main
     malloc.of > @
       64

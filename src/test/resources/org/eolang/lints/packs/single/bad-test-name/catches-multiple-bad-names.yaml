@@ -8,6 +8,9 @@ asserts:
 input: |
   [] > foo
     [] > bar
+
     [] +> can-do-something
+
     [] +> testing
+
     [] +> should-not-pass

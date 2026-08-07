@@ -5,9 +5,10 @@ sheets:
   - /org/eolang/lints/critical/duplicate-names.xsl
 defects: 0
 input: |
-  # Foo.
   [] > foo
     x > @
       *
-        [x] (x.zz > xzz)
-        [x] (x.tt > xtt)
+        [x]
+          x.zz > xzz
+        [x]
+          x.tt > xtt

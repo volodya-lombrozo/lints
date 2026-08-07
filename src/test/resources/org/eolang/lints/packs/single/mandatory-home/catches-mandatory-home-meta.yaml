@@ -10,6 +10,5 @@ input: |
   +alias stdout org.eolang.io.stdout
   +package test
 
-  # No comments.
   [] > main
     (stdout "Hello, world!").print > @

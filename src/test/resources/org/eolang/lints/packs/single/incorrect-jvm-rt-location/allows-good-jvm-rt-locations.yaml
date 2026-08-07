@@ -11,5 +11,4 @@ input: |
   +rt jvm the.great:gatsby:1.2.3
   +rt node fine
 
-  # No comments.
   [] > foo

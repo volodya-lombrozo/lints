@@ -5,6 +5,5 @@ sheets:
   - /org/eolang/lints/misc/redundant-object.xsl
 defects: 0
 input: |
-  # Foo.
   [spb] > foo
     spb.plus 2 > @

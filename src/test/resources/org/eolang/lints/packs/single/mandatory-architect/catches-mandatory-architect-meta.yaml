@@ -9,6 +9,5 @@ asserts:
 input: |
   +package test
 
-  # No comments.
   [] > main
     42 > @

@@ -10,5 +10,4 @@ input: |
   +unlint foo
   +unlint foo
 
-  # No comments.
   [] > main

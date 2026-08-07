@@ -15,5 +15,4 @@ input: |
   +alias with-dash
   +alias with-dash org.eolang.with-dash
 
-  # foo.
   [] > foo

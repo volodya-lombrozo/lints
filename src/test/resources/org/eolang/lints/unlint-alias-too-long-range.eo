@@ -1,8 +1,8 @@
++alias something very strange
 +spdx SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
 +spdx SPDX-License-Identifier: MIT
-+unlint ascii-only:6-8
++alias something very strange again
++unlint alias-too-long:1-4
 
-# 应用程序.
 [] > app
-  # 主函数.
   [] > main

@@ -6,6 +6,5 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='warning'])=1]
 input: |
-  # No comments.
   [] > decorates-num
     5 > @

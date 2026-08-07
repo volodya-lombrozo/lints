@@ -8,6 +8,5 @@ asserts:
 input: |
   +package test
 
-  # No comments.
   [] > main
     (stdout "Hello, world!").print > @

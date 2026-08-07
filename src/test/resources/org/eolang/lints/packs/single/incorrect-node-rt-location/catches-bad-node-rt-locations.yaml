@@ -15,5 +15,4 @@ input: |
   +rt node hello, world!
   +rt node foo:1.2.3.4
 
-  # No comments.
   [] > foo

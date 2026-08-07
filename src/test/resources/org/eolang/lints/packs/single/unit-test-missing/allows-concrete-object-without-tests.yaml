@@ -5,5 +5,4 @@ sheets:
   - /org/eolang/lints/tests/unit-test-missing.xsl
 defects: 0
 input: |
-  # The not a number object.
   number 7F-F8-00-00-00-00-00-00 > nan

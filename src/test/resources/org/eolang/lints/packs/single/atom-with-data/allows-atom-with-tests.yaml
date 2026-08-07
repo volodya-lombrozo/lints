@@ -5,8 +5,7 @@ sheets:
   - /org/eolang/lints/critical/atom-with-data.xsl
 defects: 0
 input: |
-  # Boom.
   [] > boom /number
-    # Test.
+
     [] +> tests-explosion
       boom 123 4 > @

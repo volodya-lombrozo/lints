@@ -3,9 +3,10 @@
 ---
 sheets:
   - /org/eolang/lints/tests/wrong-test-order.xsl
-asserts:
-  - /defects[count(defect[@severity='warning'])=0]
+defects: 0
 input: |
   [] > at
+
     [] +> test
+
     [] +> another-test

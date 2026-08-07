@@ -6,6 +6,7 @@ sheets:
 defects: 0
 input: |
   [] > foo
+
     [] +> tests-slice-foreign-literals
       eq. > @
         "hello, 大家!".slice

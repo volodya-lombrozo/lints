@@ -5,7 +5,6 @@ sheets:
   - /org/eolang/lints/names/anonymous-formation.xsl
 defects: 0
 input: |
-  # Foo.
   [] > foo
     boom > @
       [acc x i]

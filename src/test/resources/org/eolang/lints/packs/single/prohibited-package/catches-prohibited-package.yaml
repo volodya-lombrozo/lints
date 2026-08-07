@@ -9,5 +9,4 @@ asserts:
 input: |
   +package org.eolang
 
-  # No comments.
   [] > main

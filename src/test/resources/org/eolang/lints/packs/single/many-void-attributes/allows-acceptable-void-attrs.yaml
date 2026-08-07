@@ -5,6 +5,5 @@ sheets:
   - /org/eolang/lints/errors/many-void-attributes.xsl
 defects: 0
 input: |
-  # No comments.
   [x y z] > main
     42 > @

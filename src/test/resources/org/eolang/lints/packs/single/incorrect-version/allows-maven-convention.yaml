@@ -8,6 +8,5 @@ asserts:
 input: |
   +version 1.0-SNAPSHOT
 
-  # No comments.
   [x] > foo
     41 > @

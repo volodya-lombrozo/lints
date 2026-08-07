@@ -4,16 +4,24 @@ Unit tests must be located after live objects:
 
 Incorrect:
 
-```eo
-[] > foo
-  [] +> runs-something
-  [] > bar
+```xml
+<object>
+  <o name="foo">
+    <o name="bar"/>
+    <o name="+runs-program"/>
+    <o name="boom"/>
+  </o>
+</object>
 ```
 
 Correct:
 
-```eo
-[] > foo
-  [] > bar
-  [] +> runs-something
+```xml
+<object>
+  <o name="foo">
+    <o name="bar"/>
+    <o name="boom"/>
+    <o name="+runs-program"/>
+  </o>
+</object>
 ```

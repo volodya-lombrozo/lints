@@ -10,6 +10,5 @@ input: |
   +alias first org.example.alpha
   +alias second org.example.alphabet
 
-  # No comments
   [] > foo
     second > @

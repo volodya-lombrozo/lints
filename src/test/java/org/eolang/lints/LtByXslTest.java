@@ -393,7 +393,7 @@ final class LtByXslTest {
                 (Function<Path, Map<Path, Map<String, Object>>>)
                     p -> new MapOf<>(p, new Yaml().load(new ReaderOf(p.toFile())))
             )
-            .filter(pack -> pack.values().stream().findFirst().get().containsKey("input"))
+            .filter(LtByXslTest::eligibleForValidation)
             .filter(pack -> !LtByXslTest.eoErrorFree(pack))
             .map(pack -> pack.keySet().iterator().next())
             .collect(Collectors.toList());
@@ -404,11 +404,21 @@ final class LtByXslTest {
         );
     }
 
+    /**
+     * Whether a pack is eligible for validation?
+     * @param pack Pack
+     * @return True or False
+     */
+    private static boolean eligibleForValidation(final Map<Path, Map<String, Object>> pack) {
+        final Map<String, Object> yaml = pack.values().stream().findFirst().get();
+        return yaml.containsKey("input") && !yaml.containsKey("skip-errors");
+    }
+
     private static void voidAttr(
         final Directives dirs,
         final String name,
         final int children
-    ) throws ImpossibleModificationException {
+    ) {
         dirs.add("o").attr("name", name).attr("base", "∅");
         for (int idx = 0; idx < children; idx += 1) {
             dirs.add("o").attr("base", String.format("Φ.f%d", idx)).up();

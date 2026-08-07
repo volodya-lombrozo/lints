@@ -5,6 +5,5 @@ sheets:
   - /org/eolang/lints/design/missed-obfuscation.xsl
 defects: 0
 input: |
-  # Restricted.
   [cant-read cant-write] > restricted
     foo > @

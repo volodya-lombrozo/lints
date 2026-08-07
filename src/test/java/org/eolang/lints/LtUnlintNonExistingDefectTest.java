@@ -129,11 +129,11 @@ final class LtUnlintNonExistingDefectTest {
         MatcherAssert.assertThat(
             "Defects are not empty, but they should",
             new LtUnlintNonExistingDefect(
-                new ListOf<>(new LtAsciiOnly()),
+                new ListOf<>(new LtByXsl("aliases/alias-too-long")),
                 new ListOf<>()
             ).defects(
                 new EoProgram(
-                    "org/eolang/lints/unlint-ascii-only-range.eo"
+                    "org/eolang/lints/unlint-alias-too-long-range.eo"
                 ).parse()
             ),
             Matchers.emptyIterable()

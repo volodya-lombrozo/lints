@@ -12,6 +12,5 @@ input: |
   +alias in org.eolang.io.stdin
   +alias org.eolang.io.stdout
 
-  # No comments
   [x] > foo
     x.div in.nextInt > @

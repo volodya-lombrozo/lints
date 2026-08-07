@@ -1,6 +1,12 @@
 # SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
 # SPDX-License-Identifier: MIT
 ---
+# @todo #1172:25min Enable `catches-package-duplicate` after fix in EO parser.
+#  Current EO version fails to parse EO with multiple `+package` metas.
+#  See this for more details: https://github.com/objectionary/eo/issues/6395.
+#  Once it will be fixed and realised, we can enable this test again.
+skip: true
+skip-errors: true
 sheets:
   - /org/eolang/lints/metas/unique-metas.xsl
 asserts:

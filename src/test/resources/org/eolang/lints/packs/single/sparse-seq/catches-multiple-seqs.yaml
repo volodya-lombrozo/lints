@@ -5,10 +5,9 @@ sheets:
   - /org/eolang/lints/misc/sparse-seq.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=2]
-  - /defects/defect[@line='3']
-  - /defects/defect[@line='6']
+  - /defects/defect[@line='2']
+  - /defects/defect[@line='5']
 input: |
-  # App.
   [] > app
     seq > first
       *
