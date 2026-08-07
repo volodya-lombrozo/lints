@@ -3,12 +3,11 @@
 ---
 sheets:
   - /org/eolang/lints/refs/line-is-absent.xsl
-asserts:
-  - /defects[count(defect[@severity='error'])=1]
-document: |
+defects: 0
+document:
   <object author="tests">
     <o line="1">
-      <o name="foo"/>
-      <o name="bar" base="Φ.foo" line="3"/>
+      <o line="2"><o name="foo" line="2"/></o>
+      <o line="3"><o name="bar" base="ξ.foo" line="3"/></o>
     </o>
   </object>
