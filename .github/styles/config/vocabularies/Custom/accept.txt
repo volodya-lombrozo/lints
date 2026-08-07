@@ -18,3 +18,4 @@ inlined
 [Ii]nlining
 [Ss]ubgraph
 [Aa]pplication
+[Ff]orma(e)?
