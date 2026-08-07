@@ -5,13 +5,11 @@ sheets:
   - /org/eolang/lints/design/package-member-without-void.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=2]
-  - /defects/defect[@line='4']
-  - /defects/defect[@line='7']
+  - /defects/defect[@line='3']
+  - /defects/defect[@line='5']
 input: |
   +package foo
 
-  # Bar.
   [] > bar
 
-  # Baz.
   [] > baz
