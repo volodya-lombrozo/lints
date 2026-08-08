@@ -5,5 +5,4 @@ sheets:
   - /org/eolang/lints/design/package-member-without-void.xsl
 defects: 0
 input: |
-  # Stdin.
   [] > stdin
