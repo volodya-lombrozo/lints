@@ -151,6 +151,7 @@ final class SourceTest {
     }
 
     /**
+     * Accepts canonical code.
      * @todo #1101:30min Decide whether canonical.eo should drop the `>>` on
      *  nested formations like `[i] >>`/`[i1] >>`, or whether
      *  `redundant-attachment` should gain a documented exception for
