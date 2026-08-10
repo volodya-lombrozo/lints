@@ -1,8 +1,8 @@
 # Redundant attachment
 
-The `>>` suffix gives an anonymous formation an auto-generated name, so
+The `>>` suffix gives an anonymous formation a name generated for it, so
 that it can be referenced from elsewhere: by itself recursively (via `%`),
-or by another object. If nothing ever refers to that auto-generated
+or by another object. If nothing ever refers to that generated
 name, the `>>` is redundant and should be removed.
 
 Incorrect:
@@ -23,7 +23,7 @@ Correct:
       2.plus 2 > @
 ```
 
-An auto-generated name is *not* redundant when it is actually used,
+A generated name is *not* redundant when it is actually used,
 either by a recursive self-reference:
 
 ```eo
