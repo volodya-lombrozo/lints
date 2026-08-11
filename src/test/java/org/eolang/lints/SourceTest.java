@@ -36,6 +36,7 @@ import org.cactoos.bytes.BytesOf;
 import org.cactoos.bytes.UncheckedBytes;
 import org.cactoos.io.InputOf;
 import org.cactoos.io.ResourceOf;
+import org.cactoos.iterable.Mapped;
 import org.cactoos.iterable.Sticky;
 import org.cactoos.iterable.Synced;
 import org.cactoos.list.ListOf;
@@ -497,34 +498,15 @@ final class SourceTest {
         /**
          * Defects.
          * @return Defects
-         * @todo #144:35min Resolve code duplication with Source.java class.
-         *  Currently, BcSource.java is duplication of Source.java. Let's make
-         *  it use the original Source.java, so they will stay synced. Don't forget
-         *  to remove this puzzle.
          */
         Collection<Defect> defects() {
-            try {
-                final Collection<Defect> messages = new ArrayList<>(0);
-                for (final Lint lint : this.lints) {
-                    messages.addAll(this.timed(lint));
-                }
-                return messages;
-            } catch (final IOException ex) {
-                throw new IllegalStateException(
-                    "Failed to find defects in the XMIR file",
-                    ex
-                );
-            }
-        }
-
-        /**
-         * Execute lint and record timing.
-         * @param lint Lint to execute
-         * @return Defects found
-         * @throws IOException If fails
-         */
-        private Collection<Defect> timed(final Lint lint) throws IOException {
-            return new SourceTest.TimedLint(lint, this.xmir, this.timings, this.marker).defects();
+            return new Source(
+                this.xmir,
+                new Mapped<>(
+                    lint -> new SourceTest.TimedLint(lint, this.timings, this.marker),
+                    this.lints
+                )
+            ).defects();
         }
     }
 
@@ -532,17 +514,12 @@ final class SourceTest {
      * Wrapper for timed lint execution.
      * @since 0.0.45
      */
-    private static final class TimedLint {
+    private static final class TimedLint implements Lint {
 
         /**
          * Lint to execute.
          */
         private final Lint lint;
-
-        /**
-         * XML to check.
-         */
-        private final XML xml;
 
         /**
          * Timings recorder.
@@ -557,30 +534,40 @@ final class SourceTest {
         /**
          * Ctor.
          * @param lnt Lint
-         * @param xmr XML
          * @param tmngs Timings
          * @param mrkr Marker
          */
-        TimedLint(final Lint lnt, final XML xmr, final Tojos tmngs, final String mrkr) {
+        TimedLint(final Lint lnt, final Tojos tmngs, final String mrkr) {
             this.lint = lnt;
-            this.xml = xmr;
             this.timings = tmngs;
             this.marker = mrkr;
         }
 
-        /**
-         * Get defects with timing.
-         * @return Defects
-         * @throws IOException If fails
-         */
-        Collection<Defect> defects() throws IOException {
+        @Override
+        public String name() {
+            return this.lint.name();
+        }
+
+        @Override
+        public String motive() throws IOException {
+            return this.lint.motive();
+        }
+
+        @Override
+        public Collection<Defect> defects(final XML xmir) throws IOException {
             final long before = System.currentTimeMillis();
             try {
-                return this.lint.defects(this.xml);
+                return this.lint.defects(xmir);
             } finally {
-                this.timings.add(String.format("%s (%s)", this.lint.name(), this.marker))
-                    .set("ms", System.currentTimeMillis() - before);
+                this.timings.add(
+                    String.format("%s (%s)", this.lint.name(), this.marker)
+                ).set("ms", System.currentTimeMillis() - before);
             }
+        }
+
+        @Override
+        public Fix fix() {
+            return this.lint.fix();
         }
     }
 
