@@ -55,28 +55,27 @@ final class LtUnlintNonExistingDefect implements Lint {
 
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
-        final List<Xnav> unlints = new Xnav(xmir.inner())
-            .path("/object/metas/meta[head='unlint']")
-            .collect(Collectors.toList());
-        return unlints.stream().map(
-            meta -> meta.element("tail").text().orElse("unknown")
-        ).distinct().filter(
-            new DefectMissing(this.existingDefects(xmir), this.excluded)::apply
-        ).flatMap(
-            tail -> unlints.stream().filter(
-                meta -> tail.equals(meta.element("tail").text().orElse("unknown"))
-            ).map(
-                meta -> new Defect.Default(
-                    this.name(),
-                    Severity.WARNING,
-                    Integer.parseInt(meta.attribute("line").text().orElse("0")),
+        return new Xnav(xmir.inner()).path("/object/metas/meta[head='unlint']/tail")
+            .map(xnav -> xnav.text().get())
+            .distinct()
+            .filter(new DefectMissing(this.existingDefects(xmir), this.excluded)::apply).flatMap(
+                unlint -> new Xnav(xmir.inner()).path(
                     String.format(
-                        "Unlinting rule '%s' doesn't make sense, since there are no defects with it",
-                        tail
+                        "object/metas/meta[head='unlint' and tail=%s]/@line",
+                        LtUnlintNonExistingDefect.quoted(unlint)
+                    )
+                ).map(
+                    xnav -> new Defect.Default(
+                        this.name(),
+                        Severity.WARNING,
+                        Integer.parseInt(xnav.text().get()),
+                        String.format(
+                            "Unlinting rule '%s' doesn't make sense, since there are no defects with it",
+                            unlint
+                        )
                     )
                 )
-            )
-        ).collect(Collectors.toList());
+            ).collect(Collectors.toList());
     }
 
     @Override
@@ -87,6 +86,28 @@ final class LtUnlintNonExistingDefect implements Lint {
     @Override
     public Fix fix() {
         return new FxEmpty();
+    }
+
+    /**
+     * Quote the value for safe embedding into an XPath string literal.
+     * A single quote in the value forces double-quoted literal, and a value
+     * containing both kinds of quotes cannot be embedded safely.
+     * @param value The value to quote
+     * @return Quoted XPath string literal
+     */
+    private static String quoted(final String value) {
+        final String result;
+        if (value.contains("\"")) {
+            if (value.contains("'")) {
+                throw new IllegalArgumentException(
+                    String.format("Unquotable value for XPath: '%s'", value)
+                );
+            }
+            result = String.format("'%s'", value);
+        } else {
+            result = String.format("\"%s\"", value);
+        }
+        return result;
     }
 
     private Map<String, List<Integer>> existingDefects(final XML xmir) {
