@@ -24,6 +24,7 @@ public interface Lint {
      * Find and return defects.
      * @param xmir The XMIR to analyze
      * @return Defects
+     * @throws IOException if something went wrong
      */
     Collection<Defect> defects(XML xmir) throws IOException;
 

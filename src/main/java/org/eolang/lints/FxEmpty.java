@@ -13,6 +13,13 @@ import com.jcabi.xml.XML;
  */
 public final class FxEmpty implements Fix {
 
+    /**
+     * Ctor.
+     */
+    public FxEmpty() {
+        // nothing to construct
+    }
+
     @Override
     public XML apply(final XML xmir) {
         return xmir;
