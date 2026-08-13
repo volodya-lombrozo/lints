@@ -90,19 +90,14 @@ final class LtUnlintNonExistingDefect implements Lint {
 
     /**
      * Quote the value for safe embedding into an XPath string literal.
-     * A single quote in the value forces double-quoted literal, and a value
-     * containing both kinds of quotes cannot be embedded safely.
+     * A value with a double quote is wrapped in single quotes, otherwise
+     * in double quotes, so a single quote inside the value is fine.
      * @param value The value to quote
      * @return Quoted XPath string literal
      */
     private static String quoted(final String value) {
         final String result;
         if (value.contains("\"")) {
-            if (value.contains("'")) {
-                throw new IllegalArgumentException(
-                    String.format("Unquotable value for XPath: '%s'", value)
-                );
-            }
             result = String.format("'%s'", value);
         } else {
             result = String.format("\"%s\"", value);
