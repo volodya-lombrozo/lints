@@ -20,5 +20,6 @@ input: |
   +home https://earth.com
   +unlint test
   +probe
+  +syntax 0.62.1
 
   [] > foo
