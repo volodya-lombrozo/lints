@@ -62,15 +62,11 @@ import org.objectweb.asm.Opcodes;
 /**
  * Test for {@link Source}.
  * @since 0.0.1
- * @todo #767:60min Decrease timeouts for source linting.
- *  As for now, most lints are too slow, we need to optimize them first, so they
- *  run in milliseconds, not seconds/minutes. It should decrease our build time too.
- *  After that, we need to decrease our test timeouts. Don't forget to remove this puzzle.
  */
 @ExtendWith(MktmpResolver.class)
 final class SourceTest {
 
-    @Timeout(unit = TimeUnit.SECONDS, value = 60L)
+    @Timeout(unit = TimeUnit.SECONDS, value = 30L)
     @Test
     void returnsEmptyListOfDefects() {
         MatcherAssert.assertThat(
@@ -152,7 +148,7 @@ final class SourceTest {
     }
 
     @Test
-    @Timeout(60L)
+    @Timeout(30L)
     void acceptsCanonicalCode() {
         final XML xmir = new EoProgram(
             "org/eolang/lints/canonical.eo"
