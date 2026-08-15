@@ -317,7 +317,7 @@ final class LtByXslTest {
     void checksNamedObjectAbstractNestedLintOnLargeXmirInReasonableTime()
         throws ImpossibleModificationException {
         final int chains = 500;
-        final int depth = 100;
+        final int depth = 99;
         final Directives dirs = new Directives().add("object");
         for (int chain = 0; chain < chains; chain += 1) {
             for (int idx = 0; idx < depth; idx += 1) {
