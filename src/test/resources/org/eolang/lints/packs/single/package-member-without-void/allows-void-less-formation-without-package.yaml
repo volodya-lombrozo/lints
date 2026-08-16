@@ -1,8 +1,0 @@
-# SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
-# SPDX-License-Identifier: MIT
----
-sheets:
-  - /org/eolang/lints/design/package-member-without-void.xsl
-defects: 0
-input: |
-  [] > stdin
