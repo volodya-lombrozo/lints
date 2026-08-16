@@ -61,7 +61,8 @@ final class LtUnlintNonExistingDefect implements Lint {
             .filter(new DefectMissing(this.existingDefects(xmir), this.excluded)::apply).flatMap(
                 unlint -> new Xnav(xmir.inner()).path(
                     String.format(
-                        "object/metas/meta[head='unlint' and tail='%s']/@line", unlint
+                        "object/metas/meta[head='unlint' and tail=%s]/@line",
+                        LtUnlintNonExistingDefect.quoted(unlint)
                     )
                 ).map(
                     xnav -> new Defect.Default(
@@ -85,6 +86,23 @@ final class LtUnlintNonExistingDefect implements Lint {
     @Override
     public Fix fix() {
         return new FxEmpty();
+    }
+
+    /**
+     * Quote the value for safe embedding into an XPath string literal.
+     * A value with a double quote is wrapped in single quotes, otherwise
+     * in double quotes, so a single quote inside the value is fine.
+     * @param value The value to quote
+     * @return Quoted XPath string literal
+     */
+    private static String quoted(final String value) {
+        final String result;
+        if (value.contains("\"")) {
+            result = String.format("'%s'", value);
+        } else {
+            result = String.format("\"%s\"", value);
+        }
+        return result;
     }
 
     private Map<String, List<Integer>> existingDefects(final XML xmir) {
