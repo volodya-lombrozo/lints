@@ -5,10 +5,11 @@
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:eo="https://www.eolang.org" id="mandatory-package" version="2.0">
   <xsl:import href="/org/eolang/funcs/lineno.xsl"/>
+  <xsl:import href="/org/eolang/funcs/home-object.xsl"/>
   <xsl:output encoding="UTF-8"/>
   <xsl:template match="/">
     <defects>
-      <xsl:if test="count(/object/metas/meta[head ='package'])=0">
+      <xsl:if test="count(/object/metas/meta[head ='package'])=0 and not(eo:home-object(/object/o[1]/@name, /object/metas/meta))">
         <xsl:element name="defect">
           <xsl:attribute name="line">
             <xsl:value-of select="eo:lineno(@line)"/>
