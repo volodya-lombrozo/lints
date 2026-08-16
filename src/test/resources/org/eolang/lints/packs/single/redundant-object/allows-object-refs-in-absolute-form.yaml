@@ -13,11 +13,11 @@ input: |
           match.
             regex "/linux/i"
             name
-  
+
     or. ++> can-check-the-os-family
       os.is-windows.or os.is-macos
       os.is-linux
-  
+
     not. ++> can-tell-it-does-not-belong-to-two-os-families-at-once
       or.
         or.
