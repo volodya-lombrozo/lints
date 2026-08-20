@@ -111,20 +111,11 @@ final class PkMonoTest {
             );
     }
 
-    /**
-     * Snapshot of every lint name produced by {@link PkMono}.
-     * @return Set of lint names
-     */
     private static Set<String> lintNames() {
         return StreamSupport.stream(new PkMono().spliterator(), false)
             .map(Lint::name).collect(Collectors.toSet());
     }
 
-    /**
-     * Pull the lint name out of a motive resource filename.
-     * @param res Classpath resource for a motive markdown file
-     * @return Lint name (filename without {@code .md})
-     */
     private static String shortName(final Resource res) {
         final String filename = res.getFilename();
         if (filename == null) {
@@ -135,11 +126,6 @@ final class PkMonoTest {
         return filename.replaceAll("\\.md$", "");
     }
 
-    /**
-     * Found decorated lint of specific lint.
-     * @param decorate Lint
-     * @return Decorated lint
-     */
     @SuppressWarnings("PMD.AvoidAccessibilityAlteration")
     private static Lint decoratee(final Lint decorate) {
         Lint result = decorate;

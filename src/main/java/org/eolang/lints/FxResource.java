@@ -52,11 +52,6 @@ public final class FxResource implements Fix {
         return this.delegate.value().apply(xmir);
     }
 
-    /**
-     * Load fix from classpath if available, otherwise return no-op.
-     * @param path Classpath path to the XSL fix stylesheet
-     * @return Fix
-     */
     private static Fix load(final String path) {
         final Fix fix;
         if (Thread.currentThread().getContextClassLoader().getResource(path) != null) {

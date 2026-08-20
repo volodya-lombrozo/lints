@@ -121,10 +121,6 @@ final class PkByXslTest {
         );
     }
 
-    /**
-     * Parse EO source into XMIR once.
-     * @return Parsed XMIR
-     */
     private static XML parse() {
         return new EoProgram("org/eolang/lints/canonical.eo").parse();
     }

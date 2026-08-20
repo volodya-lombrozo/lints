@@ -372,10 +372,6 @@ final class SourceTest {
         return lines >= src.minAllowed() && lines <= src.maxAllowed();
     }
 
-    /**
-     * Run benchmark, and output the results.
-     * @return Benchmark results
-     */
     private static Map<Map<SourceSize, Collection<Defect>>, String> benchmarkResults() {
         final List<Map<SourceSize, Collection<Defect>>> results = new ArrayList<>(0);
         final StringBuilder sum = new StringBuilder();

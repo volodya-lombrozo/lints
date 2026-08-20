@@ -106,11 +106,6 @@ final class LtSyntaxVersionTest {
         );
     }
 
-    /**
-     * Discover the actual EO parser version used at test time, by parsing
-     * a trivial program and reading its root {@code version} attribute.
-     * @return Parser version, e.g. "0.62.1"
-     */
     private static String actualVersion() {
         final String src = LtSyntaxVersionTest.program("+home https://example.com");
         return new Xnav(new EoProgram(src, new InputOf(src)).parse().inner())
@@ -118,11 +113,6 @@ final class LtSyntaxVersionTest {
             .attribute("version").text().get();
     }
 
-    /**
-     * Build a tiny EO program with the given meta line.
-     * @param meta Meta line, e.g. {@code "+syntax 0.1.0"}
-     * @return EO source
-     */
     private static String program(final String meta) {
         return String.join(System.lineSeparator(), meta, "", "[] > foo", "");
     }

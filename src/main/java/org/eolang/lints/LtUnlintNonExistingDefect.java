@@ -100,13 +100,6 @@ final class LtUnlintNonExistingDefect implements Lint {
         return new FxEmpty();
     }
 
-    /**
-     * Quote the value for safe embedding into an XPath string literal.
-     * A value with a double quote is wrapped in single quotes, otherwise
-     * in double quotes, so a single quote inside the value is fine.
-     * @param value The value to quote
-     * @return Quoted XPath string literal
-     */
     private static String quoted(final String value) {
         final String result;
         if (value.contains("\"")) {
@@ -117,13 +110,6 @@ final class LtUnlintNonExistingDefect implements Lint {
         return result;
     }
 
-    /**
-     * Build a map of existing defects, checking only lints referenced by
-     * <code>+unlint</code> metas.
-     * @param unlints Tails of all <code>+unlint</code> metas in the document
-     * @param xmir The XMIR document
-     * @return Existing defects grouped by rule and line
-     */
     private Map<String, List<Integer>> existing(final List<String> unlints, final XML xmir) {
         final Set<String> names = unlints.stream()
             .map(unlint -> unlint.split(":", -1)[0])

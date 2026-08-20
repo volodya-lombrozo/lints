@@ -404,11 +404,6 @@ final class LtByXslTest {
         );
     }
 
-    /**
-     * Whether a pack is eligible for validation?
-     * @param pack Pack
-     * @return True or False
-     */
     private static boolean eligibleForValidation(final Map<Path, Map<String, Object>> pack) {
         final Map<String, Object> yaml = pack.values().stream().findFirst().get();
         return yaml.containsKey("input") && !yaml.containsKey("skip-errors");
@@ -464,20 +459,11 @@ final class LtByXslTest {
         ).path("/object[errors]").findAny().isEmpty();
     }
 
-    /**
-     * Filter YAML files.
-     * @return Predicate
-     */
     @SuppressWarnings("UnnecessaryLambda")
     private static Predicate<Path> yamls() {
         return path -> path.toString().endsWith(".yaml");
     }
 
-    /**
-     * Check if YAML pack path has a corresponding XSL file.
-     * @param yaml YAML pack path
-     * @return True if matching XSL exists
-     */
     @SuppressWarnings("StreamResourceLeak")
     private static boolean hasMatchingXsl(final Path yaml) {
         try {

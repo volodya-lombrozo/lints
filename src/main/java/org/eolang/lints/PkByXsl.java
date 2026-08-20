@@ -48,10 +48,6 @@ final class PkByXsl extends IterableEnvelope<Lint> {
         super(new Shuffled<>(PkByXsl.LINTS));
     }
 
-    /**
-     * Load all lints once.
-     * @return List of all lints
-     */
     @SuppressWarnings("PMD.UnnecessaryLocalRule")
     private static List<Lint> load() {
         try {

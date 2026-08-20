@@ -164,11 +164,6 @@ final class LtByXsl implements Lint {
         return this.fixer;
     }
 
-    /**
-     * Defect is experimental?
-     * @param defect Defect
-     * @return Experimental or not
-     */
     private static boolean experimental(final Xnav defect) {
         final boolean result;
         final Optional<String> attr = defect.attribute("experimental").text();
@@ -180,11 +175,6 @@ final class LtByXsl implements Lint {
         return result;
     }
 
-    /**
-     * Get line number of the defect.
-     * @param defect XML defect
-     * @return Line number
-     */
     private int lineno(final Xnav defect) {
         final Optional<String> oline = defect.attribute("line").text();
         if (oline.isEmpty()) {
@@ -213,11 +203,6 @@ final class LtByXsl implements Lint {
         return lineno;
     }
 
-    /**
-     * Find defects in the report.
-     * @param report XML report
-     * @return Collection of defects
-     */
     private static Collection<XML> findDefects(final XML report) {
         return new Xnav(report.inner())
             .element("defects")

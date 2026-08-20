@@ -65,13 +65,6 @@ final class DefectMissing implements Function<String, Boolean> {
         return missing;
     }
 
-    /**
-     * Is a defect missing at the requested line?
-     * @param unlint Unlint selector
-     * @param lines Defect lines
-     * @param names Defect names
-     * @return Whether the defect is missing
-     */
     private boolean missingAtLine(
         final String unlint,
         final List<Integer> lines,

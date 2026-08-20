@@ -62,12 +62,6 @@ public final class BytecodeClass implements Scalar<XML> {
         return xml;
     }
 
-    /**
-     * Disassemble the bytecode into XMIR.
-     * @param farea Farea instance
-     * @param ref Reference to store the result
-     * @throws IOException If fails
-     */
     private void disassemble(final Farea farea, final AtomicReference<XML> ref) throws IOException {
         farea.clean();
         farea.files().file(String.format("target/classes/%s", this.java)).write(

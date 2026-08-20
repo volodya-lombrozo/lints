@@ -64,22 +64,12 @@ final class LtTestNotVerb implements Lint {
         return new FxEmpty();
     }
 
-    /**
-     * Check if the test object name is a verb in singular.
-     * @param object Object navigator
-     * @return True if first word is a verb in singular form
-     */
     private boolean isVerb(final Xnav object) {
         return this.vocabulary.isVerb(
             object.attribute("name").text().get().replace("+", "")
         );
     }
 
-    /**
-     * Create defect for non-verb test name.
-     * @param object Object navigator
-     * @return Defect
-     */
     private static Defect verbDefect(final Xnav object) {
         return new Defect.Default(
             "unit-test-is-not-verb",

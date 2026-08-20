@@ -76,11 +76,6 @@ public final class EoProgram {
         }
     }
 
-    /**
-     * Perform the actual parse and log timing.
-     * @return Parsed XMIR document
-     * @throws IOException If parsing fails
-     */
     private XML doParse() throws IOException {
         final long start = System.currentTimeMillis();
         final XML xmir = new EoSyntax(this.resource).parsed();

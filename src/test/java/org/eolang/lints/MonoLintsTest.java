@@ -79,20 +79,10 @@ final class MonoLintsTest {
         );
     }
 
-    /**
-     * Parse EO source into XMIR once.
-     * @return Parsed XMIR
-     */
     private static XML parse() {
         return new EoProgram("org/eolang/lints/simple.eo").parse();
     }
 
-    /**
-     * Collect defects from the lint into the accumulator.
-     * @param lint Lint to run
-     * @param xmir Parsed XMIR
-     * @param into Accumulator
-     */
     private static void collect(
         final Lint lint, final XML xmir, final Collection<Defect> into
     ) {
