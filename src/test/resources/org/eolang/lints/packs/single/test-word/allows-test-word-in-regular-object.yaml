@@ -5,10 +5,8 @@ sheets:
   - /org/eolang/lints/tests/test-word.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=0]
-ignore-schema: true
-document: |
-  <object author="tests">
-    <o line="1" name="app" pos="0">
-      <o base="Q.org.testing" line="3" name="testing-helper" pos="2"/>
-    </o>
-  </object>
+input: |
+  [] > app
+
+    testing-helper > testing-helper
+    TRUE > @

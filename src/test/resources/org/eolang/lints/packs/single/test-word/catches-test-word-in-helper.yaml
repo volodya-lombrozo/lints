@@ -5,13 +5,10 @@ sheets:
   - /org/eolang/lints/tests/test-word.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='5']
-ignore-schema: true
-document: |
-  <object author="tests">
-    <o line="1" name="foo-tests" pos="0">
-      <o line="3" name="can-run" pos="2">
-        <o base="Q.number" line="5" name="tests-helper" pos="4"/>
-      </o>
-    </o>
-  </object>
+  - /defects/defect[@line='4']
+input: |
+  [] > foo-tests
+
+    [] > can-run
+      tests-helper > tests-helper
+      42 > @
