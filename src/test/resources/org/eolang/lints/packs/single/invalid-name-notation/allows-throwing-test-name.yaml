@@ -7,5 +7,6 @@ asserts:
   - /defects[count(defect[@severity='warning'])=0]
 input: |
   [] > foo
-    [] > -rejects-wrong-size-as-i16
-      TRUE > @
+
+    [] -> rejects-wrong-size-as-i16
+      42 > @
