@@ -7,6 +7,5 @@ asserts:
   - /defects[count(defect[@severity='warning'])=0]
 input: |
   [] > app
-
     testing-helper > testing-helper
-    TRUE > @
+    42 > @
