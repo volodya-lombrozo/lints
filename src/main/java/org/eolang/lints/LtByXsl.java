@@ -129,6 +129,7 @@ final class LtByXsl implements Lint {
 
     @Override
     public Collection<Defect> defects(final XML xmir) {
+        // @checkstyle ConditionalRegexpMultilineCheck (1 line)
         final Collection<Defect> defects = new ArrayList<>();
         for (final XML defect : LtByXsl.findDefects(this.sheet.value().transform(xmir))) {
             final Xnav xml = new Xnav(defect.inner());

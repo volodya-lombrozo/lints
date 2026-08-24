@@ -40,6 +40,7 @@ final class LtUnlint implements Lint {
 
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
+        // @checkstyle ConditionalRegexpMultilineCheck (1 line)
         final Collection<Defect> defects = new ArrayList<>();
         final String lname = this.origin.name();
         final Collection<Defect> found = this.origin.defects(xmir);

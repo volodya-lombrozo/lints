@@ -27,6 +27,7 @@ public final class DefectsMatcher extends BaseMatcher<XML> {
 
     @Override
     public boolean matches(final Object xml) {
+        // @checkstyle ConditionalRegexpMultilineCheck (1 line)
         final Collection<Defect> defects = new ArrayList<>();
         for (final XML defect : ((XML) xml).nodes("/defects/defect")) {
             defects.add(

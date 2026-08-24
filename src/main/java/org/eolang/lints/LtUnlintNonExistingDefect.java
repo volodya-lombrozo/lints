@@ -64,6 +64,7 @@ final class LtUnlintNonExistingDefect implements Lint {
             .collect(Collectors.toList());
         final Collection<Defect> messages;
         if (unlints.isEmpty()) {
+            // @checkstyle ConditionalRegexpMultilineCheck (1 line)
             messages = new ArrayList<>();
         } else {
             messages = unlints.stream().filter(

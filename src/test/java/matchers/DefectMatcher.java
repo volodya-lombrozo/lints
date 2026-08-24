@@ -21,6 +21,7 @@ public final class DefectMatcher extends BaseMatcher<Defect> {
     /**
      * Synthetic matcher that is built when input arrives.
      */
+    // @checkstyle ConditionalRegexpMultilineCheck (1 line)
     private final List<Matcher<?>> matchers = new ArrayList<>();
 
     @Override

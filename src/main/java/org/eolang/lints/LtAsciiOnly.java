@@ -26,6 +26,7 @@ final class LtAsciiOnly implements Lint {
 
     @Override
     public Collection<Defect> defects(final XML xmir) throws IOException {
+        // @checkstyle ConditionalRegexpMultilineCheck (1 line)
         final Collection<Defect> defects = new ArrayList<>();
         final Xnav xml = new Xnav(xmir.inner());
         final List<Xnav> comments = xml.path("/object/comments/comment")

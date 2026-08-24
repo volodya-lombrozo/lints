@@ -103,6 +103,7 @@ public final class Source {
      */
     public Collection<Defect> defects() {
         try {
+            // @checkstyle ConditionalRegexpMultilineCheck (1 line)
             final Collection<Defect> messages = new ArrayList<>();
             for (final Lint lint : this.lints) {
                 messages.addAll(new ScopedDefects(lint.defects(this.xmir), "S"));

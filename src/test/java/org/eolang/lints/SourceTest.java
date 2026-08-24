@@ -373,6 +373,7 @@ final class SourceTest {
     }
 
     private static Map<Map<SourceSize, Collection<Defect>>, String> benchmarkResults() {
+        // @checkstyle ConditionalRegexpMultilineCheck (1 line)
         final List<Map<SourceSize, Collection<Defect>>> results = new ArrayList<>();
         final StringBuilder sum = new StringBuilder();
         for (final SourceSize source : SourceSize.values()) {
