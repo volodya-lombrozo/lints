@@ -153,8 +153,7 @@
       <groupId>com.jcabi.incubator</groupId>
       <artifactId>xembly</artifactId>
       <version>0.32.2</version>
-      <!-- Used by tests; "provided" also puts it on the compile classpath, where proguard needs it to resolve eo-parser's references -->
-      <scope>provided</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.languagetool</groupId>
@@ -182,7 +181,8 @@
       <groupId>org.eolang</groupId>
       <artifactId>eo-parser</artifactId>
       <version>0.62.1</version>
-      <scope>compile</scope>
+      <!-- Our XSL sheets import /org/eolang/parser/_funcs.xsl from this JAR, so it is needed at runtime, but no main Java code references it -->
+      <scope>runtime</scope>
       <exclusions>
         <exclusion>
           <groupId>org.apache.commons</groupId>
@@ -478,8 +478,6 @@
                     <class>org.eolang.lints.LtTestNotVerbTest</class>
                   </excludedTestClasses>
                   <excludedClasses>
-                    <!-- Groovy script. -->
-                    <class>org.eolang.lints.ReserveNames</class>
                     <!-- Used as benchmark resource. -->
                     <class>org.apache.hadoop.hdfs.server.namenode.FSNamesystem</class>
                   </excludedClasses>
@@ -652,6 +650,14 @@
       <activation>
         <activeByDefault>false</activeByDefault>
       </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.groovy</groupId>
+          <artifactId>groovy</artifactId>
+          <version>5.0.8</version>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
       <build>
         <plugins>
           <plugin>
@@ -725,13 +731,6 @@
             </configuration>
             <executions>
               <execution>
-                <id>groovy-compile</id>
-                <goals>
-                  <goal>addSources</goal>
-                  <goal>compile</goal>
-                </goals>
-              </execution>
-              <execution>
                 <id>groovy-test</id>
                 <goals>
                   <goal>addTestSources</goal>
@@ -740,13 +739,13 @@
               </execution>
               <execution>
                 <id>groovy-execute</id>
-                <phase>process-classes</phase>
+                <phase>process-test-classes</phase>
                 <goals>
                   <goal>execute</goal>
                 </goals>
                 <configuration>
                   <scripts>
-                    <script>src/main/groovy/org/eolang/lints/ReserveNames.groovy</script>
+                    <script>src/test/groovy/org/eolang/lints/ReserveNames.groovy</script>
                   </scripts>
                 </configuration>
               </execution>
