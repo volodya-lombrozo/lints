@@ -153,7 +153,8 @@
       <groupId>com.jcabi.incubator</groupId>
       <artifactId>xembly</artifactId>
       <version>0.32.2</version>
-      <scope>test</scope>
+      <!-- Used by tests; "provided" also puts it on the compile classpath, where proguard needs it to resolve eo-parser's references -->
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.languagetool</groupId>
