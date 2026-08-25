@@ -33,12 +33,12 @@ final class Vocabulary {
     /**
      * Part-Of-Speech tagger.
      */
-    private final POSTaggerME taggers;
+    private final POSTaggerME tagger;
 
     /**
      * Lock guarding the tagger.
      */
-    private final java.util.concurrent.locks.ReentrantLock lock;
+    private final ReentrantLock lock;
 
     /**
      * Ctor.
@@ -59,7 +59,15 @@ final class Vocabulary {
      * @param mdl Part-Of-Speech model
      */
     Vocabulary(final POSModel mdl) {
-        this.taggers = new POSTaggerME(mdl);
+        this(new POSTaggerME(mdl));
+    }
+
+    /**
+     * Ctor.
+     * @param pos Part-Of-Speech tagger
+     */
+    Vocabulary(final POSTaggerME pos) {
+        this.tagger = pos;
         this.lock = new ReentrantLock();
     }
 
@@ -76,7 +84,7 @@ final class Vocabulary {
         this.lock.lock();
         try {
             return "VBZ".equals(
-                this.taggers.tag(
+                this.tagger.tag(
                     Stream.concat(
                         Stream.of("It"),
                         Arrays.stream(Vocabulary.KEBAB.split(name))
