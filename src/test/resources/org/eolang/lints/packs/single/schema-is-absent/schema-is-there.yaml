@@ -3,8 +3,7 @@
 ---
 sheets:
   - /org/eolang/lints/critical/schema-is-absent.xsl
-asserts:
-  - /defects[not(defect)]
+defects: 0
 ignore-schema: true
 document: |
   <object xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
