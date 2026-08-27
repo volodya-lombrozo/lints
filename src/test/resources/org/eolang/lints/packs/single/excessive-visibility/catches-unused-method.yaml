@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+sheets:
+  - /org/eolang/lints/design/excessive-visibility.xsl
+asserts:
+  - /defects[count(defect[@severity='warning'])=1]
+  - /defects/defect[@line='3']
+  - /defects/defect[contains(text(), 'pos')]
+input: |
+  [t] > phrase
+    pos.gte 0 > multi-words
+    t.index-of " " > pos
+
+    [] +> checks-phrase
+      (phrase "Object Thinking").multi-words > @
