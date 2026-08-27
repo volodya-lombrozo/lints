@@ -9,6 +9,5 @@ input: |
   +package org.eolang.txt
   +alias sp org.eolang.txt.sprintf
 
-  # Foo.
   [x] > foo
     sp x > @

@@ -8,6 +8,5 @@ asserts:
 input: |
   +alias org.eolang.txt.sprintf
 
-  # Foo.
   [x] > foo
     sprintf x > @
