@@ -5,11 +5,13 @@
 package org.eolang.lints;
 
 import com.jcabi.xml.XML;
+import com.jcabi.xml.XMLDocument;
 import com.yegor256.xsline.Shift;
 import com.yegor256.xsline.Xsline;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import org.eolang.xax.XtYaml;
 import org.eolang.xax.Xtory;
 import org.xembly.Directives;
 import org.xembly.Xembler;
@@ -20,6 +22,10 @@ import org.xembly.Xembler;
  * the resolved {@link Lint} to the input, producing a
  * {@code <defects>} document.
  * @since 1.0
+ * @todo #1271:30min Let XtLint accept EO sources (the {@code input:} pack key) in
+ *  addition to raw XMIR documents, so that Java-implemented lints can be tested
+ *  from EO programs the same way XSL-based lints are tested, instead of the
+ *  hand-written {@code document:} blocks that the current packs use.
  */
 public final class XtLint implements Xtory {
 
@@ -34,7 +40,7 @@ public final class XtLint implements Xtory {
      * @param parser Parser
      */
     public XtLint(final String yaml, final Xtory.Parser parser) {
-        this(new org.eolang.xax.XtYaml(yaml, parser));
+        this(new XtYaml(yaml, parser));
     }
 
     /**
@@ -82,19 +88,10 @@ public final class XtLint implements Xtory {
         return this.origin.asserts();
     }
 
-    /**
-     * Lint name from the YAML map.
-     * @return Lint name
-     */
     private String name() {
         return String.valueOf(this.origin.map().get("lint"));
     }
 
-    /**
-     * Run the lint and serialize defects into XML.
-     * @param xml Input XMIR
-     * @return Defects document
-     */
     private XML defects(final XML xml) {
         final Directives dirs = new Directives().add("defects");
         try {
@@ -116,7 +113,7 @@ public final class XtLint implements Xtory {
                 ex
             );
         }
-        return new com.jcabi.xml.XMLDocument(
+        return new XMLDocument(
             new Xembler(dirs).xmlQuietly()
         );
     }

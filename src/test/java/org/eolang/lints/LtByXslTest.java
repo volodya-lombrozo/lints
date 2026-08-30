@@ -14,6 +14,7 @@ import fixtures.EoProgram;
 import fixtures.FixPack;
 import fixtures.XtDefects;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,6 +35,7 @@ import org.eolang.jucs.ClasspathSource;
 import org.eolang.parser.StrictXmir;
 import org.eolang.xax.XtSticky;
 import org.eolang.xax.XtYaml;
+import org.eolang.xax.Xtory;
 import org.eolang.xax.XtoryMatcher;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -107,49 +109,14 @@ final class LtByXslTest {
     @Execution(ExecutionMode.CONCURRENT)
     @ParameterizedTest
     @ClasspathSource(value = "org/eolang/lints/packs/single/", glob = "**.yaml")
-    void testsAllLintsByEo(final String yaml, final String pack) {
-        org.junit.jupiter.api.Assumptions.assumeTrue(
-            !((Map<?, ?>) new org.yaml.snakeyaml.Yaml().load(yaml)).containsKey("lint"),
-            String.format("Pack '%s' is a Java lint pack", pack)
-        );
+    void testsAllLints(final String yaml, final String pack) {
         MatcherAssert.assertThat(
             String.format(
                 "Pack '%s' doesn't tell the story as expected",
                 pack
             ),
             new XtDefects(
-                new XtSticky(
-                    new XtYaml(
-                        yaml,
-                        eo -> new EoProgram(pack, new InputOf(eo)).parse()
-                    )
-                )
-            ),
-            new XtoryMatcher(new DefectsMatcher())
-        );
-    }
-
-    @SuppressWarnings("JTCOP.RuleNotContainsTestWord")
-    @Execution(ExecutionMode.CONCURRENT)
-    @ParameterizedTest
-    @ClasspathSource(value = "org/eolang/lints/packs/single/", glob = "**.yaml")
-    void testsAllLintsByLintName(final String yaml, final String pack) {
-        org.junit.jupiter.api.Assumptions.assumeTrue(
-            ((Map<?, ?>) new org.yaml.snakeyaml.Yaml().load(yaml)).containsKey("lint"),
-            String.format("Pack '%s' has no lint key", pack)
-        );
-        MatcherAssert.assertThat(
-            String.format(
-                "Pack '%s' doesn't tell the story as expected",
-                pack
-            ),
-            new fixtures.XtDefects(
-                new XtSticky(
-                    new XtLint(
-                        yaml,
-                        eo -> new EoProgram(pack, new InputOf(eo)).parse()
-                    )
-                )
+                new XtSticky(LtByXslTest.story(yaml, pack))
             ),
             new XtoryMatcher(new DefectsMatcher())
         );
@@ -498,8 +465,8 @@ final class LtByXslTest {
     private static boolean hasMatchingXsl(final Path yaml) {
         final boolean result;
         try {
-            if (((Map<?, ?>) new org.yaml.snakeyaml.Yaml().load(
-                new String(Files.readAllBytes(yaml), java.nio.charset.StandardCharsets.UTF_8)
+            if (((Map<?, ?>) new Yaml().load(
+                new String(Files.readAllBytes(yaml), StandardCharsets.UTF_8)
             )).containsKey("lint")) {
                 result = true;
             } else {
@@ -520,6 +487,18 @@ final class LtByXslTest {
             }
         } catch (final IOException ex) {
             throw new IllegalStateException(ex);
+        }
+        return result;
+    }
+
+    private static Xtory story(final String yaml, final String pack) {
+        final boolean java = ((Map<?, ?>) new Yaml().load(yaml)).containsKey("lint");
+        final Xtory.Parser parser = eo -> new EoProgram(pack, new InputOf(eo)).parse();
+        final Xtory result;
+        if (java) {
+            result = new XtLint(yaml, parser);
+        } else {
+            result = new XtYaml(yaml, parser);
         }
         return result;
     }
