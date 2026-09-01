@@ -22,15 +22,10 @@ import org.eolang.parser.EoSyntax;
 public final class EoProgram {
 
     /**
-     * Maximum number of cached entries.
-     */
-    private static final int MAX = 1000;
-
-    /**
      * Cache of parsed XMIR documents, keyed by resource path.
      */
     private static final Cache<String, XML> CACHE = CacheBuilder.newBuilder()
-        .maximumSize(EoProgram.MAX)
+        .maximumSize(1000)
         .build();
 
     /**

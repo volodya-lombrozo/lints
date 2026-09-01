@@ -36,6 +36,13 @@ public final class GrammarMatcher extends BaseMatcher<String> {
      */
     private List<RuleMatch> errors;
 
+    /**
+     * Ctor.
+     */
+    public GrammarMatcher() {
+        // nothing to do
+    }
+
     @Override
     public boolean matches(final Object obj) {
         final JLanguageTool tool = new JLanguageTool(

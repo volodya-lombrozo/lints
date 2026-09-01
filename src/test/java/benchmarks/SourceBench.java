@@ -30,6 +30,13 @@ import org.openjdk.jmh.annotations.Warmup;
 public class SourceBench {
 
     /**
+     * Ctor.
+     */
+    public SourceBench() {
+        // nothing to do
+    }
+
+    /**
      * Benchmark for XMIR scanning.
      * Scans XMIR.
      * @param state State

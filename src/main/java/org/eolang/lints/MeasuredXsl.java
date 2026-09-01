@@ -16,11 +16,6 @@ import com.jcabi.xml.XSL;
 final class MeasuredXsl implements XSL {
 
     /**
-     * Default threshold in milliseconds.
-     */
-    private static final long DEFAULT = 100L;
-
-    /**
      * Rule name.
      */
     private final String rule;
@@ -41,7 +36,7 @@ final class MeasuredXsl implements XSL {
      * @param decorated Decorated XSL
      */
     MeasuredXsl(final String name, final XSL decorated) {
-        this(name, decorated, MeasuredXsl.DEFAULT);
+        this(name, decorated, 100L);
     }
 
     /**

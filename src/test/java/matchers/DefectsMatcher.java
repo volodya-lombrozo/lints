@@ -25,6 +25,13 @@ public final class DefectsMatcher extends BaseMatcher<XML> {
      */
     private Matcher<Iterable<? extends Defect>> matcher;
 
+    /**
+     * Ctor.
+     */
+    public DefectsMatcher() {
+        // nothing to do
+    }
+
     @Override
     public boolean matches(final Object xml) {
         // @checkstyle ConditionalRegexpMultilineCheck (1 line)
