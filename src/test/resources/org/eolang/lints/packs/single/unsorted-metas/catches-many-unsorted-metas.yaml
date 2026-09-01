@@ -11,11 +11,11 @@ input: |
   +alias org.eolang.io.stdin
   +alias org.eolang.io.stdout
   +boo
-  +alias org.eolang.io.stdin
-  +alias org.eolang.io.stdout
+  +alias org.eolang.io.stdin2
+  +alias org.eolang.io.stdout2
   +boo
   +z
-  +alias org.eolang.io.stdin
+  +alias org.eolang.io.stdin3
   +foo
   +z
 

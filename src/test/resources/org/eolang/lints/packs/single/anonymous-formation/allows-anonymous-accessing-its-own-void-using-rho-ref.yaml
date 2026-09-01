@@ -12,5 +12,5 @@ input: |
         [el] > check
           if. > @
             ^.x.lt 100
-            ^.acc.plus x
-            ^.acc.minus x
+            ^.acc.plus ^.x
+            ^.acc.minus ^.x

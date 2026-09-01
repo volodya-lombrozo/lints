@@ -79,8 +79,8 @@ final class LtByXslTest {
     void lintsOneFile() {
         MatcherAssert.assertThat(
             "No defects found, while a few of them expected",
-            new LtByXsl("critical/duplicate-names").defects(
-                new EoProgram("org/eolang/lints/duplicate-names.eo").parse()
+            new LtByXsl("comments/comment-too-short").defects(
+                new EoProgram("org/eolang/lints/generic-lint-example.eo").parse()
             ),
             Matchers.hasSize(Matchers.greaterThan(0))
         );
@@ -89,13 +89,13 @@ final class LtByXslTest {
     @Tag("deep")
     @RepeatedTest(5)
     void lintsInMultipleThreads() {
-        final LtByXsl lint = new LtByXsl("critical/duplicate-names");
+        final LtByXsl lint = new LtByXsl("comments/comment-too-short");
         MatcherAssert.assertThat(
             "wrong number of defects found, in parallel",
             new SetOf<>(
                 new Together<>(
                     t -> lint.defects(
-                        new EoProgram("org/eolang/lints/duplicate-names.eo").parse()
+                        new EoProgram("org/eolang/lints/generic-lint-example.eo").parse()
                     ).size()
                 ).asList()
             ).size(),
@@ -129,7 +129,7 @@ final class LtByXslTest {
     void returnsMotive() throws Exception {
         MatcherAssert.assertThat(
             "The motive was not found or empty",
-            new LtByXsl("critical/duplicate-names").motive().isEmpty(),
+            new LtByXsl("comments/comment-too-short").motive().isEmpty(),
             Matchers.equalTo(false)
         );
     }

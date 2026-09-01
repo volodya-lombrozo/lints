@@ -9,10 +9,10 @@ input: |
   +alias one-two
   +alias one-two-three-four
   +alias i文件
-  +alias i文件 this.is.legal2
+  +alias i文件2 this.is.legal2
   +alias org.eolang.io.stdout
   +alias org.eolang.with-dash
-  +alias with-dash
-  +alias with-dash org.eolang.with-dash
+  +alias with-dash3
+  +alias with-dash2 org.eolang.with-dash
 
   [] > foo

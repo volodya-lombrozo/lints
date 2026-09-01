@@ -8,6 +8,7 @@ asserts:
   - /defects/defect[contains(text(),'positive')]
 input: |
   [] > foo
+
     eq. +> stops-on-zero
       recovered
         42.div 0

@@ -6,9 +6,9 @@ sheets:
 asserts:
   - /defects[count(defect[@severity='error'])=4]
 input: |
-  +alias good Capital.Letters.Prohibited.Here
-  +alias good Should.Be.Small
-  +alias good 0.1.2
-  +alias good theS.IS.2
+  +alias good1 Capital.Letters.Prohibited.Here
+  +alias good2 Should.Be.Small
+  +alias good3 0.1.2
+  +alias good4 theS.IS.2
 
   [] > foo
