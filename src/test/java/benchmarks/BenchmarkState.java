@@ -33,6 +33,13 @@ public class BenchmarkState {
     private XML xmir;
 
     /**
+     * Ctor.
+     */
+    public BenchmarkState() {
+        // nothing to do
+    }
+
+    /**
      * Initialize the state.
      */
     @Setup(Level.Trial)
