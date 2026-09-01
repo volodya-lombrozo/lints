@@ -8,13 +8,13 @@
   <xsl:import href="/org/eolang/funcs/defect-context.xsl"/>
   <xsl:output encoding="UTF-8" method="xml"/>
   <!--
-    @todo #1046:30min Report the exact physical line of the too-wide line
-     inside a multi-line comment. Right now every offending line is reported
-     with the comment block's own start @line, since the XSL has no way to
-     compute the offset of a line within the tokenized comment text. Add a
-     $pos-based offset (comment @line + position() - 1) so
-     catches-multiline-wide-comment.yaml can assert on line 2 (the actual
-     offending line) instead of line 1.
+  @todo #1046:30min Report the exact physical line of the too-wide line
+  inside a multi-line comment. Right now every offending line is reported
+  with the comment block's own start @line, since the XSL has no way to
+  compute the offset of a line within the tokenized comment text. Add a
+  $pos-based offset (comment @line + position() - 1) so
+  catches-multiline-wide-comment.yaml can assert on line 2 (the actual
+  offending line) instead of line 1.
   -->
   <xsl:template match="/">
     <xsl:variable name="max" select="100"/>

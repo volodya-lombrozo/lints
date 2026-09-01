@@ -8,4 +8,4 @@ input: |
   [] > jeff
     $ > self
     [] > say-hello
-      stdout self > @
+      stdout ^.self > @

@@ -13,4 +13,4 @@ input: |
       if. > @
         n.eq 0
         0
-        squared.plus (poly (n.minus 1))
+        ^.squared.plus (^.poly (n.minus 1))
