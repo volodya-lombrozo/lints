@@ -15,4 +15,4 @@ input: |
       64
       [m]
         io.stdout > @
-          t
+          ^.t

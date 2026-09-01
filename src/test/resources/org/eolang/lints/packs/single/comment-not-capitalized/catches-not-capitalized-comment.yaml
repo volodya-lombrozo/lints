@@ -5,7 +5,7 @@ sheets:
   - /org/eolang/lints/comments/comment-not-capitalized.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='3']
+  - /defects/defect[@line='1']
 input: |
   # this comment doesn't start with capital English letter.
 

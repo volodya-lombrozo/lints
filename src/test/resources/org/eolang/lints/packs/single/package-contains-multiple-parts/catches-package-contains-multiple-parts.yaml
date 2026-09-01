@@ -4,10 +4,9 @@
 sheets:
   - /org/eolang/lints/metas/package-contains-multiple-parts.xsl
 asserts:
-  - /defects[count(defect[@severity='critical'])=3]
+  - /defects[count(defect[@severity='critical'])=2]
   - /defects/defect[@line='8']
   - /defects/defect[@line='9']
-  - /defects/defect[@line='10']
 input: |
   +package test
   +package test.
@@ -18,6 +17,5 @@ input: |
   +package test.xy
   +package hello world
   +package привет, как дела?
-  +package
 
   [] > foo

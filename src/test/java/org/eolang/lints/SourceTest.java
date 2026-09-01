@@ -309,7 +309,7 @@ final class SourceTest {
                 Matchers.hasToString(
                     Matchers.allOf(
                         Matchers.containsString("comment-without-dot/S WARNING"),
-                        Matchers.containsString(":3")
+                        Matchers.containsString(":1")
                     )
                 )
             )

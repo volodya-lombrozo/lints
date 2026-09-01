@@ -9,4 +9,4 @@ input: |
     t.index-of " " > pos
 
     [] +> checks-phrase
-      pos > @
+      ^.pos > @

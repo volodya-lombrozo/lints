@@ -6,7 +6,7 @@ sheets:
   - /org/eolang/lints/comments/comment-is-too-wide.xsl
 asserts:
   - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='3']
+  - /defects/defect[@line='1']
   - /defects/defect[contains(text(), 'The comment width is 101, while 100 is max allowed')]
 input: |
   # This comment is one character wider than the limit of 100, therefore the lint reports it as too wide.

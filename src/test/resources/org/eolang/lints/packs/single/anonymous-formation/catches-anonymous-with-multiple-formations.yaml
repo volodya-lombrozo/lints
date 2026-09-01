@@ -15,9 +15,9 @@ input: |
       64 > i
       [m]
         io.stdout > @
-          t
+          ^.t
     malloc.of > sec
       52 > xa
       [o]
         io.stdout > @
-          f
+          ^.f

@@ -1,3 +1,5 @@
+# Times table, which is a canonical example of EO program.
+
 +architect yegor256@gmail.com
 +home https://www.eolang.org
 +package canonical
@@ -7,7 +9,6 @@
 +unlint missed-obfuscation
 +unlint unit-test-missing
 
-# Times table, which is a canonical example of EO program.
 [start] > canonical
   malloc.for > @
     start
@@ -16,7 +17,7 @@
         *
           x.put 2
           while
-            x.as-number.lt 6 > [i] >>
+            ^.x.as-number.lt 6 > [i] >>
             [i] >>
               seq > @
                 *
