@@ -8,6 +8,7 @@ import com.jcabi.xml.XML;
 import com.yegor256.xsline.Xsline;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import org.eolang.xax.Xtory;
 
@@ -55,7 +56,15 @@ public final class XtDefects implements Xtory {
         final Collection<String> assertions =
             new ArrayList<>(this.origin.asserts());
         final Object defects = this.map().get("defects");
-        if (defects != null) {
+        if (defects instanceof List) {
+            final List<?> list = (List<?>) defects;
+            assertions.add(
+                String.format("/defects[count(defect)=%d]", list.size())
+            );
+            for (final Object entry : list) {
+                assertions.add(XtDefects.defect((Map<?, ?>) entry));
+            }
+        } else if (defects != null) {
             assertions.add(
                 String.format(
                     "/defects[count(defect)=%s]",
@@ -64,5 +73,26 @@ public final class XtDefects implements Xtory {
             );
         }
         return assertions;
+    }
+
+    /**
+     * Build an XPath assertion for a single expected defect.
+     * @param entry Map with optional "severity" and "line" keys
+     * @return XPath expression
+     */
+    private static String defect(final Map<?, ?> entry) {
+        final Collection<String> predicates = new ArrayList<>(entry.size());
+        final Object severity = entry.get("severity");
+        if (severity != null) {
+            predicates.add(String.format("@severity='%s'", severity));
+        }
+        final Object line = entry.get("line");
+        if (line != null) {
+            predicates.add(String.format("@line='%s'", line));
+        }
+        return String.format(
+            "/defects/defect[%s]",
+            String.join(" and ", predicates)
+        );
     }
 }
