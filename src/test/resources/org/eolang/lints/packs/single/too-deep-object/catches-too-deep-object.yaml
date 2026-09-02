@@ -3,9 +3,9 @@
 ---
 sheets:
   - /org/eolang/lints/design/too-deep-object.xsl
-asserts:
-  - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='16']
+defects:
+  - severity: warning
+    line: 16
 input: |
   # Foo.
 

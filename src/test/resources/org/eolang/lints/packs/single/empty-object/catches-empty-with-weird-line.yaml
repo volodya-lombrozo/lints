@@ -3,9 +3,9 @@
 ---
 sheets:
   - /org/eolang/lints/errors/empty-object.xsl
-asserts:
-  - /defects[count(defect[@severity='warning'])=1]
-  - /defects/defect[@line='0']
+defects:
+  - severity: warning
+    line: 0
 ignore-schema: true
 document: |
   <object author="tests">
