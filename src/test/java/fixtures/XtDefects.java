@@ -75,11 +75,6 @@ public final class XtDefects implements Xtory {
         return assertions;
     }
 
-    /**
-     * Build an XPath assertion for a single expected defect.
-     * @param entry Map with optional "severity" and "line" keys
-     * @return XPath expression
-     */
     private static String defect(final Map<?, ?> entry) {
         final Collection<String> predicates = new ArrayList<>(entry.size());
         final Object severity = entry.get("severity");
