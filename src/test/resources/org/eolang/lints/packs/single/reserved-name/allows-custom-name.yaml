@@ -9,5 +9,4 @@ input: |
   +spdx SPDX-License-Identifier: MIT
 
   [] > main
-    [] > my-object
-      foo
+    foo > my-object
