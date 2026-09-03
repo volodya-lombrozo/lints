@@ -20,12 +20,10 @@ import org.xembly.Xembler;
  * A story that runs a Java-implemented lint by its name.
  * Reads the {@code lint} key from the pack YAML and applies
  * the resolved {@link Lint} to the input, producing a
- * {@code <defects>} document.
+ * {@code <defects>} document. The input itself may be given either
+ * as a raw XMIR document (the {@code document} pack key) or as
+ * EO source (the {@code input} pack key), same as {@link XtYaml}.
  * @since 1.0
- * @todo #1271:30min Let XtLint accept EO sources (the {@code input:} pack key) in
- *  addition to raw XMIR documents, so that Java-implemented lints can be tested
- *  from EO programs the same way XSL-based lints are tested, instead of the
- *  hand-written {@code document:} blocks that the current packs use.
  */
 public final class XtLint implements Xtory {
 
