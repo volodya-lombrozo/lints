@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
+# SPDX-License-Identifier: MIT
+---
+lint: ascii-only
+defects: 0
+document: |
+  <object author="tests">
+    <metas>
+      <meta line="1">
+        <head>unlint</head>
+        <tail>ascii-only:7</tail>
+      </meta>
+      <meta line="2">
+        <head>unlint</head>
+        <tail>ascii-only:9</tail>
+      </meta>
+    </metas>
+    <comments>
+      <comment line="7">Not ascii text: привет!</comment>
+      <comment line="9">Not ascii text: 你好，杰夫!</comment>
+    </comments>
+  </object>
