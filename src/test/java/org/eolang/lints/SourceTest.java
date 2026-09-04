@@ -287,7 +287,7 @@ final class SourceTest {
                         Matchers.allOf(
                             Matchers.containsString("unlint-non-existing-defect"),
                             Matchers.containsString(
-                                String.format("Unlinting rule '%s' doesn't make sense,", lid)
+                                String.format("Unlinting rule \"%s\" doesn't make sense,", lid)
                             ),
                             Matchers.containsString("since there are no defects with it")
                         )

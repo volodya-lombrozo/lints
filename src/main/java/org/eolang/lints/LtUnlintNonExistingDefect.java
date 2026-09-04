@@ -81,7 +81,7 @@ final class LtUnlintNonExistingDefect implements Lint {
                         Severity.WARNING,
                         Integer.parseInt(xnav.text().get()),
                         String.format(
-                            "Unlinting rule '%s' doesn't make sense, since there are no defects with it",
+                            "Unlinting rule \"%s\" doesn't make sense, since there are no defects with it",
                             unlint
                         )
                     )
