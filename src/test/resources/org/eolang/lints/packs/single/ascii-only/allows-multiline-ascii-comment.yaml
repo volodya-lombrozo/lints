@@ -2,8 +2,7 @@
 # SPDX-License-Identifier: MIT
 ---
 lint: ascii-only
-asserts:
-  - /defects[count(defect)=0]
+defects: 0
 input: |
   +spdx SPDX-FileCopyrightText: Copyright (c) 2016-2026 Objectionary.com
   +spdx SPDX-License-Identifier: MIT
