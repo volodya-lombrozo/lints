@@ -12,6 +12,7 @@ import com.yegor256.Together;
 import fixtures.EoProgram;
 import io.github.secretx33.resourceresolver.PathMatchingResourcePatternResolver;
 import io.github.secretx33.resourceresolver.Resource;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
@@ -64,6 +65,17 @@ final class PkMonoTest {
             ).collect(Collectors.toList()),
             Matchers.emptyIterable()
         );
+    }
+
+    @Test
+    void checksAllMotives() throws IOException {
+        for (final Lint lint : new PkMono()) {
+            MatcherAssert.assertThat(
+                Logger.format("Lint '%s' has an empty motive", lint.name()),
+                lint.motive().isEmpty(),
+                new IsEqual<>(false)
+            );
+        }
     }
 
     @Test

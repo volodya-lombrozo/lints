@@ -79,17 +79,6 @@ final class PkByXslTest {
     }
 
     @Test
-    void checksAllMotives() throws Exception {
-        for (final Lint lint : new PkByXsl()) {
-            MatcherAssert.assertThat(
-                "Lint's motive is empty, but should not be",
-                lint.motive().isEmpty(),
-                Matchers.equalTo(false)
-            );
-        }
-    }
-
-    @Test
     void returnsMarkdownContentInsteadOfUrl() throws Exception {
         final String name = "self-referencing";
         MatcherAssert.assertThat(
