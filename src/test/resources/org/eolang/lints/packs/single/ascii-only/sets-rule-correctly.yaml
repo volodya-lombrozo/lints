@@ -2,9 +2,8 @@
 # SPDX-License-Identifier: MIT
 ---
 lint: ascii-only
-defects: 1
-asserts:
-  - /defects[count(defect[@rule='ascii-only'])=1]
+defects:
+  - rule: ascii-only
 input: |
   # тук тук
 

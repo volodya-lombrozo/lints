@@ -85,6 +85,10 @@ public final class XtDefects implements Xtory {
         if (line != null) {
             predicates.add(String.format("@line='%s'", line));
         }
+        final Object rule = entry.get("rule");
+        if (rule != null) {
+            predicates.add(String.format("@rule='%s'", rule));
+        }
         return String.format(
             "/defects/defect[%s]",
             String.join(" and ", predicates)
