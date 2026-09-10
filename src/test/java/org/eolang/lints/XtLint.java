@@ -118,21 +118,14 @@ public final class XtLint implements Xtory {
         );
     }
 
-    /**
-     * Resolve the {@link Lint} this pack should run.
-     * If the pack supplies a {@code params} map, the lint matching
-     * this pack's name is built directly from those parameters.
-     * Otherwise, the default instance is taken from {@link PkMono}.
-     * @return Resolved lint
-     */
     @SuppressWarnings("unchecked")
     private Lint lint() {
         final Lint result;
         if (this.origin.map().containsKey("params")) {
-            final Map<String, String> params =
-                (Map<String, String>) this.origin.map().get("params");
             if ("reserved-name".equals(this.name())) {
-                result = new LtReservedName(params);
+                result = new LtReservedName(
+                    (Map<String, String>) this.origin.map().get("params")
+                );
             } else {
                 throw new IllegalStateException(
                     String.format(
@@ -144,8 +137,7 @@ public final class XtLint implements Xtory {
         } else {
             result = StreamSupport.stream(new PkMono().spliterator(), false)
                 .filter(lint -> lint.name().equals(this.name()))
-                .findFirst()
-                .orElseThrow(
+                .findFirst().orElseThrow(
                     () -> new IllegalStateException(
                         String.format("Lint '%s' is not found in PkMono", this.name())
                     )
