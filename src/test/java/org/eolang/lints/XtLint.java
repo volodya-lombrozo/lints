@@ -11,6 +11,7 @@ import com.yegor256.xsline.Xsline;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
+import java.util.stream.StreamSupport;
 import org.eolang.xax.XtYaml;
 import org.eolang.xax.Xtory;
 import org.xembly.Directives;
@@ -23,6 +24,11 @@ import org.xembly.Xembler;
  * {@code <defects>} document. The input itself may be given either
  * as a raw XMIR document (the {@code document} pack key) or as
  * EO source (the {@code input} pack key), same as {@link XtYaml}.
+ * By default, the lint is taken as-is from {@link PkMono} (its
+ * default, no-arg construction). A pack may instead supply a
+ * generic {@code params} map; when present, {@link #lint()} builds
+ * the matching lint from those parameters directly, instead of
+ * using the default one from {@link PkMono}.
  * @since 1.0
  */
 public final class XtLint implements Xtory {
@@ -93,18 +99,13 @@ public final class XtLint implements Xtory {
     private XML defects(final XML xml) {
         final Directives dirs = new Directives().add("defects");
         try {
-            for (final Lint lint : new PkMono()) {
-                if (lint.name().equals(this.name())) {
-                    for (final Defect defect : lint.defects(xml)) {
-                        dirs.add("defect")
-                            .attr("line", defect.line())
-                            .attr("rule", defect.rule())
-                            .attr("severity", defect.severity().mnemo())
-                            .set(defect.text())
-                            .up();
-                    }
-                    break;
-                }
+            for (final Defect defect : this.lint().defects(xml)) {
+                dirs.add("defect")
+                    .attr("line", defect.line())
+                    .attr("rule", defect.rule())
+                    .attr("severity", defect.severity().mnemo())
+                    .set(defect.text())
+                    .up();
             }
         } catch (final IOException ex) {
             throw new IllegalStateException(
@@ -115,5 +116,33 @@ public final class XtLint implements Xtory {
         return new XMLDocument(
             new Xembler(dirs).xmlQuietly()
         );
+    }
+
+    @SuppressWarnings("unchecked")
+    private Lint lint() {
+        final Lint result;
+        if (this.origin.map().containsKey("params")) {
+            if ("reserved-name".equals(this.name())) {
+                result = new LtReservedName(
+                    (Map<String, String>) this.origin.map().get("params")
+                );
+            } else {
+                throw new IllegalStateException(
+                    String.format(
+                        "Lint '%s' does not support the 'params' pack key",
+                        this.name()
+                    )
+                );
+            }
+        } else {
+            result = StreamSupport.stream(new PkMono().spliterator(), false)
+                .filter(lint -> lint.name().equals(this.name()))
+                .findFirst().orElseThrow(
+                    () -> new IllegalStateException(
+                        String.format("Lint '%s' is not found in PkMono", this.name())
+                    )
+                );
+        }
+        return result;
     }
 }
