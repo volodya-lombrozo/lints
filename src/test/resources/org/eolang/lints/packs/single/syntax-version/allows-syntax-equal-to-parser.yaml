@@ -4,6 +4,6 @@
 lint: syntax-version
 defects: 0
 input: |
-  +home https://example.com
+  +syntax 0.63.0
 
   [] > foo
