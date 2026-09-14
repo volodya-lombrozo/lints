@@ -13,6 +13,7 @@ import fixtures.BytecodeClass;
 import fixtures.EoProgram;
 import fixtures.FixPack;
 import fixtures.XtDefects;
+import fixtures.YamlPack;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -182,6 +183,27 @@ final class LtByXslTest {
                 .filter(Files::isRegularFile)
                 .allMatch(path -> path.toFile().toString().endsWith(".yaml")),
             Matchers.equalTo(true)
+        );
+    }
+
+    @Test
+    @SuppressWarnings("StreamResourceLeak")
+    void checksDocumentUsageIsJustified() throws IOException {
+        final List<Path> unjustified = Files.walk(
+            Paths.get("src/test/resources/org/eolang/lints/packs")
+        ).filter(Files::isRegularFile)
+            .filter(LtByXslTest.yamls())
+            .map(YamlPack::new)
+            .filter(pack -> !pack.documentUsageJustified())
+            .map(YamlPack::path)
+            .collect(Collectors.toList());
+        MatcherAssert.assertThat(
+            String.format(
+                "These packs use 'document' (raw XMIR) instead of 'input' (EO) without an 'xml-reason' key explaining why: %s",
+                unjustified
+            ),
+            unjustified,
+            Matchers.empty()
         );
     }
 
