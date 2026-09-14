@@ -7,6 +7,7 @@ defects:
   - severity: warning
     line: 0
 ignore-schema: true
+xml-reason: "TODO: this can be translated into an EO input test"
 document: |
   <object author="tests">
     <o line="60.50.301"/>

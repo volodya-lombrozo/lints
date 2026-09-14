@@ -7,6 +7,7 @@ asserts:
   - /defects[count(defect[@severity='warning'])=2]
   - /defects/defect[contains(text(), '"foo"')]
   - /defects/defect[contains(text(), '"bar"')]
+xml-reason: "TODO: this can be translated into an EO input test"
 document: |
   <object author="tests">
     <o base="Φ.t" name="tee" line="3">

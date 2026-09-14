@@ -8,6 +8,7 @@ asserts:
   - /defects[count(defect[@severity='critical'])=2]
   - /defects/defect[1][normalize-space()='Only object that have parent object with @base equal to "Φ.bytes" may contain data, while parent object with @base "Φ.x" provided']
   - /defects/defect[2][normalize-space()='Only object that have parent object with @base equal to "Φ.bytes" may contain data, while parent object with @base "Φ.y" provided']
+xml-reason: data under a parent with the wrong (or missing) @base is unreachable via a valid EO parse; only raw XMIR can trigger this defect
 document: |
   <object author="tests">
     <o name="a">

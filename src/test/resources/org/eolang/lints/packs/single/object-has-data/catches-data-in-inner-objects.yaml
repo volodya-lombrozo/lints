@@ -6,6 +6,7 @@ sheets:
 defects:
   - severity: critical
     line: 2
+xml-reason: data under a parent with the wrong (or missing) @base is unreachable via a valid EO parse; only raw XMIR can trigger this defect
 document: |
   <object author="tests">
     <o base="Φ.foo" name="o" line="1">
