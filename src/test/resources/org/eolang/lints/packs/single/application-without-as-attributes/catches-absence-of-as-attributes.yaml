@@ -7,7 +7,7 @@ asserts:
   - /defects[count(defect[@severity='error'])=1]
   - /defects/defect[@line='2']
   - /defects/defect[contains(normalize-space(), 'Φ.f')]
-xml-reason: "TODO: this can be translated into an EO input test"
+xml-reason: "not yet converted to an EO input test"
 document: |
   <object author="tests">
     <o name="app">

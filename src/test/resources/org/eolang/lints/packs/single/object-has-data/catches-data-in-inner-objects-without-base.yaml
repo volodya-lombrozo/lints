@@ -5,7 +5,7 @@ sheets:
   - /org/eolang/lints/critical/object-has-data.xsl
 defects:
   - severity: critical
-xml-reason: data under a parent with the wrong (or missing) @base is unreachable via a valid EO parse; only raw XMIR can trigger this defect
+xml-reason: "data with wrong/missing @base is unreachable via valid EO parse"
 document: |
   <object author="tests">
     <o name="foo">
