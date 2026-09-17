@@ -5,7 +5,7 @@ sheets:
   - /org/eolang/lints/errors/empty-object.xsl
 defects:
   - severity: warning
-    line: 2
+    line: 3
 input: |
   [] > main
     * > @
