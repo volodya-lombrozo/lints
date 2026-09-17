@@ -5,7 +5,7 @@ sheets:
   - /org/eolang/lints/errors/empty-object.xsl
 asserts:
   - /defects[count(defect[@context and @severity='warning'])=1]
-xml-reason: "not yet converted to an EO input test"
+xml-reason: "every <o> the parser emits carries a @line; this tests defect-context fallback when @line is entirely absent, an invariant a valid EO parse never violates"
 document: |
   <object author="tests">
     <o/>
