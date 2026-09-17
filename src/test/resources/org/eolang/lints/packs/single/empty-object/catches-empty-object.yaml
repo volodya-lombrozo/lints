@@ -8,4 +8,5 @@ defects:
     line: 2
 input: |
   [] > main
-    []
+    * > @
+      []
