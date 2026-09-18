@@ -6,5 +6,5 @@ sheets:
 defects: 0
 input: |
   [] > main
-    f
+    f > y
       42 > @
