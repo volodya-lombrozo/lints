@@ -6,7 +6,7 @@ sheets:
 defects:
   - severity: critical
     line: 1
-xml-reason: "not yet converted to an EO input test"
+xml-reason: "a non-void attribute preceding a void one is a parser error (R-3.4.9); no valid EO source can produce this ordering"
 document: |
   <object author="tests">
     <o name="foo">

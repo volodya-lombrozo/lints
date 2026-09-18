@@ -4,7 +4,7 @@
 sheets:
   - /org/eolang/lints/critical/void-attributes-not-higher-than-other.xsl
 defects: 0
-xml-reason: "not yet converted to an EO input test"
+xml-reason: "the ξ/xi🌵 marker exercised here is synthesized by a later transformation pass, not by the EO parser, so no valid EO source produces it"
 document: |
   <object author="tests">
     <o name="foo">
